@@ -1,0 +1,47 @@
+# task-manager.poly — Task Management Feature Block with Cross-File Link
+
+@contract
+feature_id: "TASK-2026-880"
+owner: "core-product-team"
+classification: "internal"
+timeout_ms: 3000
+@end
+
+@link ./auth-login.poly::python[service] as AuthService
+
+@schema TaskCreateRequest
+  title: string<min:3,max:255>
+  priority: string
+  assignee: string
+@end
+
+@python[service]
+def process(req):
+    title = req.get("title", "New Task")
+    priority = req.get("priority", "medium")
+    assignee = req.get("assignee", "unassigned")
+    
+    ctx.emit_audit("task_created", title=title, priority=priority)
+    
+    return {
+        "task_id": "task-9901",
+        "title": title,
+        "priority": priority,
+        "assignee": assignee,
+        "status": "open",
+        "created_at": "2026-08-07T12:00:00Z"
+    }
+@end
+
+@javascript[notifier]
+function process(req) {
+    return {
+        notification_status: "queued",
+        channel: "slack",
+        message: "Task created: " + (req.title || "New Task")
+    };
+}
+@end
+
+@merge strategy="parallel-collect"
+@end
