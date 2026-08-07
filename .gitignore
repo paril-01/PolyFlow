@@ -10,6 +10,11 @@ Desktop.ini
 *.swo
 *~
 
+# Python cache & outputs
+__pycache__/
+*.pyc
+.aef_output/
+
 # Build artifacts
 _site/
 site/

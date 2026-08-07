@@ -57,52 +57,55 @@ The framework guides the **complete Software Development Life Cycle (SDLC)** —
 ```mermaid
 graph TB
     subgraph Constitution["🏛️ Engineering Constitution"]
-        Ethics["Ethics"]
-        Priorities["Priorities"]
+        Ethics["Ethics (Articles I-XIV)"]
+        Priorities["Priorities Hierarchy"]
         Safety["Safety Rules"]
     end
 
-    subgraph Agents["🤖 Specialized Agents"]
-        Maker["🔍 Maker<br/>Discovery & Design"]
-        Reviewer["🔬 Reviewer<br/>Independent Review"]
-        Implementer["⚙️ Implementer<br/>Production Code"]
-        Gatekeeper["🚪 Gatekeeper<br/>Release Authority"]
-        Historian["📚 Historian<br/>Engineering Memory"]
+    subgraph Orchestrator["⚙️ Automated Orchestrator Engine"]
+        Runner["python -m orchestrator"]
+        Pipeline["Master Sequential Pipeline"]
     end
 
-    subgraph Governance["📋 Governance Layer"]
-        Architecture["Architecture"]
-        Dependencies["Dependencies"]
-        Ownership["Ownership"]
-        Releases["Releases"]
+    subgraph Agents["🤖 Specialized Agents (Sequential Pipeline)"]
+        Maker["1. 🔍 Maker<br/>Discovery & Design"]
+        ReviewerD["2. 🔬 Reviewer<br/>Design Review"]
+        Implementer["3. ⚙️ Implementer<br/>Production Code"]
+        ReviewerC["4. 🔬 Reviewer<br/>Code Review"]
+        Gatekeeper["5. 🚪 Gatekeeper<br/>Release Authority"]
+        Historian["6. 📚 Historian<br/>Engineering Memory"]
     end
 
-    subgraph Support["🔧 Support Systems"]
-        Playbooks["Playbooks"]
-        Checklists["Checklists"]
-        Templates["Templates"]
-        Protocols["Protocols"]
-        Standards["Standards"]
-    end
-
-    subgraph Memory["🧠 Knowledge Systems"]
-        KnowledgeGraph["Knowledge Graph"]
-        Traceability["Traceability"]
-        EngMemory["Engineering Memory"]
-    end
-
-    Constitution --> Agents
-    Agents --> Governance
-    Support --> Agents
-    Memory --> Agents
-
-    Maker -->|"Requirements & ADRs"| Reviewer
-    Reviewer -->|"Validated Design"| Implementer
-    Implementer -->|"Code & Tests"| Reviewer
-    Reviewer -->|"Review Report"| Gatekeeper
-    Gatekeeper -->|"Release Decision"| Historian
-    Historian -->|"Context"| Maker
+    Constitution --> Orchestrator
+    Orchestrator --> Maker
+    Maker --> ReviewerD
+    ReviewerD --> Implementer
+    Implementer --> ReviewerC
+    ReviewerC --> Gatekeeper
+    Gatekeeper --> Historian
 ```
+
+---
+
+## 🤖 End-to-End Automated Agent Orchestration
+
+Rather than invoking agents individually, you can execute the **complete synchronized sequence** (Maker → Reviewer → Implementer → Reviewer → Gatekeeper → Historian) using the built-in orchestrator:
+
+### Option A: Python CLI Orchestrator (Automated)
+
+```bash
+# Run using detected LLM provider (OpenAI / Anthropic / Gemini) or fallback to dry-run
+python -m orchestrator "Build a REST API for task management"
+
+# Force dry-run mode to inspect the pipeline flow without external API calls
+python -m orchestrator "Build user authentication module" --dry-run
+```
+
+All stage outputs are saved to `.aef_output/` as verified markdown artifacts.
+
+### Option B: Single-Prompt LLM Pipeline
+
+You can copy the master prompt from [`protocols/end-to-end-pipeline.md`](protocols/end-to-end-pipeline.md) directly into your AI assistant session to run all 5 agents in a single continuous turn.
 
 ---
 
