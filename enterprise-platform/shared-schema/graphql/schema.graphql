@@ -1,0 +1,297 @@
+scalar DateTime
+scalar JSON
+
+type JwtTokenIssue {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type JwtTokenVerify {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type OrderCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type OrderCancel {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type OrderReturnRequest {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type WarehouseSync {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type WarehouseCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type WarehouseUpdate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type StripeChargeCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type StripeChargeCapture {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type StripeChargeRefund {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type StripeCustomerCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type PriceBaseSet {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type PriceDynamicCompute {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type PriceSurgeDetect {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type CollabFilterTrain {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type CollabFilterPredict {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type CollabFilterRetrain {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type EmailSend {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type EmailTemplateRender {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type EmailBatchSend {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type RevenueDashboardCompute {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type RevenueByProduct {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type SemanticSearchIndex {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type SemanticSearchQuery {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type SemanticSearchRerank {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type UserList {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type UserCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type UserUpdate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type ProductListPage {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type ProductDetailPage {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type ProductImageGallery {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type CartAddItem {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type VpcCreate {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type SubnetConfigure {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+type SecurityGroupDefine {
+  id: ID!
+  status: String!
+  createdAt: DateTime!
+}
+
+
+type Query {
+  jwt_token_issue(id: ID!): JwtTokenIssue
+  jwt_token_verify(id: ID!): JwtTokenVerify
+  order_create(id: ID!): OrderCreate
+  order_cancel(id: ID!): OrderCancel
+  order_return_request(id: ID!): OrderReturnRequest
+  warehouse_sync(id: ID!): WarehouseSync
+  warehouse_create(id: ID!): WarehouseCreate
+  warehouse_update(id: ID!): WarehouseUpdate
+  stripe_charge_create(id: ID!): StripeChargeCreate
+  stripe_charge_capture(id: ID!): StripeChargeCapture
+  stripe_charge_refund(id: ID!): StripeChargeRefund
+  stripe_customer_create(id: ID!): StripeCustomerCreate
+  price_base_set(id: ID!): PriceBaseSet
+  price_dynamic_compute(id: ID!): PriceDynamicCompute
+  price_surge_detect(id: ID!): PriceSurgeDetect
+  collab_filter_train(id: ID!): CollabFilterTrain
+  collab_filter_predict(id: ID!): CollabFilterPredict
+  collab_filter_retrain(id: ID!): CollabFilterRetrain
+  email_send(id: ID!): EmailSend
+  email_template_render(id: ID!): EmailTemplateRender
+  email_batch_send(id: ID!): EmailBatchSend
+  revenue_dashboard_compute(id: ID!): RevenueDashboardCompute
+  revenue_by_product(id: ID!): RevenueByProduct
+  semantic_search_index(id: ID!): SemanticSearchIndex
+  semantic_search_query(id: ID!): SemanticSearchQuery
+  semantic_search_rerank(id: ID!): SemanticSearchRerank
+  user_list(id: ID!): UserList
+  user_create(id: ID!): UserCreate
+  user_update(id: ID!): UserUpdate
+  product_list_page(id: ID!): ProductListPage
+  product_detail_page(id: ID!): ProductDetailPage
+  product_image_gallery(id: ID!): ProductImageGallery
+  cart_add_item(id: ID!): CartAddItem
+  vpc_create(id: ID!): VpcCreate
+  subnet_configure(id: ID!): SubnetConfigure
+  security_group_define(id: ID!): SecurityGroupDefine
+}
+
+type Mutation {
+  executeJwtTokenIssue(input: JSON!): JwtTokenIssue
+  executeJwtTokenVerify(input: JSON!): JwtTokenVerify
+  executeOrderCreate(input: JSON!): OrderCreate
+  executeOrderCancel(input: JSON!): OrderCancel
+  executeOrderReturnRequest(input: JSON!): OrderReturnRequest
+  executeWarehouseSync(input: JSON!): WarehouseSync
+  executeWarehouseCreate(input: JSON!): WarehouseCreate
+  executeWarehouseUpdate(input: JSON!): WarehouseUpdate
+  executeStripeChargeCreate(input: JSON!): StripeChargeCreate
+  executeStripeChargeCapture(input: JSON!): StripeChargeCapture
+  executeStripeChargeRefund(input: JSON!): StripeChargeRefund
+  executeStripeCustomerCreate(input: JSON!): StripeCustomerCreate
+  executePriceBaseSet(input: JSON!): PriceBaseSet
+  executePriceDynamicCompute(input: JSON!): PriceDynamicCompute
+  executePriceSurgeDetect(input: JSON!): PriceSurgeDetect
+  executeCollabFilterTrain(input: JSON!): CollabFilterTrain
+  executeCollabFilterPredict(input: JSON!): CollabFilterPredict
+  executeCollabFilterRetrain(input: JSON!): CollabFilterRetrain
+  executeEmailSend(input: JSON!): EmailSend
+  executeEmailTemplateRender(input: JSON!): EmailTemplateRender
+  executeEmailBatchSend(input: JSON!): EmailBatchSend
+  executeRevenueDashboardCompute(input: JSON!): RevenueDashboardCompute
+  executeRevenueByProduct(input: JSON!): RevenueByProduct
+  executeSemanticSearchIndex(input: JSON!): SemanticSearchIndex
+  executeSemanticSearchQuery(input: JSON!): SemanticSearchQuery
+  executeSemanticSearchRerank(input: JSON!): SemanticSearchRerank
+  executeUserList(input: JSON!): UserList
+  executeUserCreate(input: JSON!): UserCreate
+  executeUserUpdate(input: JSON!): UserUpdate
+  executeProductListPage(input: JSON!): ProductListPage
+  executeProductDetailPage(input: JSON!): ProductDetailPage
+  executeProductImageGallery(input: JSON!): ProductImageGallery
+  executeCartAddItem(input: JSON!): CartAddItem
+  executeVpcCreate(input: JSON!): VpcCreate
+  executeSubnetConfigure(input: JSON!): SubnetConfigure
+  executeSecurityGroupDefine(input: JSON!): SecurityGroupDefine
+}

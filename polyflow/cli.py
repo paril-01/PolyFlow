@@ -149,6 +149,33 @@ def cmd_run(filepath: str, payload_json: str = "{}", timeout_ms: int = 5000):
     _safe_print(f"\n🔒 Merkle Ledger Node #{ledger_node.index} Created: {ledger_node.merkle_root[:16]}...")
 
 def cmd_validate(filepath: str):
+    path = Path(filepath)
+    if path.is_dir():
+        poly_files = list(path.glob("**/*.poly"))
+        _safe_print(f"🔍 Validating {len(poly_files)} .poly files in directory: {filepath}")
+        total_violations = 0
+        p = PolyParser()
+        gov = PolyGovernanceEngine()
+        guards = PolyGuardEngine()
+
+        for f in poly_files:
+            try:
+                ast = p.parse_file(str(f))
+                violations = guards.inspect_ast(ast)
+                if violations:
+                    total_violations += len(violations)
+                    _safe_print(f"  ❌ {f.name}: {len(violations)} Guard Violation(s)")
+            except Exception as e:
+                total_violations += 1
+                _safe_print(f"  ❌ {f.name}: Parsing error - {e}")
+
+        if total_violations == 0:
+            _safe_print(f"  ✅ All {len(poly_files)} .poly files passed IDE Guards & Governance checks cleanly!")
+        else:
+            _safe_print(f"  ❌ Total Guard Violations across directory: {total_violations}")
+            sys.exit(1)
+        return
+
     p = PolyParser()
     ast = p.parse_file(filepath)
 

@@ -1,0 +1,82 @@
+# Cohort Define — PolyFlow Governance Module
+# Service: analytics-java | Language: java | Domain: analytics
+
+@contract
+feature_id: "ECP-ANALYTICS-COHORT-DEFINE"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "sensitive"
+approvers: ["leo.rivera@ecp.dev", "bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema CohortDefineRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema CohortDefineResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class CohortDefineProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "cohort_define",
+            "domain", "analytics",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in cohort_define request."
+  "IllegalArgumentException" -> "Invalid argument passed to cohort_define."
+  "TimeoutException" -> "Operation cohort_define timed out."
+@end
+
+@rationale for="cohort_define"
+reason: "Selected java for Cohort Define due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="cohort_define"
+decision: "Implement as microservice endpoint on analytics-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Cohort Define execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

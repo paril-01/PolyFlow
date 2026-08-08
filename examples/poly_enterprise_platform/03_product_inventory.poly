@@ -1,0 +1,209 @@
+# 03_product_inventory.poly — Product Catalog & Multi-Warehouse Inventory Platform
+
+@contract
+feature_id: "CATALOG-2026-SCALE-003"
+owner: "inventory-architecture-team"
+classification: "public"
+timeout_ms: 2000
+@end
+
+@schema ProductSearchRequest
+  query: string
+  category: string
+  max_price: number
+  in_stock_only: boolean
+@end
+
+@schema ProductSearchResponse
+  results: list
+  total_found: number
+  warehouse_location: string
+  warehouse_id: string
+@end
+
+@typescript[component]
+import React, { useState } from 'react';
+
+export interface ProductItem {
+  product_id: string;
+  title: string;
+  category: string;
+  unit_price: number;
+  inventory_count: number;
+  in_stock: boolean;
+}
+
+export function ProductCatalogGrid({
+  products,
+  onAddToCart,
+  onFilterChange
+}: {
+  products: ProductItem[];
+  onAddToCart: (item: ProductItem) => void;
+  onFilterChange: (cat: string) => void;
+}) {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredProducts = products.filter((p) =>
+    p.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="bg-slate-950 p-8 rounded-2xl border border-slate-850">
+      <div className="flex justify-between items-center pb-6 border-b border-slate-800">
+        <div>
+          <h3 className="text-2xl font-bold text-white">Enterprise Equipment Catalog</h3>
+          <p className="text-xs text-slate-400 mt-1">Multi-Warehouse Inventory Allocation & Logistics</p>
+        </div>
+        <div className="w-72">
+          <input
+            type="text"
+            placeholder="Search enterprise items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-slate-900 border border-slate-750 text-white text-xs px-3.5 py-2 rounded-lg focus:outline-none focus:border-indigo-500"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        {filteredProducts.map((item) => (
+          <div
+            key={item.product_id}
+            className="rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-xl hover:border-slate-700 transition flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-mono font-bold uppercase text-indigo-400 bg-indigo-950 px-2.5 py-1 rounded">
+                  {item.category}
+                </span>
+                <span className="text-xs text-slate-400 font-mono">{item.product_id}</span>
+              </div>
+              <h4 className="mt-3 text-lg font-bold text-white leading-snug">{item.title}</h4>
+              <p className="mt-2 text-3xl font-extrabold text-emerald-400 font-mono">
+                ${item.unit_price.toFixed(2)}
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-800">
+              <div className="flex justify-between text-xs text-slate-400 font-mono mb-3">
+                <span>Warehouse Stock:</span>
+                <span className={item.inventory_count > 20 ? 'text-emerald-400' : 'text-amber-400'}>
+                  {item.inventory_count} units available
+                </span>
+              </div>
+              <button
+                onClick={() => onAddToCart(item)}
+                className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 text-xs shadow-lg transition"
+              >
+                Add Item to Corporate Cart
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    query = req.get("query", "").lower()
+    category = req.get("category", "all")
+    in_stock_only = req.get("in_stock_only", False)
+    
+    catalog_items = [
+        {
+            "product_id": "prod_server_101",
+            "title": "PolyFlow Cluster Server Node",
+            "category": "Hardware",
+            "unit_price": 2499.00,
+            "inventory_count": 85,
+            "warehouse_id": "WH-US-EAST-01",
+            "specs": {"cpu": "64 Cores", "ram": "256GB DDR5", "storage": "4TB NVMe RAID"}
+        },
+        {
+            "product_id": "prod_license_102",
+            "title": "PolyEnterprise Unlimited Core License",
+            "category": "Software",
+            "unit_price": 4999.00,
+            "inventory_count": 1000,
+            "warehouse_id": "WH-DIGITAL-GLOBAL",
+            "specs": {"license_type": "Perpetual Enterprise", "support": "24/7 SLA"}
+        },
+        {
+            "product_id": "prod_workstation_103",
+            "title": "AI Engineering Workstation Pro",
+            "category": "Hardware",
+            "unit_price": 3899.50,
+            "inventory_count": 42,
+            "warehouse_id": "WH-US-WEST-02",
+            "specs": {"gpu": "Dual RTX 6000 Ada", "ram": "128GB", "storage": "2TB NVMe"}
+        }
+    ]
+    
+    results = catalog_items
+    if query:
+        results = [item for item in results if query in item["title"].lower() or query in item["category"].lower()]
+        
+    ctx.emit_audit("inventory_catalog_searched", query=query, results_count=len(results))
+    
+    return {
+        "status": "catalog_fetched",
+        "results": results,
+        "total_found": len(results),
+        "warehouse_location": "US-EAST-PRIMARY-DC",
+        "warehouse_id": "WH-US-EAST-01"
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.ims;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaEnterpriseInventoryManager {
+    public Map<String, Object> checkStock(String productId) {
+        Map<String, Object> stock = new HashMap<>();
+        stock.put("product_id", productId);
+        stock.put("stock_status", "IN_STOCK");
+        stock.put("reserved_quantity", 12);
+        stock.put("available_unreserved", 73);
+        stock.put("fulfillment_center", "FC-CHICAGO-01");
+        stock.put("reorder_point", 15);
+        return stock;
+    }
+}
+@end
+
+@go[gateway]
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type StockCheckRequest struct {
+	ProductID string `json:"product_id"`
+}
+
+type StockCheckResponse struct {
+	Available int    `json:"available"`
+	Status    string `json:"status"`
+	QPS       int    `json:"qps_throughput"`
+}
+
+func CheckStockGo(req StockCheckRequest) StockCheckResponse {
+	return StockCheckResponse{
+		Available: 150,
+		Status:    "go_high_speed_counter_ok",
+		QPS:       45000,
+	}
+}
+@end
+
+@merge strategy="fallback" order=["python", "java", "go"]
+@end

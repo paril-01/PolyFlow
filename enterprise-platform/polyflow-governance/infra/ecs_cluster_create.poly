@@ -1,0 +1,61 @@
+# Ecs Cluster Create — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-ECS-CLUSTER-CREATE"
+owner: "Hassan Ali <hassan.ali@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["hassan.ali@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema EcsClusterCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema EcsClusterCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Ecs Cluster Create implementation
+@end
+
+@merge strategy="all-success" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in ecs_cluster_create."
+@end
+
+@rationale for="ecs_cluster_create"
+reason: "Selected hcl for Ecs Cluster Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="ecs_cluster_create"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Hassan Ali"]
+@end
+
+@audit
+action: "Log Ecs Cluster Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

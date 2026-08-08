@@ -1,0 +1,91 @@
+# Cross-Service Call Chain: Order Return Flow
+# Customer initiates a return, inventory restocked, refund processed
+# Chain Length: 7 services, 5 languages
+
+@contract
+feature_id: "ECP-CHAIN-ORDER-RETURN-FLOW"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 15000
+@end
+
+@link frontend-react::order_history_detail as order_history_detail
+@link gateway-go::route_order_return as route_order_return
+@link order-service-go::order_return_request as order_return_request
+@link inventory-python::reservation_release as reservation_release
+@link payment-service-java::refund_full as refund_full
+@link notification-node::email_send as email_send
+@link analytics-java::event_track as event_track
+
+@typescript[step_0_order_history_detail]
+# Step 1: frontend-react -> order_history_detail
+# Language: typescript
+# This is step 1 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 1, "service": "frontend-react", "action": "order_history_detail", "status": "completed"}
+@end
+@go[step_1_route_order_return]
+# Step 2: gateway-go -> route_order_return
+# Language: go
+# This is step 2 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 2, "service": "gateway-go", "action": "route_order_return", "status": "completed"}
+@end
+@go[step_2_order_return_request]
+# Step 3: order-service-go -> order_return_request
+# Language: go
+# This is step 3 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 3, "service": "order-service-go", "action": "order_return_request", "status": "completed"}
+@end
+@python[step_3_reservation_release]
+# Step 4: inventory-python -> reservation_release
+# Language: python
+# This is step 4 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 4, "service": "inventory-python", "action": "reservation_release", "status": "completed"}
+@end
+@java[step_4_refund_full]
+# Step 5: payment-service-java -> refund_full
+# Language: java
+# This is step 5 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 5, "service": "payment-service-java", "action": "refund_full", "status": "completed"}
+@end
+@javascript[step_5_email_send]
+# Step 6: notification-node -> email_send
+# Language: javascript
+# This is step 6 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 6, "service": "notification-node", "action": "email_send", "status": "completed"}
+@end
+@java[step_6_event_track]
+# Step 7: analytics-java -> event_track
+# Language: java
+# This is step 7 of 7 in the Order Return Flow call chain.
+def process(req):
+    return {"step": 7, "service": "analytics-java", "action": "event_track", "status": "completed"}
+@end
+
+@merge strategy="all-success" order=["typescript", "go", "go", "python", "java", "javascript", "java"]
+@end
+
+@rationale for="order_return_flow"
+reason: "This call chain crosses 5 language boundaries. Each step is isolated in its own process cell for fault tolerance."
+@end
+
+@decision for="order_return_flow"
+decision: "Route through API Gateway for centralized auth and rate limiting"
+date: "2024-03-20"
+status: "accepted"
+@end
+
+@audit
+action: "Trace full call chain execution for Order Return Flow"
+fields: ["chain_id", "total_steps", "total_latency_ms", "failed_steps"]
+retention: "7_years"
+compliance: ["SOC2"]
+@end

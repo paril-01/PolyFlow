@@ -1,0 +1,89 @@
+# Account Payment Methods — PolyFlow Governance Module
+# Service: frontend-react | Language: typescript | Domain: frontend_customer
+
+@contract
+feature_id: "ECP-FRONTEND_CUSTOMER-ACCOUNT-PAYMENT-METH"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["alice.chen@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema AccountPaymentMethodsRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  amount: number<min:0>
+  currency: string<len:3>
+  metadata: object | null
+@end
+
+@schema AccountPaymentMethodsResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface AccountPaymentMethodsProps {
+  onComplete?: (data: any) => void;
+}
+
+export const AccountPaymentMethods: React.FC<AccountPaymentMethodsProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/frontend_customer/account-payment-methods', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Account Payment Methods'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="all-success" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in account_payment_methods component."
+  "NetworkError" -> "API call failed for account_payment_methods."
+@end
+
+@rationale for="account_payment_methods"
+reason: "Selected typescript for Account Payment Methods due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="account_payment_methods"
+decision: "Implement as microservice endpoint on frontend-react"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Account Payment Methods execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

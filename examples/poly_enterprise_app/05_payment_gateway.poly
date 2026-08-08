@@ -1,0 +1,78 @@
+# 05_payment_gateway.poly — Resilient Payment Gateway Feature (Fail-Partial Demo)
+
+@contract
+feature_id: "PAY-2026-904"
+owner: "payments-finance-team"
+classification: "sensitive"
+approvers: ["cfo@enterprise.com", "security.lead@enterprise.com"]
+timeout_ms: 3000
+@end
+
+@schema PaymentRequest
+  cart_id: string
+  amount: number
+  payment_method: string
+@end
+
+@schema PaymentResponse
+  payment_id: string
+  cart_id: string
+  amount: number
+  status: string
+  gateway: string
+@end
+
+@error-map language="python"
+ConnectionError:primary_gateway_timeout → "Primary payment gateway connection timed out. Activating secondary fail-partial cell."
+@end
+
+@rationale for="python[service].gateway"
+reason: "Primary payment gateway uses simulated circuit breaker failure to demonstrate PolyFlow fail-partial resilience."
+decision_date: "2026-08-07"
+selected: "resilient-fallback-v1"
+@end
+
+@python[service]
+def process(req):
+    # Simulate primary gateway outage if flag is set
+    simulate_fail = req.get("simulate_fail", False)
+    if simulate_fail:
+        ctx.emit_audit("primary_payment_failed", reason="simulated_gateway_outage")
+        raise ConnectionError("primary_gateway_timeout")
+        
+    amount = req.get("amount", 100.0)
+    cart_id = req.get("cart_id", "cart_000")
+    
+    return {
+        "status": "payment_approved",
+        "payment_id": "pay_py_998811",
+        "cart_id": cart_id,
+        "amount": amount,
+        "gateway": "Primary-Python-Gateway"
+    }
+@end
+
+@node[fallback]
+function process(req) {
+    const amount = req.amount || 100.0;
+    const cartId = req.cart_id || "cart_000";
+    return {
+        status: "payment_approved",
+        payment_id: "pay_node_fallback_776622",
+        cart_id: cartId,
+        amount: amount,
+        gateway: "Secondary-Node-Resilient-Gateway",
+        resilience_notice: "Recovered seamlessly from primary cell failure"
+    };
+}
+@end
+
+@merge strategy="fallback" order=["python", "node"]
+@end
+
+@audit
+entry: "2026-08-07T12:05:00Z"
+agent: "payments-architect"
+action: "enabled_fail_partial_resilience"
+approved_by: "cfo@enterprise.com"
+@end

@@ -1,0 +1,95 @@
+# 02_treasury_accounts.poly — Treasury Balances & Inter-Account Transfers
+
+@contract
+feature_id: "FINTECH-TREASURY-002"
+owner: "corporate-treasury-group"
+classification: "sensitive"
+approvers: ["cfo@polyfintech.com", "treasury.head@polyfintech.com"]
+timeout_ms: 3000
+@end
+
+@schema AccountTransferRequest
+  from_account_id: string
+  to_account_id: string
+  amount: number
+  currency: string
+  description: string
+@end
+
+@schema AccountTransferResponse
+  tx_id: string
+  status: string
+  new_balance: number
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function TreasuryAccountCards({ accounts }: { accounts: any[] }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {accounts.map((acc) => (
+        <div key={acc.account_id} className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+          <div className="flex justify-between items-center text-xs font-mono text-slate-400">
+            <span>{acc.currency} Account</span>
+            <span className="bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded font-bold">{acc.status}</span>
+          </div>
+          <p className="mt-3 text-3xl font-black text-white font-mono">
+            {acc.currency === 'USD' ? '$' : acc.currency === 'EUR' ? '€' : acc.currency === 'GBP' ? '£' : ''}
+            {acc.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+          </p>
+          <p className="mt-2 text-xs text-slate-400 font-mono">{acc.account_number}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    from_acc = req.get("from_account_id", "acc_usd_01")
+    to_acc = req.get("to_account_id", "acc_eur_02")
+    amount = float(req.get("amount", 10000.0))
+    desc = req.get("description", "Treasury Rebalance")
+    
+    tx_hash = hashlib.sha256(f"{from_acc}:{to_acc}:{amount}:{time.time()}".encode()).hexdigest()[:10]
+    tx_id = f"tx_tr_{tx_hash}"
+    
+    ctx.emit_audit("treasury_transfer_executed", tx_id=tx_id, amount=amount)
+    
+    return {
+        "status": "COMPLETED",
+        "tx_id": tx_id,
+        "from_account_id": from_acc,
+        "to_account_id": to_acc,
+        "amount": amount,
+        "currency": req.get("currency", "USD"),
+        "description": desc,
+        "timestamp": time.time(),
+        "settlement": "INSTANT_INTERNAL_CLEARING"
+    }
+@end
+
+@java[backend]
+package com.polyfintech.treasury;
+
+import java.util.Map;
+
+public class JavaFedWireClearingService {
+    public Map<String, Object> clearFedWireTransaction(String txId) {
+        return Map.of(
+            "tx_id", txId,
+            "fed_clearing_status", "SETTLED",
+            "routing_imad", "20260807B1Q9002C000101"
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

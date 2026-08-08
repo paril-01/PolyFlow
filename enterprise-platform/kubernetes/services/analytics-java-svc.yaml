@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-java
+  namespace: ecp
+spec:
+  selector:
+    app: analytics-java
+  ports:
+  - port: 8088
+    targetPort: 8088
+  type: ClusterIP

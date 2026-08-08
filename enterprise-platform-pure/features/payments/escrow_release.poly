@@ -1,0 +1,82 @@
+# Escrow Release — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-ESCROW-RELEASE"
+owner: "Karen Singh <karen.singh@ecp.dev>"
+team: "ml"
+classification: "restricted"
+approvers: ["karen.singh@ecp.dev", "bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema EscrowReleaseRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema EscrowReleaseResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class EscrowReleaseProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "escrow_release",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="first-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in escrow_release request."
+  "IllegalArgumentException" -> "Invalid argument passed to escrow_release."
+  "TimeoutException" -> "Operation escrow_release timed out."
+@end
+
+@rationale for="escrow_release"
+reason: "Selected java for Escrow Release due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="escrow_release"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Karen Singh"]
+@end
+
+@audit
+action: "Log Escrow Release execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

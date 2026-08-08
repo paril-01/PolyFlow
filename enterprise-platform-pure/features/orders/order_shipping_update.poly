@@ -1,0 +1,86 @@
+# Order Shipping Update — PolyFlow Governance Module
+# Service: order-service-go | Language: go | Domain: orders
+
+@contract
+feature_id: "ECP-ORDERS-ORDER-SHIPPING-UPDAT"
+owner: "Carol Williams <carol.williams@ecp.dev>"
+team: "frontend"
+classification: "internal"
+approvers: ["carol.williams@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema OrderShippingUpdateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  items: array<OrderItem>
+  total: number<min:0>
+  metadata: object | null
+@end
+
+@schema OrderShippingUpdateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="go"
+allowed_imports: ["fmt", "net/http", "encoding/json", "time", "github.com/google/uuid"]
+@end
+
+@go[service]
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "time"
+)
+
+func process(req map[string]interface{}) map[string]interface{} {
+    start := time.Now()
+    result := map[string]interface{}{
+        "feature":   "order_shipping_update",
+        "domain":    "orders",
+        "processed": true,
+    }
+    elapsed := time.Since(start).Milliseconds()
+    return map[string]interface{}{
+        "status":          "success",
+        "result":          result,
+        "processing_ms":   elapsed,
+    }
+}
+@end
+
+@merge strategy="vote" order=["go"]
+@end
+
+@error-map language="go"
+  "context.DeadlineExceeded" -> "Request to order_shipping_update timed out."
+  "sql.ErrNoRows" -> "Resource not found for order_shipping_update."
+  "io.EOF" -> "Unexpected end of input in order_shipping_update."
+@end
+
+@rationale for="order_shipping_update"
+reason: "Selected go for Order Shipping Update due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="order_shipping_update"
+decision: "Implement as microservice endpoint on order-service-go"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Carol Williams"]
+@end
+
+@audit
+action: "Log Order Shipping Update execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

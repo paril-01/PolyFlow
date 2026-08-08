@@ -1,0 +1,144 @@
+# 06_multi_gateway_payment.poly — Multi-Language Payment Gateway Platform
+
+@contract
+feature_id: "PAY-2026-SCALE-006"
+owner: "payments-core-architecture"
+classification: "sensitive"
+approvers: ["cfo@enterprise.com", "security.lead@enterprise.com", "treasury@enterprise.com"]
+timeout_ms: 3500
+@end
+
+@schema PaymentProcessRequest
+  cart_id: string
+  grand_total: number
+  payment_method: string
+@end
+
+@schema PaymentProcessResponse
+  payment_id: string
+  cart_id: string
+  grand_total: number
+  status: string
+  executed_gateway: string
+@end
+
+@error-map language="python"
+ConnectionError:primary_stripe_down → "Stripe payment gateway connection timed out. Circuit breaker activated secondary Java SWIFT gateway."
+@end
+
+@rationale for="python[service].payment_routing"
+reason: "Routes corporate payments through Stripe (Python), SWIFT (Java), or Crypto Ledger (Go) with automatic fail-partial recovery."
+decision_date: "2026-08-07"
+selected: "polyglot-circuit-breaker-v3"
+@end
+
+@typescript[component]
+import React, { useState } from 'react';
+
+export function CreditCardPaymentForm({ totalAmount, onSubmit }: { totalAmount: number; onSubmit: (data: any) => void }) {
+  const [method, setMethod] = useState('corporate_swift');
+
+  return (
+    <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-white max-w-md shadow-2xl">
+      <h3 className="text-xl font-bold">Enterprise Multi-Gateway Payment</h3>
+      <p className="text-xs text-slate-400 mt-1">Total Amount Authorized: ${totalAmount.toFixed(2)}</p>
+
+      <div className="mt-6 space-y-3">
+        <label className="block text-xs font-semibold uppercase text-slate-300">Payment Gateway Routing Engine</label>
+        <select
+          value={method}
+          onChange={(e) => setMethod(e.target.value)}
+          className="w-full rounded-xl bg-slate-950 px-3.5 py-2.5 text-white border border-slate-800 text-xs font-mono"
+        >
+          <option value="corporate_swift">Java Banking SWIFT / SEPA Gateway (ISO-20022)</option>
+          <option value="stripe_python">Python Stripe Enterprise Gateway</option>
+          <option value="go_crypto">Go High-Throughput Ledger Gateway</option>
+        </select>
+      </div>
+
+      <button
+        onClick={() => onSubmit({ method, totalAmount })}
+        className="mt-8 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg transition"
+      >
+        Authorize Enterprise Payment (${totalAmount.toFixed(2)})
+      </button>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    simulate_fail = req.get("simulate_fail", True)  # Simulate primary Python failure to demonstrate Java recovery
+    if simulate_fail:
+        ctx.emit_audit("python_stripe_failed", reason="circuit_breaker_triggered")
+        raise ConnectionError("primary_stripe_down")
+        
+    cart_id = req.get("cart_id", "cart_000")
+    total = req.get("grand_total", 500.0)
+    
+    return {
+        "status": "payment_approved",
+        "payment_id": "pay_stripe_py_9911",
+        "cart_id": cart_id,
+        "grand_total": total,
+        "executed_gateway": "Python-Stripe-Gateway"
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.payments;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaSwiftPaymentProcessor {
+    public Map<String, Object> processSwiftTransfer(Map<String, Object> req) {
+        String cartId = (String) req.getOrDefault("cart_id", "cart_000");
+        Double total = Double.parseDouble(req.getOrDefault("grand_total", "500.0").toString());
+        
+        Map<String, Object> res = new HashMap<>();
+        res.put("status", "payment_approved");
+        res.put("payment_id", "pay_swift_java_774411");
+        res.put("cart_id", cartId);
+        res.put("grand_total", total);
+        res.put("executed_gateway", "Java-Banking-SWIFT-Resilient-Gateway");
+        res.put("resilience_recovery", "Recovered automatically from Python cell timeout");
+        res.put("swift_reference", "SWIFT-ISO20022-USNY-2026");
+        return res;
+    }
+}
+@end
+
+@go[gateway]
+package main
+
+type PaymentReq struct {
+	CartID string  `json:"cart_id"`
+	Total  float64 `json:"grand_total"`
+}
+
+type PaymentResp struct {
+	Status    string  `json:"status"`
+	PaymentID string  `json:"payment_id"`
+	Gateway   string  `json:"executed_gateway"`
+}
+
+func ProcessCryptoPayment(req PaymentReq) PaymentResp {
+	return PaymentResp{
+		Status:    "payment_approved",
+		PaymentID: "pay_go_crypto_883322",
+		Gateway:   "Go-Crypto-Ledger-Gateway",
+	}
+}
+@end
+
+@merge strategy="fallback" order=["python", "java", "go"]
+@end
+
+@audit
+entry: "2026-08-07T13:10:00Z"
+agent: "payments-core-architecture"
+action: "verified_multi_language_circuit_breaker"
+approved_by: "cfo@enterprise.com"
+@end

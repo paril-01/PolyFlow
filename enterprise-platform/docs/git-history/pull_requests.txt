@@ -1,0 +1,72 @@
+PR-0001 | notification admin template | Alice Chen | frontend-angular | closed
+PR-0002 | device trust verify | Hassan Ali | auth-service-java | merged
+PR-0003 | api key admin revoke | Frank Johnson | frontend-angular | merged
+PR-0004 | cart remove item | Jake Thompson | frontend-react | merged
+PR-0005 | realtime metric alert | Frank Johnson | analytics-java | merged
+PR-0006 | recommendation cache invalidate | Hassan Ali | recommendation-python | merged
+PR-0007 | recommendation batch compute | Hassan Ali | recommendation-python | merged
+PR-0008 | payout vendor reconcile | David Kim | payment-service-java | merged
+PR-0009 | delivery bounce handle | Frank Johnson | notification-node | merged
+PR-0010 | delivery bounce handle | Frank Johnson | notification-node | merged
+PR-0011 | funnel compute | Hassan Ali | analytics-java | closed
+PR-0012 | email template render | Grace Liu | notification-node | merged
+PR-0013 | whatsapp send | Frank Johnson | notification-node | merged
+PR-0014 | whatsapp status | Alice Chen | notification-node | merged
+PR-0015 | razorpay order create | Carol Williams | payment-service-java | closed
+PR-0016 | restock approval | Hassan Ali | inventory-python | merged
+PR-0017 | event track | Alice Chen | analytics-java | merged
+PR-0018 | flash sale activate | Iris Nakamura | pricing-python | merged
+PR-0019 | prometheus alert | Jake Thompson | terraform | merged
+PR-0020 | segment export | Carol Williams | analytics-java | closed
+PR-0021 | order tax calculate | Bob Martinez | order-service-go | merged
+PR-0022 | tax exempt check | Jake Thompson | pricing-python | merged
+PR-0023 | escrow release | Hassan Ali | payment-service-java | merged
+PR-0024 | checkout confirm | Elena Petrov | frontend-react | merged
+PR-0025 | gift card redeem | Elena Petrov | frontend-react | merged
+PR-0026 | permission matrix view | Bob Martinez | frontend-angular | merged
+PR-0027 | k8s service | Frank Johnson | terraform | merged
+PR-0028 | recommendation model version | Carol Williams | recommendation-python | merged
+PR-0029 | rbac permission check | Bob Martinez | auth-service-java | merged
+PR-0030 | settlement weekly | David Kim | payment-service-java | merged
+PR-0031 | notification center | Frank Johnson | frontend-react | merged
+PR-0032 | recommendation model version | Iris Nakamura | recommendation-python | merged
+PR-0033 | reservation expire | David Kim | inventory-python | merged
+PR-0034 | payout vendor reconcile | Jake Thompson | payment-service-java | merged
+PR-0035 | ab test conclude | David Kim | analytics-java | merged
+PR-0036 | recommendation explain | Alice Chen | recommendation-python | merged
+PR-0037 | inventory import csv | Grace Liu | inventory-python | merged
+PR-0038 | event schema validate | Iris Nakamura | analytics-java | merged
+PR-0039 | order fulfillment complete | Elena Petrov | order-service-go | merged
+PR-0040 | tax exempt check | David Kim | pricing-python | merged
+PR-0041 | cohort compute | Alice Chen | analytics-java | merged
+PR-0042 | diversity inject | Alice Chen | recommendation-python | merged
+PR-0043 | fraud detect transaction | Hassan Ali | ai-service-python | merged
+PR-0044 | realtime metric aggregate | Frank Johnson | analytics-java | merged
+PR-0045 | fraud rule evaluate | Iris Nakamura | payment-service-java | merged
+PR-0046 | feature flag segment | Jake Thompson | frontend-angular | merged
+PR-0047 | s3 lifecycle policy | Alice Chen | terraform | merged
+PR-0048 | flash sale deactivate | Iris Nakamura | pricing-python | merged
+PR-0049 | vpc create | Grace Liu | terraform | merged
+PR-0050 | reservation create | David Kim | inventory-python | closed
+PR-0051 | order subtotal compute | Grace Liu | order-service-go | merged
+PR-0052 | segment compute | Carol Williams | analytics-java | merged
+PR-0053 | integration manage | Carol Williams | frontend-angular | merged
+PR-0054 | price rule create | Bob Martinez | pricing-python | merged
+PR-0055 | realtime metric ingest | Jake Thompson | analytics-java | merged
+PR-0056 | collab filter predict | Carol Williams | recommendation-python | closed
+PR-0057 | embedding text generate | Frank Johnson | ai-service-python | merged
+PR-0058 | k8s ingress | Frank Johnson | terraform | merged
+PR-0059 | review helpful vote | Grace Liu | frontend-react | merged
+PR-0060 | user update | Frank Johnson | frontend-angular | merged
+PR-0061 | migration status | Frank Johnson | frontend-angular | closed
+PR-0062 | device trust verify | Iris Nakamura | auth-service-java | merged
+PR-0063 | revenue by region | Carol Williams | analytics-java | merged
+PR-0064 | stock low alert | Carol Williams | inventory-python | merged
+PR-0065 | order subtotal compute | David Kim | order-service-go | merged
+PR-0066 | order invoice create | Frank Johnson | order-service-go | merged
+PR-0067 | event track | Bob Martinez | analytics-java | merged
+PR-0068 | template update | Iris Nakamura | notification-node | merged
+PR-0069 | order status update | Iris Nakamura | order-service-go | merged
+PR-0070 | flash sale activate | Bob Martinez | pricing-python | merged
+PR-0071 | jwt token verify | Iris Nakamura | auth-service-java | merged
+PR-0072 | revenue by product | David Kim | analytics-java | closed

@@ -1,0 +1,61 @@
+# Iam Role Create — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-IAM-ROLE-CREATE"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "internal"
+approvers: ["leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema IamRoleCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema IamRoleCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Iam Role Create implementation
+@end
+
+@merge strategy="vote" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in iam_role_create."
+@end
+
+@rationale for="iam_role_create"
+reason: "Selected hcl for Iam Role Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="iam_role_create"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Iam Role Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

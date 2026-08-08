@@ -1,0 +1,61 @@
+# Iam User Create — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-IAM-USER-CREATE"
+owner: "Frank Johnson <frank.johnson@ecp.dev>"
+team: "devops"
+classification: "restricted"
+approvers: ["frank.johnson@ecp.dev", "iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema IamUserCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema IamUserCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Iam User Create implementation
+@end
+
+@merge strategy="parallel-collect" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in iam_user_create."
+@end
+
+@rationale for="iam_user_create"
+reason: "Selected hcl for Iam User Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="iam_user_create"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Frank Johnson"]
+@end
+
+@audit
+action: "Log Iam User Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

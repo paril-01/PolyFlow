@@ -1,0 +1,23 @@
+name: CI - inventory-python
+on:
+  push:
+    paths: ['inventory-python/**']
+  pull_request:
+    paths: ['inventory-python/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: inventory-python
+      run: pytest tests/ -v --cov=app
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/inventory-python:${{ github.sha }} ./inventory-python

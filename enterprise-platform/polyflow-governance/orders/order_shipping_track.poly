@@ -1,0 +1,86 @@
+# Order Shipping Track — PolyFlow Governance Module
+# Service: order-service-go | Language: go | Domain: orders
+
+@contract
+feature_id: "ECP-ORDERS-ORDER-SHIPPING-TRACK"
+owner: "Bob Martinez <bob.martinez@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema OrderShippingTrackRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  items: array<OrderItem>
+  total: number<min:0>
+  metadata: object | null
+@end
+
+@schema OrderShippingTrackResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="go"
+allowed_imports: ["fmt", "net/http", "encoding/json", "time", "github.com/google/uuid"]
+@end
+
+@go[service]
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "time"
+)
+
+func process(req map[string]interface{}) map[string]interface{} {
+    start := time.Now()
+    result := map[string]interface{}{
+        "feature":   "order_shipping_track",
+        "domain":    "orders",
+        "processed": true,
+    }
+    elapsed := time.Since(start).Milliseconds()
+    return map[string]interface{}{
+        "status":          "success",
+        "result":          result,
+        "processing_ms":   elapsed,
+    }
+}
+@end
+
+@merge strategy="first-success" order=["go"]
+@end
+
+@error-map language="go"
+  "context.DeadlineExceeded" -> "Request to order_shipping_track timed out."
+  "sql.ErrNoRows" -> "Resource not found for order_shipping_track."
+  "io.EOF" -> "Unexpected end of input in order_shipping_track."
+@end
+
+@rationale for="order_shipping_track"
+reason: "Selected go for Order Shipping Track due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="order_shipping_track"
+decision: "Implement as microservice endpoint on order-service-go"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Bob Martinez"]
+@end
+
+@audit
+action: "Log Order Shipping Track execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

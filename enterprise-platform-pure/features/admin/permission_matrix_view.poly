@@ -1,0 +1,87 @@
+# Permission Matrix View — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-PERMISSION-MATRIX-VI"
+owner: "David Kim <david.kim@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["david.kim@ecp.dev", "elena.petrov@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema PermissionMatrixViewRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema PermissionMatrixViewResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface PermissionMatrixViewProps {
+  onComplete?: (data: any) => void;
+}
+
+export const PermissionMatrixView: React.FC<PermissionMatrixViewProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/permission-matrix-view', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Permission Matrix View'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="first-success" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in permission_matrix_view component."
+  "NetworkError" -> "API call failed for permission_matrix_view."
+@end
+
+@rationale for="permission_matrix_view"
+reason: "Selected typescript for Permission Matrix View due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="permission_matrix_view"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["David Kim"]
+@end
+
+@audit
+action: "Log Permission Matrix View execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

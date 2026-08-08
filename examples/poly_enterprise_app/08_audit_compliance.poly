@@ -1,0 +1,53 @@
+# 08_audit_compliance.poly — Enterprise Audit & Merkle Ledger Compliance Feature
+
+@contract
+feature_id: "AUDIT-2026-907"
+owner: "compliance-security-office"
+classification: "sensitive"
+approvers: ["chief.compliance.officer@enterprise.com", "security.lead@enterprise.com"]
+retention_years: 7
+timeout_ms: 2500
+@end
+
+@schema AuditRecordRequest
+  event_type: string
+  actor: string
+  payload_summary: string
+@end
+
+@schema AuditRecordResponse
+  audit_id: string
+  merkle_leaf_hash: str
+  status: string
+@end
+
+@python[service]
+def process(req):
+    event_type = req.get("event_type", "GENERIC_EVENT")
+    actor = req.get("actor", "system")
+    summary = req.get("payload_summary", "No details")
+    
+    timestamp = "2026-08-07T12:15:00Z"
+    leaf_payload = f"{event_type}:{actor}:{summary}:{timestamp}"
+    leaf_hash = hashlib.sha256(leaf_payload.encode("utf-8")).hexdigest()
+    
+    ctx.emit_audit("compliance_recorded", event_type=event_type, leaf_hash=leaf_hash)
+    
+    return {
+        "status": "soc2_compliant_recorded",
+        "audit_id": f"aud_{leaf_hash[:12]}",
+        "event_type": event_type,
+        "actor": actor,
+        "merkle_leaf_hash": leaf_hash,
+        "retention_policy": "7_years_immutable"
+    }
+@end
+
+@merge strategy="first-success"
+@end
+
+@audit
+entry: "2026-08-07T12:15:00Z"
+agent: "compliance-officer"
+action: "verified_soc2_audit_chain"
+@end

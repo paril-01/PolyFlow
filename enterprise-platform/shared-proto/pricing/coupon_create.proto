@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.pricing;
+option go_package = "github.com/ecp/shared-proto/pricing";
+option java_package = "com.ecp.proto.pricing";
+
+message CouponCreateRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message CouponCreateResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service CouponCreateService {
+  rpc Execute (CouponCreateRequest) returns (CouponCreateResponse);
+}

@@ -1,0 +1,82 @@
+# Revenue Dashboard Compute — PolyFlow Governance Module
+# Service: analytics-java | Language: java | Domain: analytics
+
+@contract
+feature_id: "ECP-ANALYTICS-REVENUE-DASHBOARD-CO"
+owner: "David Kim <david.kim@ecp.dev>"
+team: "backend"
+classification: "sensitive"
+approvers: ["david.kim@ecp.dev", "frank.johnson@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema RevenueDashboardComputeRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema RevenueDashboardComputeResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RevenueDashboardComputeProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "revenue_dashboard_compute",
+            "domain", "analytics",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="fallback" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in revenue_dashboard_compute request."
+  "IllegalArgumentException" -> "Invalid argument passed to revenue_dashboard_compute."
+  "TimeoutException" -> "Operation revenue_dashboard_compute timed out."
+@end
+
+@rationale for="revenue_dashboard_compute"
+reason: "Selected java for Revenue Dashboard Compute due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="revenue_dashboard_compute"
+decision: "Implement as microservice endpoint on analytics-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["David Kim"]
+@end
+
+@audit
+action: "Log Revenue Dashboard Compute execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

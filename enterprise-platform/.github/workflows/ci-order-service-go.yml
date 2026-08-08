@@ -1,0 +1,23 @@
+name: CI - order-service-go
+on:
+  push:
+    paths: ['order-service-go/**']
+  pull_request:
+    paths: ['order-service-go/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: order-service-go
+      run: go test ./... -v -race
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/order-service-go:${{ github.sha }} ./order-service-go

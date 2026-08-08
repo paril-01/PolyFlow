@@ -1,0 +1,87 @@
+# Review Helpful Vote — PolyFlow Governance Module
+# Service: frontend-react | Language: typescript | Domain: frontend_customer
+
+@contract
+feature_id: "ECP-FRONTEND_CUSTOMER-REVIEW-HELPFUL-VOTE"
+owner: "Carol Williams <carol.williams@ecp.dev>"
+team: "frontend"
+classification: "sensitive"
+approvers: ["carol.williams@ecp.dev", "elena.petrov@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema ReviewHelpfulVoteRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ReviewHelpfulVoteResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface ReviewHelpfulVoteProps {
+  onComplete?: (data: any) => void;
+}
+
+export const ReviewHelpfulVote: React.FC<ReviewHelpfulVoteProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/frontend_customer/review-helpful-vote', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Review Helpful Vote'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="parallel-collect" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in review_helpful_vote component."
+  "NetworkError" -> "API call failed for review_helpful_vote."
+@end
+
+@rationale for="review_helpful_vote"
+reason: "Selected typescript for Review Helpful Vote due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="review_helpful_vote"
+decision: "Implement as microservice endpoint on frontend-react"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Carol Williams"]
+@end
+
+@audit
+action: "Log Review Helpful Vote execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

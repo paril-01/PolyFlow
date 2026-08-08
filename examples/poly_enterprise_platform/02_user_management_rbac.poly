@@ -1,0 +1,176 @@
+# 02_user_management_rbac.poly — User Management & RBAC Directory Feature
+
+@contract
+feature_id: "USER-2026-SCALE-002"
+owner: "directory-services-team"
+classification: "internal"
+approvers: ["iam.lead@enterprise.com", "security.lead@enterprise.com"]
+timeout_ms: 2500
+@end
+
+@link ./01_enterprise_auth.poly::python[service] as AuthService
+
+@schema UserProfileRequest
+  user_id: string
+  roles: list
+  department: string
+  clearance_level: string | null
+@end
+
+@schema UserProfileResponse
+  user_id: string
+  department: string
+  assigned_roles: list
+  permissions: list
+  clearance_level: string
+  rbac_status: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React, { useState } from 'react';
+
+export interface UserProfileProps {
+  user: {
+    user_id: string;
+    username: string;
+    department: string;
+    roles: string[];
+  };
+  permissions: string[];
+  onRoleUpdate: (newRole: string) => void;
+}
+
+export function UserRBACConsole({ user, permissions, onRoleUpdate }: UserProfileProps) {
+  const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'audit'>('permissions');
+
+  return (
+    <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 text-white shadow-2xl">
+      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <h3 className="text-xl font-extrabold tracking-tight text-white">Enterprise Identity Directory</h3>
+          <p className="text-xs text-slate-400 font-mono mt-0.5">User ID: {user?.user_id || 'usr_ent_882911'}</p>
+        </div>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setActiveTab('permissions')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
+              activeTab === 'permissions' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'
+            }`}
+          >
+            Permissions Matrix
+          </button>
+          <button
+            onClick={() => setActiveTab('audit')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
+              activeTab === 'audit' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'
+            }`}
+          >
+            Access History
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-3 gap-6">
+        <div className="col-span-1 bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <p className="text-xs font-semibold uppercase text-slate-400">Department</p>
+          <p className="text-lg font-bold text-emerald-400 mt-1">{user?.department || 'Cloud Security'}</p>
+          
+          <p className="text-xs font-semibold uppercase text-slate-400 mt-4">Assigned Roles</p>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {(user?.roles || ['admin', 'compliance']).map((r, i) => (
+              <span key={i} className="bg-indigo-950 border border-indigo-700/50 text-indigo-300 text-xs px-2.5 py-1 rounded-md font-mono">
+                {r}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <h4 className="text-sm font-semibold text-slate-200 mb-3">Effective Granted Scopes ({permissions.length})</h4>
+          <div className="grid grid-cols-2 gap-2">
+            {permissions.map((perm, idx) => (
+              <div key={idx} className="flex items-center space-x-2 bg-slate-900 px-3 py-2 rounded-lg border border-slate-850">
+                <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                <span className="text-xs font-mono text-slate-300">{perm}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_ent_demo")
+    roles = req.get("roles", ["user"])
+    department = req.get("department", "Engineering")
+    clearance = req.get("clearance_level", "LEVEL-3")
+    
+    ctx.emit_audit("rbac_permissions_evaluated", user_id=user_id, roles=roles, clearance=clearance)
+    
+    base_permissions = ["read:catalog", "write:cart", "checkout:standard"]
+    
+    role_policy_matrix = {
+        "admin": ["admin:all", "write:catalog", "override:pricing", "approve:refunds", "view:audit_logs", "manage:users"],
+        "compliance_officer": ["view:audit_logs", "export:soc2_reports", "verify:merkle_ledger"],
+        "security_architect": ["manage:iam_policies", "view:security_logs", "revoke:tokens"],
+        "finance_manager": ["approve:po_credit", "view:financial_reports", "override:tax_rules"]
+    }
+    
+    effective_permissions = set(base_permissions)
+    for role in roles:
+        if role in role_policy_matrix:
+            effective_permissions.update(role_policy_matrix[role])
+            
+    if "admin" in user_id or "ciso" in user_id:
+        effective_permissions.update(role_policy_matrix["admin"])
+        effective_permissions.update(role_policy_matrix["compliance_officer"])
+        
+    return {
+        "rbac_status": "active",
+        "user_id": user_id,
+        "department": department,
+        "clearance_level": clearance,
+        "assigned_roles": roles,
+        "permissions": sorted(list(effective_permissions)),
+        "policy_version": "2026.4.1",
+        "last_sync": "2026-08-07T13:00:00Z"
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.directory;
+
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaLdapDirectoryConnector {
+    
+    public Map<String, Object> fetchLdapGroups(String username) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("dn", "cn=" + username + ",ou=Engineering,dc=enterprise,dc=com");
+        result.put("groups", List.of("CN=Enterprise-Admins", "CN=Cloud-Engineers", "CN=SOC2-Auditors"));
+        result.put("ldap_server", "ldaps://ldap.internal.enterprise.com:636");
+        result.put("bind_status", "SUCCESSFUL_TLS_BIND");
+        return result;
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end
+
+@audit
+entry: "2026-08-07T13:05:00Z"
+agent: "directory-services-team"
+action: "updated_rbac_directory_policy"
+approved_by: "iam.lead@enterprise.com"
+@end

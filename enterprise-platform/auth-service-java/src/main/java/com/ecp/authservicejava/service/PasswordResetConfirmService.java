@@ -1,0 +1,40 @@
+package com.ecp.authservicejava.service;
+
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.*;
+
+@Service
+public class PasswordResetConfirmService {
+
+    private static final Logger log = LoggerFactory.getLogger(PasswordResetConfirmService.class);
+
+    public Map<String, Object> execute(Map<String, Object> request) {
+        long start = System.currentTimeMillis();
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        log.info("[{}] Executing password_reset_confirm", traceId);
+
+        try {
+            Map<String, Object> result = process(request);
+            long elapsed = System.currentTimeMillis() - start;
+            return Map.of(
+                "status", "success",
+                "trace_id", traceId,
+                "result", result,
+                "processing_time_ms", elapsed
+            );
+        } catch (Exception e) {
+            log.error("[{}] password_reset_confirm failed: {}", traceId, e.getMessage());
+            return Map.of("status", "error", "trace_id", traceId, "error", e.getMessage());
+        }
+    }
+
+    private Map<String, Object> process(Map<String, Object> request) {
+        return Map.of(
+            "feature", "password_reset_confirm",
+            "domain", "authentication",
+            "processed", true
+        );
+    }
+}

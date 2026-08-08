@@ -1,0 +1,89 @@
+# 08_notification_omnichannel.poly — Omni-Channel Notification Platform
+
+@contract
+feature_id: "NOTIF-2026-SCALE-008"
+owner: "customer-communications-team"
+classification: "public"
+timeout_ms: 2000
+@end
+
+@schema OmniNotificationRequest
+  recipient_email: string<format:email>
+  subject: string
+  body: string
+  channels: list
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function NotificationCenterPanel({ notifications }: { notifications: any[] }) {
+  return (
+    <div className="bg-slate-950 border border-slate-800 p-6 rounded-2xl text-white max-w-lg shadow-2xl">
+      <h4 className="text-md font-bold text-slate-200 border-b border-slate-800 pb-3">
+        Omni-Channel Notification Center ({notifications.length})
+      </h4>
+      <div className="mt-4 space-y-2">
+        {notifications.map((n, i) => (
+          <div key={i} className="flex justify-between items-center text-xs bg-slate-900 border border-slate-850 p-3 rounded-xl font-mono">
+            <div>
+              <span className="font-bold text-indigo-400">[{n.channel}]</span> {n.subject}
+            </div>
+            <span className="text-emerald-400 font-bold">{n.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[email_service]
+def process(req):
+    recipient = req.get("recipient_email", "customer@enterprise.com")
+    subject = req.get("subject", "Order Event Notification")
+    
+    ctx.emit_audit("email_notification_dispatched", recipient=recipient, subject=subject)
+    
+    return {
+        "channel": "email",
+        "status": "delivered",
+        "recipient": recipient,
+        "subject": subject,
+        "dispatched_at": "2026-08-07T13:15:00Z"
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.notifications;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaEnterpriseExchangeService {
+    public Map<String, Object> sendExchangeMessage(String recipient, String message) {
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("channel", "exchange_office365");
+        msg.put("status", "delivered");
+        msg.put("message_id", "MSG-EXCH-992288");
+        return msg;
+    }
+}
+@end
+
+@node[webhook_service]
+function process(req) {
+    const subject = req.subject || "Enterprise Alert";
+    return {
+        channel: "slack_teams_webhook",
+        status: "dispatched",
+        payload: {
+            text: "📢 Enterprise Alert: " + subject,
+            webhook_url: "https://hooks.slack.com/services/ENT/BOT/123"
+        }
+    };
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

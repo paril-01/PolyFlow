@@ -1,0 +1,84 @@
+# 03_product_catalog.poly — Product Catalog & Pricing Engine Feature
+
+@contract
+feature_id: "CATALOG-2026-902"
+owner: "commerce-catalog-team"
+classification: "public"
+timeout_ms: 1500
+@end
+
+@schema ProductLookupRequest
+  product_id: string
+  currency: string
+@end
+
+@schema ProductLookupResponse
+  product_id: string
+  title: string
+  price: number
+  in_stock: boolean
+  inventory_count: number
+@end
+
+@error-map language="python"
+KeyError:product_id → "Product not found in catalog database."
+@end
+
+@rationale for="python[service].pricing"
+reason: "Dynamic volume discounts applied for enterprise customers."
+decision_date: "2026-08-07"
+selected: "volume-discount-v2"
+@end
+
+@python[service]
+def process(req):
+    product_id = req.get("product_id", "prod_101")
+    quantity = req.get("quantity", 1)
+    
+    catalog_db = {
+        "prod_101": {"title": "Enterprise Cloud Server Node", "base_price": 499.99, "stock": 150},
+        "prod_102": {"title": "PolyFlow Runtime Enterprise License", "base_price": 1299.00, "stock": 500},
+        "prod_103": {"title": "High-Performance Workstation", "base_price": 2499.50, "stock": 25}
+    }
+    
+    product = catalog_db.get(product_id, {"title": "Custom Solution Package", "base_price": 999.00, "stock": 100})
+    
+    unit_price = product["base_price"]
+    if quantity >= 10:
+        unit_price *= 0.85  # 15% enterprise volume discount
+        
+    total_price = round(unit_price * quantity, 2)
+    
+    ctx.emit_audit("catalog_lookup", product_id=product_id, quantity=quantity, total_price=total_price)
+    
+    return {
+        "status": "available",
+        "product_id": product_id,
+        "title": product["title"],
+        "unit_price": unit_price,
+        "quantity": quantity,
+        "total_price": total_price,
+        "in_stock": product["stock"] >= quantity,
+        "inventory_count": product["stock"]
+    }
+@end
+
+@node[fallback]
+function process(req) {
+    const productId = req.product_id || "prod_101";
+    return {
+        status: "available",
+        product_id: productId,
+        title: "Fallback Product Package",
+        unit_price: 999.00,
+        quantity: 1,
+        total_price: 999.00,
+        in_stock: true,
+        inventory_count: 50,
+        source: "node-catalog-cache"
+    };
+}
+@end
+
+@merge strategy="fallback" order=["python", "node"]
+@end

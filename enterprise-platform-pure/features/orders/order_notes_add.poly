@@ -1,0 +1,86 @@
+# Order Notes Add — PolyFlow Governance Module
+# Service: order-service-go | Language: go | Domain: orders
+
+@contract
+feature_id: "ECP-ORDERS-ORDER-NOTES-ADD"
+owner: "Jake Thompson <jake.thompson@ecp.dev>"
+team: "devops"
+classification: "public"
+approvers: ["jake.thompson@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema OrderNotesAddRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  items: array<OrderItem>
+  total: number<min:0>
+  metadata: object | null
+@end
+
+@schema OrderNotesAddResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="go"
+allowed_imports: ["fmt", "net/http", "encoding/json", "time", "github.com/google/uuid"]
+@end
+
+@go[service]
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "time"
+)
+
+func process(req map[string]interface{}) map[string]interface{} {
+    start := time.Now()
+    result := map[string]interface{}{
+        "feature":   "order_notes_add",
+        "domain":    "orders",
+        "processed": true,
+    }
+    elapsed := time.Since(start).Milliseconds()
+    return map[string]interface{}{
+        "status":          "success",
+        "result":          result,
+        "processing_ms":   elapsed,
+    }
+}
+@end
+
+@merge strategy="parallel-collect" order=["go"]
+@end
+
+@error-map language="go"
+  "context.DeadlineExceeded" -> "Request to order_notes_add timed out."
+  "sql.ErrNoRows" -> "Resource not found for order_notes_add."
+  "io.EOF" -> "Unexpected end of input in order_notes_add."
+@end
+
+@rationale for="order_notes_add"
+reason: "Selected go for Order Notes Add due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="order_notes_add"
+decision: "Implement as microservice endpoint on order-service-go"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Jake Thompson"]
+@end
+
+@audit
+action: "Log Order Notes Add execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

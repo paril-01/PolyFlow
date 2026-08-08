@@ -1,0 +1,23 @@
+name: CI - notification-node
+on:
+  push:
+    paths: ['notification-node/**']
+  pull_request:
+    paths: ['notification-node/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: notification-node
+      run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/notification-node:${{ github.sha }} ./notification-node

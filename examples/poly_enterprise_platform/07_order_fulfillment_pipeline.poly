@@ -1,0 +1,110 @@
+# 07_order_fulfillment_pipeline.poly — Order Fulfillment Pipeline & ERP Feature
+
+@contract
+feature_id: "FULFILLMENT-2026-SCALE-007"
+owner: "logistics-erp-team"
+classification: "internal"
+timeout_ms: 3000
+@end
+
+@link ./05_cart_checkout.poly as CartModule
+@link ./06_multi_gateway_payment.poly as PaymentModule
+
+@schema OrderFulfillmentRequest
+  user_id: string
+  cart_id: string
+  payment_id: string
+  grand_total: number
+@end
+
+@schema OrderFulfillmentResponse
+  order_id: string
+  tracking_number: string
+  fulfillment_status: string
+  carrier: string
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function OrderTrackingMap({ trackingNumber, carrier }: { trackingNumber: string; carrier: string }) {
+  return (
+    <div className="bg-slate-950 border border-slate-800 p-8 rounded-2xl text-white shadow-2xl">
+      <div className="flex justify-between items-center">
+        <div>
+          <span className="text-xs uppercase text-emerald-400 font-extrabold tracking-wider bg-emerald-950 px-2.5 py-1 rounded">
+            Fulfillment Status: In Transit
+          </span>
+          <h3 className="text-2xl font-black mt-3">Tracking #{trackingNumber}</h3>
+          <p className="text-xs text-slate-400 mt-1">Carrier Provider: {carrier}</p>
+        </div>
+        <div className="h-4 w-4 rounded-full bg-emerald-500 animate-ping"></div>
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_ent_demo")
+    cart_id = req.get("cart_id", "cart_000")
+    payment_id = req.get("payment_id", "pay_000")
+    grand_total = req.get("grand_total", 1000.0)
+    
+    order_hash = hashlib.sha256(f"{user_id}:{cart_id}:{payment_id}".encode()).hexdigest()[:10]
+    order_id = f"ord_ent_2026_{order_hash}"
+    tracking_number = f"TRK-FEDEX-{order_hash.upper()}"
+    
+    ctx.emit_audit("order_fulfillment_created", order_id=order_id, user_id=user_id)
+    
+    return {
+        "status": "order_confirmed",
+        "order_id": order_id,
+        "user_id": user_id,
+        "cart_id": cart_id,
+        "payment_id": payment_id,
+        "fulfillment_status": "DISPATCHED_FROM_WAREHOUSE",
+        "carrier": "FedEx Freight Enterprise",
+        "tracking_number": tracking_number,
+        "estimated_delivery": "2026-08-09T18:00:00Z"
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.erp;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaSapErpIntegrationService {
+    public Map<String, Object> syncSapInventory(String orderId) {
+        Map<String, Object> sap = new HashMap<>();
+        sap.put("order_id", orderId);
+        sap.put("sap_document_number", "SAP-DOC-99882211");
+        sap.put("gl_account_entry", "GL-4000-REVENUE");
+        sap.put("cost_center", "CC-ENGINEERING-101");
+        return sap;
+    }
+}
+@end
+
+@go[gateway]
+package main
+
+type LocationUpdate struct {
+	TrackingID string  `json:"tracking_id"`
+	Latitude   float64 `json:"lat"`
+	Longitude  float64 `json:"lng"`
+}
+
+func UpdateRealtimeLocation(loc LocationUpdate) map[string]string {
+	return map[string]string{
+		"status":   "go_location_stream_updated",
+		"location": "40.7128,-74.0060",
+	}
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

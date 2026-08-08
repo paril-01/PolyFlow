@@ -1,0 +1,75 @@
+# Cross-Service Call Chain: Fraud Detection Flow
+# Payment triggers AI fraud scoring, blocks suspicious transactions
+# Chain Length: 5 services, 3 languages
+
+@contract
+feature_id: "ECP-CHAIN-FRAUD-DETECTION-FLOW"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 15000
+@end
+
+@link payment-service-java::fraud_score_compute as fraud_score_compute
+@link ai-service-python::fraud_detect_transaction as fraud_detect_transaction
+@link auth-service-java::audit_login_failure as audit_login_failure
+@link notification-node::slack_channel_notify as slack_channel_notify
+@link analytics-java::realtime_metric_alert as realtime_metric_alert
+
+@java[step_0_fraud_score_compute]
+# Step 1: payment-service-java -> fraud_score_compute
+# Language: java
+# This is step 1 of 5 in the Fraud Detection Flow call chain.
+def process(req):
+    return {"step": 1, "service": "payment-service-java", "action": "fraud_score_compute", "status": "completed"}
+@end
+@python[step_1_fraud_detect_transaction]
+# Step 2: ai-service-python -> fraud_detect_transaction
+# Language: python
+# This is step 2 of 5 in the Fraud Detection Flow call chain.
+def process(req):
+    return {"step": 2, "service": "ai-service-python", "action": "fraud_detect_transaction", "status": "completed"}
+@end
+@java[step_2_audit_login_failure]
+# Step 3: auth-service-java -> audit_login_failure
+# Language: java
+# This is step 3 of 5 in the Fraud Detection Flow call chain.
+def process(req):
+    return {"step": 3, "service": "auth-service-java", "action": "audit_login_failure", "status": "completed"}
+@end
+@javascript[step_3_slack_channel_notify]
+# Step 4: notification-node -> slack_channel_notify
+# Language: javascript
+# This is step 4 of 5 in the Fraud Detection Flow call chain.
+def process(req):
+    return {"step": 4, "service": "notification-node", "action": "slack_channel_notify", "status": "completed"}
+@end
+@java[step_4_realtime_metric_alert]
+# Step 5: analytics-java -> realtime_metric_alert
+# Language: java
+# This is step 5 of 5 in the Fraud Detection Flow call chain.
+def process(req):
+    return {"step": 5, "service": "analytics-java", "action": "realtime_metric_alert", "status": "completed"}
+@end
+
+@merge strategy="all-success" order=["java", "python", "java", "javascript", "java"]
+@end
+
+@rationale for="fraud_detection_flow"
+reason: "This call chain crosses 3 language boundaries. Each step is isolated in its own process cell for fault tolerance."
+@end
+
+@decision for="fraud_detection_flow"
+decision: "Route through API Gateway for centralized auth and rate limiting"
+date: "2024-03-20"
+status: "accepted"
+@end
+
+@audit
+action: "Trace full call chain execution for Fraud Detection Flow"
+fields: ["chain_id", "total_steps", "total_latency_ms", "failed_steps"]
+retention: "7_years"
+compliance: ["SOC2"]
+@end

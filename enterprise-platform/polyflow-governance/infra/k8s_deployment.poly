@@ -1,0 +1,61 @@
+# K8s Deployment — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-K8S-DEPLOYMENT"
+owner: "Bob Martinez <bob.martinez@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["bob.martinez@ecp.dev", "jake.thompson@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema K8sDeploymentRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema K8sDeploymentResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// K8s Deployment implementation
+@end
+
+@merge strategy="all-success" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in k8s_deployment."
+@end
+
+@rationale for="k8s_deployment"
+reason: "Selected hcl for K8s Deployment due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="k8s_deployment"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Bob Martinez"]
+@end
+
+@audit
+action: "Log K8s Deployment execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

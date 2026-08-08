@@ -1,0 +1,82 @@
+# Settlement Reconcile — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-SETTLEMENT-RECONCILE"
+owner: "Grace Liu <grace.liu@ecp.dev>"
+team: "frontend"
+classification: "public"
+approvers: ["grace.liu@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema SettlementReconcileRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema SettlementReconcileResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class SettlementReconcileProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "settlement_reconcile",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in settlement_reconcile request."
+  "IllegalArgumentException" -> "Invalid argument passed to settlement_reconcile."
+  "TimeoutException" -> "Operation settlement_reconcile timed out."
+@end
+
+@rationale for="settlement_reconcile"
+reason: "Selected java for Settlement Reconcile due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="settlement_reconcile"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Grace Liu"]
+@end
+
+@audit
+action: "Log Settlement Reconcile execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

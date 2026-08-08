@@ -1,0 +1,90 @@
+# Regional Price Set — PolyFlow Governance Module
+# Service: pricing-python | Language: python | Domain: pricing
+
+@contract
+feature_id: "ECP-PRICING-REGIONAL-PRICE-SET"
+owner: "Grace Liu <grace.liu@ecp.dev>"
+team: "frontend"
+classification: "internal"
+approvers: ["grace.liu@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema RegionalPriceSetRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  base_price: number<min:0>
+  discount: number
+  metadata: object | null
+@end
+
+@schema RegionalPriceSetResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="python"
+allowed_imports: ["json", "time", "uuid", "hashlib", "logging", "typing"]
+@end
+
+@python[service]
+import time
+import logging
+from uuid import uuid4
+
+logger = logging.getLogger(__name__)
+
+def process(req):
+    """Execute Regional Price Set."""
+    start = time.time()
+    trace_id = str(uuid4())[:8]
+    logger.info(f"[{trace_id}] Processing regional_price_set")
+
+    result = {
+        "feature": "regional_price_set",
+        "domain": "pricing",
+        "processed": True,
+        "input_keys": list(req.keys()) if isinstance(req, dict) else [],
+    }
+
+    elapsed = (time.time() - start) * 1000
+    return {
+        "status": "success",
+        "trace_id": trace_id,
+        "result": result,
+        "processing_time_ms": round(elapsed, 2),
+    }
+@end
+
+@merge strategy="parallel-collect" order=["python"]
+@end
+
+@error-map language="python"
+  "ValueError" -> "Invalid input provided to regional_price_set. Check request parameters."
+  "TimeoutError" -> "Operation regional_price_set timed out. Service may be under heavy load."
+  "ConnectionError" -> "Unable to reach downstream service. Check network connectivity."
+@end
+
+@rationale for="regional_price_set"
+reason: "Selected python for Regional Price Set due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="regional_price_set"
+decision: "Implement as microservice endpoint on pricing-python"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Grace Liu"]
+@end
+
+@audit
+action: "Log Regional Price Set execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

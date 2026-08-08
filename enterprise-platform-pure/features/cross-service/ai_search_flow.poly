@@ -1,0 +1,83 @@
+# Cross-Service Call Chain: Ai Search Flow
+# Customer searches for a product using natural language, AI processes query
+# Chain Length: 6 services, 4 languages
+
+@contract
+feature_id: "ECP-CHAIN-AI-SEARCH-FLOW"
+owner: "Jake Thompson <jake.thompson@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["jake.thompson@ecp.dev"]
+retention_years: 7
+timeout_ms: 15000
+@end
+
+@link frontend-react::search_autocomplete as search_autocomplete
+@link gateway-go::route_search as route_search
+@link ai-service-python::semantic_search_query as semantic_search_query
+@link recommendation-python::similar_products_fetch as similar_products_fetch
+@link pricing-python::price_base_set as price_base_set
+@link analytics-java::event_track as event_track
+
+@typescript[step_0_search_autocomplete]
+# Step 1: frontend-react -> search_autocomplete
+# Language: typescript
+# This is step 1 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 1, "service": "frontend-react", "action": "search_autocomplete", "status": "completed"}
+@end
+@go[step_1_route_search]
+# Step 2: gateway-go -> route_search
+# Language: go
+# This is step 2 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 2, "service": "gateway-go", "action": "route_search", "status": "completed"}
+@end
+@python[step_2_semantic_search_query]
+# Step 3: ai-service-python -> semantic_search_query
+# Language: python
+# This is step 3 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 3, "service": "ai-service-python", "action": "semantic_search_query", "status": "completed"}
+@end
+@python[step_3_similar_products_fetch]
+# Step 4: recommendation-python -> similar_products_fetch
+# Language: python
+# This is step 4 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 4, "service": "recommendation-python", "action": "similar_products_fetch", "status": "completed"}
+@end
+@python[step_4_price_base_set]
+# Step 5: pricing-python -> price_base_set
+# Language: python
+# This is step 5 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 5, "service": "pricing-python", "action": "price_base_set", "status": "completed"}
+@end
+@java[step_5_event_track]
+# Step 6: analytics-java -> event_track
+# Language: java
+# This is step 6 of 6 in the Ai Search Flow call chain.
+def process(req):
+    return {"step": 6, "service": "analytics-java", "action": "event_track", "status": "completed"}
+@end
+
+@merge strategy="all-success" order=["typescript", "go", "python", "python", "python", "java"]
+@end
+
+@rationale for="ai_search_flow"
+reason: "This call chain crosses 4 language boundaries. Each step is isolated in its own process cell for fault tolerance."
+@end
+
+@decision for="ai_search_flow"
+decision: "Route through API Gateway for centralized auth and rate limiting"
+date: "2024-03-20"
+status: "accepted"
+@end
+
+@audit
+action: "Trace full call chain execution for Ai Search Flow"
+fields: ["chain_id", "total_steps", "total_latency_ms", "failed_steps"]
+retention: "7_years"
+compliance: ["SOC2"]
+@end

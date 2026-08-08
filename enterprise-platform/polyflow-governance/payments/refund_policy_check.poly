@@ -1,0 +1,82 @@
+# Refund Policy Check — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-REFUND-POLICY-CHECK"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema RefundPolicyCheckRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema RefundPolicyCheckResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RefundPolicyCheckProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "refund_policy_check",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="all-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in refund_policy_check request."
+  "IllegalArgumentException" -> "Invalid argument passed to refund_policy_check."
+  "TimeoutException" -> "Operation refund_policy_check timed out."
+@end
+
+@rationale for="refund_policy_check"
+reason: "Selected java for Refund Policy Check due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="refund_policy_check"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Refund Policy Check execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,129 @@
+# 04_swift_wire_transfers.poly — ISO-20022 Cross-Border SWIFT Wire Engine
+
+@contract
+feature_id: "FINTECH-SWIFT-004"
+owner: "international-banking-group"
+classification: "sensitive"
+approvers: ["cfo@polyfintech.com", "compliance@polyfintech.com"]
+timeout_ms: 3500
+@end
+
+@schema SwiftWireRequest
+  recipient_bank: string
+  swift_bic: string
+  account_number: string
+  amount: number
+  currency: string
+  purpose_code: string
+@end
+
+@schema SwiftWireResponse
+  wire_id: string
+  swift_reference: string
+  iso20022_xml_status: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React, { useState } from 'react';
+
+export function SwiftWireForm({ onExecuteWire }: { onExecuteWire: (data: any) => void }) {
+  const [recipientBank, setRecipientBank] = useState('BNP Paribas France');
+  const [swiftBic, setSwiftBic] = useState('BNPAFRPPXXX');
+  const [accountNum, setAccountNum] = useState('FR76-3000-4000-1111');
+  const [amount, setAmount] = useState('75000');
+  const [currency, setCurrency] = useState('EUR');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onExecuteWire({ recipient_bank: recipientBank, swift_bic: swiftBic, account_number: accountNum, amount: parseFloat(amount), currency });
+  };
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl text-white max-w-xl mx-auto shadow-2xl">
+      <h3 className="text-xl font-bold border-b border-slate-800 pb-3">ISO-20022 Cross-Border SWIFT Wire</h3>
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs uppercase text-slate-400 font-bold">Recipient Bank</label>
+            <input value={recipientBank} onChange={(e) => setRecipientBank(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-xs" />
+          </div>
+          <div>
+            <label className="block text-xs uppercase text-slate-400 font-bold">SWIFT BIC Code</label>
+            <input value={swiftBic} onChange={(e) => setSwiftBic(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-xs" />
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs uppercase text-slate-400 font-bold">IBAN / Account Number</label>
+          <input value={accountNum} onChange={(e) => setAccountNum(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-xs" />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs uppercase text-slate-400 font-bold">Wire Amount</label>
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-xs" />
+          </div>
+          <div>
+            <label className="block text-xs uppercase text-slate-400 font-bold">Currency</label>
+            <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-xs">
+              <option value="EUR">EUR (€)</option>
+              <option value="USD">USD ($)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold text-xs text-white shadow-lg">
+          Dispatch ISO-20022 Wire Message
+        </button>
+      </form>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    bank = req.get("recipient_bank", "BNP Paribas")
+    bic = req.get("swift_bic", "BNPAFRPPXXX")
+    amount = float(req.get("amount", 50000.0))
+    currency = req.get("currency", "EUR")
+    
+    wire_hash = hashlib.sha256(f"{bic}:{amount}:{time.time()}".encode()).hexdigest()[:10]
+    wire_id = f"wire_swift_{wire_hash}"
+    swift_ref = f"SWIFT-2026-{wire_hash.upper()}"
+    
+    ctx.emit_audit("swift_wire_dispatched", wire_id=wire_id, bic=bic, amount=amount)
+    
+    return {
+        "status": "DISPATCHED",
+        "wire_id": wire_id,
+        "recipient_bank": bank,
+        "swift_bic": bic,
+        "swift_reference": swift_ref,
+        "amount": amount,
+        "currency": currency,
+        "iso20022_xml_status": "pacs.008.001.08_VALIDATED",
+        "timestamp": time.time()
+    }
+@end
+
+@java[backend]
+package com.polyfintech.swift;
+
+import java.util.Map;
+
+public class JavaIso20022XmlGenerator {
+    public Map<String, Object> generatePacs008Message(String wireId) {
+        return Map.of(
+            "wire_id", wireId,
+            "iso_message_type", "pacs.008.001.08",
+            "xml_signature", "RSA256_ISO20022_SIG_992211"
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

@@ -1,0 +1,61 @@
+# S3 Bucket Create — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-S3-BUCKET-CREATE"
+owner: "David Kim <david.kim@ecp.dev>"
+team: "backend"
+classification: "internal"
+approvers: ["david.kim@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema S3BucketCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema S3BucketCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// S3 Bucket Create implementation
+@end
+
+@merge strategy="fallback" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in s3_bucket_create."
+@end
+
+@rationale for="s3_bucket_create"
+reason: "Selected hcl for S3 Bucket Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="s3_bucket_create"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["David Kim"]
+@end
+
+@audit
+action: "Log S3 Bucket Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

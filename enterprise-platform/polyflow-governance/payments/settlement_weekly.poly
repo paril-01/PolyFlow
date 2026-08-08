@@ -1,0 +1,82 @@
+# Settlement Weekly — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-SETTLEMENT-WEEKLY"
+owner: "Grace Liu <grace.liu@ecp.dev>"
+team: "frontend"
+classification: "sensitive"
+approvers: ["grace.liu@ecp.dev", "carol.williams@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema SettlementWeeklyRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema SettlementWeeklyResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class SettlementWeeklyProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "settlement_weekly",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="all-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in settlement_weekly request."
+  "IllegalArgumentException" -> "Invalid argument passed to settlement_weekly."
+  "TimeoutException" -> "Operation settlement_weekly timed out."
+@end
+
+@rationale for="settlement_weekly"
+reason: "Selected java for Settlement Weekly due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="settlement_weekly"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Grace Liu"]
+@end
+
+@audit
+action: "Log Settlement Weekly execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,73 @@
+### PolyFlow Feature Module: Global Payment Gateway Portal
+### ID: 08_payment_gateway.poly
+### Description: End-to-end payment gateway processor. Simulates charging a card and settling funds to a corporate account.
+### Governance Level: HIGH (Requires Merkle Audit & Circuit Breaker)
+
+=== START GUARD_A_IMPORTS ===
+allow: "json", "time", "uuid", "hashlib"
+=== END GUARD_A_IMPORTS ===
+
+=== START GUARD_B_CIRCUIT_BREAKER ===
+timeout_ms: 6000
+retry_count: 2
+fallback: "gateway_down_fallback"
+=== END GUARD_B_CIRCUIT_BREAKER ===
+
+@python[service]
+import time
+import uuid
+import hashlib
+
+def process(req):
+    card_number = req.get("card_number", "")
+    amount = float(req.get("amount", 0.0))
+    currency = req.get("currency", "USD")
+    
+    # 1. Validation
+    if not card_number or len(str(card_number)) < 15:
+        return {
+            "status": "FAILED",
+            "reason": "Invalid card number provided."
+        }
+    if amount <= 0:
+        return {
+            "status": "FAILED",
+            "reason": "Payment amount must be greater than zero."
+        }
+        
+    # 2. Simulate Payment Gateway Processing (Network Delay)
+    time.sleep(0.3)
+    
+    # 3. Simulate Fraud Check on the Card (Hardcode a decline rule for demo)
+    if str(card_number).endswith("0000"):
+        return {
+            "status": "DECLINED",
+            "reason": "Card declined by fraud matrix (test rule matched)."
+        }
+        
+    # 4. Generate transaction receipt
+    receipt_id = f"pg_txn_{uuid.uuid4().hex[:10]}"
+    auth_code = hashlib.sha256(f"{card_number}{amount}{time.time()}".encode()).hexdigest()[:8].upper()
+    
+    return {
+        "status": "APPROVED",
+        "receipt_id": receipt_id,
+        "auth_code": auth_code,
+        "amount": amount,
+        "currency": currency,
+        "settlement_status": "PENDING_CLEARING",
+        "timestamp": time.time()
+    }
+
+def gateway_down_fallback(req):
+    return {
+        "status": "SYSTEM_UNAVAILABLE",
+        "reason": "Payment gateway circuit breaker triggered. Please try again later."
+    }
+@end
+
+=== START GUARD_E_AUDIT_DIRECTIVE ===
+action: "Log Payment Gateway Transaction"
+fields: ["status", "receipt_id", "amount", "auth_code"]
+retention: "7_years"
+=== END GUARD_E_AUDIT_DIRECTIVE ===

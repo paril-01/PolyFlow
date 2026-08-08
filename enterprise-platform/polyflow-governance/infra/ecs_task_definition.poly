@@ -1,0 +1,61 @@
+# Ecs Task Definition — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-ECS-TASK-DEFINITION"
+owner: "Hassan Ali <hassan.ali@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["hassan.ali@ecp.dev", "bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema EcsTaskDefinitionRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema EcsTaskDefinitionResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Ecs Task Definition implementation
+@end
+
+@merge strategy="all-success" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in ecs_task_definition."
+@end
+
+@rationale for="ecs_task_definition"
+reason: "Selected hcl for Ecs Task Definition due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="ecs_task_definition"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Hassan Ali"]
+@end
+
+@audit
+action: "Log Ecs Task Definition execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

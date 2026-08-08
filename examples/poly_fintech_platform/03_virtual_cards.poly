@@ -1,0 +1,102 @@
+# 03_virtual_cards.poly — Corporate Virtual Card Issuance & Freeze Controls
+
+@contract
+feature_id: "FINTECH-CARDS-003"
+owner: "corporate-cards-team"
+classification: "sensitive"
+timeout_ms: 2500
+@end
+
+@schema CardActionRequest
+  card_id: string
+  action: string  # "FREEZE" | "UNFREEZE" | "ADJUST_LIMIT"
+  new_limit: number | null
+@end
+
+@schema CardActionResponse
+  card_id: string
+  status: string
+  spend_limit: number
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function VirtualCardGrid({ cards, onToggleFreeze }: { cards: any[]; onToggleFreeze: (cardId: string) => void }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {cards.map((card) => (
+        <div key={card.card_id} className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-6 rounded-2xl shadow-2xl relative overflow-hidden">
+          <div className="flex justify-between items-center text-xs font-mono text-slate-400">
+            <span>Corporate Card</span>
+            <span className={`px-2.5 py-0.5 rounded font-bold ${card.status === 'ACTIVE' ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'}`}>
+              {card.status}
+            </span>
+          </div>
+          <p className="mt-6 text-xl font-mono tracking-widest text-white">{card.card_number}</p>
+          <div className="mt-4 flex justify-between items-end">
+            <div>
+              <p className="text-[10px] uppercase text-slate-400 font-mono">Cardholder</p>
+              <p className="text-xs font-bold text-slate-200">{card.cardholder_name}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] uppercase text-slate-400 font-mono">Spend Limit</p>
+              <p className="text-xs font-bold text-emerald-400 font-mono">${card.spent_amount.toLocaleString()} / ${card.spend_limit.toLocaleString()}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => onToggleFreeze(card.card_id)}
+            className={`mt-4 w-full py-2 rounded-xl text-xs font-bold shadow ${
+              card.status === 'ACTIVE' ? 'bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-800' : 'bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-800'
+            }`}
+          >
+            {card.status === 'ACTIVE' ? 'Freeze Card Instantly' : 'Unfreeze Card'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    card_id = req.get("card_id", "card_vc_01")
+    action = req.get("action", "FREEZE")
+    new_limit = req.get("new_limit")
+    
+    new_status = "FROZEN" if action == "FREEZE" else "ACTIVE"
+    
+    ctx.emit_audit("virtual_card_status_changed", card_id=card_id, action=action, new_status=new_status)
+    
+    return {
+        "status": "SUCCESS",
+        "card_id": card_id,
+        "card_status": new_status,
+        "action_applied": action,
+        "timestamp": time.time()
+    }
+@end
+
+@java[backend]
+package com.polyfintech.cards;
+
+import java.util.Map;
+
+public class JavaVisaMastercardNetworkService {
+    public Map<String, Object> syncVisaCardToken(String cardId) {
+        return Map.of(
+            "card_id", cardId,
+            "visa_vts_token", "VTS-TOKEN-998822-ACTIVE",
+            "network_status", "TOKEN_UPDATED"
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

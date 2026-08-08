@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-java
+  namespace: ecp
+  labels:
+    app: auth-service-java
+    team: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: auth-service-java
+  template:
+    metadata:
+      labels:
+        app: auth-service-java
+    spec:
+      containers:
+      - name: auth-service-java
+        image: ecp/auth-service-java:latest
+        ports:
+        - containerPort: 8081
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.authentication;
+option go_package = "github.com/ecp/shared-proto/authentication";
+option java_package = "com.ecp.proto.authentication";
+
+message JwtTokenRefreshRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message JwtTokenRefreshResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service JwtTokenRefreshService {
+  rpc Execute (JwtTokenRefreshRequest) returns (JwtTokenRefreshResponse);
+}

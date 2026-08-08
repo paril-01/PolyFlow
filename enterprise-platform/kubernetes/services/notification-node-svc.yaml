@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-node
+  namespace: ecp
+spec:
+  selector:
+    app: notification-node
+  ports:
+  - port: 8087
+    targetPort: 8087
+  type: ClusterIP

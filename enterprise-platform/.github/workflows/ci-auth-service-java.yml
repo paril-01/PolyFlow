@@ -1,0 +1,23 @@
+name: CI - auth-service-java
+on:
+  push:
+    paths: ['auth-service-java/**']
+  pull_request:
+    paths: ['auth-service-java/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: auth-service-java
+      run: ./mvnw test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/auth-service-java:${{ github.sha }} ./auth-service-java

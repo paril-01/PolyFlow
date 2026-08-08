@@ -1,0 +1,88 @@
+# Coupon Validate — PolyFlow Governance Module
+# Service: pricing-python | Language: python | Domain: pricing
+
+@contract
+feature_id: "ECP-PRICING-COUPON-VALIDATE"
+owner: "Frank Johnson <frank.johnson@ecp.dev>"
+team: "devops"
+classification: "internal"
+approvers: ["frank.johnson@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema CouponValidateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema CouponValidateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="python"
+allowed_imports: ["json", "time", "uuid", "hashlib", "logging", "typing"]
+@end
+
+@python[service]
+import time
+import logging
+from uuid import uuid4
+
+logger = logging.getLogger(__name__)
+
+def process(req):
+    """Execute Coupon Validate."""
+    start = time.time()
+    trace_id = str(uuid4())[:8]
+    logger.info(f"[{trace_id}] Processing coupon_validate")
+
+    result = {
+        "feature": "coupon_validate",
+        "domain": "pricing",
+        "processed": True,
+        "input_keys": list(req.keys()) if isinstance(req, dict) else [],
+    }
+
+    elapsed = (time.time() - start) * 1000
+    return {
+        "status": "success",
+        "trace_id": trace_id,
+        "result": result,
+        "processing_time_ms": round(elapsed, 2),
+    }
+@end
+
+@merge strategy="first-success" order=["python"]
+@end
+
+@error-map language="python"
+  "ValueError" -> "Invalid input provided to coupon_validate. Check request parameters."
+  "TimeoutError" -> "Operation coupon_validate timed out. Service may be under heavy load."
+  "ConnectionError" -> "Unable to reach downstream service. Check network connectivity."
+@end
+
+@rationale for="coupon_validate"
+reason: "Selected python for Coupon Validate due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="coupon_validate"
+decision: "Implement as microservice endpoint on pricing-python"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Frank Johnson"]
+@end
+
+@audit
+action: "Log Coupon Validate execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

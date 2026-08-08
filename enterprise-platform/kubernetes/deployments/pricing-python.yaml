@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pricing-python
+  namespace: ecp
+  labels:
+    app: pricing-python
+    team: ml
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pricing-python
+  template:
+    metadata:
+      labels:
+        app: pricing-python
+    spec:
+      containers:
+      - name: pricing-python
+        image: ecp/pricing-python:latest
+        ports:
+        - containerPort: 8085
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8085
+          initialDelaySeconds: 30
+          periodSeconds: 10

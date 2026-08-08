@@ -1,0 +1,1 @@
+"""ECP inventory-python service."""

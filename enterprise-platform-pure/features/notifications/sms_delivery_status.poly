@@ -1,0 +1,83 @@
+# Sms Delivery Status — PolyFlow Governance Module
+# Service: notification-node | Language: javascript | Domain: notifications
+
+@contract
+feature_id: "ECP-NOTIFICATIONS-SMS-DELIVERY-STATUS"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "sensitive"
+approvers: ["iris.nakamura@ecp.dev", "bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema SmsDeliveryStatusRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema SmsDeliveryStatusResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="javascript"
+allowed_imports: ["express", "uuid", "winston", "bull", "nodemailer"]
+@end
+
+@javascript[service]
+const { v4: uuidv4 } = require('uuid');
+
+async function process(req) {
+  const start = Date.now();
+  const traceId = uuidv4().slice(0, 8);
+
+  const result = {
+    feature: 'sms_delivery_status',
+    domain: 'notifications',
+    processed: true,
+    input_keys: Object.keys(req || {}),
+  };
+
+  return {
+    status: 'success',
+    trace_id: traceId,
+    result,
+    processing_time_ms: Date.now() - start,
+  };
+}
+
+module.exports = { process };
+@end
+
+@merge strategy="all-success" order=["javascript"]
+@end
+
+@error-map language="javascript"
+  "TypeError" -> "Type mismatch in sms_delivery_status payload."
+  "ECONNREFUSED" -> "Downstream service unreachable from sms_delivery_status."
+@end
+
+@rationale for="sms_delivery_status"
+reason: "Selected javascript for Sms Delivery Status due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="sms_delivery_status"
+decision: "Implement as microservice endpoint on notification-node"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Sms Delivery Status execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

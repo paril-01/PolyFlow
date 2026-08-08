@@ -1,0 +1,61 @@
+# Elasticache Cluster — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-ELASTICACHE-CLUSTER"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "public"
+approvers: ["iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema ElasticacheClusterRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ElasticacheClusterResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Elasticache Cluster implementation
+@end
+
+@merge strategy="vote" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in elasticache_cluster."
+@end
+
+@rationale for="elasticache_cluster"
+reason: "Selected hcl for Elasticache Cluster due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="elasticache_cluster"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Elasticache Cluster execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

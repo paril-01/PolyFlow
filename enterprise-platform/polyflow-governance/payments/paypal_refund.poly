@@ -1,0 +1,82 @@
+# Paypal Refund — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-PAYPAL-REFUND"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "public"
+approvers: ["alice.chen@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema PaypalRefundRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema PaypalRefundResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class PaypalRefundProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "paypal_refund",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="fallback" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in paypal_refund request."
+  "IllegalArgumentException" -> "Invalid argument passed to paypal_refund."
+  "TimeoutException" -> "Operation paypal_refund timed out."
+@end
+
+@rationale for="paypal_refund"
+reason: "Selected java for Paypal Refund due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="paypal_refund"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Paypal Refund execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

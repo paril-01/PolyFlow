@@ -1,0 +1,88 @@
+# Chatbot Response Generate — PolyFlow Governance Module
+# Service: ai-service-python | Language: python | Domain: ai_features
+
+@contract
+feature_id: "ECP-AI_FEATURES-CHATBOT-RESPONSE-GEN"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["leo.rivera@ecp.dev", "karen.singh@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema ChatbotResponseGenerateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ChatbotResponseGenerateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="python"
+allowed_imports: ["json", "time", "uuid", "hashlib", "logging", "typing"]
+@end
+
+@python[service]
+import time
+import logging
+from uuid import uuid4
+
+logger = logging.getLogger(__name__)
+
+def process(req):
+    """Execute Chatbot Response Generate."""
+    start = time.time()
+    trace_id = str(uuid4())[:8]
+    logger.info(f"[{trace_id}] Processing chatbot_response_generate")
+
+    result = {
+        "feature": "chatbot_response_generate",
+        "domain": "ai_features",
+        "processed": True,
+        "input_keys": list(req.keys()) if isinstance(req, dict) else [],
+    }
+
+    elapsed = (time.time() - start) * 1000
+    return {
+        "status": "success",
+        "trace_id": trace_id,
+        "result": result,
+        "processing_time_ms": round(elapsed, 2),
+    }
+@end
+
+@merge strategy="all-success" order=["python"]
+@end
+
+@error-map language="python"
+  "ValueError" -> "Invalid input provided to chatbot_response_generate. Check request parameters."
+  "TimeoutError" -> "Operation chatbot_response_generate timed out. Service may be under heavy load."
+  "ConnectionError" -> "Unable to reach downstream service. Check network connectivity."
+@end
+
+@rationale for="chatbot_response_generate"
+reason: "Selected python for Chatbot Response Generate due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="chatbot_response_generate"
+decision: "Implement as microservice endpoint on ai-service-python"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Chatbot Response Generate execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

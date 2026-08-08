@@ -1,0 +1,16 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: auth-service-java
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth_service_java
+    username: ecp
+    password: ecp_secret
+  jpa:
+    hibernate:
+      ddl-auto: validate
+logging:
+  level:
+    root: INFO
+    com.ecp: DEBUG

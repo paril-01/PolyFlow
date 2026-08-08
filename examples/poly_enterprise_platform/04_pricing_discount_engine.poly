@@ -1,0 +1,121 @@
+# 04_pricing_discount_engine.poly — AI Pricing & Corporate Discount Engine
+
+@contract
+feature_id: "PRICING-2026-SCALE-004"
+owner: "revenue-operations-team"
+classification: "internal"
+timeout_ms: 2000
+@end
+
+@schema PricingCalcRequest
+  product_id: string
+  quantity: number
+  account_tier: string
+@end
+
+@schema PricingCalcResponse
+  subtotal: number
+  discount_applied: number
+  discount_percentage: string
+  final_price: number
+  tier_name: string
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function PricingSummaryWidget({
+  subtotal,
+  discount,
+  finalPrice,
+  discountPct
+}: {
+  subtotal: number;
+  discount: number;
+  finalPrice: number;
+  discountPct: string;
+}) {
+  return (
+    <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 font-mono shadow-xl">
+      <h4 className="text-sm font-bold uppercase tracking-wider text-slate-300 pb-3 border-b border-slate-800">
+        Enterprise MSA Pricing Breakdown
+      </h4>
+      <div className="mt-4 space-y-2">
+        <div className="flex justify-between text-xs text-slate-400">
+          <span>Gross Subtotal:</span>
+          <span className="text-white font-bold">${subtotal.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-xs text-emerald-400">
+          <span>Corporate Discount ({discountPct}):</span>
+          <span className="font-bold">-${discount.toFixed(2)}</span>
+        </div>
+      </div>
+      <div className="flex justify-between text-lg font-black text-white mt-4 pt-3 border-t border-slate-800">
+        <span>Net Total:</span>
+        <span className="text-indigo-400">${finalPrice.toFixed(2)}</span>
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    product_id = req.get("product_id", "prod_server_101")
+    quantity = req.get("quantity", 1)
+    account_tier = req.get("account_tier", "enterprise_platinum")
+    
+    base_prices = {
+        "prod_server_101": 2499.00,
+        "prod_license_102": 4999.00,
+        "prod_workstation_103": 3899.50
+    }
+    
+    base_price = base_prices.get(product_id, 1999.00)
+    subtotal = base_price * quantity
+    
+    discount_pct = 0.05
+    if account_tier == "enterprise_gold":
+        discount_pct = 0.15
+    elif account_tier == "enterprise_platinum":
+        discount_pct = 0.25
+        
+    if quantity >= 10:
+        discount_pct += 0.05  # Extra 5% volume bonus
+        
+    discount_amount = round(subtotal * discount_pct, 2)
+    final_price = round(subtotal - discount_amount, 2)
+    
+    ctx.emit_audit("pricing_calculated", account_tier=account_tier, discount_amount=discount_amount, final_price=final_price)
+    
+    return {
+        "status": "calculated",
+        "subtotal": round(subtotal, 2),
+        "discount_applied": discount_amount,
+        "discount_percentage": f"{int(discount_pct * 100)}%",
+        "final_price": final_price,
+        "tier_name": account_tier
+    }
+@end
+
+@java[backend]
+package com.enterprise.polyflow.pricing;
+
+import java.util.Map;
+import java.util.HashMap;
+
+public class JavaCorporateRateRulesEngine {
+    public Map<String, Object> evaluateCorporateAgreements(String accountId) {
+        Map<String, Object> contract = new HashMap<>();
+        contract.put("account_id", accountId);
+        contract.put("msa_contract_number", "MSA-2026-GLOBAL-9988");
+        contract.put("custom_contract_active", true);
+        contract.put("payment_terms", "NET-30");
+        contract.put("credit_limit", 500000.00);
+        return contract;
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

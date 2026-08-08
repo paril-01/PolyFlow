@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.recommendations;
+option go_package = "github.com/ecp/shared-proto/recommendations";
+option java_package = "com.ecp.proto.recommendations";
+
+message CollabFilterPredictRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message CollabFilterPredictResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service CollabFilterPredictService {
+  rpc Execute (CollabFilterPredictRequest) returns (CollabFilterPredictResponse);
+}

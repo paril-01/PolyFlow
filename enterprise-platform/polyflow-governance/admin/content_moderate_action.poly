@@ -1,0 +1,87 @@
+# Content Moderate Action — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-CONTENT-MODERATE-ACT"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "restricted"
+approvers: ["alice.chen@ecp.dev", "leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema ContentModerateActionRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ContentModerateActionResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface ContentModerateActionProps {
+  onComplete?: (data: any) => void;
+}
+
+export const ContentModerateAction: React.FC<ContentModerateActionProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/content-moderate-action', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Content Moderate Action'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="parallel-collect" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in content_moderate_action component."
+  "NetworkError" -> "API call failed for content_moderate_action."
+@end
+
+@rationale for="content_moderate_action"
+reason: "Selected typescript for Content Moderate Action due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="content_moderate_action"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Content Moderate Action execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

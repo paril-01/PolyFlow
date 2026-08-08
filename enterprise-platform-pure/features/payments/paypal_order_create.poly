@@ -1,0 +1,84 @@
+# Paypal Order Create — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-PAYPAL-ORDER-CREATE"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "sensitive"
+approvers: ["iris.nakamura@ecp.dev", "alice.chen@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema PaypalOrderCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  items: array<OrderItem>
+  total: number<min:0>
+  metadata: object | null
+@end
+
+@schema PaypalOrderCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class PaypalOrderCreateProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "paypal_order_create",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="all-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in paypal_order_create request."
+  "IllegalArgumentException" -> "Invalid argument passed to paypal_order_create."
+  "TimeoutException" -> "Operation paypal_order_create timed out."
+@end
+
+@rationale for="paypal_order_create"
+reason: "Selected java for Paypal Order Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="paypal_order_create"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Paypal Order Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,88 @@
+# Collab Filter Train — PolyFlow Governance Module
+# Service: recommendation-python | Language: python | Domain: recommendations
+
+@contract
+feature_id: "ECP-RECOMMENDATIONS-COLLAB-FILTER-TRAIN"
+owner: "Hassan Ali <hassan.ali@ecp.dev>"
+team: "backend"
+classification: "sensitive"
+approvers: ["hassan.ali@ecp.dev", "hassan.ali@ecp.dev"]
+retention_years: 7
+timeout_ms: 8000
+@end
+
+@schema CollabFilterTrainRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema CollabFilterTrainResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="python"
+allowed_imports: ["json", "time", "uuid", "hashlib", "logging", "typing"]
+@end
+
+@python[service]
+import time
+import logging
+from uuid import uuid4
+
+logger = logging.getLogger(__name__)
+
+def process(req):
+    """Execute Collab Filter Train."""
+    start = time.time()
+    trace_id = str(uuid4())[:8]
+    logger.info(f"[{trace_id}] Processing collab_filter_train")
+
+    result = {
+        "feature": "collab_filter_train",
+        "domain": "recommendations",
+        "processed": True,
+        "input_keys": list(req.keys()) if isinstance(req, dict) else [],
+    }
+
+    elapsed = (time.time() - start) * 1000
+    return {
+        "status": "success",
+        "trace_id": trace_id,
+        "result": result,
+        "processing_time_ms": round(elapsed, 2),
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@error-map language="python"
+  "ValueError" -> "Invalid input provided to collab_filter_train. Check request parameters."
+  "TimeoutError" -> "Operation collab_filter_train timed out. Service may be under heavy load."
+  "ConnectionError" -> "Unable to reach downstream service. Check network connectivity."
+@end
+
+@rationale for="collab_filter_train"
+reason: "Selected python for Collab Filter Train due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="collab_filter_train"
+decision: "Implement as microservice endpoint on recommendation-python"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Hassan Ali"]
+@end
+
+@audit
+action: "Log Collab Filter Train execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

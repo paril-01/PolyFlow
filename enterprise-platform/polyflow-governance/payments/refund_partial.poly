@@ -1,0 +1,82 @@
+# Refund Partial — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-REFUND-PARTIAL"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "restricted"
+approvers: ["iris.nakamura@ecp.dev", "bob.martinez@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema RefundPartialRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema RefundPartialResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RefundPartialProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "refund_partial",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="first-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in refund_partial request."
+  "IllegalArgumentException" -> "Invalid argument passed to refund_partial."
+  "TimeoutException" -> "Operation refund_partial timed out."
+@end
+
+@rationale for="refund_partial"
+reason: "Selected java for Refund Partial due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="refund_partial"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Refund Partial execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,87 @@
+# System Health Dashboard — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-SYSTEM-HEALTH-DASHBO"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema SystemHealthDashboardRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema SystemHealthDashboardResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface SystemHealthDashboardProps {
+  onComplete?: (data: any) => void;
+}
+
+export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/system-health-dashboard', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'System Health Dashboard'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="first-success" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in system_health_dashboard component."
+  "NetworkError" -> "API call failed for system_health_dashboard."
+@end
+
+@rationale for="system_health_dashboard"
+reason: "Selected typescript for System Health Dashboard due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="system_health_dashboard"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log System Health Dashboard execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

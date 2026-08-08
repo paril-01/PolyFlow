@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.orders;
+option go_package = "github.com/ecp/shared-proto/orders";
+option java_package = "com.ecp.proto.orders";
+
+message OrderCancelRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message OrderCancelResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service OrderCancelService {
+  rpc Execute (OrderCancelRequest) returns (OrderCancelResponse);
+}

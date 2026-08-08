@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.payments;
+option go_package = "github.com/ecp/shared-proto/payments";
+option java_package = "com.ecp.proto.payments";
+
+message StripeChargeRefundRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message StripeChargeRefundResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service StripeChargeRefundService {
+  rpc Execute (StripeChargeRefundRequest) returns (StripeChargeRefundResponse);
+}

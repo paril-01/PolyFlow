@@ -1,0 +1,62 @@
+# 06_order_processor.poly — Order Processing Pipeline & State Machine
+
+@contract
+feature_id: "ORDER-2026-905"
+owner: "order-fulfillment-team"
+classification: "internal"
+timeout_ms: 3000
+@end
+
+@link ./04_cart_checkout.poly as CartModule
+@link ./05_payment_gateway.poly as PaymentModule
+
+@schema OrderProcessRequest
+  user_id: string
+  cart_id: string
+  payment_id: string
+  grand_total: number
+@end
+
+@schema OrderProcessResponse
+  order_id: string
+  fulfillment_status: string
+  tracking_number: string
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_unknown")
+    cart_id = req.get("cart_id", "cart_000")
+    payment_id = req.get("payment_id", "pay_000")
+    grand_total = req.get("grand_total", 0.0)
+    
+    order_hash = hashlib.sha256(f"{user_id}:{cart_id}:{payment_id}".encode()).hexdigest()[:10]
+    order_id = f"ord_2026_{order_hash}"
+    tracking_number = f"TRK-99-{order_hash.upper()}"
+    
+    ctx.emit_audit("order_placed", order_id=order_id, user_id=user_id, total=grand_total)
+    
+    return {
+        "status": "order_confirmed",
+        "order_id": order_id,
+        "user_id": user_id,
+        "cart_id": cart_id,
+        "payment_id": payment_id,
+        "fulfillment_status": "processing_warehouse",
+        "tracking_number": tracking_number,
+        "grand_total": grand_total
+    }
+@end
+
+@javascript[async_dispatcher]
+function process(req) {
+    return {
+        event: "ORDER_PLACED_EVENT",
+        dispatched: true,
+        queue: "order-events-stream"
+    };
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

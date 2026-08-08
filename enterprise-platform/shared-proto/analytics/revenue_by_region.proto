@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.analytics;
+option go_package = "github.com/ecp/shared-proto/analytics";
+option java_package = "com.ecp.proto.analytics";
+
+message RevenueByRegionRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message RevenueByRegionResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service RevenueByRegionService {
+  rpc Execute (RevenueByRegionRequest) returns (RevenueByRegionResponse);
+}

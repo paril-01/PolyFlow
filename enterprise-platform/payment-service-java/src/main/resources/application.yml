@@ -1,0 +1,16 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: payment-service-java
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_service_java
+    username: ecp
+    password: ecp_secret
+  jpa:
+    hibernate:
+      ddl-auto: validate
+logging:
+  level:
+    root: INFO
+    com.ecp: DEBUG

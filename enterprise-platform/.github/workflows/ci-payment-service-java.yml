@@ -1,0 +1,23 @@
+name: CI - payment-service-java
+on:
+  push:
+    paths: ['payment-service-java/**']
+  pull_request:
+    paths: ['payment-service-java/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: payment-service-java
+      run: ./mvnw test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/payment-service-java:${{ github.sha }} ./payment-service-java

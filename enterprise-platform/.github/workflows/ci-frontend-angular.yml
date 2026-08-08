@@ -1,0 +1,23 @@
+name: CI - frontend-angular
+on:
+  push:
+    paths: ['frontend-angular/**']
+  pull_request:
+    paths: ['frontend-angular/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: frontend-angular
+      run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/frontend-angular:${{ github.sha }} ./frontend-angular

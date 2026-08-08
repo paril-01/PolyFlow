@@ -1,0 +1,72 @@
+# 04_cart_checkout.poly — Shopping Cart & Checkout Engine Feature
+
+@contract
+feature_id: "CART-2026-903"
+owner: "checkout-experience-team"
+classification: "internal"
+timeout_ms: 2500
+@end
+
+@link ./03_product_catalog.poly::python[service] as CatalogService
+
+@schema CartCheckoutRequest
+  user_id: string
+  items: list
+  shipping_address: string
+@end
+
+@schema CartCheckoutResponse
+  cart_id: string
+  user_id: string
+  subtotal: number
+  tax: number
+  grand_total: number
+  item_count: number
+  status: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "uuid", "sys"]
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_unknown")
+    items = req.get("items", [{"product_id": "prod_101", "quantity": 2}])
+    
+    subtotal = 0.0
+    processed_items = []
+    
+    for item in items:
+        pid = item.get("product_id", "prod_101")
+        qty = item.get("quantity", 1)
+        # Item price calculation logic
+        base_p = 1299.00 if pid == "prod_102" else 499.99
+        item_total = base_p * qty
+        subtotal += item_total
+        processed_items.append({
+            "product_id": pid,
+            "quantity": qty,
+            "item_total": item_total
+        })
+        
+    tax = round(subtotal * 0.08, 2)  # 8% enterprise sales tax
+    grand_total = round(subtotal + tax, 2)
+    cart_id = f"cart_{hashlib.md5((user_id + str(grand_total)).encode()).hexdigest()[:10]}"
+    
+    ctx.emit_audit("cart_validated", cart_id=cart_id, grand_total=grand_total)
+    
+    return {
+        "status": "ready_for_payment",
+        "cart_id": cart_id,
+        "user_id": user_id,
+        "items": processed_items,
+        "item_count": len(items),
+        "subtotal": round(subtotal, 2),
+        "tax": tax,
+        "grand_total": grand_total
+    }
+@end
+
+@merge strategy="first-success"
+@end

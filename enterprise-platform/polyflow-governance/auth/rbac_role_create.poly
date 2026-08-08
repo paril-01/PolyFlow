@@ -1,0 +1,82 @@
+# Rbac Role Create — PolyFlow Governance Module
+# Service: auth-service-java | Language: java | Domain: authentication
+
+@contract
+feature_id: "ECP-AUTHENTICATION-RBAC-ROLE-CREATE"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "public"
+approvers: ["alice.chen@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema RbacRoleCreateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema RbacRoleCreateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RbacRoleCreateProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "rbac_role_create",
+            "domain", "authentication",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="all-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in rbac_role_create request."
+  "IllegalArgumentException" -> "Invalid argument passed to rbac_role_create."
+  "TimeoutException" -> "Operation rbac_role_create timed out."
+@end
+
+@rationale for="rbac_role_create"
+reason: "Selected java for Rbac Role Create due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="rbac_role_create"
+decision: "Implement as microservice endpoint on auth-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Rbac Role Create execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

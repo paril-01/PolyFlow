@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-java
+  namespace: ecp
+  labels:
+    app: analytics-java
+    team: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: analytics-java
+  template:
+    metadata:
+      labels:
+        app: analytics-java
+    spec:
+      containers:
+      - name: analytics-java
+        image: ecp/analytics-java:latest
+        ports:
+        - containerPort: 8088
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10

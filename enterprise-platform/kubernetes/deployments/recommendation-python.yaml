@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation-python
+  namespace: ecp
+  labels:
+    app: recommendation-python
+    team: ml
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: recommendation-python
+  template:
+    metadata:
+      labels:
+        app: recommendation-python
+    spec:
+      containers:
+      - name: recommendation-python
+        image: ecp/recommendation-python:latest
+        ports:
+        - containerPort: 8086
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8086
+          initialDelaySeconds: 30
+          periodSeconds: 10

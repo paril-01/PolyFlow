@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-angular
+  namespace: ecp
+  labels:
+    app: frontend-angular
+    team: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-angular
+  template:
+    metadata:
+      labels:
+        app: frontend-angular
+    spec:
+      containers:
+      - name: frontend-angular
+        image: ecp/frontend-angular:latest
+        ports:
+        - containerPort: 4200
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4200
+          initialDelaySeconds: 30
+          periodSeconds: 10

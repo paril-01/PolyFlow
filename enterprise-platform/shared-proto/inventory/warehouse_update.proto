@@ -1,0 +1,20 @@
+syntax = "proto3";
+package ecp.inventory;
+option go_package = "github.com/ecp/shared-proto/inventory";
+option java_package = "com.ecp.proto.inventory";
+
+message WarehouseUpdateRequest {
+  string id = 1;
+  string timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+message WarehouseUpdateResponse {
+  string id = 1;
+  string status = 2;
+  double processing_time_ms = 3;
+}
+
+service WarehouseUpdateService {
+  rpc Execute (WarehouseUpdateRequest) returns (WarehouseUpdateResponse);
+}

@@ -1,0 +1,23 @@
+name: CI - gateway-go
+on:
+  push:
+    paths: ['gateway-go/**']
+  pull_request:
+    paths: ['gateway-go/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: gateway-go
+      run: go test ./... -v -race
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/gateway-go:${{ github.sha }} ./gateway-go

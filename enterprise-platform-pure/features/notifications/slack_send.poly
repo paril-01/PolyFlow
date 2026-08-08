@@ -1,0 +1,83 @@
+# Slack Send — PolyFlow Governance Module
+# Service: notification-node | Language: javascript | Domain: notifications
+
+@contract
+feature_id: "ECP-NOTIFICATIONS-SLACK-SEND"
+owner: "Hassan Ali <hassan.ali@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["hassan.ali@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema SlackSendRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema SlackSendResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="javascript"
+allowed_imports: ["express", "uuid", "winston", "bull", "nodemailer"]
+@end
+
+@javascript[service]
+const { v4: uuidv4 } = require('uuid');
+
+async function process(req) {
+  const start = Date.now();
+  const traceId = uuidv4().slice(0, 8);
+
+  const result = {
+    feature: 'slack_send',
+    domain: 'notifications',
+    processed: true,
+    input_keys: Object.keys(req || {}),
+  };
+
+  return {
+    status: 'success',
+    trace_id: traceId,
+    result,
+    processing_time_ms: Date.now() - start,
+  };
+}
+
+module.exports = { process };
+@end
+
+@merge strategy="fallback" order=["javascript"]
+@end
+
+@error-map language="javascript"
+  "TypeError" -> "Type mismatch in slack_send payload."
+  "ECONNREFUSED" -> "Downstream service unreachable from slack_send."
+@end
+
+@rationale for="slack_send"
+reason: "Selected javascript for Slack Send due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="slack_send"
+decision: "Implement as microservice endpoint on notification-node"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Hassan Ali"]
+@end
+
+@audit
+action: "Log Slack Send execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

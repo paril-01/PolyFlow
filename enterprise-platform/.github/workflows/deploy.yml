@@ -1,0 +1,17 @@
+name: Deploy to Production
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to deploy'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy
+      run: |
+        echo "Deploying ${{ github.event.inputs.service }}"
+        # kubectl apply -f kubernetes/deployments/${{ github.event.inputs.service }}.yaml

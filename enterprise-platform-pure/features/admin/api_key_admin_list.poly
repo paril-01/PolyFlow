@@ -1,0 +1,87 @@
+# Api Key Admin List — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-API-KEY-ADMIN-LIST"
+owner: "David Kim <david.kim@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["david.kim@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema ApiKeyAdminListRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ApiKeyAdminListResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface ApiKeyAdminListProps {
+  onComplete?: (data: any) => void;
+}
+
+export const ApiKeyAdminList: React.FC<ApiKeyAdminListProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/api-key-admin-list', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Api Key Admin List'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="fallback" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in api_key_admin_list component."
+  "NetworkError" -> "API call failed for api_key_admin_list."
+@end
+
+@rationale for="api_key_admin_list"
+reason: "Selected typescript for Api Key Admin List due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="api_key_admin_list"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["David Kim"]
+@end
+
+@audit
+action: "Log Api Key Admin List execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

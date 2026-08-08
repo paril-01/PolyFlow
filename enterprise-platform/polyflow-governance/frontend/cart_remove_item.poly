@@ -1,0 +1,87 @@
+# Cart Remove Item — PolyFlow Governance Module
+# Service: frontend-react | Language: typescript | Domain: frontend_customer
+
+@contract
+feature_id: "ECP-FRONTEND_CUSTOMER-CART-REMOVE-ITEM"
+owner: "Jake Thompson <jake.thompson@ecp.dev>"
+team: "devops"
+classification: "restricted"
+approvers: ["jake.thompson@ecp.dev", "jake.thompson@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema CartRemoveItemRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema CartRemoveItemResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface CartRemoveItemProps {
+  onComplete?: (data: any) => void;
+}
+
+export const CartRemoveItem: React.FC<CartRemoveItemProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/frontend_customer/cart-remove-item', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Cart Remove Item'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="parallel-collect" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in cart_remove_item component."
+  "NetworkError" -> "API call failed for cart_remove_item."
+@end
+
+@rationale for="cart_remove_item"
+reason: "Selected typescript for Cart Remove Item due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="cart_remove_item"
+decision: "Implement as microservice endpoint on frontend-react"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Jake Thompson"]
+@end
+
+@audit
+action: "Log Cart Remove Item execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

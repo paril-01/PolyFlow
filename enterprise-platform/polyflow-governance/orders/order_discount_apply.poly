@@ -1,0 +1,86 @@
+# Order Discount Apply — PolyFlow Governance Module
+# Service: order-service-go | Language: go | Domain: orders
+
+@contract
+feature_id: "ECP-ORDERS-ORDER-DISCOUNT-APPLY"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "internal"
+approvers: ["leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema OrderDiscountApplyRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  items: array<OrderItem>
+  total: number<min:0>
+  metadata: object | null
+@end
+
+@schema OrderDiscountApplyResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="go"
+allowed_imports: ["fmt", "net/http", "encoding/json", "time", "github.com/google/uuid"]
+@end
+
+@go[service]
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "time"
+)
+
+func process(req map[string]interface{}) map[string]interface{} {
+    start := time.Now()
+    result := map[string]interface{}{
+        "feature":   "order_discount_apply",
+        "domain":    "orders",
+        "processed": true,
+    }
+    elapsed := time.Since(start).Milliseconds()
+    return map[string]interface{}{
+        "status":          "success",
+        "result":          result,
+        "processing_ms":   elapsed,
+    }
+}
+@end
+
+@merge strategy="parallel-collect" order=["go"]
+@end
+
+@error-map language="go"
+  "context.DeadlineExceeded" -> "Request to order_discount_apply timed out."
+  "sql.ErrNoRows" -> "Resource not found for order_discount_apply."
+  "io.EOF" -> "Unexpected end of input in order_discount_apply."
+@end
+
+@rationale for="order_discount_apply"
+reason: "Selected go for Order Discount Apply due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="order_discount_apply"
+decision: "Implement as microservice endpoint on order-service-go"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Order Discount Apply execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

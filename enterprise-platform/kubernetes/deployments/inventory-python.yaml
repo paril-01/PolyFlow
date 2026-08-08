@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-python
+  namespace: ecp
+  labels:
+    app: inventory-python
+    team: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: inventory-python
+  template:
+    metadata:
+      labels:
+        app: inventory-python
+    spec:
+      containers:
+      - name: inventory-python
+        image: ecp/inventory-python:latest
+        ports:
+        - containerPort: 8084
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8084
+          initialDelaySeconds: 30
+          periodSeconds: 10

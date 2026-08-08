@@ -1,0 +1,23 @@
+name: CI - ai-service-python
+on:
+  push:
+    paths: ['ai-service-python/**']
+  pull_request:
+    paths: ['ai-service-python/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: ai-service-python
+      run: pytest tests/ -v --cov=app
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/ai-service-python:${{ github.sha }} ./ai-service-python

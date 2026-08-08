@@ -1,0 +1,46 @@
+# 07_notification_engine.poly — Multi-Channel Notification Engine Feature
+
+@contract
+feature_id: "NOTIF-2026-906"
+owner: "communications-platform-team"
+classification: "public"
+timeout_ms: 2000
+@end
+
+@schema NotificationRequest
+  recipient: string
+  subject: string
+  body: string
+  channels: list
+@end
+
+@python[email_service]
+def process(req):
+    recipient = req.get("recipient", "customer@enterprise.com")
+    subject = req.get("subject", "Order Confirmation")
+    
+    ctx.emit_audit("email_sent", recipient=recipient, subject=subject)
+    
+    return {
+        "channel": "email",
+        "status": "delivered",
+        "recipient": recipient,
+        "sent_at": "2026-08-07T12:10:00Z"
+    }
+@end
+
+@node[webhook_service]
+function process(req) {
+    const channels = req.channels || ["slack"];
+    return {
+        channel: "slack_webhook",
+        status: "dispatched",
+        payload: {
+            text: "Notification: " + (req.subject || "Order Event")
+        }
+    };
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

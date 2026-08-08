@@ -1,0 +1,23 @@
+name: CI - analytics-java
+on:
+  push:
+    paths: ['analytics-java/**']
+  pull_request:
+    paths: ['analytics-java/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: analytics-java
+      run: ./mvnw test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/analytics-java:${{ github.sha }} ./analytics-java

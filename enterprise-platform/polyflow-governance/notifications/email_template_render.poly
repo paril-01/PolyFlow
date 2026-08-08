@@ -1,0 +1,83 @@
+# Email Template Render — PolyFlow Governance Module
+# Service: notification-node | Language: javascript | Domain: notifications
+
+@contract
+feature_id: "ECP-NOTIFICATIONS-EMAIL-TEMPLATE-RENDE"
+owner: "Carol Williams <carol.williams@ecp.dev>"
+team: "frontend"
+classification: "public"
+approvers: ["carol.williams@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema EmailTemplateRenderRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema EmailTemplateRenderResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="javascript"
+allowed_imports: ["express", "uuid", "winston", "bull", "nodemailer"]
+@end
+
+@javascript[service]
+const { v4: uuidv4 } = require('uuid');
+
+async function process(req) {
+  const start = Date.now();
+  const traceId = uuidv4().slice(0, 8);
+
+  const result = {
+    feature: 'email_template_render',
+    domain: 'notifications',
+    processed: true,
+    input_keys: Object.keys(req || {}),
+  };
+
+  return {
+    status: 'success',
+    trace_id: traceId,
+    result,
+    processing_time_ms: Date.now() - start,
+  };
+}
+
+module.exports = { process };
+@end
+
+@merge strategy="first-success" order=["javascript"]
+@end
+
+@error-map language="javascript"
+  "TypeError" -> "Type mismatch in email_template_render payload."
+  "ECONNREFUSED" -> "Downstream service unreachable from email_template_render."
+@end
+
+@rationale for="email_template_render"
+reason: "Selected javascript for Email Template Render due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="email_template_render"
+decision: "Implement as microservice endpoint on notification-node"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Carol Williams"]
+@end
+
+@audit
+action: "Log Email Template Render execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,84 @@
+# Oauth2 Callback — PolyFlow Governance Module
+# Service: auth-service-java | Language: java | Domain: authentication
+
+@contract
+feature_id: "ECP-AUTHENTICATION-OAUTH2-CALLBACK"
+owner: "Iris Nakamura <iris.nakamura@ecp.dev>"
+team: "platform"
+classification: "public"
+approvers: ["iris.nakamura@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema Oauth2CallbackRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  username: string<format:email>
+  token: string
+  metadata: object | null
+@end
+
+@schema Oauth2CallbackResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class Oauth2CallbackProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "oauth2_callback",
+            "domain", "authentication",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="vote" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in oauth2_callback request."
+  "IllegalArgumentException" -> "Invalid argument passed to oauth2_callback."
+  "TimeoutException" -> "Operation oauth2_callback timed out."
+@end
+
+@rationale for="oauth2_callback"
+reason: "Selected java for Oauth2 Callback due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="oauth2_callback"
+decision: "Implement as microservice endpoint on auth-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Iris Nakamura"]
+@end
+
+@audit
+action: "Log Oauth2 Callback execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

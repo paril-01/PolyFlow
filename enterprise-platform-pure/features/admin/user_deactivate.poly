@@ -1,0 +1,87 @@
+# User Deactivate — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-USER-DEACTIVATE"
+owner: "Elena Petrov <elena.petrov@ecp.dev>"
+team: "ml"
+classification: "internal"
+approvers: ["elena.petrov@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema UserDeactivateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema UserDeactivateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface UserDeactivateProps {
+  onComplete?: (data: any) => void;
+}
+
+export const UserDeactivate: React.FC<UserDeactivateProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/user-deactivate', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'User Deactivate'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="vote" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in user_deactivate component."
+  "NetworkError" -> "API call failed for user_deactivate."
+@end
+
+@rationale for="user_deactivate"
+reason: "Selected typescript for User Deactivate due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="user_deactivate"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Elena Petrov"]
+@end
+
+@audit
+action: "Log User Deactivate execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

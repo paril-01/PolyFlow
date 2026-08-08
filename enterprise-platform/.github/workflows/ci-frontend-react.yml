@@ -1,0 +1,23 @@
+name: CI - frontend-react
+on:
+  push:
+    paths: ['frontend-react/**']
+  pull_request:
+    paths: ['frontend-react/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: frontend-react
+      run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/frontend-react:${{ github.sha }} ./frontend-react

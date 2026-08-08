@@ -1,0 +1,5 @@
+apiVersion: v2
+name: ecp
+description: Enterprise Commerce Platform
+version: 1.5.0
+appVersion: "2.4.1"

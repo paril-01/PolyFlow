@@ -1,0 +1,130 @@
+version: '3.9'
+
+services:
+  frontend-react:
+    build: ./frontend-react
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway-go
+    environment:
+      - LOG_LEVEL=INFO
+
+  frontend-angular:
+    build: ./frontend-angular
+    ports:
+      - "4200:4200"
+    depends_on:
+      - gateway-go
+    environment:
+      - LOG_LEVEL=INFO
+
+  mobile-flutter:
+    build: ./mobile-flutter
+    depends_on:
+      - gateway-go
+    environment:
+      - LOG_LEVEL=INFO
+
+  gateway-go:
+    build: ./gateway-go
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service-java
+      - order-service-go
+      - inventory-python
+    environment:
+      - LOG_LEVEL=INFO
+
+  auth-service-java:
+    build: ./auth-service-java
+    ports:
+      - "8081:8081"
+    depends_on:
+      - analytics-java
+    environment:
+      - LOG_LEVEL=INFO
+
+  payment-service-java:
+    build: ./payment-service-java
+    ports:
+      - "8082:8082"
+    depends_on:
+      - notification-node
+      - analytics-java
+    environment:
+      - LOG_LEVEL=INFO
+
+  order-service-go:
+    build: ./order-service-go
+    ports:
+      - "8083:8083"
+    depends_on:
+      - pricing-python
+      - inventory-python
+      - payment-service-java
+    environment:
+      - LOG_LEVEL=INFO
+
+  inventory-python:
+    build: ./inventory-python
+    ports:
+      - "8084:8084"
+    depends_on:
+      - notification-node
+    environment:
+      - LOG_LEVEL=INFO
+
+  pricing-python:
+    build: ./pricing-python
+    ports:
+      - "8085:8085"
+    depends_on:
+      - analytics-java
+    environment:
+      - LOG_LEVEL=INFO
+
+  recommendation-python:
+    build: ./recommendation-python
+    ports:
+      - "8086:8086"
+    depends_on:
+      - ai-service-python
+      - analytics-java
+    environment:
+      - LOG_LEVEL=INFO
+
+  notification-node:
+    build: ./notification-node
+    ports:
+      - "8087:8087"
+    environment:
+      - LOG_LEVEL=INFO
+
+  analytics-java:
+    build: ./analytics-java
+    ports:
+      - "8088:8088"
+    environment:
+      - LOG_LEVEL=INFO
+
+  ai-service-python:
+    build: ./ai-service-python
+    ports:
+      - "8089:8089"
+    environment:
+      - LOG_LEVEL=INFO
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ecp
+      POSTGRES_PASSWORD: ecp_secret
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

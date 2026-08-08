@@ -1,0 +1,12 @@
+name: ecp_mobile
+description: Enterprise Commerce Platform Mobile App
+version: 1.2.0+3
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.4.0
+  provider: ^6.1.1
+  go_router: ^12.1.1
+  flutter_riverpod: ^2.4.9

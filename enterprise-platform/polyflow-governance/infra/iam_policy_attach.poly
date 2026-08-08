@@ -1,0 +1,61 @@
+# Iam Policy Attach — PolyFlow Governance Module
+# Service: terraform | Language: hcl | Domain: infrastructure
+
+@contract
+feature_id: "ECP-INFRASTRUCTURE-IAM-POLICY-ATTACH"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema IamPolicyAttachRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema IamPolicyAttachResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="hcl"
+allowed_imports: ["json"]
+@end
+
+@hcl[service]
+// Iam Policy Attach implementation
+@end
+
+@merge strategy="parallel-collect" order=["hcl"]
+@end
+
+@error-map language="hcl"
+  "Error" -> "Unknown error in iam_policy_attach."
+@end
+
+@rationale for="iam_policy_attach"
+reason: "Selected hcl for Iam Policy Attach due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="iam_policy_attach"
+decision: "Implement as microservice endpoint on terraform"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Iam Policy Attach execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,62 @@
+# 02_user_profile.poly — User Profile & RBAC Feature Block
+
+@contract
+feature_id: "USER-2026-901"
+owner: "user-management-team"
+classification: "internal"
+timeout_ms: 2000
+@end
+
+@link ./01_identity_auth.poly::python[service] as AuthService
+
+@schema ProfileRequest
+  user_id: string
+  name: string
+  department: string
+@end
+
+@schema ProfileResponse
+  user_id: string
+  name: string
+  department: string
+  permissions: list
+  status: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_unknown")
+    name = req.get("name", "Enterprise User")
+    department = req.get("department", "Engineering")
+    
+    ctx.emit_audit("profile_updated", user_id=user_id, department=department)
+    
+    permissions = ["read:catalog", "write:cart", "checkout"]
+    if "admin" in user_id or req.get("role") == "admin":
+        permissions.extend(["admin:all", "write:catalog", "override:discounts"])
+        
+    return {
+        "status": "profile_active",
+        "user_id": user_id,
+        "name": name,
+        "department": department,
+        "permissions": permissions
+    }
+@end
+
+@javascript[component]
+function process(req) {
+    return {
+        ui_rendered: true,
+        component: "UserProfileCard",
+        theme: "enterprise-dark"
+    };
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

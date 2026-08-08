@@ -1,0 +1,87 @@
+# Product Detail Page — PolyFlow Governance Module
+# Service: frontend-react | Language: typescript | Domain: frontend_customer
+
+@contract
+feature_id: "ECP-FRONTEND_CUSTOMER-PRODUCT-DETAIL-PAGE"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "sensitive"
+approvers: ["alice.chen@ecp.dev", "frank.johnson@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema ProductDetailPageRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema ProductDetailPageResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface ProductDetailPageProps {
+  onComplete?: (data: any) => void;
+}
+
+export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/frontend_customer/product-detail-page', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Product Detail Page'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="all-success" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in product_detail_page component."
+  "NetworkError" -> "API call failed for product_detail_page."
+@end
+
+@rationale for="product_detail_page"
+reason: "Selected typescript for Product Detail Page due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="product_detail_page"
+decision: "Implement as microservice endpoint on frontend-react"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Product Detail Page execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

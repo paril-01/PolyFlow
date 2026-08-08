@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-go
+  namespace: ecp
+  labels:
+    app: order-service-go
+    team: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-service-go
+  template:
+    metadata:
+      labels:
+        app: order-service-go
+    spec:
+      containers:
+      - name: order-service-go
+        image: ecp/order-service-go:latest
+        ports:
+        - containerPort: 8083
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8083
+          initialDelaySeconds: 30
+          periodSeconds: 10

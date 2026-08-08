@@ -1,0 +1,118 @@
+# 05_credit_underwriting.poly — AI Credit Scoring & Automated Underwriting
+
+@contract
+feature_id: "FINTECH-CREDIT-005"
+owner: "risk-underwriting-group"
+classification: "internal"
+approvers: ["cro@polyfintech.com", "risk.head@polyfintech.com"]
+timeout_ms: 2500
+@end
+
+@schema LoanApplicationRequest
+  company_name: string
+  requested_amount: number
+  annual_revenue: number
+  loan_purpose: string
+@end
+
+@schema LoanApplicationResponse
+  application_id: string
+  credit_score: number
+  approval_status: string
+  approved_limit: number
+  interest_rate: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React, { useState } from 'react';
+
+export function LoanApplicationWidget({ onApply }: { onApply: (data: any) => void }) {
+  const [requestedAmount, setRequestedAmount] = useState('500000');
+  const [revenue, setRevenue] = useState('4500000');
+  const [purpose, setPurpose] = useState('Working Capital & Server Scaling');
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl text-white max-w-lg mx-auto shadow-2xl">
+      <h3 className="text-xl font-bold border-b border-slate-800 pb-3">AI Credit Line & Working Capital Application</h3>
+      <div className="mt-6 space-y-4">
+        <div>
+          <label className="block text-xs uppercase text-slate-400 font-bold">Requested Facility ($)</label>
+          <input type="number" value={requestedAmount} onChange={(e) => setRequestedAmount(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white font-mono text-sm" />
+        </div>
+        <div>
+          <label className="block text-xs uppercase text-slate-400 font-bold">Annual Corporate Revenue ($)</label>
+          <input type="number" value={revenue} onChange={(e) => setRevenue(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white font-mono text-sm" />
+        </div>
+        <div>
+          <label className="block text-xs uppercase text-slate-400 font-bold">Purpose</label>
+          <input value={purpose} onChange={(e) => setPurpose(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white font-mono text-sm" />
+        </div>
+        <button
+          onClick={() => onApply({ requested_amount: parseFloat(requestedAmount), annual_revenue: parseFloat(revenue), loan_purpose: purpose })}
+          className="w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-xl font-bold text-sm text-white shadow-lg"
+        >
+          Submit to AI Underwriting Engine
+        </button>
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    requested = float(req.get("requested_amount", 500000.0))
+    revenue = float(req.get("annual_revenue", 4500000.0))
+    
+    # Underwriting Scoring Logic
+    debt_service_ratio = requested / max(revenue, 1.0)
+    credit_score = 785
+    if debt_service_ratio > 0.3:
+        credit_score -= 40
+    if revenue > 2000000.0:
+        credit_score += 35
+        
+    approval_status = "APPROVED" if credit_score >= 700 else "REJECTED"
+    approved_limit = requested if approval_status == "APPROVED" else 0.0
+    interest_rate = "5.45% APR" if credit_score > 780 else "6.85% APR"
+    
+    app_hash = hashlib.sha256(f"{requested}:{revenue}:{time.time()}".encode()).hexdigest()[:8]
+    app_id = f"ln_app_{app_hash}"
+    
+    ctx.emit_audit("loan_application_underwritten", app_id=app_id, credit_score=credit_score, status=approval_status)
+    
+    return {
+        "status": "EVALUATED",
+        "application_id": app_id,
+        "credit_score": credit_score,
+        "approval_status": approval_status,
+        "approved_limit": approved_limit,
+        "interest_rate": interest_rate,
+        "debt_service_ratio": round(debt_service_ratio, 3),
+        "timestamp": time.time()
+    }
+@end
+
+@java[backend]
+package com.polyfintech.credit;
+
+import java.util.Map;
+
+public class JavaExperianEquifaxCreditBureau {
+    public Map<String, Object> fetchBureauReport(String companyTaxId) {
+        return Map.of(
+            "bureau_status", "MATCH_FOUND",
+            "duns_number", "99-882-1102",
+            "delinquencies_24m", 0,
+            "paydex_score", 84
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

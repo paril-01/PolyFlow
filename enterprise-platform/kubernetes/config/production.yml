@@ -1,0 +1,5 @@
+# WARNING: config drift — pool_size differs from staging
+database_pool_size: 25
+redis_ttl: 600
+log_level: INFO
+feature_new_checkout: false  # Should this still be false?

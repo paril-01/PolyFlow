@@ -1,0 +1,84 @@
+# Razorpay Payment Verify — PolyFlow Governance Module
+# Service: payment-service-java | Language: java | Domain: payments
+
+@contract
+feature_id: "ECP-PAYMENTS-RAZORPAY-PAYMENT-VER"
+owner: "Leo Rivera <leo.rivera@ecp.dev>"
+team: "backend"
+classification: "public"
+approvers: ["leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 3000
+@end
+
+@schema RazorpayPaymentVerifyRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  amount: number<min:0>
+  currency: string<len:3>
+  metadata: object | null
+@end
+
+@schema RazorpayPaymentVerifyResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RazorpayPaymentVerifyProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "razorpay_payment_verify",
+            "domain", "payments",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="all-success" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in razorpay_payment_verify request."
+  "IllegalArgumentException" -> "Invalid argument passed to razorpay_payment_verify."
+  "TimeoutException" -> "Operation razorpay_payment_verify timed out."
+@end
+
+@rationale for="razorpay_payment_verify"
+reason: "Selected java for Razorpay Payment Verify due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="razorpay_payment_verify"
+decision: "Implement as microservice endpoint on payment-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Leo Rivera"]
+@end
+
+@audit
+action: "Log Razorpay Payment Verify execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

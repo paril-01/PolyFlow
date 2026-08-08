@@ -1,0 +1,23 @@
+name: CI - mobile-flutter
+on:
+  push:
+    paths: ['mobile-flutter/**']
+  pull_request:
+    paths: ['mobile-flutter/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: mobile-flutter
+      run: flutter test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/mobile-flutter:${{ github.sha }} ./mobile-flutter

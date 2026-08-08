@@ -1,0 +1,87 @@
+# Audit Log Export — PolyFlow Governance Module
+# Service: frontend-angular | Language: typescript | Domain: admin
+
+@contract
+feature_id: "ECP-ADMIN-AUDIT-LOG-EXPORT"
+owner: "Hassan Ali <hassan.ali@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["hassan.ali@ecp.dev", "leo.rivera@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema AuditLogExportRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema AuditLogExportResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="typescript"
+allowed_imports: ["react", "axios", "@tanstack/react-query"]
+@end
+
+@typescript[service]
+import React, { useState } from 'react';
+
+interface AuditLogExportProps {
+  onComplete?: (data: any) => void;
+}
+
+export const AuditLogExport: React.FC<AuditLogExportProps> = ({ onComplete }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/admin/audit-log-export', { method: 'POST' });
+      const data = await res.json();
+      onComplete?.(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleClick} disabled={loading}>
+      {loading ? 'Processing...' : 'Audit Log Export'}
+    </button>
+  );
+};
+@end
+
+@merge strategy="fallback" order=["typescript"]
+@end
+
+@error-map language="typescript"
+  "TypeError" -> "Type mismatch in audit_log_export component."
+  "NetworkError" -> "API call failed for audit_log_export."
+@end
+
+@rationale for="audit_log_export"
+reason: "Selected typescript for Audit Log Export due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="audit_log_export"
+decision: "Implement as microservice endpoint on frontend-angular"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Hassan Ali"]
+@end
+
+@audit
+action: "Log Audit Log Export execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

@@ -1,0 +1,97 @@
+# 06_fraud_sanctions.poly — Risk Score & OFAC Sanctions Screening Shield
+
+@contract
+feature_id: "FINTECH-RISK-006"
+owner: "compliance-security-group"
+classification: "sensitive"
+approvers: ["ciso@polyfintech.com", "compliance.head@polyfintech.com"]
+timeout_ms: 2000
+@end
+
+@schema RiskScreeningRequest
+  user_id: string
+  recipient_name: string
+  amount: number
+  ip_address: string
+@end
+
+@schema RiskScreeningResponse
+  risk_score: number
+  ofac_status: string
+  decision: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "hashlib", "time", "sys"]
+@end
+
+@typescript[component]
+import React from 'react';
+
+export function FraudRiskMeter({ riskScore, decision, ofacStatus }: { riskScore: number; decision: string; ofacStatus: string }) {
+  return (
+    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-white shadow-xl">
+      <div className="flex justify-between items-center">
+        <h4 className="text-xs uppercase text-slate-400 font-bold">AI Risk & Compliance Shield</h4>
+        <span className={`text-xs px-2.5 py-0.5 rounded font-bold ${decision === 'APPROVE' ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'}`}>
+          {decision}
+        </span>
+      </div>
+      <div className="mt-4 flex items-baseline justify-between">
+        <div className="text-3xl font-black font-mono">{riskScore.toFixed(2)} / 1.00</div>
+        <div className="text-xs font-mono text-emerald-400">OFAC: {ofacStatus}</div>
+      </div>
+    </div>
+  );
+}
+@end
+
+@python[service]
+def process(req):
+    user_id = req.get("user_id", "usr_corp_101")
+    recipient = req.get("recipient_name", "").lower()
+    amount = float(req.get("amount", 1000.0))
+    
+    # OFAC Sanctions Watchlist
+    sanctioned_keywords = ["sanctioned", "embargo", "darknet", "restricted_entity"]
+    ofac_hit = any(k in recipient for k in sanctioned_keywords)
+    
+    risk_score = 0.03
+    if amount > 100000.0:
+        risk_score += 0.15
+    if ofac_hit:
+        risk_score = 0.99
+        
+    decision = "BLOCK" if ofac_hit or risk_score > 0.80 else "APPROVE"
+    ofac_status = "SANCTION_HIT_BLOCKED" if ofac_hit else "CLEAN_NO_MATCH"
+    
+    ctx.emit_audit("fraud_screening_performed", risk_score=risk_score, decision=decision, ofac=ofac_status)
+    
+    return {
+        "status": "SCREENED",
+        "user_id": user_id,
+        "risk_score": round(risk_score, 2),
+        "ofac_status": ofac_status,
+        "decision": decision,
+        "timestamp": time.time()
+    }
+@end
+
+@java[backend]
+package com.polyfintech.risk;
+
+import java.util.Map;
+
+public class JavaOfacSanctionsDatabase {
+    public Map<String, Object> queryOfacSdnList(String entityName) {
+        return Map.of(
+            "entity_query", entityName,
+            "sdn_match_found", false,
+            "list_version", "OFAC-SDN-2026-08"
+        );
+    }
+}
+@end
+
+@merge strategy="parallel-collect"
+@end

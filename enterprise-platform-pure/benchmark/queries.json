@@ -1,0 +1,84 @@
+[
+  {
+    "id": "Q001",
+    "type": "lineage",
+    "query": "Where does discount_percentage originate?",
+    "expected_services": [
+      "pricing-python",
+      "order-service-go",
+      "frontend-react"
+    ]
+  },
+  {
+    "id": "Q002",
+    "type": "impact",
+    "query": "Which deployments break if PaymentService changes?",
+    "expected_services": [
+      "payment-service-java",
+      "order-service-go",
+      "notification-node"
+    ]
+  },
+  {
+    "id": "Q003",
+    "type": "refactor",
+    "query": "Rename OrderStatus to FulfillmentStatus \u2014 estimate blast radius",
+    "expected_entities": [
+      "order-service-go",
+      "frontend-react",
+      "shared-proto",
+      "shared-schema"
+    ]
+  },
+  {
+    "id": "Q004",
+    "type": "bug",
+    "query": "Find SQL injection vulnerabilities",
+    "expected_count": 3
+  },
+  {
+    "id": "Q005",
+    "type": "dead_code",
+    "query": "List unreachable API endpoints",
+    "expected": [
+      "LegacyOrdersV0Handler",
+      "OldDashboard"
+    ]
+  },
+  {
+    "id": "Q006",
+    "type": "duplicate",
+    "query": "Find duplicate utility functions across services",
+    "expected": [
+      "string_utils.go",
+      "string_helpers.go"
+    ]
+  },
+  {
+    "id": "Q007",
+    "type": "docs",
+    "query": "Which ADRs are contradicted by current implementation?",
+    "expected": []
+  },
+  {
+    "id": "Q008",
+    "type": "chain",
+    "query": "Trace the customer_purchase_flow call chain end-to-end",
+    "expected_languages": 5
+  },
+  {
+    "id": "Q009",
+    "type": "config",
+    "query": "Find configuration drift between staging and production",
+    "expected": [
+      "database_pool_size",
+      "feature_new_checkout"
+    ]
+  },
+  {
+    "id": "Q010",
+    "type": "security",
+    "query": "Find hardcoded secrets or tokens",
+    "expected_count": 2
+  }
+]

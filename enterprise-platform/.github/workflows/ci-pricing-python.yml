@@ -1,0 +1,23 @@
+name: CI - pricing-python
+on:
+  push:
+    paths: ['pricing-python/**']
+  pull_request:
+    paths: ['pricing-python/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      working-directory: pricing-python
+      run: pytest tests/ -v --cov=app
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: docker build -t ecp/pricing-python:${{ github.sha }} ./pricing-python

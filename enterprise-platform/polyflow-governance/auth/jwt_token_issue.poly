@@ -1,0 +1,82 @@
+# Jwt Token Issue — PolyFlow Governance Module
+# Service: auth-service-java | Language: java | Domain: authentication
+
+@contract
+feature_id: "ECP-AUTHENTICATION-JWT-TOKEN-ISSUE"
+owner: "Alice Chen <alice.chen@ecp.dev>"
+team: "platform"
+classification: "public"
+approvers: ["alice.chen@ecp.dev"]
+retention_years: 7
+timeout_ms: 5000
+@end
+
+@schema JwtTokenIssueRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema JwtTokenIssueResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class JwtTokenIssueProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "jwt_token_issue",
+            "domain", "authentication",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="fallback" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in jwt_token_issue request."
+  "IllegalArgumentException" -> "Invalid argument passed to jwt_token_issue."
+  "TimeoutException" -> "Operation jwt_token_issue timed out."
+@end
+
+@rationale for="jwt_token_issue"
+reason: "Selected java for Jwt Token Issue due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="jwt_token_issue"
+decision: "Implement as microservice endpoint on auth-service-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Alice Chen"]
+@end
+
+@audit
+action: "Log Jwt Token Issue execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

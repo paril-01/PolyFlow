@@ -1,0 +1,79 @@
+
+========================================================================
+[TIMESTAMP]  : 2026-08-07 19:41:25
+[MODULE/TAG] : test (PYTHON)
+[ISSUE]      : The python execution crashed. Please check your logic.
+[DETAILS]    : Process returned non-zero exit code.
+[RAW ERROR]  : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpvhvfgi0t\cell.py", line 29, in <module>
+    _result = locals()['process'](req)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpvhvfgi0t\cell.py", line 23, in process
+    return 1/0
+           ~^~
+ZeroDivisionError: division by zero
+========================================================================
+
+========================================================================
+[TIMESTAMP]  : 2026-08-07 20:26:39
+[MODULE/TAG] : service (PYTHON)
+[ISSUE]      : The python execution crashed. Please check your logic.
+[DETAILS]    : Process returned non-zero exit code.
+[RAW ERROR]  : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpwtgc6ees\cell.py", line 28, in <module>
+    _result = locals()['process'](req)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpwtgc6ees\cell.py", line 23, in process
+    raise ValueError('Simulated database crash')
+ValueError: Simulated database crash
+========================================================================
+
+========================================================================
+[TIMESTAMP]  : 2026-08-07 23:14:42
+[MODULE/TAG] : service (PYTHON)
+[ISSUE]      : The python execution crashed. Please check your logic.
+[DETAILS]    : In-Memory Native Execution Exception
+[RAW ERROR]  : 
+Simulated database crash
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-08-08 20:44:50
+[MODULE/TAG]     : demo_cell (PYTHON)
+[SIMPLE SUMMARY] : Division by zero in @python[demo_cell] code block.
+[RECOMMENDED FIX]: Check denominators before dividing. Ensure variables like divisor or scale factor are non-zero.
+[DETAILS]        : Process returned non-zero exit code (ZeroDivisionError)
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File 'cell.py', line 14, in process
+    return 1 / 0
+ZeroDivisionError: division by zero
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-08-08 20:45:49
+[MODULE/TAG]     : demo_cell (PYTHON)
+[SIMPLE SUMMARY] : Division by zero in @python[demo_cell] code block.
+[RECOMMENDED FIX]: Check denominators before dividing. Ensure variables like divisor or scale factor are non-zero.
+[DETAILS]        : Process returned non-zero exit code (ZeroDivisionError)
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File 'cell.py', line 14, in process
+    return 1 / 0
+ZeroDivisionError: division by zero
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-08-08 21:15:48
+[MODULE/TAG]     : demo_cell (PYTHON)
+[SIMPLE SUMMARY] : Division by zero in @python[demo_cell] code block.
+[RECOMMENDED FIX]: Check denominators before dividing. Ensure variables like divisor or scale factor are non-zero.
+[DETAILS]        : Process returned non-zero exit code (ZeroDivisionError)
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File 'cell.py', line 14, in process
+    return 1 / 0
+ZeroDivisionError: division by zero
+========================================================================

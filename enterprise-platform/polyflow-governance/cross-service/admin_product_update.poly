@@ -1,0 +1,91 @@
+# Cross-Service Call Chain: Admin Product Update
+# Admin updates product in dashboard, triggers inventory sync and price recalculation
+# Chain Length: 7 services, 5 languages
+
+@contract
+feature_id: "ECP-CHAIN-ADMIN-PRODUCT-UPDATE"
+owner: "Karen Singh <karen.singh@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["karen.singh@ecp.dev"]
+retention_years: 7
+timeout_ms: 15000
+@end
+
+@link frontend-angular::config_manage as config_manage
+@link gateway-go::route_inventory_update as route_inventory_update
+@link inventory-python::stock_level_update as stock_level_update
+@link pricing-python::price_dynamic_compute as price_dynamic_compute
+@link recommendation-python::collab_filter_retrain as collab_filter_retrain
+@link analytics-java::event_track as event_track
+@link notification-node::slack_channel_notify as slack_channel_notify
+
+@typescript[step_0_config_manage]
+# Step 1: frontend-angular -> config_manage
+# Language: typescript
+# This is step 1 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 1, "service": "frontend-angular", "action": "config_manage", "status": "completed"}
+@end
+@go[step_1_route_inventory_update]
+# Step 2: gateway-go -> route_inventory_update
+# Language: go
+# This is step 2 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 2, "service": "gateway-go", "action": "route_inventory_update", "status": "completed"}
+@end
+@python[step_2_stock_level_update]
+# Step 3: inventory-python -> stock_level_update
+# Language: python
+# This is step 3 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 3, "service": "inventory-python", "action": "stock_level_update", "status": "completed"}
+@end
+@python[step_3_price_dynamic_compute]
+# Step 4: pricing-python -> price_dynamic_compute
+# Language: python
+# This is step 4 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 4, "service": "pricing-python", "action": "price_dynamic_compute", "status": "completed"}
+@end
+@python[step_4_collab_filter_retrain]
+# Step 5: recommendation-python -> collab_filter_retrain
+# Language: python
+# This is step 5 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 5, "service": "recommendation-python", "action": "collab_filter_retrain", "status": "completed"}
+@end
+@java[step_5_event_track]
+# Step 6: analytics-java -> event_track
+# Language: java
+# This is step 6 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 6, "service": "analytics-java", "action": "event_track", "status": "completed"}
+@end
+@javascript[step_6_slack_channel_notify]
+# Step 7: notification-node -> slack_channel_notify
+# Language: javascript
+# This is step 7 of 7 in the Admin Product Update call chain.
+def process(req):
+    return {"step": 7, "service": "notification-node", "action": "slack_channel_notify", "status": "completed"}
+@end
+
+@merge strategy="all-success" order=["typescript", "go", "python", "python", "python", "java", "javascript"]
+@end
+
+@rationale for="admin_product_update"
+reason: "This call chain crosses 5 language boundaries. Each step is isolated in its own process cell for fault tolerance."
+@end
+
+@decision for="admin_product_update"
+decision: "Route through API Gateway for centralized auth and rate limiting"
+date: "2024-03-20"
+status: "accepted"
+@end
+
+@audit
+action: "Trace full call chain execution for Admin Product Update"
+fields: ["chain_id", "total_steps", "total_latency_ms", "failed_steps"]
+retention: "7_years"
+compliance: ["SOC2"]
+@end

@@ -1,0 +1,107 @@
+# Cross-Service Call Chain: Customer Purchase Flow
+# Customer adds items to cart, checks out, payment processed, notifications sent
+# Chain Length: 9 services, 5 languages
+
+@contract
+feature_id: "ECP-CHAIN-CUSTOMER-PURCHASE-FLOW"
+owner: "Jake Thompson <jake.thompson@ecp.dev>"
+team: "platform"
+classification: "internal"
+approvers: ["jake.thompson@ecp.dev"]
+retention_years: 7
+timeout_ms: 15000
+@end
+
+@link frontend-react::checkout_confirm as checkout_confirm
+@link gateway-go::route_order_create as route_order_create
+@link auth-service-java::jwt_token_verify as jwt_token_verify
+@link order-service-go::order_create as order_create
+@link pricing-python::price_dynamic_compute as price_dynamic_compute
+@link inventory-python::reservation_create as reservation_create
+@link payment-service-java::stripe_charge_create as stripe_charge_create
+@link notification-node::email_send as email_send
+@link analytics-java::event_track as event_track
+
+@typescript[step_0_checkout_confirm]
+# Step 1: frontend-react -> checkout_confirm
+# Language: typescript
+# This is step 1 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 1, "service": "frontend-react", "action": "checkout_confirm", "status": "completed"}
+@end
+@go[step_1_route_order_create]
+# Step 2: gateway-go -> route_order_create
+# Language: go
+# This is step 2 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 2, "service": "gateway-go", "action": "route_order_create", "status": "completed"}
+@end
+@java[step_2_jwt_token_verify]
+# Step 3: auth-service-java -> jwt_token_verify
+# Language: java
+# This is step 3 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 3, "service": "auth-service-java", "action": "jwt_token_verify", "status": "completed"}
+@end
+@go[step_3_order_create]
+# Step 4: order-service-go -> order_create
+# Language: go
+# This is step 4 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 4, "service": "order-service-go", "action": "order_create", "status": "completed"}
+@end
+@python[step_4_price_dynamic_compute]
+# Step 5: pricing-python -> price_dynamic_compute
+# Language: python
+# This is step 5 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 5, "service": "pricing-python", "action": "price_dynamic_compute", "status": "completed"}
+@end
+@python[step_5_reservation_create]
+# Step 6: inventory-python -> reservation_create
+# Language: python
+# This is step 6 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 6, "service": "inventory-python", "action": "reservation_create", "status": "completed"}
+@end
+@java[step_6_stripe_charge_create]
+# Step 7: payment-service-java -> stripe_charge_create
+# Language: java
+# This is step 7 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 7, "service": "payment-service-java", "action": "stripe_charge_create", "status": "completed"}
+@end
+@javascript[step_7_email_send]
+# Step 8: notification-node -> email_send
+# Language: javascript
+# This is step 8 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 8, "service": "notification-node", "action": "email_send", "status": "completed"}
+@end
+@java[step_8_event_track]
+# Step 9: analytics-java -> event_track
+# Language: java
+# This is step 9 of 9 in the Customer Purchase Flow call chain.
+def process(req):
+    return {"step": 9, "service": "analytics-java", "action": "event_track", "status": "completed"}
+@end
+
+@merge strategy="all-success" order=["typescript", "go", "java", "go", "python", "python", "java", "javascript", "java"]
+@end
+
+@rationale for="customer_purchase_flow"
+reason: "This call chain crosses 5 language boundaries. Each step is isolated in its own process cell for fault tolerance."
+@end
+
+@decision for="customer_purchase_flow"
+decision: "Route through API Gateway for centralized auth and rate limiting"
+date: "2024-03-20"
+status: "accepted"
+@end
+
+@audit
+action: "Trace full call chain execution for Customer Purchase Flow"
+fields: ["chain_id", "total_steps", "total_latency_ms", "failed_steps"]
+retention: "7_years"
+compliance: ["SOC2"]
+@end

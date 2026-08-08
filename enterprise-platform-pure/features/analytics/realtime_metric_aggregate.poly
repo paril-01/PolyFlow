@@ -1,0 +1,82 @@
+# Realtime Metric Aggregate — PolyFlow Governance Module
+# Service: analytics-java | Language: java | Domain: analytics
+
+@contract
+feature_id: "ECP-ANALYTICS-REALTIME-METRIC-AGGR"
+owner: "Bob Martinez <bob.martinez@ecp.dev>"
+team: "backend"
+classification: "restricted"
+approvers: ["bob.martinez@ecp.dev", "carol.williams@ecp.dev"]
+retention_years: 7
+timeout_ms: 2000
+@end
+
+@schema RealtimeMetricAggregateRequest
+  id: string<format:uuid>
+  timestamp: string<format:datetime>
+  metadata: object | null
+@end
+
+@schema RealtimeMetricAggregateResponse
+  id: string<format:uuid>
+  status: string
+  processing_time_ms: number
+  result: object | null
+  errors: array<string>
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "org.springframework", "javax.persistence"]
+@end
+
+@java[service]
+package com.ecp.service;
+
+import java.util.*;
+
+public class RealtimeMetricAggregateProcessor {
+    public Map<String, Object> process(Map<String, Object> req) {
+        long start = System.currentTimeMillis();
+        Map<String, Object> result = Map.of(
+            "feature", "realtime_metric_aggregate",
+            "domain", "analytics",
+            "processed", true
+        );
+        long elapsed = System.currentTimeMillis() - start;
+        return Map.of(
+            "status", "success",
+            "result", result,
+            "processing_time_ms", elapsed
+        );
+    }
+}
+@end
+
+@merge strategy="fallback" order=["java"]
+@end
+
+@error-map language="java"
+  "NullPointerException" -> "Required field is missing in realtime_metric_aggregate request."
+  "IllegalArgumentException" -> "Invalid argument passed to realtime_metric_aggregate."
+  "TimeoutException" -> "Operation realtime_metric_aggregate timed out."
+@end
+
+@rationale for="realtime_metric_aggregate"
+reason: "Selected java for Realtime Metric Aggregate due to ecosystem maturity and team expertise."
+alternatives_considered: ["rust", "elixir"]
+rejected_reasons: {"rust": "Team lacks Rust experience", "elixir": "Insufficient library support"}
+@end
+
+@decision for="realtime_metric_aggregate"
+decision: "Implement as microservice endpoint on analytics-java"
+date: "2024-06-15"
+status: "accepted"
+stakeholders: ["Bob Martinez"]
+@end
+
+@audit
+action: "Log Realtime Metric Aggregate execution"
+fields: ["status", "trace_id", "processing_time_ms"]
+retention: "7_years"
+compliance: ["SOC2", "PCI-DSS"]
+@end

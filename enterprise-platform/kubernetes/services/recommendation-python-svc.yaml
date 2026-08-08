@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation-python
+  namespace: ecp
+spec:
+  selector:
+    app: recommendation-python
+  ports:
+  - port: 8086
+    targetPort: 8086
+  type: ClusterIP

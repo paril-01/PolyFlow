@@ -50,11 +50,24 @@ class PolyGuardEngine:
 
         for block in ast.language_blocks:
             lines = block.code.splitlines()
+            block_lang = block.language.lower()
+
+            # Find matching standard allowed imports for this block language
+            allowed_imports = set()
+            forbidden_patterns = set()
+            for std in ast.standards:
+                std_lang = (std.target or "universal").lower()
+                if std_lang in (block_lang, "universal"):
+                    if "allowed_imports" in std.data:
+                        allowed_imports.update(std.data["allowed_imports"])
+                    if "forbidden_patterns" in std.data:
+                        forbidden_patterns.update(std.data["forbidden_patterns"])
+
             for idx, line in enumerate(lines, start=block.start_line):
                 line_str = line.strip()
 
-                # Guard A: Import Allowlist & Forbidden Patterns
-                if allowed_imports and (line_str.startswith("import ") or line_str.startswith("from ")):
+                # Guard A: Import Allowlist & Forbidden Patterns (only for matching language)
+                if block_lang in ("python", "py") and allowed_imports and (line_str.startswith("import ") or line_str.startswith("from ")):
                     module_name = self._extract_import_module(line_str)
                     if module_name and module_name not in allowed_imports:
                         violations.append(
