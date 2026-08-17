@@ -1,0 +1,67 @@
+# Traffic Core — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-traffic-core"
+owner: "UrbanOS Core Team"
+team: "mobility"
+domain: "traffic"
+timeout_ms: 5000
+@end
+
+@schema TrafficCoreRequest
+  sensor_id: string
+  road_id: string
+  speed_mph: number
+  vehicle_count: number
+  occupancy_pct: number
+@end
+
+@python[ingest_and_score]
+import time, random
+
+def process(req):
+    road_id = req.get("road_id", "ROAD-001")
+    raw_speed = req.get("speed_mph", 35.0)
+    volume = req.get("vehicle_count", 0)
+    occupancy = req.get("occupancy_pct", 0.0)
+    ts = req.get("timestamp", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
+
+    free_flow_speed = 45.0
+    speed_ratio = max(0, 1.0 - (raw_speed / free_flow_speed))
+    occ_factor = min(1.0, occupancy / 85.0)
+    congestion_score = round(0.6 * speed_ratio + 0.4 * occ_factor, 3)
+
+    if congestion_score < 0.2:
+        level = "FREE_FLOW"
+    elif congestion_score < 0.45:
+        level = "LIGHT"
+    elif congestion_score < 0.7:
+        level = "MODERATE"
+    elif congestion_score < 0.85:
+        level = "HEAVY"
+    else:
+        level = "GRIDLOCK"
+
+    volume_vph = volume * 4 if volume > 0 else int(random.gauss(1200, 300))
+
+    return {
+        "road_id": road_id,
+        "avg_speed_mph": round(raw_speed, 1),
+        "volume_vph": volume_vph,
+        "congestion_score": congestion_score,
+        "congestion_level": level,
+        "occupancy_pct": round(occupancy, 1),
+        "source": "TRAFFIC_SENSOR_ADAPTER",
+        "timestamp": ts,
+        "status": "processed"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Traffic Sensor Reading"
+retention: "90_days"
+compliance: ["DOT_DATA_STANDARD"]
+@end

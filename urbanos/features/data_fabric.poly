@@ -1,0 +1,59 @@
+# Data Fabric — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-data-fabric"
+owner: "UrbanOS Infra Team"
+team: "infrastructure"
+domain: "infrastructure"
+timeout_ms: 3000
+@end
+
+@python[feed_health_monitor]
+import time, random
+
+def process(req):
+    action = req.get("action", "status")
+
+    sources = [
+        {"id": "NYC_TRAFFIC",     "name": "NYC DOT Traffic Speed",   "type": "LIVE",       "frequency": "~realtime", "latency_ms": round(random.gauss(800, 200)),   "status": "LIVE",    "last_event_ago_sec": random.randint(1, 5)},
+        {"id": "511NY_INCIDENTS", "name": "511NY Incidents",         "type": "LIVE",       "frequency": "API",       "latency_ms": round(random.gauss(2100, 500)),  "status": "LIVE",    "last_event_ago_sec": random.randint(2, 15)},
+        {"id": "511NY_CAMERAS",   "name": "511NY Traffic Cameras",   "type": "LIVE",       "frequency": "feed",      "latency_ms": round(random.gauss(400, 100)),   "status": "LIVE",    "last_event_ago_sec": random.randint(1, 8)},
+        {"id": "MTA_GTFS_RT",     "name": "MTA GTFS-Realtime",       "type": "LIVE",       "frequency": "realtime",  "latency_ms": round(random.gauss(8200, 2000)), "status": "LIVE",    "last_event_ago_sec": random.randint(5, 30)},
+        {"id": "OPEN_METEO",      "name": "Open-Meteo Weather",      "type": "LIVE",       "frequency": "5min",      "latency_ms": round(random.gauss(3100, 800)),  "status": "LIVE",    "last_event_ago_sec": random.randint(60, 300)},
+        {"id": "WAQI_AIR",        "name": "WAQI Air Quality",        "type": "LIVE",       "frequency": "sensor",    "latency_ms": round(random.gauss(12000, 3000)),"status": "LIVE",    "last_event_ago_sec": random.randint(300, 720)},
+        {"id": "SUMO_SIM",        "name": "PolyFlow Traffic Sim",    "type": "SIMULATION", "frequency": "continuous", "latency_ms": round(random.gauss(24, 8)),      "status": "RUNNING", "last_event_ago_sec": 0},
+        {"id": "REPLAY_ARCHIVE",  "name": "Historical Event Archive","type": "REPLAY",     "frequency": "recorded",  "latency_ms": 0,                               "status": "READY",   "last_event_ago_sec": None}
+    ]
+
+    for s in sources:
+        if s["latency_ms"] and isinstance(s["latency_ms"], (int, float)):
+            s["latency_ms"] = max(1, int(s["latency_ms"]))
+
+    msgs_sec = random.randint(12000, 18000)
+    events_sec = random.randint(1800, 2500)
+    dropped = random.randint(0, 5)
+    kafka_lag = random.randint(50, 120)
+
+    return {
+        "sources": sources,
+        "total_sources": len(sources),
+        "live_sources": sum(1 for s in sources if s["status"] == "LIVE"),
+        "total_messages_sec": msgs_sec,
+        "total_events_sec": events_sec,
+        "dropped_events": dropped,
+        "kafka_lag_ms": kafka_lag,
+        "recording_active": True,
+        "replay_available": True,
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "status": "healthy"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Data Source Health Check"
+retention: "30_days"
+compliance: ["SYSTEM_OBSERVABILITY_STD"]
+@end

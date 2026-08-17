@@ -1,0 +1,71 @@
+# Incident Operations — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-incident-operations"
+owner: "UrbanOS Incident Team"
+team: "incidents"
+domain: "incidents"
+timeout_ms: 5000
+@end
+
+@python[incident_processor]
+import time, random, hashlib
+
+def process(req):
+    inc_type = req.get("incident_type", "ACCIDENT")
+    severity = req.get("severity", "MODERATE")
+    location = req.get("location", "I-95 / Exit 12")
+    lat = req.get("lat", 40.7128 + random.gauss(0, 0.015))
+    lon = req.get("lon", -74.0060 + random.gauss(0, 0.015))
+
+    inc_id = f"INC-{hashlib.sha256(f'{inc_type}{time.time()}'.encode()).hexdigest()[:8].upper()}"
+
+    sev_config = {
+        "LOW":      {"routes": (1,3),  "bus_delay": (1,3),   "clearance": (5,15),  "congestion": 0.15},
+        "MODERATE": {"routes": (3,6),  "bus_delay": (3,8),   "clearance": (15,35), "congestion": 0.35},
+        "HIGH":     {"routes": (5,10), "bus_delay": (6,15),  "clearance": (25,60), "congestion": 0.55},
+        "CRITICAL": {"routes": (8,15), "bus_delay": (12,30), "clearance": (45,120),"congestion": 0.80}
+    }
+    cfg = sev_config.get(severity, sev_config["MODERATE"])
+    
+    affected_routes = random.randint(*cfg["routes"])
+    bus_delay = round(random.uniform(*cfg["bus_delay"]), 1)
+    clearance = round(random.uniform(*cfg["clearance"]), 0)
+    congestion_impact = cfg["congestion"]
+
+    type_details = {
+        "ACCIDENT": {"responders": ["EMS", "POLICE", "TOW"]},
+        "ROADWORK": {"responders": ["DOT"]},
+        "BREAKDOWN": {"responders": ["TOW"]},
+        "SPECIAL_EVENT": {"responders": ["POLICE", "TRAFFIC_CONTROL"]},
+        "WEATHER": {"responders": ["DOT", "SALT_TRUCK"]},
+        "SIGNAL_FAILURE": {"responders": ["DOT_ELECTRICAL"]}
+    }
+    details = type_details.get(inc_type, type_details["ACCIDENT"])
+
+    return {
+        "incident_id": inc_id,
+        "type": inc_type,
+        "severity": severity,
+        "location": location,
+        "position": {"lat": round(lat, 6), "lon": round(lon, 6)},
+        "affected_routes": affected_routes,
+        "bus_delays_min": bus_delay,
+        "predicted_clearance_min": clearance,
+        "congestion_impact": round(congestion_impact, 2),
+        "responders": details["responders"],
+        "detected_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "detected_ago_sec": random.randint(2, 30),
+        "source": req.get("source", "CAMERA_AI"),
+        "status": "ACTIVE"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Incident Detection"
+retention: "365_days"
+compliance: ["DOT_INCIDENT_REPORTING"]
+@end

@@ -1,0 +1,46 @@
+# Digital Twin — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-digital-twin"
+owner: "UrbanOS Twin Team"
+team: "digital_twin"
+domain: "core"
+timeout_ms: 3000
+@end
+
+@python[twin_state_manager]
+import time, hashlib, json
+
+def process(req):
+    etype = req.get("entity_type", "ROAD")
+    eid = req.get("entity_id", "ENTITY-001")
+    update = req.get("state_update", {})
+    source = req.get("source", "UNKNOWN")
+    mode = req.get("mode", "LIVE")
+    
+    state_hash = hashlib.sha256(json.dumps(update, sort_keys=True).encode()).hexdigest()[:16]
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    return {
+        "entity_id": eid,
+        "entity_type": etype,
+        "state": update,
+        "state_hash": state_hash,
+        "source": source,
+        "mode": mode,
+        "timestamp": now,
+        "freshness_indicator": "LIVE" if mode == "LIVE" else mode,
+        "confidence": update.get("confidence", 0.95),
+        "version": 1,
+        "status": "state_updated"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Digital Twin State Update"
+retention: "30_days"
+compliance: ["STATE_AUDIT_STANDARD"]
+@end

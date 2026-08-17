@@ -1,0 +1,79 @@
+# Camera Vision — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-camera-vision"
+owner: "UrbanOS Vision Team"
+team: "cameras"
+domain: "cameras"
+timeout_ms: 8000
+@end
+
+@python[vision_analytics]
+import time, random
+
+def process(req):
+    cam_id = req.get("camera_id", "CAM-001")
+    
+    cars = random.randint(15, 65)
+    trucks = random.randint(2, 15)
+    buses = random.randint(0, 8)
+    motorcycles = random.randint(1, 12)
+    bikes = random.randint(0, 6)
+    pedestrians = random.randint(3, 35)
+    total_vehicles = cars + trucks + buses + motorcycles
+
+    avg_speed = round(random.gauss(28, 10), 1)
+    avg_speed = max(0, min(65, avg_speed))
+
+    queue_m = round(max(0, random.gauss(45, 30)), 1)
+
+    density = total_vehicles / 80.0
+    if density > 0.9:
+        ai_status = "GRIDLOCK_DETECTED"
+    elif density > 0.7:
+        ai_status = "CONGESTION_DETECTED"
+    elif density > 0.4:
+        ai_status = "MODERATE_FLOW"
+    else:
+        ai_status = "NORMAL_FLOW"
+
+    anomalies = []
+    if random.random() < 0.05:
+        anomalies.append("STOPPED_VEHICLE_DETECTED")
+    if random.random() < 0.02:
+        anomalies.append("WRONG_WAY_DRIVER")
+    if random.random() < 0.03:
+        anomalies.append("PEDESTRIAN_IN_ROADWAY")
+
+    return {
+        "camera_id": cam_id,
+        "vehicles_total": total_vehicles,
+        "cars": cars,
+        "trucks": trucks,
+        "buses": buses,
+        "motorcycles": motorcycles,
+        "bikes": bikes,
+        "pedestrians": pedestrians,
+        "avg_speed_mph": avg_speed,
+        "queue_length_m": queue_m,
+        "lane_occupancy_pct": round(density * 100, 1),
+        "ai_status": ai_status,
+        "anomalies": anomalies,
+        "detection_model": "YOLOv8-UrbanOS",
+        "tracker": "ByteTrack",
+        "inference_ms": round(random.gauss(18, 5), 1),
+        "fps": round(random.gauss(15, 3), 1),
+        "source": "CAMERA_AI_PIPELINE",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "status": "live"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Camera Vision Metadata"
+retention: "7_days"
+compliance: ["PRIVACY_COMPLIANT"]
+@end

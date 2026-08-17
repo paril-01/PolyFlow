@@ -1,0 +1,91 @@
+# PolyFlow Observer — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-polyflow-observer"
+owner: "PolyFlow Core Team"
+team: "engineering"
+domain: "engineering"
+timeout_ms: 5000
+@end
+
+@python[change_impact_analyzer]
+import time, random
+
+def process(req):
+    change_type = req.get("change_type", "CODE_MODIFICATION")
+    changed_file = req.get("changed_file", "incident_classifier.py")
+    changed_comp = req.get("changed_component", "Python CV")
+
+    dependency_graph = {
+        "Camera":           ["Python CV", "Go Ingestion"],
+        "Python CV":        ["Go Ingestion", "Kafka"],
+        "Go Ingestion":     ["Kafka"],
+        "Kafka":            ["Java Incident Service", "Python Prediction", "Node Realtime"],
+        "Java Incident Service": ["PostgreSQL", "Kafka", "Node Realtime"],
+        "Python Prediction": ["PostgreSQL", "Kafka"],
+        "Node Realtime":    ["WebSocket Gateway"],
+        "WebSocket Gateway": ["React Dashboard"],
+        "React Dashboard":  [],
+        "PostgreSQL":       [],
+        "Weather Adapter":  ["Kafka"],
+        "Transit Adapter":  ["Kafka"],
+        "Traffic Adapter":  ["Kafka"],
+        "Simulation Engine": ["Kafka"]
+    }
+
+    affected = []
+    queue = [changed_comp]
+    visited = set()
+    while queue:
+        current = queue.pop(0)
+        if current in visited:
+            continue
+        visited.add(current)
+        if current != changed_comp:
+            affected.append(current)
+        for dep in dependency_graph.get(current, []):
+            if dep not in visited:
+                queue.append(dep)
+
+    trace_path = [changed_comp] + affected
+
+    if len(affected) >= 5:
+        risk = "HIGH"
+    elif len(affected) >= 3:
+        risk = "MODERATE"
+    else:
+        risk = "LOW"
+
+    tests = len(affected) * 3 + random.randint(2, 5)
+
+    api_services = [a for a in affected if a in ["Java Incident Service", "Go Ingestion", "Node Realtime", "WebSocket Gateway"]]
+    
+    schemas = 1 if "Kafka" in affected else 0
+
+    return {
+        "change_type": change_type,
+        "changed_file": changed_file,
+        "changed_component": changed_comp,
+        "impact_trace": trace_path,
+        "affected_components": affected,
+        "total_affected": len(affected),
+        "risk_level": risk,
+        "tests_recommended": tests,
+        "api_impact": len(api_services),
+        "event_schemas_affected": schemas,
+        "ui_components_affected": 1 if "React Dashboard" in affected else 0,
+        "polyflow_version": "2.0.0",
+        "analysis_ms": round(random.gauss(8, 2), 1),
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "status": "analyzed"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log PolyFlow Change Impact Analysis"
+retention: "365_days"
+compliance: ["SOFTWARE_GOVERNANCE_STD"]
+@end

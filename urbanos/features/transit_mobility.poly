@@ -1,0 +1,63 @@
+# Transit Mobility — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-transit-mobility"
+owner: "UrbanOS Transit Team"
+team: "transit"
+domain: "transit"
+timeout_ms: 5000
+@end
+
+@python[transit_position_processor]
+import time, random
+
+def process(req):
+    vid = req.get("vehicle_id", f"BUS-{random.randint(100,999)}")
+    route = req.get("route_id", f"M{random.randint(1,99)}")
+    lat = req.get("lat", 40.7128 + random.gauss(0, 0.02))
+    lon = req.get("lon", -74.0060 + random.gauss(0, 0.02))
+    bearing = req.get("bearing", random.uniform(0, 360))
+    speed = req.get("speed_kmh", random.gauss(25, 8))
+
+    scheduled_mins = random.uniform(2, 15)
+    actual_delay = round(random.gauss(1.5, 3), 1)
+    eta = round(max(0.5, scheduled_mins + actual_delay), 1)
+
+    stops = ["42nd St", "34th St-Penn", "23rd St", "14th St-Union", "Houston St", "Canal St", "City Hall", "Fulton St", "Wall St", "Bowling Green"]
+    next_stop_idx = random.randint(0, len(stops)-1)
+
+    if actual_delay > 5:
+        status = "DELAYED"
+    elif actual_delay < -1:
+        status = "EARLY"
+    elif speed < 3:
+        status = "STOPPED_AT_STATION"
+    else:
+        status = "IN_TRANSIT"
+
+    return {
+        "vehicle_id": vid,
+        "route_id": route,
+        "vehicle_type": random.choice(["BUS", "BUS", "BUS", "SUBWAY", "FERRY"]),
+        "position": {"lat": round(lat, 6), "lon": round(lon, 6)},
+        "bearing": round(bearing, 1),
+        "speed_kmh": round(max(0, speed), 1),
+        "next_stop": stops[next_stop_idx],
+        "eta_minutes": eta,
+        "delay_minutes": round(actual_delay, 1),
+        "occupancy": random.choice(["LOW", "MEDIUM", "HIGH", "STANDING_ROOM"]),
+        "passengers_est": random.randint(8, 65),
+        "status": status,
+        "source": "GTFS_RT_ADAPTER",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Transit Vehicle Position"
+retention: "30_days"
+compliance: ["GTFS_RT_SPEC"]
+@end

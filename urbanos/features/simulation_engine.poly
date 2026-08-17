@@ -1,0 +1,98 @@
+# Simulation Engine — PolyFlow Governance Module
+
+@contract
+feature_id: "urbanos-simulation-engine"
+owner: "UrbanOS Sim Team"
+team: "simulation"
+domain: "simulation"
+timeout_ms: 15000
+@end
+
+@python[traffic_sim_engine]
+import time, random
+
+def process(req):
+    command = req.get("sim_command", "step")
+    sim_speed = req.get("sim_speed", 1.0)
+    step = req.get("sim_step", 0)
+    
+    corridors = [
+        {"id": "BROADWAY", "name": "Broadway", "base_speed": 25, "lanes": 4, "length_km": 21},
+        {"id": "5TH_AVE", "name": "5th Avenue", "base_speed": 20, "lanes": 3, "length_km": 10},
+        {"id": "FDR_DRIVE", "name": "FDR Drive", "base_speed": 45, "lanes": 3, "length_km": 15},
+        {"id": "WEST_SIDE_HWY", "name": "West Side Highway", "base_speed": 50, "lanes": 3, "length_km": 12},
+        {"id": "BQE", "name": "Brooklyn-Queens Expressway", "base_speed": 45, "lanes": 3, "length_km": 18},
+        {"id": "I95_CROSS_BRONX", "name": "I-95 Cross Bronx Expressway", "base_speed": 40, "lanes": 3, "length_km": 8},
+        {"id": "QUEENS_BLVD", "name": "Queens Boulevard", "base_speed": 30, "lanes": 4, "length_km": 11},
+        {"id": "ATLANTIC_AVE", "name": "Atlantic Avenue", "base_speed": 25, "lanes": 4, "length_km": 8},
+        {"id": "GRAND_CENTRAL", "name": "Grand Central Pkwy", "base_speed": 45, "lanes": 3, "length_km": 14},
+        {"id": "LEXINGTON_AVE", "name": "Lexington Avenue", "base_speed": 20, "lanes": 2, "length_km": 9},
+        {"id": "PARK_AVE", "name": "Park Avenue", "base_speed": 22, "lanes": 3, "length_km": 7},
+        {"id": "3RD_AVE", "name": "3rd Avenue", "base_speed": 22, "lanes": 3, "length_km": 8},
+    ]
+
+    hour = (step // 240) % 24
+    tod_mult = {
+        0: 0.15, 1: 0.10, 2: 0.08, 3: 0.07, 4: 0.10, 5: 0.20,
+        6: 0.45, 7: 0.80, 8: 1.00, 9: 0.90, 10: 0.70, 11: 0.75,
+        12: 0.80, 13: 0.75, 14: 0.70, 15: 0.75, 16: 0.90, 17: 1.00,
+        18: 0.85, 19: 0.65, 20: 0.50, 21: 0.35, 22: 0.25, 23: 0.18
+    }.get(hour, 0.5)
+
+    total_vehicles = int(2000 * tod_mult + random.gauss(0, 200))
+    total_vehicles = max(200, min(5000, total_vehicles))
+
+    road_states = []
+    total_speed = 0
+    for c in corridors:
+        noise = random.gauss(0, 5)
+        volume_ratio = tod_mult * random.uniform(0.6, 1.2)
+        speed = c["base_speed"] * (1.0 - 0.6 * min(1.0, volume_ratio)) + noise
+        speed = max(3, min(c["base_speed"] * 1.1, speed))
+        congestion = max(0, min(1.0, 1.0 - speed / c["base_speed"]))
+        
+        road_states.append({
+            "id": c["id"],
+            "name": c["name"],
+            "speed_mph": round(speed, 1),
+            "capacity_pct": round(volume_ratio * 100, 1),
+            "congestion": round(congestion, 3),
+            "status": "CONGESTED" if congestion > 0.6 else ("SLOW" if congestion > 0.3 else "FREE_FLOW")
+        })
+        total_speed += speed
+
+    avg_speed = round(total_speed / len(corridors), 1)
+
+    signals_in_phase = {
+        "NS_GREEN": int(500 * 0.35),
+        "EW_GREEN": int(500 * 0.35),
+        "TRANSITION": int(500 * 0.15),
+        "ALL_RED": int(500 * 0.05),
+        "FLASHING": int(500 * 0.10)
+    }
+
+    return {
+        "sim_step": step + 1,
+        "sim_time_sec": (step + 1) * 15,
+        "vehicles_active": total_vehicles,
+        "avg_speed_mph": avg_speed,
+        "road_segments": road_states,
+        "signals": signals_in_phase,
+        "signals_total": 500,
+        "intersections": 500,
+        "tod_hour": hour,
+        "tod_multiplier": round(tod_mult, 2),
+        "mode": "SIMULATION",
+        "engine": "PolyFlow-Native-TrafficSim",
+        "status": "running"
+    }
+@end
+
+@merge strategy="vote" order=["python"]
+@end
+
+@audit
+action: "Log Traffic Simulation Step"
+retention: "session"
+compliance: ["SIMULATION_REPRODUCIBLE"]
+@end
