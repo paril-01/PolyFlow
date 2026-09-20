@@ -1,0 +1,2569 @@
+{
+  "id": "otel_agent",
+  "name": "otel_agent",
+  "source_path": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\agent",
+  "graph": {
+    "nodes": [
+      {
+        "path": "run.py::start_servers",
+        "kind": "function",
+        "level": "function",
+        "line": 28,
+        "end_line": 34,
+        "args": [],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/agents.py::ChatRequest",
+        "kind": "class",
+        "level": "class",
+        "line": 34,
+        "end_line": 36,
+        "bases": [
+          "BaseModel"
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent",
+        "kind": "class",
+        "level": "class",
+        "line": 39,
+        "end_line": 110,
+        "bases": []
+      },
+      {
+        "path": "src/agents/agents.py::Agent.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 40,
+        "end_line": 46,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/agents.py::Agent.lifespan",
+        "kind": "method",
+        "level": "function",
+        "line": 49,
+        "end_line": 57,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "app",
+            "annotation": "Name(id='FastAPI', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "asynccontextmanager"
+        ],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/agents.py::Agent.handle_prompt",
+        "kind": "method",
+        "level": "function",
+        "line": 59,
+        "end_line": 60,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": "Name(id='ChatRequest', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/agents.py::Agent.get_tool_list",
+        "kind": "method",
+        "level": "function",
+        "line": 62,
+        "end_line": 79,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/agents.py::Agent.run_agent",
+        "kind": "method",
+        "level": "function",
+        "line": 82,
+        "end_line": 99,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "input_prompt",
+            "annotation": null
+          },
+          {
+            "name": "history",
+            "annotation": "BinOp(left=Subscript(value=Name(id='List', ctx=Load()), slice=Name(id='Dict', ctx=Load()), ctx=Load()), op=BitOr(), right=Constant(value=None))"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "workflow"
+        ],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/agents.py::Agent.launch",
+        "kind": "method",
+        "level": "function",
+        "line": 101,
+        "end_line": 110,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM",
+        "kind": "class",
+        "level": "class",
+        "line": 13,
+        "end_line": 46,
+        "bases": [
+          "ChatOpenAI"
+        ]
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 14,
+        "end_line": 34,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM._generate",
+        "kind": "method",
+        "level": "function",
+        "line": 36,
+        "end_line": 40,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "messages",
+            "annotation": null
+          },
+          {
+            "name": "stop",
+            "annotation": null
+          },
+          {
+            "name": "run_manager",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM._agenerate",
+        "kind": "method",
+        "level": "function",
+        "line": 42,
+        "end_line": 46,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "messages",
+            "annotation": null
+          },
+          {
+            "name": "stop",
+            "annotation": null
+          },
+          {
+            "name": "run_manager",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient",
+        "kind": "class",
+        "level": "class",
+        "line": 13,
+        "end_line": 29,
+        "bases": []
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 14,
+        "end_line": 16,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "kind": "method",
+        "level": "function",
+        "line": 18,
+        "end_line": 23,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "url",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.cleanup",
+        "kind": "method",
+        "level": "function",
+        "line": 25,
+        "end_line": 29,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true
+      },
+      {
+        "path": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "kind": "function",
+        "level": "function",
+        "line": 25,
+        "end_line": 29,
+        "args": [
+          {
+            "name": "vcr_response",
+            "annotation": null
+          },
+          {
+            "name": "httpx_module",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::normalize_body",
+        "kind": "function",
+        "level": "function",
+        "line": 37,
+        "end_line": 51,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::clean_response",
+        "kind": "function",
+        "level": "function",
+        "line": 54,
+        "end_line": 97,
+        "args": [
+          {
+            "name": "response",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_parse_body",
+        "kind": "function",
+        "level": "function",
+        "line": 108,
+        "end_line": 121,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "kind": "function",
+        "level": "function",
+        "line": 124,
+        "end_line": 135,
+        "args": [
+          {
+            "name": "content",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_normalize_message",
+        "kind": "function",
+        "level": "function",
+        "line": 138,
+        "end_line": 143,
+        "args": [
+          {
+            "name": "msg",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_stringify",
+        "kind": "function",
+        "level": "function",
+        "line": 146,
+        "end_line": 152,
+        "args": [
+          {
+            "name": "value",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::body_similarity",
+        "kind": "function",
+        "level": "function",
+        "line": 155,
+        "end_line": 190,
+        "args": [
+          {
+            "name": "r1",
+            "annotation": null
+          },
+          {
+            "name": "r2",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::similar_body_matcher",
+        "kind": "function",
+        "level": "function",
+        "line": 193,
+        "end_line": 206,
+        "args": [
+          {
+            "name": "r1",
+            "annotation": null
+          },
+          {
+            "name": "r2",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_install_best_match_playback",
+        "kind": "function",
+        "level": "function",
+        "line": 226,
+        "end_line": 256,
+        "args": [],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "src/agents/patch_vcr.py::play_response",
+        "kind": "function",
+        "level": "function",
+        "line": 230,
+        "end_line": 254,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "run.py",
+        "target": "asyncio",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "os",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "dotenv.load_dotenv",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "opentelemetry.instrumentation.fastapi.FastAPIInstrumentor",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "opentelemetry.instrumentation.httpx.HTTPXClientInstrumentor",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "src.agents.agents.Agent",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "traceloop.sdk.Traceloop",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "logging.basicConfig",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "dotenv.load_dotenv",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "traceloop.sdk.Traceloop.init",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "instrument",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "opentelemetry.instrumentation.httpx.HTTPXClientInstrumentor",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py::start_servers",
+        "target": "src.agents.agents.Agent",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py::start_servers",
+        "target": "opentelemetry.instrumentation.fastapi.FastAPIInstrumentor.instrument_app",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py::start_servers",
+        "target": "tasks.append",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py::start_servers",
+        "target": "agent.launch",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py::start_servers",
+        "target": "asyncio.gather",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "asyncio.run",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "run.py",
+        "target": "start_servers",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "run.py",
+        "target": "logging.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "os",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "contextlib.asynccontextmanager",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "typing.Dict",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "typing.List",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "uvicorn",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "fastapi.FastAPI",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "fastapi.HTTPException",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "langchain.agents.create_agent",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "langchain.tools.tool",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "langchain_mcp_adapters.tools.load_mcp_tools",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "pydantic.BaseModel",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.llm.ChatLLM",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.mcp_client.MCPClient",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.add_to_cart",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.checkout",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.empty_cart",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_ads",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_cart",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_product",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_recommendations",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_shipping_quote",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.get_supported_currencies",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "src.agents.tools.list_products",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py",
+        "target": "traceloop.sdk.decorators.workflow",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::ChatRequest",
+        "target": "pydantic.BaseModel",
+        "type": "inherits",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.__init__",
+        "target": "fastapi.FastAPI",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.__init__",
+        "target": "self.app.post()",
+        "type": "calls",
+        "confidence": 0.3,
+        "resolution": "dynamic_unresolved"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.__init__",
+        "target": "self.app.post",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.__init__",
+        "target": "int",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.__init__",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.lifespan",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.lifespan",
+        "target": "logging.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.lifespan",
+        "target": "src.agents.mcp_client.MCPClient",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.lifespan",
+        "target": "self.mcp_server.connect_to_mcp_server",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.lifespan",
+        "target": "self.mcp_server.cleanup",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.handle_prompt",
+        "target": "self.run_agent",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.get_tool_list",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.get_tool_list",
+        "target": "langchain_mcp_adapters.tools.load_mcp_tools",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.get_tool_list",
+        "target": "langchain.tools.tool",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "src.agents.llm.ChatLLM",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "self.get_tool_list",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "langchain.agents.create_agent",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "list",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "messages.append",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "agent.ainvoke",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "fastapi.HTTPException",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "str",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.run_agent",
+        "target": "traceloop.sdk.decorators.workflow",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.launch",
+        "target": "int",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.launch",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.launch",
+        "target": "uvicorn.Config",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.launch",
+        "target": "uvicorn.Server",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/agents.py::Agent.launch",
+        "target": "agent_server.serve",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py",
+        "target": "os",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/llm.py",
+        "target": "httpx",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/llm.py",
+        "target": "langchain_openai.ChatOpenAI",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/llm.py",
+        "target": "src.agents.patch_vcr.VCR",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM",
+        "target": "langchain_openai.ChatOpenAI",
+        "type": "inherits",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "lower",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "model_name.replace",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "httpx.AsyncClient",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "kwargs.setdefault",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "__init__",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "super",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM.__init__",
+        "target": "object.__setattr__",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._generate",
+        "target": "getattr",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._generate",
+        "target": "src.agents.patch_vcr.VCR.use_cassette",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._generate",
+        "target": "_generate",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._generate",
+        "target": "super",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._agenerate",
+        "target": "getattr",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._agenerate",
+        "target": "src.agents.patch_vcr.VCR.use_cassette",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._agenerate",
+        "target": "_agenerate",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/llm.py::ChatLLM._agenerate",
+        "target": "super",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/mcp_client.py",
+        "target": "contextlib.AsyncExitStack",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py",
+        "target": "mcp.ClientSession",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py",
+        "target": "mcp.client.streamable_http.streamablehttp_client",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.__init__",
+        "target": "contextlib.AsyncExitStack",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "target": "mcp.client.streamable_http.streamablehttp_client",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "target": "self.exit_stack.enter_async_context",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "target": "mcp.ClientSession",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "target": "self.session.initialize",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.cleanup",
+        "target": "self.exit_stack.aclose",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/mcp_client.py::MCPClient.cleanup",
+        "target": "logging.error",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "json",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "os",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "difflib.SequenceMatcher",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "vcr",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "vcr.stubs.httpx_stubs",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "setLevel",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "logging.getLogger",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "target": "get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "target": "vcr_response.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "target": "body.encode",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "target": "_original_deserialize_response",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "lower",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "os.getenv",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::normalize_body",
+        "target": "hasattr",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::normalize_body",
+        "target": "json.loads",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::normalize_body",
+        "target": "request.body.decode",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::normalize_body",
+        "target": "encode",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::normalize_body",
+        "target": "json.dumps",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "response.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "int",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "logging.warning",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "body.decode",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "json.loads",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "data.pop",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "data.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "choice.pop",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "choice.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "message.pop",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::clean_response",
+        "target": "json.dumps",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "float",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_parse_body",
+        "target": "getattr",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_parse_body",
+        "target": "hasattr",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_parse_body",
+        "target": "body.decode",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_parse_body",
+        "target": "json.loads",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "parts.append",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "str",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "block.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "join",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "target": "_stringify",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_normalize_message",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_normalize_message",
+        "target": "msg.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_normalize_message",
+        "target": "dict",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_normalize_message",
+        "target": "_unwrap_tool_content",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_stringify",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_stringify",
+        "target": "json.dumps",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_stringify",
+        "target": "str",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "_parse_body",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "isinstance",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "d1.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "d2.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "ratio",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "difflib.SequenceMatcher",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "_stringify",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "len",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::body_similarity",
+        "target": "_normalize_message",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::similar_body_matcher",
+        "target": "body_similarity",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::similar_body_matcher",
+        "target": "AssertionError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "vcr.VCR",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "vcr.VCR.ensure_suffix",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "VCR.register_matcher",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback",
+        "target": "vcr.cassette.Cassette",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback",
+        "target": "vcr.errors.UnhandledHTTPRequestError",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback.play_response",
+        "target": "enumerate",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback.play_response",
+        "target": "body_similarity",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback.play_response",
+        "target": "vcr.errors.UnhandledHTTPRequestError",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py::_install_best_match_playback.play_response",
+        "target": "logging.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "_install_best_match_playback",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "src/agents/patch_vcr.py",
+        "target": "logging.error",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      }
+    ],
+    "metadata": {
+      "repo_path": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\agent",
+      "files_parsed": 5,
+      "files_skipped": 0,
+      "total_nodes": 28,
+      "total_edges": 181
+    }
+  },
+  "hierarchy": {
+    "nodes": [
+      {
+        "path": "run.py::start_servers",
+        "kind": "function",
+        "level": "function",
+        "line": 28,
+        "end_line": 34,
+        "args": [],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "run.py",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::ChatRequest",
+        "kind": "class",
+        "level": "class",
+        "line": 34,
+        "end_line": 36,
+        "bases": [
+          "BaseModel"
+        ],
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent",
+        "kind": "class",
+        "level": "class",
+        "line": 39,
+        "end_line": 110,
+        "bases": [],
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 40,
+        "end_line": 46,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.lifespan",
+        "kind": "method",
+        "level": "function",
+        "line": 49,
+        "end_line": 57,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "app",
+            "annotation": "Name(id='FastAPI', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "asynccontextmanager"
+        ],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.handle_prompt",
+        "kind": "method",
+        "level": "function",
+        "line": 59,
+        "end_line": 60,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": "Name(id='ChatRequest', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.get_tool_list",
+        "kind": "method",
+        "level": "function",
+        "line": 62,
+        "end_line": 79,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.run_agent",
+        "kind": "method",
+        "level": "function",
+        "line": 82,
+        "end_line": 99,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "input_prompt",
+            "annotation": null
+          },
+          {
+            "name": "history",
+            "annotation": "BinOp(left=Subscript(value=Name(id='List', ctx=Load()), slice=Name(id='Dict', ctx=Load()), ctx=Load()), op=BitOr(), right=Constant(value=None))"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "workflow"
+        ],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py::Agent.launch",
+        "kind": "method",
+        "level": "function",
+        "line": 101,
+        "end_line": 110,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/agents.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM",
+        "kind": "class",
+        "level": "class",
+        "line": 13,
+        "end_line": 46,
+        "bases": [
+          "ChatOpenAI"
+        ],
+        "ancestors": [
+          "src/agents/llm.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 14,
+        "end_line": 34,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/llm.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM._generate",
+        "kind": "method",
+        "level": "function",
+        "line": 36,
+        "end_line": 40,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "messages",
+            "annotation": null
+          },
+          {
+            "name": "stop",
+            "annotation": null
+          },
+          {
+            "name": "run_manager",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/llm.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/llm.py::ChatLLM._agenerate",
+        "kind": "method",
+        "level": "function",
+        "line": 42,
+        "end_line": 46,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "messages",
+            "annotation": null
+          },
+          {
+            "name": "stop",
+            "annotation": null
+          },
+          {
+            "name": "run_manager",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/llm.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient",
+        "kind": "class",
+        "level": "class",
+        "line": 13,
+        "end_line": 29,
+        "bases": [],
+        "ancestors": [
+          "src/agents/mcp_client.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 14,
+        "end_line": 16,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/mcp_client.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+        "kind": "method",
+        "level": "function",
+        "line": 18,
+        "end_line": 23,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "url",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/mcp_client.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/mcp_client.py::MCPClient.cleanup",
+        "kind": "method",
+        "level": "function",
+        "line": 25,
+        "end_line": 29,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": true,
+        "ancestors": [
+          "src/agents/mcp_client.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::patched_deserialize_response",
+        "kind": "function",
+        "level": "function",
+        "line": 25,
+        "end_line": 29,
+        "args": [
+          {
+            "name": "vcr_response",
+            "annotation": null
+          },
+          {
+            "name": "httpx_module",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::normalize_body",
+        "kind": "function",
+        "level": "function",
+        "line": 37,
+        "end_line": 51,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::clean_response",
+        "kind": "function",
+        "level": "function",
+        "line": 54,
+        "end_line": 97,
+        "args": [
+          {
+            "name": "response",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_parse_body",
+        "kind": "function",
+        "level": "function",
+        "line": 108,
+        "end_line": 121,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_unwrap_tool_content",
+        "kind": "function",
+        "level": "function",
+        "line": 124,
+        "end_line": 135,
+        "args": [
+          {
+            "name": "content",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_normalize_message",
+        "kind": "function",
+        "level": "function",
+        "line": 138,
+        "end_line": 143,
+        "args": [
+          {
+            "name": "msg",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_stringify",
+        "kind": "function",
+        "level": "function",
+        "line": 146,
+        "end_line": 152,
+        "args": [
+          {
+            "name": "value",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::body_similarity",
+        "kind": "function",
+        "level": "function",
+        "line": 155,
+        "end_line": 190,
+        "args": [
+          {
+            "name": "r1",
+            "annotation": null
+          },
+          {
+            "name": "r2",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::similar_body_matcher",
+        "kind": "function",
+        "level": "function",
+        "line": 193,
+        "end_line": 206,
+        "args": [
+          {
+            "name": "r1",
+            "annotation": null
+          },
+          {
+            "name": "r2",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::_install_best_match_playback",
+        "kind": "function",
+        "level": "function",
+        "line": 226,
+        "end_line": 256,
+        "args": [],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py::play_response",
+        "kind": "function",
+        "level": "function",
+        "line": 230,
+        "end_line": 254,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "src/agents/patch_vcr.py",
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "run.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "run.py::start_servers"
+        ],
+        "child_count": 1,
+        "ancestors": [
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/agents.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "src/agents/agents.py::ChatRequest",
+          "src/agents/agents.py::Agent",
+          "src/agents/agents.py::Agent.__init__",
+          "src/agents/agents.py::Agent.lifespan",
+          "src/agents/agents.py::Agent.handle_prompt",
+          "src/agents/agents.py::Agent.get_tool_list",
+          "src/agents/agents.py::Agent.run_agent",
+          "src/agents/agents.py::Agent.launch"
+        ],
+        "child_count": 8,
+        "ancestors": [
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/llm.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "src/agents/llm.py::ChatLLM",
+          "src/agents/llm.py::ChatLLM.__init__",
+          "src/agents/llm.py::ChatLLM._generate",
+          "src/agents/llm.py::ChatLLM._agenerate"
+        ],
+        "child_count": 4,
+        "ancestors": [
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/mcp_client.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "src/agents/mcp_client.py::MCPClient",
+          "src/agents/mcp_client.py::MCPClient.__init__",
+          "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server",
+          "src/agents/mcp_client.py::MCPClient.cleanup"
+        ],
+        "child_count": 4,
+        "ancestors": [
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src/agents/patch_vcr.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "src/agents/patch_vcr.py::patched_deserialize_response",
+          "src/agents/patch_vcr.py::normalize_body",
+          "src/agents/patch_vcr.py::clean_response",
+          "src/agents/patch_vcr.py::_parse_body",
+          "src/agents/patch_vcr.py::_unwrap_tool_content",
+          "src/agents/patch_vcr.py::_normalize_message",
+          "src/agents/patch_vcr.py::_stringify",
+          "src/agents/patch_vcr.py::body_similarity",
+          "src/agents/patch_vcr.py::similar_body_matcher",
+          "src/agents/patch_vcr.py::_install_best_match_playback",
+          "src/agents/patch_vcr.py::play_response"
+        ],
+        "child_count": 11,
+        "ancestors": [
+          "src/agents",
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": ".",
+        "kind": "module",
+        "level": "root",
+        "children": [
+          "run.py",
+          "src"
+        ],
+        "child_count": 2,
+        "ancestors": []
+      },
+      {
+        "path": "src/agents",
+        "kind": "module",
+        "level": "module",
+        "children": [
+          "src/agents/agents.py",
+          "src/agents/llm.py",
+          "src/agents/mcp_client.py",
+          "src/agents/patch_vcr.py"
+        ],
+        "child_count": 4,
+        "ancestors": [
+          "src",
+          "."
+        ]
+      },
+      {
+        "path": "src",
+        "kind": "module",
+        "level": "module",
+        "children": [
+          "src/agents"
+        ],
+        "child_count": 1,
+        "ancestors": [
+          "."
+        ]
+      }
+    ],
+    "hub_scores": {
+      "run.py::start_servers": 0.0,
+      "src/agents/agents.py::ChatRequest": 0.0,
+      "src/agents/agents.py::Agent": 0.0,
+      "src/agents/agents.py::Agent.__init__": 0.0,
+      "src/agents/agents.py::Agent.lifespan": 0.0,
+      "src/agents/agents.py::Agent.handle_prompt": 0.0,
+      "src/agents/agents.py::Agent.get_tool_list": 0.0,
+      "src/agents/agents.py::Agent.run_agent": 0.0,
+      "src/agents/agents.py::Agent.launch": 0.0,
+      "src/agents/llm.py::ChatLLM": 0.0,
+      "src/agents/llm.py::ChatLLM.__init__": 0.0,
+      "src/agents/llm.py::ChatLLM._generate": 0.0,
+      "src/agents/llm.py::ChatLLM._agenerate": 0.0,
+      "src/agents/mcp_client.py::MCPClient": 0.0,
+      "src/agents/mcp_client.py::MCPClient.__init__": 0.0,
+      "src/agents/mcp_client.py::MCPClient.connect_to_mcp_server": 0.0,
+      "src/agents/mcp_client.py::MCPClient.cleanup": 0.0,
+      "src/agents/patch_vcr.py::patched_deserialize_response": 0.0,
+      "src/agents/patch_vcr.py::normalize_body": 0.0,
+      "src/agents/patch_vcr.py::clean_response": 0.0,
+      "src/agents/patch_vcr.py::_parse_body": 0.0,
+      "src/agents/patch_vcr.py::_unwrap_tool_content": 0.0,
+      "src/agents/patch_vcr.py::_normalize_message": 0.0,
+      "src/agents/patch_vcr.py::_stringify": 0.0,
+      "src/agents/patch_vcr.py::body_similarity": 0.0,
+      "src/agents/patch_vcr.py::similar_body_matcher": 0.0,
+      "src/agents/patch_vcr.py::_install_best_match_playback": 0.0,
+      "src/agents/patch_vcr.py::play_response": 0.0
+    },
+    "metadata": {
+      "total_leaf_nodes": 28,
+      "total_files": 5,
+      "total_modules": 3,
+      "source_graph": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\agent"
+    }
+  }
+}

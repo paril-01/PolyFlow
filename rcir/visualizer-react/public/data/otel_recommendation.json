@@ -1,0 +1,7236 @@
+{
+  "id": "otel_recommendation",
+  "name": "otel_recommendation",
+  "source_path": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\recommendation",
+  "graph": {
+    "nodes": [
+      {
+        "path": "demo_pb2_grpc.py::CartServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 28,
+        "end_line": 53,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 33,
+        "end_line": 53,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 56,
+        "end_line": 77,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+        "kind": "method",
+        "level": "function",
+        "line": 61,
+        "end_line": 65,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+        "kind": "method",
+        "level": "function",
+        "line": 67,
+        "end_line": 71,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+        "kind": "method",
+        "level": "function",
+        "line": 73,
+        "end_line": 77,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 80,
+        "end_line": 101,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService",
+        "kind": "class",
+        "level": "class",
+        "line": 105,
+        "end_line": 189,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.AddItem",
+        "kind": "method",
+        "level": "function",
+        "line": 111,
+        "end_line": 135,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.GetCart",
+        "kind": "method",
+        "level": "function",
+        "line": 138,
+        "end_line": 162,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.EmptyCart",
+        "kind": "method",
+        "level": "function",
+        "line": 165,
+        "end_line": 189,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 192,
+        "end_line": 207,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 197,
+        "end_line": 207,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 210,
+        "end_line": 219,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 215,
+        "end_line": 219,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 222,
+        "end_line": 233,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationService",
+        "kind": "class",
+        "level": "class",
+        "line": 237,
+        "end_line": 267,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationService.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 243,
+        "end_line": 267,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 270,
+        "end_line": 295,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 275,
+        "end_line": 295,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 298,
+        "end_line": 319,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 303,
+        "end_line": 307,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+        "kind": "method",
+        "level": "function",
+        "line": 309,
+        "end_line": 313,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 315,
+        "end_line": 319,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 322,
+        "end_line": 343,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService",
+        "kind": "class",
+        "level": "class",
+        "line": 347,
+        "end_line": 431,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.ListProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 353,
+        "end_line": 377,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.GetProduct",
+        "kind": "method",
+        "level": "function",
+        "line": 380,
+        "end_line": 404,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.SearchProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 407,
+        "end_line": 431,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 434,
+        "end_line": 454,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 439,
+        "end_line": 454,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 457,
+        "end_line": 472,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+        "kind": "method",
+        "level": "function",
+        "line": 462,
+        "end_line": 466,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 468,
+        "end_line": 472,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 475,
+        "end_line": 491,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService",
+        "kind": "class",
+        "level": "class",
+        "line": 495,
+        "end_line": 552,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService.GetQuote",
+        "kind": "method",
+        "level": "function",
+        "line": 501,
+        "end_line": 525,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService.ShipOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 528,
+        "end_line": 552,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 555,
+        "end_line": 575,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 560,
+        "end_line": 575,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 578,
+        "end_line": 593,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+        "kind": "method",
+        "level": "function",
+        "line": 583,
+        "end_line": 587,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+        "kind": "method",
+        "level": "function",
+        "line": 589,
+        "end_line": 593,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 596,
+        "end_line": 612,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService",
+        "kind": "class",
+        "level": "class",
+        "line": 616,
+        "end_line": 673,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService.GetSupportedCurrencies",
+        "kind": "method",
+        "level": "function",
+        "line": 622,
+        "end_line": 646,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService.Convert",
+        "kind": "method",
+        "level": "function",
+        "line": 649,
+        "end_line": 673,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 676,
+        "end_line": 691,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 681,
+        "end_line": 691,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 694,
+        "end_line": 703,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+        "kind": "method",
+        "level": "function",
+        "line": 699,
+        "end_line": 703,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 706,
+        "end_line": 717,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentService",
+        "kind": "class",
+        "level": "class",
+        "line": 721,
+        "end_line": 751,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentService.Charge",
+        "kind": "method",
+        "level": "function",
+        "line": 727,
+        "end_line": 751,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 754,
+        "end_line": 769,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 759,
+        "end_line": 769,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 772,
+        "end_line": 781,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+        "kind": "method",
+        "level": "function",
+        "line": 777,
+        "end_line": 781,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 784,
+        "end_line": 795,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailService",
+        "kind": "class",
+        "level": "class",
+        "line": 799,
+        "end_line": 829,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailService.SendOrderConfirmation",
+        "kind": "method",
+        "level": "function",
+        "line": 805,
+        "end_line": 829,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 832,
+        "end_line": 847,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 837,
+        "end_line": 847,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 850,
+        "end_line": 859,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 855,
+        "end_line": 859,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 862,
+        "end_line": 873,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutService",
+        "kind": "class",
+        "level": "class",
+        "line": 877,
+        "end_line": 907,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutService.PlaceOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 883,
+        "end_line": 907,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 910,
+        "end_line": 925,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 915,
+        "end_line": 925,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 928,
+        "end_line": 937,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+        "kind": "method",
+        "level": "function",
+        "line": 933,
+        "end_line": 937,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 940,
+        "end_line": 951,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdService",
+        "kind": "class",
+        "level": "class",
+        "line": 955,
+        "end_line": 985,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdService.GetAds",
+        "kind": "method",
+        "level": "function",
+        "line": 961,
+        "end_line": 985,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 988,
+        "end_line": 1023,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 993,
+        "end_line": 1023,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 1026,
+        "end_line": 1059,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1031,
+        "end_line": 1035,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1037,
+        "end_line": 1041,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1043,
+        "end_line": 1047,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+        "kind": "method",
+        "level": "function",
+        "line": 1049,
+        "end_line": 1053,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1055,
+        "end_line": 1059,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 1062,
+        "end_line": 1093,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService",
+        "kind": "class",
+        "level": "class",
+        "line": 1097,
+        "end_line": 1235,
+        "bases": []
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.GetFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1103,
+        "end_line": 1127,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.CreateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1130,
+        "end_line": 1154,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.UpdateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1157,
+        "end_line": 1181,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.ListFlags",
+        "kind": "method",
+        "level": "function",
+        "line": 1184,
+        "end_line": 1208,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.DeleteFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1211,
+        "end_line": 1235,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false
+      },
+      {
+        "path": "logger.py::CustomJsonFormatter",
+        "kind": "class",
+        "level": "class",
+        "line": 12,
+        "end_line": 18,
+        "bases": [
+          "Attribute(value=Name(id='jsonlogger', ctx=Load()), attr='JsonFormatter', ctx=Load())"
+        ]
+      },
+      {
+        "path": "logger.py::CustomJsonFormatter.add_fields",
+        "kind": "method",
+        "level": "function",
+        "line": 13,
+        "end_line": 18,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "log_record",
+            "annotation": null
+          },
+          {
+            "name": "record",
+            "annotation": null
+          },
+          {
+            "name": "message_dict",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "logger.py::getJSONLogger",
+        "kind": "function",
+        "level": "function",
+        "line": 20,
+        "end_line": 28,
+        "args": [
+          {
+            "name": "name",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "metrics.py::init_metrics",
+        "kind": "function",
+        "level": "function",
+        "line": 6,
+        "end_line": 17,
+        "args": [
+          {
+            "name": "meter",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService",
+        "kind": "class",
+        "level": "class",
+        "line": 42,
+        "end_line": 64,
+        "bases": [
+          "Attribute(value=Name(id='demo_pb2_grpc', ctx=Load()), attr='RecommendationServiceServicer', ctx=Load())"
+        ]
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 43,
+        "end_line": 56,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.Check",
+        "kind": "method",
+        "level": "function",
+        "line": 58,
+        "end_line": 60,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.Watch",
+        "kind": "method",
+        "level": "function",
+        "line": 62,
+        "end_line": 64,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::get_product_list",
+        "kind": "function",
+        "level": "function",
+        "line": 67,
+        "end_line": 113,
+        "args": [
+          {
+            "name": "request_product_ids",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::must_map_env",
+        "kind": "function",
+        "level": "function",
+        "line": 116,
+        "end_line": 120,
+        "args": [
+          {
+            "name": "key",
+            "annotation": "Name(id='str', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      },
+      {
+        "path": "recommendation_server.py::check_feature_flag",
+        "kind": "function",
+        "level": "function",
+        "line": 123,
+        "end_line": 126,
+        "args": [
+          {
+            "name": "flag_name",
+            "annotation": "Name(id='str', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.descriptor",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.descriptor_pool",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.runtime_version",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.symbol_database",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.internal.builder",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.runtime_version.ValidateProtobufRuntimeVersion",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.symbol_database.Default",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "AddSerializedFile",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.descriptor_pool.Default",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "globals",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.internal.builder.BuildMessageAndEnumDescriptors",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2.py",
+        "target": "google.protobuf.internal.builder.BuildTopDescriptorsAndMessages",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "grpc",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "warnings",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "demo_pb2",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "grpc._utilities.first_version_is_lower",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "grpc._utilities.first_version_is_lower",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "demo_pb2_grpc.py",
+        "target": "RuntimeError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartService.AddItem",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartService.GetCart",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CartService.EmptyCart",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::RecommendationServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::RecommendationService.ListRecommendations",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogService.ListProducts",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogService.GetProduct",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ProductCatalogService.SearchProducts",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingService.GetQuote",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::ShippingService.ShipOrder",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyService.GetSupportedCurrencies",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CurrencyService.Convert",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::PaymentServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::PaymentService.Charge",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::EmailServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::EmailService.SendOrderConfirmation",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CheckoutServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::CheckoutService.PlaceOrder",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::AdServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::AdService.GetAds",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceStub.__init__",
+        "target": "channel.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+        "target": "context.set_code",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+        "target": "context.set_details",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+        "target": "NotImplementedError",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "target": "grpc.unary_unary_rpc_method_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "target": "grpc.method_handlers_generic_handler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "target": "server.add_generic_rpc_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "target": "server.add_registered_method_handlers",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagService.GetFlag",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagService.CreateFlag",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagService.UpdateFlag",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagService.ListFlags",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "demo_pb2_grpc.py::FeatureFlagService.DeleteFlag",
+        "target": "grpc.experimental.unary_unary",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "logger.py",
+        "target": "sys",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "logger.py",
+        "target": "pythonjsonlogger.jsonlogger",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "logger.py",
+        "target": "opentelemetry.trace",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter",
+        "target": "pythonjsonlogger.jsonlogger.JsonFormatter",
+        "type": "inherits",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "add_fields",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "super",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "log_record.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "opentelemetry.trace.format_trace_id",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "get_span_context",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "opentelemetry.trace.get_current_span",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::CustomJsonFormatter.add_fields",
+        "target": "opentelemetry.trace.format_span_id",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "logging.getLogger",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "logging.StreamHandler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "CustomJsonFormatter",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "handler.setFormatter",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "logger.addHandler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "logger.py::getJSONLogger",
+        "target": "logger.setLevel",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "metrics.py::init_metrics",
+        "target": "meter.create_counter",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "os",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "random",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "concurrent.futures",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.trace",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.metrics",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry._logs.set_logger_provider",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.exporter.otlp.proto.grpc._log_exporter.OTLPLogExporter",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.LoggerProvider",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.LoggingHandler",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.export.BatchLogRecordProcessor",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk.resources.Resource",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.api",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.contrib.provider.flagd.FlagdProvider",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.contrib.hook.opentelemetry.TracingHook",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "logging",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "demo_pb2",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "demo_pb2_grpc",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc_health.v1.health_pb2",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc_health.v1.health_pb2_grpc",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "metrics.init_metrics",
+        "type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService",
+        "target": "demo_pb2_grpc.RecommendationServiceServicer",
+        "type": "inherits",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "get_product_list",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "opentelemetry.trace.get_current_span",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "span.set_attribute",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "len",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "logger.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "demo_pb2.ListRecommendationsResponse",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "response.product_ids.extend",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "target": "add",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.Check",
+        "target": "grpc_health.v1.health_pb2.HealthCheckResponse",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::RecommendationService.Watch",
+        "target": "grpc_health.v1.health_pb2.HealthCheckResponse",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "tracer.start_as_current_span",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "join",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "request_product_ids_str.split",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "check_feature_flag",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "span.set_attribute",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "random.random",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "logger.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "product_catalog_stub.ListProducts",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "demo_pb2.Empty",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "len",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "list",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "set",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "min",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "random.sample",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::get_product_list",
+        "target": "range",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::must_map_env",
+        "target": "os.environ.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::must_map_env",
+        "target": "Exception",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::check_feature_flag",
+        "target": "openfeature.api.get_client",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py::check_feature_flag",
+        "target": "client.get_boolean_value",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "must_map_env",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.api.set_provider",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.contrib.provider.flagd.FlagdProvider",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "os.environ.get",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.api.add_hooks",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "openfeature.contrib.hook.opentelemetry.TracingHook",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "get_tracer",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.trace.get_tracer_provider",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "get_meter",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.metrics.get_meter_provider",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "metrics.init_metrics",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.LoggerProvider",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk.resources.Resource.create",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry._logs.set_logger_provider",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.exporter.otlp.proto.grpc._log_exporter.OTLPLogExporter",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "logger_provider.add_log_record_processor",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.export.BatchLogRecordProcessor",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "opentelemetry.sdk._logs.LoggingHandler",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "logging.getLogger",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "logger.addHandler",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc.insecure_channel",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "demo_pb2_grpc.ProductCatalogServiceStub",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc.server",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "concurrent.futures.ThreadPoolExecutor",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "RecommendationService",
+        "type": "calls",
+        "confidence": 1.0,
+        "resolution": "static_exact"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "demo_pb2_grpc.add_RecommendationServiceServicer_to_server",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "grpc_health.v1.health_pb2_grpc.add_HealthServicer_to_server",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "server.add_insecure_port",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "server.start",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "logger.info",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      },
+      {
+        "source": "recommendation_server.py",
+        "target": "server.wait_for_termination",
+        "type": "calls",
+        "confidence": 0.7,
+        "resolution": "static_inference"
+      }
+    ],
+    "metadata": {
+      "repo_path": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\recommendation",
+      "files_parsed": 5,
+      "files_skipped": 0,
+      "total_nodes": 101,
+      "total_edges": 249
+    }
+  },
+  "hierarchy": {
+    "nodes": [
+      {
+        "path": "demo_pb2_grpc.py::CartServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 28,
+        "end_line": 53,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 33,
+        "end_line": 53,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 56,
+        "end_line": 77,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+        "kind": "method",
+        "level": "function",
+        "line": 61,
+        "end_line": 65,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+        "kind": "method",
+        "level": "function",
+        "line": 67,
+        "end_line": 71,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+        "kind": "method",
+        "level": "function",
+        "line": 73,
+        "end_line": 77,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 80,
+        "end_line": 101,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService",
+        "kind": "class",
+        "level": "class",
+        "line": 105,
+        "end_line": 189,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.AddItem",
+        "kind": "method",
+        "level": "function",
+        "line": 111,
+        "end_line": 135,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.GetCart",
+        "kind": "method",
+        "level": "function",
+        "line": 138,
+        "end_line": 162,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CartService.EmptyCart",
+        "kind": "method",
+        "level": "function",
+        "line": 165,
+        "end_line": 189,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 192,
+        "end_line": 207,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 197,
+        "end_line": 207,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 210,
+        "end_line": 219,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 215,
+        "end_line": 219,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 222,
+        "end_line": 233,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationService",
+        "kind": "class",
+        "level": "class",
+        "line": 237,
+        "end_line": 267,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::RecommendationService.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 243,
+        "end_line": 267,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 270,
+        "end_line": 295,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 275,
+        "end_line": 295,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 298,
+        "end_line": 319,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 303,
+        "end_line": 307,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+        "kind": "method",
+        "level": "function",
+        "line": 309,
+        "end_line": 313,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 315,
+        "end_line": 319,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 322,
+        "end_line": 343,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService",
+        "kind": "class",
+        "level": "class",
+        "line": 347,
+        "end_line": 431,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.ListProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 353,
+        "end_line": 377,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.GetProduct",
+        "kind": "method",
+        "level": "function",
+        "line": 380,
+        "end_line": 404,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ProductCatalogService.SearchProducts",
+        "kind": "method",
+        "level": "function",
+        "line": 407,
+        "end_line": 431,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 434,
+        "end_line": 454,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 439,
+        "end_line": 454,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 457,
+        "end_line": 472,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+        "kind": "method",
+        "level": "function",
+        "line": 462,
+        "end_line": 466,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 468,
+        "end_line": 472,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 475,
+        "end_line": 491,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService",
+        "kind": "class",
+        "level": "class",
+        "line": 495,
+        "end_line": 552,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService.GetQuote",
+        "kind": "method",
+        "level": "function",
+        "line": 501,
+        "end_line": 525,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::ShippingService.ShipOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 528,
+        "end_line": 552,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 555,
+        "end_line": 575,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 560,
+        "end_line": 575,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 578,
+        "end_line": 593,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+        "kind": "method",
+        "level": "function",
+        "line": 583,
+        "end_line": 587,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+        "kind": "method",
+        "level": "function",
+        "line": 589,
+        "end_line": 593,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 596,
+        "end_line": 612,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService",
+        "kind": "class",
+        "level": "class",
+        "line": 616,
+        "end_line": 673,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService.GetSupportedCurrencies",
+        "kind": "method",
+        "level": "function",
+        "line": 622,
+        "end_line": 646,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CurrencyService.Convert",
+        "kind": "method",
+        "level": "function",
+        "line": 649,
+        "end_line": 673,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 676,
+        "end_line": 691,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 681,
+        "end_line": 691,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 694,
+        "end_line": 703,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+        "kind": "method",
+        "level": "function",
+        "line": 699,
+        "end_line": 703,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 706,
+        "end_line": 717,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentService",
+        "kind": "class",
+        "level": "class",
+        "line": 721,
+        "end_line": 751,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::PaymentService.Charge",
+        "kind": "method",
+        "level": "function",
+        "line": 727,
+        "end_line": 751,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 754,
+        "end_line": 769,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 759,
+        "end_line": 769,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 772,
+        "end_line": 781,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+        "kind": "method",
+        "level": "function",
+        "line": 777,
+        "end_line": 781,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 784,
+        "end_line": 795,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailService",
+        "kind": "class",
+        "level": "class",
+        "line": 799,
+        "end_line": 829,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::EmailService.SendOrderConfirmation",
+        "kind": "method",
+        "level": "function",
+        "line": 805,
+        "end_line": 829,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 832,
+        "end_line": 847,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 837,
+        "end_line": 847,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 850,
+        "end_line": 859,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 855,
+        "end_line": 859,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 862,
+        "end_line": 873,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutService",
+        "kind": "class",
+        "level": "class",
+        "line": 877,
+        "end_line": 907,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::CheckoutService.PlaceOrder",
+        "kind": "method",
+        "level": "function",
+        "line": 883,
+        "end_line": 907,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 910,
+        "end_line": 925,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 915,
+        "end_line": 925,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 928,
+        "end_line": 937,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+        "kind": "method",
+        "level": "function",
+        "line": 933,
+        "end_line": 937,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 940,
+        "end_line": 951,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdService",
+        "kind": "class",
+        "level": "class",
+        "line": 955,
+        "end_line": 985,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::AdService.GetAds",
+        "kind": "method",
+        "level": "function",
+        "line": 961,
+        "end_line": 985,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceStub",
+        "kind": "class",
+        "level": "class",
+        "line": 988,
+        "end_line": 1023,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceStub.__init__",
+        "kind": "method",
+        "level": "function",
+        "line": 993,
+        "end_line": 1023,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "channel",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer",
+        "kind": "class",
+        "level": "class",
+        "line": 1026,
+        "end_line": 1059,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1031,
+        "end_line": 1035,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1037,
+        "end_line": 1041,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1043,
+        "end_line": 1047,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+        "kind": "method",
+        "level": "function",
+        "line": 1049,
+        "end_line": 1053,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1055,
+        "end_line": 1059,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+        "kind": "function",
+        "level": "function",
+        "line": 1062,
+        "end_line": 1093,
+        "args": [
+          {
+            "name": "servicer",
+            "annotation": null
+          },
+          {
+            "name": "server",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService",
+        "kind": "class",
+        "level": "class",
+        "line": 1097,
+        "end_line": 1235,
+        "bases": [],
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.GetFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1103,
+        "end_line": 1127,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.CreateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1130,
+        "end_line": 1154,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.UpdateFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1157,
+        "end_line": 1181,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.ListFlags",
+        "kind": "method",
+        "level": "function",
+        "line": 1184,
+        "end_line": 1208,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py::FeatureFlagService.DeleteFlag",
+        "kind": "method",
+        "level": "function",
+        "line": 1211,
+        "end_line": 1235,
+        "args": [
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "target",
+            "annotation": null
+          },
+          {
+            "name": "options",
+            "annotation": null
+          },
+          {
+            "name": "channel_credentials",
+            "annotation": null
+          },
+          {
+            "name": "call_credentials",
+            "annotation": null
+          },
+          {
+            "name": "insecure",
+            "annotation": null
+          },
+          {
+            "name": "compression",
+            "annotation": null
+          },
+          {
+            "name": "wait_for_ready",
+            "annotation": null
+          },
+          {
+            "name": "timeout",
+            "annotation": null
+          },
+          {
+            "name": "metadata",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [
+          "staticmethod"
+        ],
+        "is_async": false,
+        "ancestors": [
+          "demo_pb2_grpc.py",
+          "."
+        ]
+      },
+      {
+        "path": "logger.py::CustomJsonFormatter",
+        "kind": "class",
+        "level": "class",
+        "line": 12,
+        "end_line": 18,
+        "bases": [
+          "Attribute(value=Name(id='jsonlogger', ctx=Load()), attr='JsonFormatter', ctx=Load())"
+        ],
+        "ancestors": [
+          "logger.py",
+          "."
+        ]
+      },
+      {
+        "path": "logger.py::CustomJsonFormatter.add_fields",
+        "kind": "method",
+        "level": "function",
+        "line": 13,
+        "end_line": 18,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "log_record",
+            "annotation": null
+          },
+          {
+            "name": "record",
+            "annotation": null
+          },
+          {
+            "name": "message_dict",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "logger.py",
+          "."
+        ]
+      },
+      {
+        "path": "logger.py::getJSONLogger",
+        "kind": "function",
+        "level": "function",
+        "line": 20,
+        "end_line": 28,
+        "args": [
+          {
+            "name": "name",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "logger.py",
+          "."
+        ]
+      },
+      {
+        "path": "metrics.py::init_metrics",
+        "kind": "function",
+        "level": "function",
+        "line": 6,
+        "end_line": 17,
+        "args": [
+          {
+            "name": "meter",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "metrics.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService",
+        "kind": "class",
+        "level": "class",
+        "line": 42,
+        "end_line": 64,
+        "bases": [
+          "Attribute(value=Name(id='demo_pb2_grpc', ctx=Load()), attr='RecommendationServiceServicer', ctx=Load())"
+        ],
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.ListRecommendations",
+        "kind": "method",
+        "level": "function",
+        "line": 43,
+        "end_line": 56,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.Check",
+        "kind": "method",
+        "level": "function",
+        "line": 58,
+        "end_line": 60,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::RecommendationService.Watch",
+        "kind": "method",
+        "level": "function",
+        "line": 62,
+        "end_line": 64,
+        "args": [
+          {
+            "name": "self",
+            "annotation": null
+          },
+          {
+            "name": "request",
+            "annotation": null
+          },
+          {
+            "name": "context",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::get_product_list",
+        "kind": "function",
+        "level": "function",
+        "line": 67,
+        "end_line": 113,
+        "args": [
+          {
+            "name": "request_product_ids",
+            "annotation": null
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::must_map_env",
+        "kind": "function",
+        "level": "function",
+        "line": 116,
+        "end_line": 120,
+        "args": [
+          {
+            "name": "key",
+            "annotation": "Name(id='str', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py::check_feature_flag",
+        "kind": "function",
+        "level": "function",
+        "line": 123,
+        "end_line": 126,
+        "args": [
+          {
+            "name": "flag_name",
+            "annotation": "Name(id='str', ctx=Load())"
+          }
+        ],
+        "return_annotation": null,
+        "decorators": [],
+        "is_async": false,
+        "ancestors": [
+          "recommendation_server.py",
+          "."
+        ]
+      },
+      {
+        "path": "demo_pb2_grpc.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "demo_pb2_grpc.py::CartServiceStub",
+          "demo_pb2_grpc.py::CartServiceStub.__init__",
+          "demo_pb2_grpc.py::CartServiceServicer",
+          "demo_pb2_grpc.py::CartServiceServicer.AddItem",
+          "demo_pb2_grpc.py::CartServiceServicer.GetCart",
+          "demo_pb2_grpc.py::CartServiceServicer.EmptyCart",
+          "demo_pb2_grpc.py::add_CartServiceServicer_to_server",
+          "demo_pb2_grpc.py::CartService",
+          "demo_pb2_grpc.py::CartService.AddItem",
+          "demo_pb2_grpc.py::CartService.GetCart",
+          "demo_pb2_grpc.py::CartService.EmptyCart",
+          "demo_pb2_grpc.py::RecommendationServiceStub",
+          "demo_pb2_grpc.py::RecommendationServiceStub.__init__",
+          "demo_pb2_grpc.py::RecommendationServiceServicer",
+          "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations",
+          "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server",
+          "demo_pb2_grpc.py::RecommendationService",
+          "demo_pb2_grpc.py::RecommendationService.ListRecommendations",
+          "demo_pb2_grpc.py::ProductCatalogServiceStub",
+          "demo_pb2_grpc.py::ProductCatalogServiceStub.__init__",
+          "demo_pb2_grpc.py::ProductCatalogServiceServicer",
+          "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts",
+          "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct",
+          "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts",
+          "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server",
+          "demo_pb2_grpc.py::ProductCatalogService",
+          "demo_pb2_grpc.py::ProductCatalogService.ListProducts",
+          "demo_pb2_grpc.py::ProductCatalogService.GetProduct",
+          "demo_pb2_grpc.py::ProductCatalogService.SearchProducts",
+          "demo_pb2_grpc.py::ShippingServiceStub",
+          "demo_pb2_grpc.py::ShippingServiceStub.__init__",
+          "demo_pb2_grpc.py::ShippingServiceServicer",
+          "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote",
+          "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder",
+          "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server",
+          "demo_pb2_grpc.py::ShippingService",
+          "demo_pb2_grpc.py::ShippingService.GetQuote",
+          "demo_pb2_grpc.py::ShippingService.ShipOrder",
+          "demo_pb2_grpc.py::CurrencyServiceStub",
+          "demo_pb2_grpc.py::CurrencyServiceStub.__init__",
+          "demo_pb2_grpc.py::CurrencyServiceServicer",
+          "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies",
+          "demo_pb2_grpc.py::CurrencyServiceServicer.Convert",
+          "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server",
+          "demo_pb2_grpc.py::CurrencyService",
+          "demo_pb2_grpc.py::CurrencyService.GetSupportedCurrencies",
+          "demo_pb2_grpc.py::CurrencyService.Convert",
+          "demo_pb2_grpc.py::PaymentServiceStub",
+          "demo_pb2_grpc.py::PaymentServiceStub.__init__",
+          "demo_pb2_grpc.py::PaymentServiceServicer",
+          "demo_pb2_grpc.py::PaymentServiceServicer.Charge",
+          "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server",
+          "demo_pb2_grpc.py::PaymentService",
+          "demo_pb2_grpc.py::PaymentService.Charge",
+          "demo_pb2_grpc.py::EmailServiceStub",
+          "demo_pb2_grpc.py::EmailServiceStub.__init__",
+          "demo_pb2_grpc.py::EmailServiceServicer",
+          "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation",
+          "demo_pb2_grpc.py::add_EmailServiceServicer_to_server",
+          "demo_pb2_grpc.py::EmailService",
+          "demo_pb2_grpc.py::EmailService.SendOrderConfirmation",
+          "demo_pb2_grpc.py::CheckoutServiceStub",
+          "demo_pb2_grpc.py::CheckoutServiceStub.__init__",
+          "demo_pb2_grpc.py::CheckoutServiceServicer",
+          "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder",
+          "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server",
+          "demo_pb2_grpc.py::CheckoutService",
+          "demo_pb2_grpc.py::CheckoutService.PlaceOrder",
+          "demo_pb2_grpc.py::AdServiceStub",
+          "demo_pb2_grpc.py::AdServiceStub.__init__",
+          "demo_pb2_grpc.py::AdServiceServicer",
+          "demo_pb2_grpc.py::AdServiceServicer.GetAds",
+          "demo_pb2_grpc.py::add_AdServiceServicer_to_server",
+          "demo_pb2_grpc.py::AdService",
+          "demo_pb2_grpc.py::AdService.GetAds",
+          "demo_pb2_grpc.py::FeatureFlagServiceStub",
+          "demo_pb2_grpc.py::FeatureFlagServiceStub.__init__",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags",
+          "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag",
+          "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server",
+          "demo_pb2_grpc.py::FeatureFlagService",
+          "demo_pb2_grpc.py::FeatureFlagService.GetFlag",
+          "demo_pb2_grpc.py::FeatureFlagService.CreateFlag",
+          "demo_pb2_grpc.py::FeatureFlagService.UpdateFlag",
+          "demo_pb2_grpc.py::FeatureFlagService.ListFlags",
+          "demo_pb2_grpc.py::FeatureFlagService.DeleteFlag"
+        ],
+        "child_count": 90,
+        "ancestors": [
+          "."
+        ]
+      },
+      {
+        "path": "logger.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "logger.py::CustomJsonFormatter",
+          "logger.py::CustomJsonFormatter.add_fields",
+          "logger.py::getJSONLogger"
+        ],
+        "child_count": 3,
+        "ancestors": [
+          "."
+        ]
+      },
+      {
+        "path": "metrics.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "metrics.py::init_metrics"
+        ],
+        "child_count": 1,
+        "ancestors": [
+          "."
+        ]
+      },
+      {
+        "path": "recommendation_server.py",
+        "kind": "file",
+        "level": "file",
+        "children": [
+          "recommendation_server.py::RecommendationService",
+          "recommendation_server.py::RecommendationService.ListRecommendations",
+          "recommendation_server.py::RecommendationService.Check",
+          "recommendation_server.py::RecommendationService.Watch",
+          "recommendation_server.py::get_product_list",
+          "recommendation_server.py::must_map_env",
+          "recommendation_server.py::check_feature_flag"
+        ],
+        "child_count": 7,
+        "ancestors": [
+          "."
+        ]
+      },
+      {
+        "path": ".",
+        "kind": "module",
+        "level": "root",
+        "children": [
+          "demo_pb2_grpc.py",
+          "logger.py",
+          "metrics.py",
+          "recommendation_server.py"
+        ],
+        "child_count": 4,
+        "ancestors": []
+      }
+    ],
+    "hub_scores": {
+      "demo_pb2_grpc.py::CartServiceStub": 0.0,
+      "demo_pb2_grpc.py::CartServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::CartServiceServicer": 0.0,
+      "demo_pb2_grpc.py::CartServiceServicer.AddItem": 0.0,
+      "demo_pb2_grpc.py::CartServiceServicer.GetCart": 0.0,
+      "demo_pb2_grpc.py::CartServiceServicer.EmptyCart": 0.0,
+      "demo_pb2_grpc.py::add_CartServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::CartService": 0.0,
+      "demo_pb2_grpc.py::CartService.AddItem": 0.0,
+      "demo_pb2_grpc.py::CartService.GetCart": 0.0,
+      "demo_pb2_grpc.py::CartService.EmptyCart": 0.0,
+      "demo_pb2_grpc.py::RecommendationServiceStub": 0.0,
+      "demo_pb2_grpc.py::RecommendationServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::RecommendationServiceServicer": 0.0,
+      "demo_pb2_grpc.py::RecommendationServiceServicer.ListRecommendations": 0.0,
+      "demo_pb2_grpc.py::add_RecommendationServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::RecommendationService": 0.0,
+      "demo_pb2_grpc.py::RecommendationService.ListRecommendations": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceStub": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceServicer": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceServicer.ListProducts": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceServicer.GetProduct": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts": 0.0,
+      "demo_pb2_grpc.py::add_ProductCatalogServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogService": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogService.ListProducts": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogService.GetProduct": 0.0,
+      "demo_pb2_grpc.py::ProductCatalogService.SearchProducts": 0.0,
+      "demo_pb2_grpc.py::ShippingServiceStub": 0.0,
+      "demo_pb2_grpc.py::ShippingServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::ShippingServiceServicer": 0.0,
+      "demo_pb2_grpc.py::ShippingServiceServicer.GetQuote": 0.0,
+      "demo_pb2_grpc.py::ShippingServiceServicer.ShipOrder": 0.0,
+      "demo_pb2_grpc.py::add_ShippingServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::ShippingService": 0.0,
+      "demo_pb2_grpc.py::ShippingService.GetQuote": 0.0,
+      "demo_pb2_grpc.py::ShippingService.ShipOrder": 0.0,
+      "demo_pb2_grpc.py::CurrencyServiceStub": 0.0,
+      "demo_pb2_grpc.py::CurrencyServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::CurrencyServiceServicer": 0.0,
+      "demo_pb2_grpc.py::CurrencyServiceServicer.GetSupportedCurrencies": 0.0,
+      "demo_pb2_grpc.py::CurrencyServiceServicer.Convert": 0.0,
+      "demo_pb2_grpc.py::add_CurrencyServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::CurrencyService": 0.0,
+      "demo_pb2_grpc.py::CurrencyService.GetSupportedCurrencies": 0.0,
+      "demo_pb2_grpc.py::CurrencyService.Convert": 0.0,
+      "demo_pb2_grpc.py::PaymentServiceStub": 0.0,
+      "demo_pb2_grpc.py::PaymentServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::PaymentServiceServicer": 0.0,
+      "demo_pb2_grpc.py::PaymentServiceServicer.Charge": 0.0,
+      "demo_pb2_grpc.py::add_PaymentServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::PaymentService": 0.0,
+      "demo_pb2_grpc.py::PaymentService.Charge": 0.0,
+      "demo_pb2_grpc.py::EmailServiceStub": 0.0,
+      "demo_pb2_grpc.py::EmailServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::EmailServiceServicer": 0.0,
+      "demo_pb2_grpc.py::EmailServiceServicer.SendOrderConfirmation": 0.0,
+      "demo_pb2_grpc.py::add_EmailServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::EmailService": 0.0,
+      "demo_pb2_grpc.py::EmailService.SendOrderConfirmation": 0.0,
+      "demo_pb2_grpc.py::CheckoutServiceStub": 0.0,
+      "demo_pb2_grpc.py::CheckoutServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::CheckoutServiceServicer": 0.0,
+      "demo_pb2_grpc.py::CheckoutServiceServicer.PlaceOrder": 0.0,
+      "demo_pb2_grpc.py::add_CheckoutServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::CheckoutService": 0.0,
+      "demo_pb2_grpc.py::CheckoutService.PlaceOrder": 0.0,
+      "demo_pb2_grpc.py::AdServiceStub": 0.0,
+      "demo_pb2_grpc.py::AdServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::AdServiceServicer": 0.0,
+      "demo_pb2_grpc.py::AdServiceServicer.GetAds": 0.0,
+      "demo_pb2_grpc.py::add_AdServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::AdService": 0.0,
+      "demo_pb2_grpc.py::AdService.GetAds": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceStub": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceStub.__init__": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer.GetFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer.CreateFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer.UpdateFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer.ListFlags": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagServiceServicer.DeleteFlag": 0.0,
+      "demo_pb2_grpc.py::add_FeatureFlagServiceServicer_to_server": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService.GetFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService.CreateFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService.UpdateFlag": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService.ListFlags": 0.0,
+      "demo_pb2_grpc.py::FeatureFlagService.DeleteFlag": 0.0,
+      "logger.py::CustomJsonFormatter": 0.0,
+      "logger.py::CustomJsonFormatter.add_fields": 0.0,
+      "logger.py::getJSONLogger": 0.0,
+      "metrics.py::init_metrics": 0.0,
+      "recommendation_server.py::RecommendationService": 0.0,
+      "recommendation_server.py::RecommendationService.ListRecommendations": 0.0,
+      "recommendation_server.py::RecommendationService.Check": 0.0,
+      "recommendation_server.py::RecommendationService.Watch": 0.0,
+      "recommendation_server.py::get_product_list": 0.0,
+      "recommendation_server.py::must_map_env": 0.0,
+      "recommendation_server.py::check_feature_flag": 0.0
+    },
+    "metadata": {
+      "total_leaf_nodes": 101,
+      "total_files": 4,
+      "total_modules": 1,
+      "source_graph": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\repos\\opentelemetry-demo\\src\\recommendation"
+    }
+  }
+}

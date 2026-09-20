@@ -1,0 +1,168 @@
+# Financial Intelligence — PolyFlow Multi-Language Governance Module
+# Languages: Python, Go, Java, TypeScript | Domain: Sector Transmission & Macro Regime Multipliers
+
+@contract
+feature_id: "WM-FINANCIAL-INTELLIGENCE-TRANSMISSION"
+name: "financial_intelligence"
+version: "2.0.0"
+description: "Sector impact transmission, macro regime multipliers, financial probability calculations"
+owner: "Macro Quantitative Group <macro-quant@worldmonitor.dev>"
+team: "markets"
+classification: "confidential"
+approvers: ["portfolio-risk@worldmonitor.dev"]
+timeout_ms: 2500
+@end
+
+@schema FinancialImpactRequest
+  signals: array<object>
+  market_regime: string | null
+  fear_greed: number | null
+@end
+
+@schema FinancialImpactResponse
+  financial_signals: array<object>
+  sector_matrix: array<object>
+  regime_multiplier: number
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "math", "time"]
+@end
+
+@standard language="go"
+allowed_packages: ["fmt", "math", "time"]
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "java.math.BigDecimal"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node"]
+@end
+
+@python[sector_mapping]
+CAMEO_SECTOR_MAP = {
+    'military_escalation': [
+        {'sector': 'Defense & Aerospace', 'direction': 'Bullish', 'base_confidence': 0.84, 'horizon': '1-3 Days'},
+        {'sector': 'Energy (Crude & Gas)', 'direction': 'Volatile', 'base_confidence': 0.78, 'horizon': 'Intraday'},
+        {'sector': 'Commercial Airlines', 'direction': 'Bearish', 'base_confidence': 0.68, 'horizon': '3-7 Days'},
+    ],
+    'political_instability': [
+        {'sector': 'Financials & Banking', 'direction': 'Bearish', 'base_confidence': 0.65, 'horizon': '1-3 Days'},
+        {'sector': 'Precious Metals (Gold)', 'direction': 'Bullish', 'base_confidence': 0.74, 'horizon': '1-5 Days'},
+        {'sector': 'Sovereign Bonds', 'direction': 'Volatile', 'base_confidence': 0.62, 'horizon': 'Intraday'},
+    ],
+    'trade_disruption': [
+        {'sector': 'Global Shipping / Logistics', 'direction': 'Volatile', 'base_confidence': 0.72, 'horizon': '1-5 Days'},
+        {'sector': 'Technology & Semiconductors', 'direction': 'Volatile', 'base_confidence': 0.58, 'horizon': '1-7 Days'},
+        {'sector': 'Agricultural Commodities', 'direction': 'Bullish', 'base_confidence': 0.68, 'horizon': '2-5 Days'},
+    ],
+    'anomaly': [
+        {'sector': 'Broad Equity Indices', 'direction': 'Volatile', 'base_confidence': 0.55, 'horizon': 'Intraday'},
+    ]
+}
+
+REGIME_MULTIPLIERS = {
+    'risk_on': 0.85,
+    'risk_off': 1.30,
+    'crisis': 1.80,
+    'neutral': 1.00
+}
+
+def compute(req):
+    signals = req.get('signals', []) if isinstance(req, dict) else []
+    regime = req.get('market_regime', 'neutral') if isinstance(req, dict) else 'neutral'
+    multiplier = REGIME_MULTIPLIERS.get(regime, 1.0)
+    fin_signals = []
+
+    for sig in signals:
+        sig_type = sig.get('signal_type', 'anomaly')
+        mappings = CAMEO_SECTOR_MAP.get(sig_type, CAMEO_SECTOR_MAP['anomaly'])
+
+        for m in mappings:
+            base_prob = float(sig.get('severity', 0.5)) * m['base_confidence']
+            adjusted = min(0.99, base_prob * multiplier)
+
+            fin_signals.append({
+                'signal_key': sig.get('key', 'sig-0'),
+                'country_code': sig.get('country_code', 'XX'),
+                'sector': m['sector'],
+                'direction': m['direction'],
+                'impact_probability': f"{round(base_prob * 100, 1)}%",
+                'adjusted_probability': f"{round(adjusted * 100, 1)}%",
+                'regime_multiplier': f"{multiplier:.1f}x",
+                'macro_regime': regime,
+                'time_horizon': m['horizon'],
+                'engine': 'polyflow_python_quant'
+            })
+
+    # Curated sector transmission table
+    default_matrix = [
+        {'sector': 'Defense & Aerospace', 'direction': 'Bullish', 'prob': '84.2%', 'mult': f"{multiplier:.1f}x", 'horizon': '1-3 Days'},
+        {'sector': 'Energy (Crude & Gas)', 'direction': 'Volatile', 'prob': '78.5%', 'mult': f"{multiplier:.1f}x", 'horizon': 'Intraday'},
+        {'sector': 'Commercial Airlines', 'direction': 'Bearish', 'prob': '68.0%', 'mult': f"{multiplier:.1f}x", 'horizon': '3-7 Days'},
+        {'sector': 'Global Shipping / Logistics', 'direction': 'Volatile', 'prob': '72.4%', 'mult': f"{multiplier:.1f}x", 'horizon': '1-5 Days'},
+        {'sector': 'Financials & Banking', 'direction': 'Bearish', 'prob': '62.1%', 'mult': f"{multiplier:.1f}x", 'horizon': '1-3 Days'},
+        {'sector': 'Technology & Semiconductors', 'direction': 'Volatile', 'prob': '58.0%', 'mult': f"{multiplier:.1f}x", 'horizon': '1-7 Days'},
+    ]
+
+    return {
+        'financial_signals': fin_signals,
+        'sector_matrix': default_matrix,
+        'regime_multiplier': multiplier,
+        'engine': 'polyflow_python_quant',
+        'processed': True
+    }
+@end
+
+@go[macro_regime_calculator]
+package main
+
+type MacroRegime struct {
+    Regime     string
+    Multiplier float64
+    FearGreed  int
+}
+
+func CalculateRegime(fearGreed int) MacroRegime {
+    if fearGreed >= 60 {
+        return MacroRegime{Regime: "risk_on", Multiplier: 0.85, FearGreed: fearGreed}
+    } else if fearGreed <= 40 {
+        return MacroRegime{Regime: "risk_off", Multiplier: 1.30, FearGreed: fearGreed}
+    }
+    return MacroRegime{Regime: "neutral", Multiplier: 1.00, FearGreed: fearGreed}
+}
+@end
+
+@java[portfolio_risk_matrix]
+package dev.worldmonitor.finance;
+
+import java.util.*;
+
+public class PortfolioRiskMatrix {
+    public double adjustProbability(double baseProb, double multiplier) {
+        return Math.min(0.99, baseProb * multiplier);
+    }
+}
+@end
+
+@typescript[market_impact_formatter]
+export interface SectorImpact {
+  sector: string;
+  direction: 'Bullish' | 'Bearish' | 'Volatile';
+  probability: number;
+}
+
+export function formatImpactDisplay(impact: SectorImpact): string {
+  return `${impact.sector}: ${impact.direction} (${(impact.probability * 100).toFixed(1)}%)`;
+}
+@end
+
+@merge strategy="first" order=["python", "go", "java", "typescript"]
+@end
+
+@error-map language="python"
+  "KeyError" -> "Missing regime or signal attributes in financial impact calculation."
+@end

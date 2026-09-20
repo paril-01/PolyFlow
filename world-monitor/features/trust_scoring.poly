@@ -1,0 +1,165 @@
+# Trust Scoring — PolyFlow Multi-Language Governance Module
+# Languages: Python, TypeScript, Go, Java | Domain: Domain Trust, Recency Decay & Cross-Corroboration
+
+@contract
+feature_id: "WM-TRUST-PROVENANCE-SCORING"
+name: "trust_scoring"
+version: "2.0.0"
+description: "Source trust verification, domain authority scoring, recency exponential decay, and multi-source corroboration"
+owner: "Intelligence Verification Desk <verification@worldmonitor.dev>"
+team: "intel"
+classification: "internal"
+approvers: ["lead-verifier@worldmonitor.dev"]
+timeout_ms: 2000
+@end
+
+@schema TrustScoringRequest
+  source_url: string | null
+  source_type: string | null
+  observed_at: string | null
+  corroboration_count: number | null
+@end
+
+@schema TrustScoringResponse
+  tier: string
+  score: number
+  label: string
+  rationale: string
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["time", "urllib", "urllib.parse", "datetime"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node"]
+@end
+
+@standard language="go"
+allowed_packages: ["net/url", "strings", "time"]
+@end
+
+@standard language="java"
+allowed_imports: ["java.net.URI", "java.util"]
+@end
+
+@python[probabilistic_trust]
+import time
+from urllib.parse import urlparse
+
+HIGH_TRUST = ['reuters.com','apnews.com','bbc.','who.int','un.org','cisa.gov','.gov','nasa.gov','usgs.gov']
+MEDIUM_TRUST = ['bloomberg.com','ft.com','wsj.com','economist.com','aljazeera.com','wikipedia.org']
+PLATFORM_TRUST = ['youtube.com','youtu.be','x.com','twitter.com','reddit.com']
+
+def domain_score(url, source_type):
+    if not url and source_type == 'signal': return 0.62
+    if not url: return 0.24
+    host = ''
+    try:
+        host = urlparse(url).netloc.lower()
+    except:
+        pass
+    if not host: return 0.20
+    if any(t in host for t in HIGH_TRUST): return 0.95
+    if any(t in host for t in MEDIUM_TRUST): return 0.78
+    if any(t in host for t in PLATFORM_TRUST): return 0.58
+    if url.startswith('https://'): return 0.48
+    return 0.32
+
+def recency_score(observed_at):
+    if not observed_at: return 0.55
+    try:
+        # Simple ISO date approximation
+        if 'T' in str(observed_at):
+            parts = str(observed_at).replace('Z','').split('T')
+            d_parts = parts[0].split('-')
+            t_parts = parts[1].split(':')
+            import datetime
+            dt = datetime.datetime(int(d_parts[0]), int(d_parts[1]), int(d_parts[2]),
+                                   int(t_parts[0]), int(t_parts[1]))
+            ts = dt.timestamp()
+            age_hours = max(0, (time.time() - ts) / 3600)
+            if age_hours <= 6: return 1.0
+            if age_hours <= 24: return 0.90
+            if age_hours <= 72: return 0.78
+            if age_hours <= 168: return 0.65
+            return 0.50
+        return 0.55
+    except:
+        return 0.55
+
+def corroboration_score(count):
+    c = int(count or 1)
+    if c >= 5: return 0.95
+    if c == 4: return 0.84
+    if c == 3: return 0.72
+    if c == 2: return 0.55
+    return 0.35
+
+def compute(req):
+    url = req.get('source_url', '') if isinstance(req, dict) else ''
+    source_type = req.get('source_type', '') if isinstance(req, dict) else ''
+    observed_at = req.get('observed_at', '') if isinstance(req, dict) else ''
+    corr_count = req.get('corroboration_count', 1) if isinstance(req, dict) else 1
+
+    d = domain_score(url, source_type)
+    r = recency_score(observed_at)
+    c = corroboration_score(corr_count)
+    score = max(0, min(100, round((d * 0.50 + r * 0.25 + c * 0.25) * 100)))
+
+    tier = 'high' if score >= 78 else ('medium' if score >= 58 else 'low')
+    label = f"Trust: {tier.upper()} ({score})"
+    rationale = f"Domain: {round(d*100)} | Recency: {round(r*100)} | Corroboration: {round(c*100)}"
+
+    return {
+        'tier': tier,
+        'score': score,
+        'label': label,
+        'rationale': rationale,
+        'engine': 'polyflow_python_trust',
+        'processed': True
+    }
+@end
+
+@typescript[source_verifier]
+export interface TrustResult {
+  tier: 'high' | 'medium' | 'low';
+  score: number;
+  label: string;
+}
+
+export function evaluateTrust(url: string | null): TrustResult {
+  const host = (url || '').toLowerCase();
+  const isHigh = host.includes('reuters') || host.includes('apnews') || host.includes('bbc');
+  const score = isHigh ? 92 : (url ? 65 : 30);
+  const tier = score >= 78 ? 'high' : (score >= 58 ? 'medium' : 'low');
+  return { tier, score, label: `Trust: ${tier.toUpperCase()} (${score})` };
+}
+@end
+
+@go[recency_decay_engine]
+package main
+
+import "math"
+
+func CalculateRecencyDecay(ageHours float64, halfLifeHours float64) float64 {
+    if halfLifeHours <= 0 {
+        return 1.0
+    }
+    return math.Exp(-0.69315 * (ageHours / halfLifeHours))
+}
+@end
+
+@java[consensus_validator]
+package dev.worldmonitor.trust;
+
+public class ConsensusValidator {
+    public double getConsensusWeight(int sourceCount) {
+        return sourceCount >= 4 ? 0.95 : (sourceCount >= 2 ? 0.70 : 0.40);
+    }
+}
+@end
+
+@merge strategy="first" order=["python", "typescript", "go", "java"]
+@end

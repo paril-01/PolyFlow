@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rcir"
+version = "0.1.0"
+description = "Dependency-Graph Context Runtime — structurally-derived, token-budgeted context for LLM coding agents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+# Zero external dependencies for v1 — stdlib only
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

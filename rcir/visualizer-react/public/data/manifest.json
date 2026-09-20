@@ -1,0 +1,42 @@
+[
+  {
+    "id": "otel_recommendation",
+    "name": "Otel Recommendation",
+    "path": "/data/otel_recommendation.json",
+    "nodes": 101,
+    "edges": 249,
+    "hierarchy_nodes": 106
+  },
+  {
+    "id": "otel_agent",
+    "name": "Otel Agent",
+    "path": "/data/otel_agent.json",
+    "nodes": 28,
+    "edges": 181,
+    "hierarchy_nodes": 36
+  },
+  {
+    "id": "requests",
+    "name": "Requests",
+    "path": "/data/requests.json",
+    "nodes": 320,
+    "edges": 1293,
+    "hierarchy_nodes": 337
+  },
+  {
+    "id": "flask",
+    "name": "Flask",
+    "path": "/data/flask.json",
+    "nodes": 442,
+    "edges": 1452,
+    "hierarchy_nodes": 465
+  },
+  {
+    "id": "polyflow",
+    "name": "Polyflow",
+    "path": "/data/polyflow.json",
+    "nodes": 110,
+    "edges": 575,
+    "hierarchy_nodes": 132
+  }
+]

@@ -1,0 +1,227 @@
+# Geopolitical Events — PolyFlow Multi-Language Governance Module
+# Languages: Python, Go, TypeScript, Java | Domain: Event Classification & Geopolitical Taxonomy
+
+@contract
+feature_id: "WM-GEOPOLITICAL-EVENTS-CLASSIFICATION"
+name: "geopolitical_events"
+version: "2.0.0"
+description: "Multi-language event classification, enrichment, region/layer taxonomy for world monitoring"
+owner: "Intelligence Ops Team <intel-ops@worldmonitor.dev>"
+team: "geoint"
+classification: "restricted"
+approvers: ["chief-analyst@worldmonitor.dev", "lead-engineer@worldmonitor.dev"]
+timeout_ms: 2500
+@end
+
+@schema EventClassificationRequest
+  id: string<format:uuid>
+  category: string
+  source_type: string
+  headline: string
+  country_code: string | null
+  actor1_name: string | null
+  actor2_name: string | null
+  composite_severity: number
+@end
+
+@schema EventClassificationResponse
+  id: string<format:uuid>
+  ui_layer: string
+  ui_region: string
+  severity_label: string
+  search_text: string
+  processed: boolean
+@end
+
+@standard language="python"
+allowed_imports: ["math", "json", "re", "time"]
+@end
+
+@standard language="go"
+allowed_packages: ["fmt", "strings", "time", "encoding/json"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node", "crypto"]
+@end
+
+@standard language="java"
+allowed_imports: ["java.util", "java.time", "java.util.regex"]
+@end
+
+@python[taxonomy_engine]
+import re
+
+LAYER_KEYWORDS = {
+    'Nuclear': ['nuclear','reactor','radiation','atomic','uranium','iaea'],
+    'Airlines': ['airline','aviation','airport','airspace','flight','faa'],
+    'Telecom': ['telecom','network','internet','fiber','satcom','5g','outage'],
+    'Crypto': ['crypto','bitcoin','btc','eth','blockchain','stablecoin'],
+    'Security': ['cyber','threat','vulnerability','breach','malware','advisory'],
+    'Sanctions': ['sanction','designation','watchlist','blacklist','ofac'],
+    'Energy': ['energy','oil','gas','power grid','electricity','lng','pipeline'],
+    'Government': ['government','cabinet','parliament','ministry','executive order'],
+    'Retail': ['retail','consumer','mall','ecommerce','supply chain'],
+    'Materials': ['materials','metals','steel','copper','lithium','rare earth'],
+    'Political': ['political','election','diplomatic','policy','parliament'],
+    'Conflict': ['conflict','war','attack','combat','strike','airstrike','militant','insurgent','bombing'],
+    'Military': ['military','army','navy','troops','defense','weapon','missile','drone'],
+    'Weather': ['weather','storm','cyclone','hurricane','typhoon','rain','climate'],
+    'Natural': ['earthquake','flood','wildfire','volcano','drought','landslide','tsunami'],
+    'Economic': ['economic','market','finance','trade','inflation','currency','bank','gdp']
+}
+
+REGION_MAP = {
+    'US':'Americas','CA':'Americas','MX':'Americas','BR':'Americas','AR':'Americas',
+    'GB':'Europe','FR':'Europe','DE':'Europe','IT':'Europe','ES':'Europe','UA':'Europe','RU':'Europe',
+    'CN':'Asia','IN':'Asia','JP':'Asia','KR':'Asia','PK':'Asia','BD':'Asia','TW':'Asia','MM':'Asia',
+    'SA':'Middle East','AE':'Middle East','IR':'Middle East','IQ':'Middle East','SY':'Middle East','IL':'Middle East','YE':'Middle East','TR':'Middle East','EG':'Middle East',
+    'ZA':'Africa','NG':'Africa','KE':'Africa','ET':'Africa',
+    'AU':'Oceania','NZ':'Oceania'
+}
+
+def process(req):
+    event = req.get('raw_event', req) if isinstance(req, dict) else {}
+    category = str(event.get('category','') or '').lower()
+    source = str(event.get('source_type','') or '').lower()
+    headline = str(event.get('headline','') or '').lower()
+    actor1 = str(event.get('actor1_name','') or '').lower()
+    actor2 = str(event.get('actor2_name','') or '').lower()
+    text = f"{category} {source} {headline} {actor1} {actor2}"
+
+    ui_layer = 'Political'
+    for layer, keywords in LAYER_KEYWORDS.items():
+        if any(k in text for k in keywords):
+            ui_layer = layer
+            break
+
+    cc = str(event.get('country_code','') or '').upper()
+    ui_region = REGION_MAP.get(cc, 'Asia')
+
+    sev = float(event.get('composite_severity', 0) or 0)
+    if sev >= 0.8: sev_label = 'critical'
+    elif sev >= 0.6: sev_label = 'high'
+    elif sev >= 0.4: sev_label = 'moderate'
+    else: sev_label = 'low'
+
+    return {
+        **event,
+        'ui_layer': ui_layer,
+        'ui_region': ui_region,
+        'severity_label': sev_label,
+        'search_text': text,
+        'engine': 'polyflow_python_core',
+        'processed': True
+    }
+@end
+
+@go[stream_classifier]
+package main
+
+import (
+    "strings"
+)
+
+type EventClassifier struct{}
+
+func (ec *EventClassifier) Classify(category, headline, countryCode string, severity float64) map[string]interface{} {
+    uiLayer := "Political"
+    text := strings.ToLower(category + " " + headline)
+    if strings.Contains(text, "conflict") || strings.Contains(text, "war") || strings.Contains(text, "attack") {
+        uiLayer = "Conflict"
+    } else if strings.Contains(text, "military") || strings.Contains(text, "missile") || strings.Contains(text, "troops") {
+        uiLayer = "Military"
+    } else if strings.Contains(text, "quake") || strings.Contains(text, "flood") || strings.Contains(text, "storm") {
+        uiLayer = "Natural"
+    } else if strings.Contains(text, "market") || strings.Contains(text, "trade") || strings.Contains(text, "inflation") {
+        uiLayer = "Economic"
+    }
+
+    uiRegion := "Asia"
+    switch countryCode {
+    case "US", "CA", "MX", "BR":
+        uiRegion = "Americas"
+    case "GB", "FR", "DE", "UA", "RU":
+        uiRegion = "Europe"
+    case "IL", "IR", "IQ", "SA", "AE", "YE":
+        uiRegion = "Middle East"
+    case "ZA", "NG", "EG":
+        uiRegion = "Africa"
+    case "AU", "NZ":
+        uiRegion = "Oceania"
+    }
+
+    sevLabel := "low"
+    if severity >= 0.8 {
+        sevLabel = "critical"
+    } else if severity >= 0.6 {
+        sevLabel = "high"
+    } else if severity >= 0.4 {
+        sevLabel = "moderate"
+    }
+
+    return map[string]interface{}{
+        "ui_layer":        uiLayer,
+        "ui_region":       uiRegion,
+        "severity_label":  sevLabel,
+        "engine":          "polyflow_go_stream",
+        "processed":       true,
+    }
+}
+@end
+
+@typescript[client_normalizer]
+interface RawEvent {
+  id?: string;
+  category?: string;
+  headline?: string;
+  country_code?: string;
+  composite_severity?: number;
+}
+
+export function normalizeEvent(event: RawEvent): Record<string, any> {
+  const sev = event.composite_severity || 0.3;
+  const sevLabel = sev >= 0.8 ? 'critical' : sev >= 0.6 ? 'high' : sev >= 0.4 ? 'moderate' : 'low';
+  return {
+    ...event,
+    severity_label: sevLabel,
+    ui_layer: event.category || 'Political',
+    ui_region: 'Global',
+    engine: 'polyflow_typescript_adapter',
+    processed: true,
+  };
+}
+@end
+
+@java[enterprise_taxonomy]
+package dev.worldmonitor.taxonomy;
+
+import java.util.*;
+
+public class EnterpriseEventTaxonomy {
+    public Map<String, Object> enrich(Map<String, Object> req) {
+        String category = (String) req.getOrDefault("category", "Political");
+        Double severity = (Double) req.getOrDefault("composite_severity", 0.3);
+        String sevLabel = severity >= 0.8 ? "critical" : (severity >= 0.6 ? "high" : (severity >= 0.4 ? "moderate" : "low"));
+        
+        Map<String, Object> out = new HashMap<>(req);
+        out.put("ui_layer", category);
+        out.put("severity_label", sevLabel);
+        out.put("engine", "polyflow_java_enterprise");
+        out.put("processed", true);
+        return out;
+    }
+}
+@end
+
+@merge strategy="first" order=["python", "go", "typescript", "java"]
+@end
+
+@error-map language="python"
+  "KeyError" -> "Missing attribute in raw geopolitical event payload."
+  "ValueError" -> "Invalid severity numeric parse in geopolitical event."
+@end
+
+@error-map language="go"
+  "nil_pointer" -> "Nil event reference encountered in Go stream classifier."
+@end

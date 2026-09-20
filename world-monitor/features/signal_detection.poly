@@ -1,0 +1,203 @@
+# Signal Detection — PolyFlow Multi-Language Governance Module
+# Languages: Python, Go, Rust, TypeScript | Domain: Statistical Anomaly & Crisis Detection
+
+@contract
+feature_id: "WM-STATISTICAL-SIGNAL-DETECTION"
+name: "signal_detection"
+version: "2.0.0"
+description: "Z-score anomaly detection, Anscombe variance transform, CUSUM accumulation, and dark pattern burst flagging"
+owner: "Statistical Defense Unit <stats-unit@worldmonitor.dev>"
+team: "analytics"
+classification: "restricted"
+approvers: ["chief-analyst@worldmonitor.dev"]
+timeout_ms: 3000
+@end
+
+@schema SignalDetectionRequest
+  event_counts: object
+  decay_factor: number | null
+@end
+
+@schema SignalDetectionResponse
+  signals: array<object>
+  total_anomalies: number
+  crisis_count: number
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["math", "random", "json"]
+@end
+
+@standard language="go"
+allowed_packages: ["math", "sync", "time"]
+@end
+
+@standard language="rust"
+allowed_crates: ["serde", "serde_json"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node"]
+@end
+
+@python[anscombe_cusum]
+import math
+
+CUSUM_STATE = {}
+
+def anscombe(x):
+    return math.sqrt(max(x + 3.0 / 8.0, 0.0))
+
+def compute(req):
+    event_counts = req.get('event_counts', req) if isinstance(req, dict) else {}
+    signals = []
+
+    for key, data in event_counts.items():
+        current = float(data.get('current', 0))
+        mean = float(data.get('mean', 5.0))
+        std = float(data.get('std', 2.0))
+        country_code = data.get('country_code', 'XX')
+        category = data.get('category', 'anomaly')
+
+        # Anscombe transform
+        current_t = anscombe(current)
+        mean_t = anscombe(mean)
+        std_t = max(anscombe(std), 0.5)
+
+        # Z-score calculation
+        z_score = (current_t - mean_t) / std_t if std_t > 0 else 0.0
+        z_raw = (current - mean) / max(std, 0.1)
+
+        # CUSUM accumulation
+        k = 0.5 * std_t
+        prev_s = CUSUM_STATE.get(key, 0.0)
+        s = max(0.0, prev_s + (current_t - mean_t - k))
+        CUSUM_STATE[key] = s
+        cusum_norm = s / std_t if std_t > 0 else 0.0
+
+        is_anomaly = z_score > 1.0 or z_raw > 2.0 or cusum_norm > 2.0 or current >= 3
+        is_crisis = z_score > 2.5 or z_raw > 3.5 or cusum_norm > 5.0
+
+        if not is_anomaly:
+            continue
+
+        severity = min(1.0, max(0.2, (z_raw / 6.0)))
+        if is_crisis:
+            severity = min(1.0, severity * 1.3)
+
+        confidence = min(1.0, 0.5 + abs(z_score) * 0.1)
+        trend = "rising" if z_score > 1.0 else ("falling" if z_score < -0.5 else "stable")
+
+        cat_lower = category.lower()
+        if "conflict" in cat_lower or "military" in cat_lower:
+            signal_type = "military_escalation"
+            half_life = 72.0
+        elif "political" in cat_lower:
+            signal_type = "political_instability"
+            half_life = 36.0
+        elif "economic" in cat_lower or "trade" in cat_lower:
+            signal_type = "trade_disruption"
+            half_life = 96.0
+        else:
+            signal_type = "anomaly"
+            half_life = 48.0
+
+        signals.append({
+            'key': key,
+            'country_code': country_code,
+            'category': category,
+            'signal_type': signal_type,
+            'z_score': round(z_score, 3),
+            'z_score_raw': round(z_raw, 3),
+            'cusum_value': round(cusum_norm, 3),
+            'severity': round(severity, 3),
+            'confidence': round(confidence, 3),
+            'trend_direction': trend,
+            'half_life_hours': half_life,
+            'is_anomaly': is_anomaly,
+            'is_crisis': is_crisis,
+            'is_dark_pattern': z_score > 2.0 and cusum_norm < 1.0,
+            'detection_method': 'cusum+zscore',
+            'engine': 'polyflow_python_anscombe'
+        })
+
+    return {
+        'signals': signals,
+        'total_anomalies': len(signals),
+        'crisis_count': sum(1 for s in signals if s.get('is_crisis')),
+        'engine': 'polyflow_python_anscombe',
+        'processed': True
+    }
+@end
+
+@go[concurrent_zscore]
+package main
+
+import (
+    "math"
+    "sync"
+)
+
+type AnomalyDetector struct {
+    sync.RWMutex
+    cusumState map[string]float64
+}
+
+func (ad *AnomalyDetector) DetectZScore(current, mean, std float64) float64 {
+    if std <= 0.001 {
+        return 0.0
+    }
+    return (current - mean) / std
+}
+
+func (ad *AnomalyDetector) Anscombe(x float64) float64 {
+    if x < 0 {
+        return 0.0
+    }
+    return math.Sqrt(x + 3.0/8.0)
+}
+@end
+
+@rust[simd_anomaly_detector]
+pub struct SimdSignalEngine {
+    pub threshold: f64,
+}
+
+impl SimdSignalEngine {
+    pub fn compute_anscombe(val: f64) -> f64 {
+        (val + 0.375).max(0.0).sqrt()
+    }
+
+    pub fn zscore(curr: f64, mean: f64, std: f64) -> f64 {
+        if std <= 0.0001 { 0.0 } else { (curr - mean) / std }
+    }
+}
+@end
+
+@typescript[client_signal_adapter]
+export interface SignalPayload {
+  country_code: string;
+  category: string;
+  z_score: number;
+  cusum_value: number;
+  severity: number;
+}
+
+export function formatClientSignals(signals: SignalPayload[]): any[] {
+  return signals.map(s => ({
+    ...s,
+    is_critical: s.severity >= 0.8,
+    badge: s.z_score > 3.0 ? 'CRISIS' : 'ANOMALY',
+    engine: 'polyflow_typescript_signals'
+  }));
+}
+@end
+
+@merge strategy="first" order=["python", "go", "rust", "typescript"]
+@end
+
+@error-map language="python"
+  "ZeroDivisionError" -> "Zero variance standard deviation in anomaly detection window."
+  "OverflowError" -> "Exponential overflow during signal half-life decay calculation."
+@end

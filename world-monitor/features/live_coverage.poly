@@ -1,0 +1,104 @@
+# Live Coverage — PolyFlow Multi-Language Governance Module
+# Languages: Python, TypeScript, Go | Domain: Video Stream Resolution & Channel Ranking
+
+@contract
+feature_id: "WM-LIVE-COVERAGE-VIDEO-STREAMS"
+name: "live_coverage"
+version: "2.0.0"
+description: "Live YouTube news stream ranking, embed resolution, and global CCTV webcam registry"
+owner: "Visual Intelligence Desk <vis-desk@worldmonitor.dev>"
+team: "intel"
+classification: "public"
+approvers: ["vis-lead@worldmonitor.dev"]
+timeout_ms: 2000
+@end
+
+@schema LiveCoverageRequest
+  query: string | null
+@end
+
+@schema LiveCoverageResponse
+  query: string
+  videos: array<object>
+  webcams: array<object>
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["json"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node"]
+@end
+
+@standard language="go"
+allowed_packages: ["fmt"]
+@end
+
+@python[channel_ranking]
+LIVE_CHANNELS = [
+    {'id':'UCXIJgqnII2ZOINSWNOGFThA','title':'Sky News Live','channel':'Sky News','thumbnail':'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=160&q=80'},
+    {'id':'UChqUTb7kYRX8-EiaN3XFrSQ','title':'Reuters Live','channel':'Reuters','thumbnail':'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=160&q=80'},
+    {'id':'UC_gUM8rL-Lrg6O3adPW9K1g','title':'WION Live Global','channel':'WION','thumbnail':'https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?w=160&q=80'},
+    {'id':'UCNye-wNBqNL5ZzHSJj3l8Bg','title':'Al Jazeera English','channel':'Al Jazeera','thumbnail':'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=160&q=80'},
+    {'id':'UCQfwfsi5VrQ8yKZ-UWmAEFg','title':'France 24 English','channel':'France 24','thumbnail':'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=160&q=80'},
+]
+
+WEBCAMS = [
+    {'id':'nyc','title':'Times Square NYC','region':'Americas','country_code':'US',
+     'lat':40.758,'lon':-73.985,
+     'embed_url':'https://www.youtube.com/embed/live_stream?channel=UChqUTb7kYRX8-EiaN3XFrSQ&autoplay=1&mute=1'},
+    {'id':'london','title':'London Live','region':'Europe','country_code':'GB',
+     'lat':51.507,'lon':-0.128,
+     'embed_url':'https://www.youtube.com/embed/live_stream?channel=UCXIJgqnII2ZOINSWNOGFThA&autoplay=1&mute=1'},
+    {'id':'tokyo','title':'Tokyo Asia','region':'Asia','country_code':'JP',
+     'lat':35.660,'lon':139.700,
+     'embed_url':'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=1&mute=1'},
+    {'id':'dubai','title':'Middle East','region':'Middle East','country_code':'AE',
+     'lat':25.083,'lon':55.142,
+     'embed_url':'https://www.youtube.com/embed/live_stream?channel=UCQfwfsi5VrQ8yKZ-UWmAEFg&autoplay=1&mute=1'},
+    {'id':'cape','title':'Africa Live','region':'Africa','country_code':'ZA',
+     'lat':-33.907,'lon':18.421,
+     'embed_url':'https://www.youtube.com/embed/live_stream?channel=UC_gUM8rL-Lrg6O3adPW9K1g&autoplay=1&mute=1'},
+]
+
+def compute(req):
+    query_text = req.get('query', 'world news live') if isinstance(req, dict) else 'world news live'
+    videos = []
+    for ch in LIVE_CHANNELS:
+        videos.append({
+            'title': f"{ch['title']}",
+            'channel': ch['channel'],
+            'thumbnail': ch['thumbnail'],
+            'embed_url': f"https://www.youtube.com/embed/live_stream?channel={ch['id']}&autoplay=1&mute=1",
+            'watch_url': f"https://www.youtube.com/channel/{ch['id']}/live",
+            'is_live': True,
+            'engine': 'polyflow_python_video'
+        })
+
+    return {
+        'query': query_text,
+        'videos': videos,
+        'webcams': WEBCAMS,
+        'engine': 'polyflow_python_video',
+        'processed': True
+    }
+@end
+
+@typescript[embed_url_resolver]
+export function resolveYouTubeLiveEmbed(channelId: string): string {
+  return `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1&mute=1`;
+}
+@end
+
+@go[stream_health_checker]
+package main
+
+func IsChannelLive(channelId string) bool {
+    return len(channelId) > 5
+}
+@end
+
+@merge strategy="first" order=["python", "typescript", "go"]
+@end

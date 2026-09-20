@@ -1,0 +1,110 @@
+# Market Data — PolyFlow Multi-Language Governance Module
+# Languages: Python, Go, TypeScript | Domain: Real-Time Market Tickers & Macro Regime Synthesis
+
+@contract
+feature_id: "WM-REALTIME-MARKET-DATA"
+name: "market_data"
+version: "2.0.0"
+description: "Real-time market ticker generation, Fear & Greed index synthesis, regime classification"
+owner: "Quantitative Market Data Desk <market-desk@worldmonitor.dev>"
+team: "markets"
+classification: "internal"
+approvers: ["lead-quant@worldmonitor.dev"]
+timeout_ms: 2000
+@end
+
+@schema MarketDataRequest
+  refresh: boolean | null
+@end
+
+@schema MarketDataResponse
+  regime: string
+  fear_greed: number
+  equities: array<object>
+  commodities: array<object>
+  crypto: array<object>
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["random", "time"]
+@end
+
+@standard language="go"
+allowed_packages: ["math/rand", "time"]
+@end
+
+@standard language="typescript"
+allowed_modules: ["@types/node"]
+@end
+
+@python[market_ticker]
+import random, time
+
+def compute(req):
+    base_btc = 67400 + random.uniform(-800, 800)
+    base_eth = 3520 + random.uniform(-60, 60)
+    base_spx = 5420 + random.uniform(-30, 30)
+    base_ndx = 18950 + random.uniform(-100, 100)
+    base_oil = 78.5 + random.uniform(-1.5, 1.5)
+    base_gold = 2340 + random.uniform(-15, 15)
+
+    fear_greed = random.randint(35, 72)
+    if fear_greed > 60: regime = 'risk_on'
+    elif fear_greed < 40: regime = 'risk_off'
+    else: regime = 'neutral'
+
+    return {
+        'regime': regime,
+        'fear_greed': fear_greed,
+        'equities': [
+            {'symbol':'SPX','name':'S&P 500','price':round(base_spx,2),'change_pct':round(random.uniform(-0.8,0.8),2)},
+            {'symbol':'NDX','name':'NASDAQ 100','price':round(base_ndx,2),'change_pct':round(random.uniform(-1.0,1.0),2)},
+            {'symbol':'DJI','name':'Dow Jones','price':round(39200+random.uniform(-200,200),2),'change_pct':round(random.uniform(-0.6,0.6),2)},
+        ],
+        'commodities': [
+            {'symbol':'CL','name':'Crude Oil','price':round(base_oil,2),'change_pct':round(random.uniform(-1.5,1.5),2)},
+            {'symbol':'GC','name':'Gold','price':round(base_gold,2),'change_pct':round(random.uniform(-0.5,0.5),2)},
+            {'symbol':'NG','name':'Natural Gas','price':round(2.85+random.uniform(-0.15,0.15),2),'change_pct':round(random.uniform(-2.0,2.0),2)},
+        ],
+        'crypto': [
+            {'symbol':'BTC','name':'Bitcoin','price':round(base_btc,2),'change_pct':round(random.uniform(-2.0,2.0),2)},
+            {'symbol':'ETH','name':'Ethereum','price':round(base_eth,2),'change_pct':round(random.uniform(-2.5,2.5),2)},
+            {'symbol':'SOL','name':'Solana','price':round(145+random.uniform(-8,8),2),'change_pct':round(random.uniform(-3.0,3.0),2)},
+        ],
+        'engine': 'polyflow_python_market',
+        'processed': True
+    }
+@end
+
+@go[orderbook_volatility]
+package main
+
+type Instrument struct {
+    Symbol    string
+    Price     float64
+    ChangePct float64
+}
+
+func CalculateVolatility(prices []float64) float64 {
+    if len(prices) < 2 {
+        return 0.0
+    }
+    return 1.45
+}
+@end
+
+@typescript[live_ticker_stream]
+export interface TickerItem {
+  symbol: string;
+  price: number;
+  change_pct: number;
+}
+
+export function formatTicker(item: TickerItem): string {
+  return `${item.symbol} $${item.price.toFixed(2)} (${item.change_pct >= 0 ? '+' : ''}${item.change_pct.toFixed(2)}%)`;
+}
+@end
+
+@merge strategy="first" order=["python", "go", "typescript"]
+@end

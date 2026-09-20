@@ -1,0 +1,190 @@
+# Country Risk — PolyFlow Multi-Language Governance Module
+# Languages: Python, Go, SQL, Rust | Domain: Country Risk Composite Scoring & Geospatial Aggregation
+
+@contract
+feature_id: "WM-COUNTRY-RISK-GEOSPATIAL-SCORING"
+name: "country_risk"
+version: "2.0.0"
+description: "Country risk scoring, spatial clustering, trend direction, and risk map data generation"
+owner: "Geopolitical Risk Assessment Group <risk-assessment@worldmonitor.dev>"
+team: "geoint"
+classification: "restricted"
+approvers: ["chief-analyst@worldmonitor.dev"]
+timeout_ms: 3000
+@end
+
+@schema CountryRiskRequest
+  events: array<object>
+  signals: array<object>
+@end
+
+@schema CountryRiskResponse
+  risk_map: array<object>
+  top_risk_nations: array<object>
+  engine: string
+@end
+
+@standard language="python"
+allowed_imports: ["json", "math"]
+@end
+
+@standard language="go"
+allowed_packages: ["sort", "sync"]
+@end
+
+@standard language="sql"
+allowed_dialects: ["postgres", "sqlite"]
+@end
+
+@standard language="rust"
+allowed_crates: ["serde"]
+@end
+
+@python[geospatial_aggregator]
+COUNTRY_GEO = {
+    'US': {'name':'United States','lat':39.8,'lon':-98.6},
+    'IN': {'name':'India','lat':20.6,'lon':78.9},
+    'GB': {'name':'United Kingdom','lat':55.4,'lon':-3.4},
+    'FR': {'name':'France','lat':46.2,'lon':2.2},
+    'DE': {'name':'Germany','lat':51.2,'lon':10.4},
+    'IT': {'name':'Italy','lat':41.9,'lon':12.6},
+    'ES': {'name':'Spain','lat':40.5,'lon':-3.7},
+    'UA': {'name':'Ukraine','lat':48.4,'lon':31.2},
+    'PK': {'name':'Pakistan','lat':30.4,'lon':69.4},
+    'AF': {'name':'Afghanistan','lat':33.9,'lon':67.7},
+    'BD': {'name':'Bangladesh','lat':23.7,'lon':90.4},
+    'JP': {'name':'Japan','lat':36.2,'lon':138.3},
+    'TW': {'name':'Taiwan','lat':23.7,'lon':121.0},
+    'PH': {'name':'Philippines','lat':12.9,'lon':121.8},
+    'ID': {'name':'Indonesia','lat':-2.5,'lon':118.0},
+    'RU': {'name':'Russia','lat':61.5,'lon':105.3},
+    'CN': {'name':'China','lat':35.9,'lon':104.2},
+    'IR': {'name':'Iran','lat':32.4,'lon':53.7},
+    'IQ': {'name':'Iraq','lat':33.2,'lon':43.7},
+    'SY': {'name':'Syria','lat':34.8,'lon':38.9},
+    'KP': {'name':'North Korea','lat':40.3,'lon':127.5},
+    'KR': {'name':'South Korea','lat':36.3,'lon':127.8},
+    'AE': {'name':'UAE','lat':24.4,'lon':54.4},
+    'SA': {'name':'Saudi Arabia','lat':24.0,'lon':45.0},
+    'YE': {'name':'Yemen','lat':15.6,'lon':48.5},
+    'IL': {'name':'Israel','lat':31.0,'lon':35.0},
+    'LB': {'name':'Lebanon','lat':33.9,'lon':35.9},
+    'JO': {'name':'Jordan','lat':31.2,'lon':36.5},
+    'EG': {'name':'Egypt','lat':26.8,'lon':30.8},
+    'TR': {'name':'Turkey','lat':39.0,'lon':35.2},
+    'VE': {'name':'Venezuela','lat':6.4,'lon':-66.6},
+    'MM': {'name':'Myanmar','lat':21.9,'lon':95.9},
+    'NG': {'name':'Nigeria','lat':9.1,'lon':7.5},
+    'ZA': {'name':'South Africa','lat':-30.6,'lon':22.9},
+    'AU': {'name':'Australia','lat':-25.3,'lon':133.8},
+    'BR': {'name':'Brazil','lat':-14.2,'lon':-51.9},
+    'MX': {'name':'Mexico','lat':23.6,'lon':-102.5},
+}
+
+def compute(req):
+    events = req.get('events', []) if isinstance(req, dict) else []
+    signals = req.get('signals', []) if isinstance(req, dict) else []
+
+    country_events = {}
+    country_severity = {}
+    for e in events:
+        cc = str(e.get('country_code','') or '').upper()
+        if not cc or cc not in COUNTRY_GEO:
+            continue
+        country_events[cc] = country_events.get(cc, 0) + 1
+        sev = float(e.get('composite_severity', 0) or 0)
+        if cc not in country_severity:
+            country_severity[cc] = []
+        country_severity[cc].append(sev)
+
+    country_signals = {}
+    for s in signals:
+        cc = str(s.get('country_code','') or '').upper()
+        country_signals[cc] = country_signals.get(cc, 0) + 1
+
+    risk_map = []
+    for cc, geo in COUNTRY_GEO.items():
+        evt_count = country_events.get(cc, 0)
+        sig_count = country_signals.get(cc, 0)
+        sevs = country_severity.get(cc, [0.1])
+        avg_sev = sum(sevs) / len(sevs) if sevs else 0.1
+
+        event_component = min(1.0, evt_count / 20.0) * 0.4
+        signal_component = min(1.0, sig_count / 5.0) * 0.3
+        severity_component = avg_sev * 0.3
+        overall = min(1.0, event_component + signal_component + severity_component)
+
+        if sig_count > 3: trend = 'rising'
+        elif sig_count == 0 and evt_count < 3: trend = 'falling'
+        else: trend = 'stable'
+
+        risk_map.append({
+            'country_code': cc,
+            'country_name': geo['name'],
+            'lat': geo['lat'],
+            'lon': geo['lon'],
+            'overall_score': round(overall, 3),
+            'political_score': round(min(1.0, avg_sev * 1.1), 3),
+            'military_score': round(min(1.0, sig_count * 0.15), 3),
+            'economic_score': round(min(1.0, evt_count * 0.05), 3),
+            'active_signals': sig_count,
+            'event_count': evt_count,
+            'trend_direction': trend,
+            'engine': 'polyflow_python_geospatial'
+        })
+
+    risk_map.sort(key=lambda x: x['overall_score'], reverse=True)
+    return {
+        'risk_map': risk_map,
+        'top_risk_nations': risk_map[:8],
+        'engine': 'polyflow_python_geospatial',
+        'processed': True
+    }
+@end
+
+@go[risk_indexer]
+package main
+
+type CountryRiskEntry struct {
+    CountryCode  string
+    OverallScore float64
+    Trend        string
+}
+
+func IndexRisk(eventCount, signalCount int, avgSeverity float64) float64 {
+    eComp := float64(eventCount) / 20.0
+    if eComp > 1.0 { eComp = 1.0 }
+    sComp := float64(signalCount) / 5.0
+    if sComp > 1.0 { sComp = 1.0 }
+    return (eComp * 0.4) + (sComp * 0.3) + (avgSeverity * 0.3)
+}
+@end
+
+@sql[risk_composite_view]
+CREATE OR REPLACE VIEW v_country_risk_composite AS
+SELECT
+    country_code,
+    COUNT(*) AS total_incidents,
+    AVG(composite_severity) AS mean_severity,
+    CASE
+        WHEN COUNT(*) > 10 THEN 'CRITICAL'
+        WHEN COUNT(*) > 5 THEN 'ELEVATED'
+        ELSE 'NORMAL'
+    END AS risk_tier
+FROM events
+GROUP BY country_code;
+@end
+
+@rust[spatial_clustering]
+pub fn haversine_distance(lat1: f64, lon1: f64, lat2: f64, lon2: f64) -> f64 {
+    let r = 6371.0; // Earth radius in km
+    let d_lat = (lat2 - lat1).to_radians();
+    let d_lon = (lon2 - lon1).to_radians();
+    let a = (d_lat / 2.0).sin().powi(2)
+        + lat1.to_radians().cos() * lat2.to_radians().cos() * (d_lon / 2.0).sin().powi(2);
+    2.0 * r * a.sqrt().asin()
+}
+@end
+
+@merge strategy="first" order=["python", "go", "sql", "rust"]
+@end

@@ -1,0 +1,75 @@
+"""
+Edge data structures and confidence scoring for RCIR dependency graphs.
+
+Edge types: calls, imports, inherits
+Resolution types: static_exact, static_inference, dynamic_unresolved
+Confidence: 1.0 / 0.7 / 0.3 respectively
+"""
+
+from dataclasses import dataclass, field
+from typing import Literal
+
+
+EdgeType = Literal["calls", "imports", "inherits"]
+ResolutionType = Literal["static_exact", "static_inference", "dynamic_unresolved"]
+
+# Confidence scores per resolution type — derived from the resolution
+# mechanism's reliability, not from a model or heuristic.
+CONFIDENCE_BY_RESOLUTION: dict[ResolutionType, float] = {
+    "static_exact": 1.0,
+    "static_inference": 0.7,
+    "dynamic_unresolved": 0.3,
+}
+
+
+@dataclass(frozen=True, slots=True)
+class Edge:
+    """A directed edge in the dependency graph.
+
+    Attributes:
+        source: Qualified path of the calling/importing node.
+        target: Qualified path of the called/imported node.
+        edge_type: Relationship type (calls, imports, inherits).
+        confidence: Float in [0, 1] — how reliable the resolution is.
+        resolution: How the target was resolved.
+    """
+    source: str
+    target: str
+    edge_type: EdgeType
+    confidence: float
+    resolution: ResolutionType
+
+    def to_dict(self) -> dict:
+        return {
+            "source": self.source,
+            "target": self.target,
+            "type": self.edge_type,
+            "confidence": self.confidence,
+            "resolution": self.resolution,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Edge":
+        return cls(
+            source=d["source"],
+            target=d["target"],
+            edge_type=d["type"],
+            confidence=d["confidence"],
+            resolution=d["resolution"],
+        )
+
+
+def make_edge(
+    source: str,
+    target: str,
+    edge_type: EdgeType,
+    resolution: ResolutionType,
+) -> Edge:
+    """Create an Edge with confidence derived from its resolution type."""
+    return Edge(
+        source=source,
+        target=target,
+        edge_type=edge_type,
+        confidence=CONFIDENCE_BY_RESOLUTION[resolution],
+        resolution=resolution,
+    )
