@@ -393,10 +393,10 @@ BUG_TEMPLATES = {
     ],
     "java": [
         {"type": "memory_leak",       "code": "// BUG: static list grows unbounded\nprivate static final List<Object> cache = new ArrayList<>();\npublic void process(Object item) { cache.add(item); }"},
-        {"type": "sql_injection",     "code": '// BUG: string concatenation in SQL\npublic User findUser(String name) {\n    return jdbc.query("SELECT * FROM users WHERE name = \'" + name + "\'");\n}'},
-        {"type": "null_pointer",      "code": "// BUG: no null check\npublic double getTotal(Order order) {\n    return order.getItems().stream().mapToDouble(Item::getPrice).sum();\n}"},
-        {"type": "deadlock",          "code": "// BUG: lock ordering deadlock\nsynchronized(lockA) { synchronized(lockB) { transfer(); } }"},
-        {"type": "incorrect_retry",   "code": "// BUG: retrying non-idempotent operation\npublic void chargeCard() {\n    for (int i = 0; i < 3; i++) {\n        try { stripe.charge(); break; } catch (Exception e) { /* retry */ }\n    }\n}"},
+        {"type": "sql_injection",     "code": '// BUG: string concatenation in SQL\npublic static class User {}\npublic interface JdbcTemplate { User query(String sql); }\nprivate JdbcTemplate jdbc;\npublic User findUser(String name) {\n    return jdbc.query("SELECT * FROM users WHERE name = \'" + name + "\'");\n}'},
+        {"type": "null_pointer",      "code": "// BUG: no null check\npublic interface Item { double getPrice(); }\npublic interface Order { List<Item> getItems(); }\npublic double getTotal(Order order) {\n    return order.getItems().stream().mapToDouble(Item::getPrice).sum();\n}"},
+        {"type": "deadlock",          "code": "// BUG: lock ordering deadlock\nprivate final Object lockA = new Object();\nprivate final Object lockB = new Object();\npublic void transferMoney() {\n    synchronized(lockA) { synchronized(lockB) { transfer(); } }\n}\nprivate void transfer() {}"},
+        {"type": "incorrect_retry",   "code": "// BUG: retrying non-idempotent operation\ninterface StripeClient { void charge() throws Exception; }\nprivate StripeClient stripe;\npublic void chargeCard() {\n    for (int i = 0; i < 3; i++) {\n        try { stripe.charge(); break; } catch (Exception e) { /* retry */ }\n    }\n}"},
     ],
     "go": [
         {"type": "goroutine_leak",    "code": "// BUG: goroutine leak - channel never read\nfunc process() {\n\tch := make(chan int)\n\tgo func() { ch <- 42 }()\n\t// ch is never read\n}"},

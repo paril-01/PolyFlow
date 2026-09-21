@@ -19,6 +19,7 @@ from rcir.retrieval.hybrid import hybrid_retrieve, _pass2_symbol_match
 from rcir.contract.schema import (
     ContextContract, ContractNode, validate_contract,
     _check_budget_integrity, _check_node_paths_unique,
+    AnalysisLayer, StructureLayer, RoutingLayer,
 )
 
 
@@ -189,6 +190,40 @@ class TestHybridRetrieval:
         real_errors = [e for e in errors if "no nodes" not in e.lower()]
         assert len(real_errors) == 0, f"Validation errors: {real_errors}"
 
+    def test_relevance_floor_stops_padding_with_noise(self, sample_hierarchy):
+        """Regression test for a real bug found via a live benchmark run:
+        a small, tightly-scoped task used MORE tokens than a naive baseline
+        because the retriever padded all the way to the token budget with
+        weakly-related nodes instead of stopping once relevance dropped off.
+
+        A query tightly matching only 'authenticate' should not pull in the
+        unrelated db/models.py or api/routes.py nodes just because there's
+        budget left over -- with a large budget, the old code would include
+        everything with score > 0; the fix should stop at the relevance
+        cliff instead.
+        """
+        contract_with_floor = hybrid_retrieve(
+            sample_hierarchy, "authenticate", token_budget=100000,
+        )
+        paths_with_floor = {n.path for n in contract_with_floor.nodes}
+
+        # The escape hatch: min_relative_score=0.0 should restore the old
+        # fill-to-budget-regardless-of-relevance behavior, proving the floor
+        # (not something else) is what's doing the filtering.
+        contract_no_floor = hybrid_retrieve(
+            sample_hierarchy, "authenticate", token_budget=100000,
+            min_relative_score=0.0,
+        )
+        paths_no_floor = {n.path for n in contract_no_floor.nodes}
+
+        assert len(paths_with_floor) < len(paths_no_floor), (
+            "the relevance floor should exclude at least some low-scoring "
+            "nodes that the no-floor run includes, given a huge token budget "
+            f"with_floor={paths_with_floor} no_floor={paths_no_floor}"
+        )
+        assert "auth/login.py::authenticate" in paths_with_floor, \
+            "the actually-relevant node must still be included with the floor on"
+
 
 # ─── Contract Validation Tests ─────────────────────────────────────
 
@@ -286,3 +321,61 @@ class TestContractValidation:
         assert len(restored.nodes) == 1
         assert restored.nodes[0].path == "a.py::foo"
         assert restored.coverage_warning == "test warning"
+
+    def test_layered_contract_roundtrip(self):
+        """Verify v7 §5 layered contract survives serialization and deserialization."""
+        analysis = AnalysisLayer(
+            resolved=12,
+            unresolved=2,
+            denominator_basis="ground_truth_test",
+            confidence_breakdown={"static_exact": 10, "static_inferred": 2, "dynamic_unresolved": 2},
+            unresolved_locations=[{"path": "foo.py:10", "reason": "eval"}],
+        )
+        structure = StructureLayer(
+            nodes_touched=8,
+            cross_service_edges_involved=3,
+            low_confidence_edge_fraction=0.15,
+            change_scope="cross_service",
+        )
+        routing = RoutingLayer(
+            suggested_tier="balanced",
+            rationale="Medium complexity cross-service change",
+        )
+
+        contract = ContextContract(
+            query="test layered contract",
+            nodes=[],
+            token_budget_used=50,
+            token_budget_total=2000,
+            analysis=analysis,
+            structure=structure,
+            routing=routing,
+        )
+
+        d = contract.to_dict()
+
+        # Check layered format
+        assert "retrieval" in d
+        assert "analysis" in d
+        assert d["analysis"]["coverage"]["resolved"] == 12
+        assert "structure" in d
+        assert d["structure"]["structural_complexity_signal"]["nodes_touched"] == 8
+        assert "routing" in d
+        assert d["routing"]["suggested_tier"] == "balanced"
+
+        # Check backward compatibility fields still exist at top level
+        assert "nodes" in d
+        assert d["token_budget_used"] == 50
+        assert d["token_budget_total"] == 2000
+
+        # Deserialization restores semantic layers
+        restored = ContextContract.from_dict(d)
+        assert restored.analysis is not None
+        assert restored.analysis.resolved == 12
+        assert restored.analysis.denominator_basis == "ground_truth_test"
+        assert restored.structure is not None
+        assert restored.structure.cross_service_edges_involved == 3
+        assert restored.structure.change_scope == "cross_service"
+        assert restored.routing is not None
+        assert restored.routing.suggested_tier == "balanced"
+

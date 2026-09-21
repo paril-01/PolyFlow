@@ -98,6 +98,24 @@ def _extract_interface(node: ast.FunctionDef | ast.AsyncFunctionDef) -> dict:
             "annotation": ast.dump(arg.annotation) if arg.annotation else None,
         })
 
+    # Positional defaults apply to the trailing N entries of args.args —
+    # align them so a changed default value (e.g. code=302 -> code=303) is
+    # visible even though the *count* and *names* of defaults are unchanged.
+    # Bug found by testing against a real Flask commit (redirect() default
+    # code changed 302->303, a real interface-relevant behavior change) —
+    # the old defaults_count-only field was blind to this class of edit.
+    n_pos_defaults = len(args.defaults)
+    default_values = [ast.dump(d) for d in args.defaults]
+    positional_defaults = {}
+    if n_pos_defaults:
+        defaulted_arg_names = [a.arg for a in args.args[-n_pos_defaults:]]
+        positional_defaults = dict(zip(defaulted_arg_names, default_values))
+
+    kw_default_values = {
+        arg.arg: (ast.dump(default) if default is not None else None)
+        for arg, default in zip(args.kwonlyargs, args.kw_defaults)
+    }
+
     return {
         "name": node.name,
         "args": arg_list,
@@ -106,6 +124,8 @@ def _extract_interface(node: ast.FunctionDef | ast.AsyncFunctionDef) -> dict:
         "kwonlyargs": kwonly,
         "defaults_count": len(args.defaults),
         "kw_defaults_count": len([d for d in args.kw_defaults if d is not None]),
+        "positional_defaults": positional_defaults,
+        "kw_defaults": kw_default_values,
         "return_annotation": ast.dump(node.returns) if node.returns else None,
         "decorators": [ast.dump(d) for d in node.decorator_list],
         "is_async": isinstance(node, ast.AsyncFunctionDef),

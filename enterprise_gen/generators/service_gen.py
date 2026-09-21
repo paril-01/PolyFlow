@@ -368,16 +368,15 @@ func main() {{
 '''
 
 def _java_main(svc: ServiceDef) -> str:
-    cls = "".join(w.capitalize() for w in svc.name.replace("-", " ").split())
     return f'''package com.ecp.{svc.name.replace("-","")};
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class {cls}Application {{
+public class Application {{
     public static void main(String[] args) {{
-        SpringApplication.run({cls}Application.class, args);
+        SpringApplication.run(Application.class, args);
     }}
 }}
 '''

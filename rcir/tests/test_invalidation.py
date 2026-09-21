@@ -173,6 +173,68 @@ def stable_function(x: int) -> str:
 
 # ─── Data Contract Detection Tests ─────────────────────────────────
 
+class TestChangedDefaultValueIsInterfaceChange:
+    """Regression test for a real bug: a changed default parameter value
+    (e.g. code=302 -> code=303) was invisible to interface diffing, because
+    _extract_interface recorded only defaults_count, not the default values
+    themselves. Found by running diff_file against a real Flask commit
+    (eca5fd1d, "redirect defaults to 303") and manually verifying the diff
+    first — this is that commit's actual before/after source for the
+    `redirect` function, not a synthetic example built to match the fix.
+    """
+
+    BEFORE_SOURCE = '''
+def redirect(
+    location: str, code: int = 302, Response: type[BaseResponse] | None = None
+) -> BaseResponse:
+    """Create a redirect response object.
+
+    :param location: The URL to redirect to.
+    :param code: The status code for the redirect.
+    """
+    if (ctx := _cv_app.get(None)) is not None:
+        return ctx.app.redirect(location, code=code)
+
+    return _wz_redirect(location, code=code, Response=Response)
+'''
+
+    AFTER_SOURCE = '''
+def redirect(
+    location: str, code: int = 303, Response: type[BaseResponse] | None = None
+) -> BaseResponse:
+    """Create a redirect response object.
+
+    :param location: The URL to redirect to.
+    :param code: The status code for the redirect.
+
+    .. versionchanged:: 3.2
+        ``code`` defaults to ``303`` instead of ``302``.
+    """
+    if (ctx := _cv_app.get(None)) is not None:
+        return ctx.app.redirect(location, code=code)
+
+    return _wz_redirect(location, code=code, Response=Response)
+'''
+
+    def test_changed_default_value_detected_as_interface_change(self):
+        diffs = diff_file(self.BEFORE_SOURCE, self.AFTER_SOURCE, "helpers.py")
+        assert len(diffs) == 1, f"expected exactly 1 changed node, got {len(diffs)}"
+        d = diffs[0]
+        assert d.node_path == "helpers.py::redirect"
+        assert d.interface_status == "changed", (
+            "a changed default parameter value must be detected as an "
+            "interface change — this is the exact bug found against a real "
+            "Flask commit: defaults_count was unchanged (still 2) so the "
+            "old implementation silently missed it"
+        )
+        assert d.body_status == "unchanged", (
+            "the function body itself (the call to _wz_redirect) did not "
+            "change — only the default value and docstring did"
+        )
+        assert d.interface_details["before"]["positional_defaults"]["code"] == "Constant(value=302)"
+        assert d.interface_details["after"]["positional_defaults"]["code"] == "Constant(value=303)"
+
+
 class TestDataContractDiff:
     def test_sql_change_detected(self):
         """Adding SQL to a function should flag data_contract_status."""

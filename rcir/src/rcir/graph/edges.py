@@ -11,7 +11,12 @@ from typing import Literal
 
 
 EdgeType = Literal["calls", "imports", "inherits"]
-ResolutionType = Literal["static_exact", "static_inference", "dynamic_unresolved"]
+ResolutionType = Literal[
+    "static_exact",       # resolved via protobuf/typed interface, no ambiguity
+    "static_inference",   # resolved via pattern-matching (route strings, naming conventions)
+    "dynamic_unresolved", # a call exists, destination could not be statically determined
+    "unsupported",        # outside current analysis scope entirely (not even attempted)
+]
 
 # Confidence scores per resolution type — derived from the resolution
 # mechanism's reliability, not from a model or heuristic.
@@ -19,6 +24,7 @@ CONFIDENCE_BY_RESOLUTION: dict[ResolutionType, float] = {
     "static_exact": 1.0,
     "static_inference": 0.7,
     "dynamic_unresolved": 0.3,
+    "unsupported": 0.0,
 }
 
 
@@ -38,15 +44,19 @@ class Edge:
     edge_type: EdgeType
     confidence: float
     resolution: ResolutionType
+    reason: str = ""  # why the edge was classified this way — §1 auditability
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "source": self.source,
             "target": self.target,
             "type": self.edge_type,
             "confidence": self.confidence,
             "resolution": self.resolution,
         }
+        if self.reason:
+            d["reason"] = self.reason
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "Edge":
@@ -56,6 +66,7 @@ class Edge:
             edge_type=d["type"],
             confidence=d["confidence"],
             resolution=d["resolution"],
+            reason=d.get("reason", ""),
         )
 
 
@@ -64,6 +75,7 @@ def make_edge(
     target: str,
     edge_type: EdgeType,
     resolution: ResolutionType,
+    reason: str = "",
 ) -> Edge:
     """Create an Edge with confidence derived from its resolution type."""
     return Edge(
@@ -72,4 +84,5 @@ def make_edge(
         edge_type=edge_type,
         confidence=CONFIDENCE_BY_RESOLUTION[resolution],
         resolution=resolution,
+        reason=reason,
     )

@@ -288,3 +288,107 @@ class TestSelfExtraction:
         paths = {n["path"] for n in graph["nodes"]}
         assert any("extract_graph" in p for p in paths), \
             f"extract_graph not found in self-extraction: {sorted(paths)[:10]}"
+
+
+class TestExcludeDirs:
+    """Regression test for a real bug: extract_graph indexed an entire
+    monorepo with no way to exclude a sibling tool's own source tree,
+    so RCIR's own tests polluted retrieval results when analyzing a
+    different project (PolyFlow) living in the same repo root — found via
+    a negative-savings result in a real benchmark run, not a synthetic case.
+    """
+
+    def _build_monorepo(self, tmp_path: Path) -> Path:
+        """Real on-disk layout: two independent projects under one root,
+        mirroring the actual PolyFlow/rcir monorepo structure that exposed
+        this bug."""
+        target = tmp_path / "target_project"
+        target.mkdir()
+        (target / "core.py").write_text(
+            "def process_order(order_id):\n"
+            "    validate(order_id)\n"
+            "    return order_id\n"
+            "\n"
+            "def validate(order_id):\n"
+            "    return order_id > 0\n"
+        )
+
+        sibling_tool = tmp_path / "sibling_tool"
+        sibling_tool.mkdir()
+        (sibling_tool / "unrelated.py").write_text(
+            "def totally_unrelated_helper():\n"
+            "    return 'should not appear when excluded'\n"
+        )
+        return tmp_path
+
+    def test_exclude_dirs_removes_sibling_tool_nodes(self, tmp_path):
+        monorepo = self._build_monorepo(tmp_path)
+
+        # Without exclusion: both projects' symbols are present
+        full_graph = extract_graph(monorepo)
+        full_paths = {n["path"] for n in full_graph["nodes"]}
+        assert any("process_order" in p for p in full_paths)
+        assert any("totally_unrelated_helper" in p for p in full_paths), \
+            "sanity check: sibling_tool symbols should be present without exclusion"
+
+        # With exclusion: sibling tool's symbols must be gone, target project's must remain
+        scoped_graph = extract_graph(monorepo, exclude_dirs={"sibling_tool"})
+        scoped_paths = {n["path"] for n in scoped_graph["nodes"]}
+        assert any("process_order" in p for p in scoped_paths), \
+            "target project symbols must survive exclusion of an unrelated sibling"
+        assert not any("totally_unrelated_helper" in p for p in scoped_paths), \
+            f"excluded sibling_tool symbols leaked through: {scoped_paths}"
+        assert scoped_graph["metadata"]["excluded_dirs"] == ["sibling_tool"]
+
+
+class TestExtractGraphCrossService:
+    """Test extract_graph end-to-end with proto and HTTP cross-service artifacts."""
+
+    def test_extract_graph_with_proto_and_http(self, tmp_path):
+        # Create a proto file
+        proto_dir = tmp_path / "protos"
+        proto_dir.mkdir()
+        (proto_dir / "payment.proto").write_text('''
+syntax = "proto3";
+service PaymentService {
+    rpc Charge(ChargeRequest) returns (ChargeResponse) {}
+}
+message ChargeRequest { string id = 1; }
+message ChargeResponse { string status = 1; }
+''')
+
+        # Create a Flask service with routes and an HTTP client call
+        app_file = tmp_path / "app.py"
+        app_file.write_text('''
+from flask import Flask
+import requests
+
+app = Flask(__name__)
+
+@app.route("/api/pay", methods=["POST"])
+def pay():
+    resp = requests.post("http://localhost:5000/api/charge", json={"amount": 100})
+    return resp.json()
+
+@app.route("/api/charge", methods=["POST"])
+def charge():
+    return {"status": "ok"}
+''')
+
+        graph = extract_graph(tmp_path)
+        meta = graph["metadata"]
+
+        assert meta["proto_files_parsed"] == 1
+        assert meta["proto_services_found"] == 1
+        assert meta["proto_messages_found"] == 2
+        assert meta["http_routes_found"] >= 2
+        assert meta["http_client_calls_found"] >= 1
+
+        node_paths = {n["path"] for n in graph["nodes"]}
+        assert any("PaymentService" in p for p in node_paths)
+        assert any("ChargeRequest" in p for p in node_paths)
+
+        edge_targets = {e["target"] for e in graph["edges"]}
+        assert "ChargeRequest" in edge_targets
+        assert any("charge" in t for t in edge_targets)
+

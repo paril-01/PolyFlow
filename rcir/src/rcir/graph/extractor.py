@@ -20,6 +20,9 @@ from collections import defaultdict
 from typing import Any
 
 from rcir.graph.edges import Edge, make_edge, EdgeType, ResolutionType
+from rcir.graph.proto_parser import parse_proto_files, proto_edges_from_parse_result
+from rcir.graph.http_routes import extract_http_routes, match_client_calls_to_routes
+from rcir.graph.polyglot_scanner import scan_polyglot_repo
 
 
 def _repo_relative_path(file_path: Path, repo_root: Path) -> str:
@@ -274,11 +277,16 @@ class _EdgeCollector(ast.NodeVisitor):
         return "static_inference"
 
 
-def extract_graph(repo_path: str | Path) -> dict[str, Any]:
+def extract_graph(repo_path: str | Path, exclude_dirs: set[str] | None = None) -> dict[str, Any]:
     """Extract a dependency graph from a Python repository.
 
     Args:
         repo_path: Path to the repository root.
+        exclude_dirs: Additional directory names to exclude beyond the
+            standard non-source dirs (.git, __pycache__, etc.) — e.g. a
+            sibling tool's own source tree living inside the same monorepo
+            as the project actually being analyzed. Matched by directory
+            name at any depth, same as the built-in skip_dirs.
 
     Returns:
         Dict with keys: nodes (list), edges (list), metadata (dict).
@@ -292,8 +300,10 @@ def extract_graph(repo_path: str | Path) -> dict[str, Any]:
     skip_dirs = {
         ".git", ".hg", ".svn", "__pycache__", ".mypy_cache", ".pytest_cache",
         "node_modules", ".tox", ".nox", ".eggs", "*.egg-info", "venv", ".venv",
-        "env", ".env", "build", "dist",
+        "env", ".env", "build", "dist", "vendor", "bin", "obj", ".idea", ".vscode", "target",
     }
+    if exclude_dirs:
+        skip_dirs = skip_dirs | set(exclude_dirs)
 
     py_files: list[Path] = []
     for root, dirs, files in os.walk(repo_path):
@@ -307,13 +317,15 @@ def extract_graph(repo_path: str | Path) -> dict[str, Any]:
     all_nodes: list[dict] = []
     all_symbol_names: set[str] = set()
     file_collectors: dict[str, _SymbolCollector] = {}
+    parsed_trees: dict[str, ast.AST] = {}
 
     for py_file in py_files:
         rel_path = _repo_relative_path(py_file, repo_path)
         try:
             source_code = py_file.read_text(encoding="utf-8", errors="replace")
             tree = ast.parse(source_code, filename=str(py_file))
-        except (SyntaxError, UnicodeDecodeError) as e:
+            parsed_trees[rel_path] = tree
+        except (SyntaxError, UnicodeDecodeError):
             # Skip files that can't be parsed — don't fail the whole extraction
             continue
 
@@ -328,20 +340,82 @@ def extract_graph(repo_path: str | Path) -> dict[str, Any]:
             short_name = node["path"].split("::")[-1] if "::" in node["path"] else node["path"]
             all_symbol_names.add(short_name)
 
-    # Second pass: extract edges with resolution against known symbols
+    # Second pass: extract edges using pre-parsed AST trees (no re-reading or re-parsing)
     all_edges: list[Edge] = []
+    all_http_routes = []
+    all_http_client_calls = []
 
-    for py_file in py_files:
-        rel_path = _repo_relative_path(py_file, repo_path)
-        try:
-            source_code = py_file.read_text(encoding="utf-8", errors="replace")
-            tree = ast.parse(source_code, filename=str(py_file))
-        except (SyntaxError, UnicodeDecodeError):
-            continue
-
+    for rel_path, tree in parsed_trees.items():
         edge_collector = _EdgeCollector(rel_path, all_symbol_names)
         edge_collector.visit(tree)
         all_edges.extend(edge_collector.edges)
+
+        # Cross-service HTTP routes and client calls (uses pre-parsed tree, 0 overhead)
+        http_result = extract_http_routes("", rel_path, tree=tree)
+        all_http_routes.extend(http_result.routes)
+        all_http_client_calls.extend(http_result.client_calls)
+
+    # Match HTTP client calls to routes
+    if all_http_client_calls:
+        http_edges = match_client_calls_to_routes(all_http_routes, all_http_client_calls)
+        for hedge in http_edges:
+            all_edges.append(make_edge(
+                source=hedge["source"],
+                target=hedge["target"],
+                edge_type=hedge.get("edge_type", "calls"),
+                resolution=hedge.get("resolution", "static_exact"),
+                reason=hedge.get("reason", "HTTP cross-service call"),
+            ))
+
+    # Cross-service proto files (v7 §10)
+    proto_result = parse_proto_files(repo_path)
+    for service in proto_result.services:
+        all_nodes.append({
+            "path": f"{service.file_path}::{service.name}",
+            "kind": "proto_service",
+            "level": "service",
+            "line": 1,
+            "end_line": 1,
+        })
+        for method in service.methods:
+            all_nodes.append({
+                "path": f"{service.file_path}::{service.name}.{method.name}",
+                "kind": "proto_rpc",
+                "level": "method",
+                "line": 1,
+                "end_line": 1,
+                "request_type": method.request_type,
+                "response_type": method.response_type,
+            })
+    for msg in proto_result.messages:
+        all_nodes.append({
+            "path": f"{msg.file_path}::{msg.name}",
+            "kind": "proto_message",
+            "level": "class",
+            "line": 1,
+            "end_line": 1,
+            "fields": [f.name for f in msg.fields],
+        })
+
+    proto_edges = proto_edges_from_parse_result(proto_result)
+    for pedge in proto_edges:
+        all_edges.append(make_edge(
+            source=pedge["source"],
+            target=pedge["target"],
+            edge_type=pedge.get("edge_type", "calls"),
+            resolution=pedge.get("resolution", "static_exact"),
+            reason=pedge.get("reason", "Protobuf RPC definition"),
+        ))
+
+    # Cross-service polyglot scanner for Go, C#, Java, JS/TS (v7 §10)
+    known_services = {s.name for s in proto_result.services}
+    poly_nodes, poly_edges = scan_polyglot_repo(
+        repo_path=repo_path,
+        known_proto_services=known_services,
+        exclude_dirs=exclude_dirs,
+    )
+    all_nodes.extend(poly_nodes)
+    all_edges.extend(poly_edges)
 
     # Deduplicate edges (same source→target→type)
     seen_edges: set[tuple] = set()
@@ -361,6 +435,14 @@ def extract_graph(repo_path: str | Path) -> dict[str, Any]:
             "files_skipped": len(py_files) - len(file_collectors),
             "total_nodes": len(all_nodes),
             "total_edges": len(unique_edges),
+            "excluded_dirs": sorted(exclude_dirs) if exclude_dirs else [],
+            "proto_files_parsed": proto_result.files_parsed,
+            "proto_services_found": len(proto_result.services),
+            "proto_messages_found": len(proto_result.messages),
+            "http_routes_found": len(all_http_routes),
+            "http_client_calls_found": len(all_http_client_calls),
+            "polyglot_nodes_found": len(poly_nodes),
+            "polyglot_edges_found": len(poly_edges),
         },
     }
 
@@ -378,9 +460,16 @@ def main():
         default=None,
         help="Output JSON file path (default: stdout)"
     )
+    parser.add_argument(
+        "--exclude",
+        default=None,
+        help="Comma-separated directory names to exclude from indexing "
+             "(e.g. a sibling tool's own source tree in the same monorepo)"
+    )
     args = parser.parse_args()
 
-    graph = extract_graph(args.repo_path)
+    exclude_dirs = set(d.strip() for d in args.exclude.split(",")) if args.exclude else None
+    graph = extract_graph(args.repo_path, exclude_dirs=exclude_dirs)
 
     output_json = json.dumps(graph, indent=2, default=str)
 

@@ -169,20 +169,22 @@ def _pass3_graph_traversal(
 
 # ─── Merge & Budget ────────────────────────────────────────────────
 
-def _estimate_tokens(node: dict) -> int:
+def _estimate_tokens(node: dict, granularity: str = "fine") -> int:
     """Estimate token count for a node in the context contract.
 
-    Rough estimate: 1 token per 4 characters of the path + metadata.
-    This is deliberately conservative — it's better to undercount and
-    fit fewer nodes than to overcount and waste budget.
+    In fine granularity: includes signature, annotations, docstrings, and snippet.
+    In coarse granularity: includes qualified path, level, and signature reference.
     """
+    if granularity == "coarse":
+        return max(len(node.get("path", "")) // 4, 15)
+
     text_len = len(node.get("path", ""))
     text_len += len(json.dumps(node.get("args", []), default=str))
     text_len += len(node.get("return_annotation", "") or "")
     text_len += len(str(node.get("decorators", [])))
     # Add estimate for any raw snippet that would be included
     text_len += (node.get("end_line", 0) - node.get("line", 0) + 1) * 40
-    return max(text_len // 4, 10)  # minimum 10 tokens per node
+    return max(text_len // 4, 15)  # minimum 15 tokens per fine node
 
 
 def hybrid_retrieve(
@@ -190,14 +192,17 @@ def hybrid_retrieve(
     query: str,
     token_budget: int = 8000,
     graph_edges: list[dict] | None = None,
+    min_relative_score: float = 0.15,
 ) -> ContextContract:
-    """Perform hybrid three-pass retrieval and return a Context Contract.
+    """Perform hybrid three-pass retrieval with adaptive granularity.
 
     Args:
         hierarchy: Hierarchy dict from builder.py.
         query: The LLM's question / context request.
         token_budget: Maximum tokens for the context response.
         graph_edges: Optional edge list (if not embedded in hierarchy).
+        min_relative_score: Stop adding candidates once a node's score falls
+            below this fraction of the top-scoring candidate.
 
     Returns:
         A ContextContract with the selected nodes, within budget.
@@ -234,52 +239,71 @@ def hybrid_retrieve(
 
     # Final ranking
     final_ranked = sorted(merged.items(), key=lambda x: x[1], reverse=True)
+    top_score = final_ranked[0][1] if final_ranked else 0.0
+    score_floor = top_score * min_relative_score
 
     # Build node lookup
     node_by_path = {n["path"]: n for n in nodes}
 
-    # Fill token budget
+    # Fill token budget with adaptive granularity (v7 §5)
     selected_nodes: list[ContractNode] = []
     tokens_used = 0
     coverage_warning = None
     hierarchy_paths_used = set()
+    stopped_at_relevance_floor = False
+    skipped_for_budget: set[str] = set()
 
     for path, score in final_ranked:
         if score <= 0:
             continue
+        if score < score_floor:
+            stopped_at_relevance_floor = True
+            break
 
         node = node_by_path.get(path)
         if node is None:
             continue
 
-        # Estimate tokens for this node
-        est_tokens = _estimate_tokens(node)
+        default_granularity = "fine" if node.get("level") in ("function", "class", "service", "method") else "coarse"
+        est_tokens = _estimate_tokens(node, granularity=default_granularity)
+        chosen_granularity = default_granularity
+
+        # Adaptive Granularity:
+        # If fine representation exceeds remaining budget, try coarse representation
         if tokens_used + est_tokens > token_budget:
-            continue  # Skip this one, try smaller nodes
+            coarse_tokens = _estimate_tokens(node, granularity="coarse")
+            if tokens_used + coarse_tokens <= token_budget:
+                chosen_granularity = "coarse"
+                est_tokens = coarse_tokens
+            else:
+                skipped_for_budget.add(path)
+                continue  # Cannot fit even at coarse granularity
 
         selected_nodes.append(ContractNode(
             path=path,
             level=node.get("level", "unknown"),
             summary=f"{node.get('kind', 'node')} at {path}",
-            raw_snippet=None,  # Would be populated from source in production
+            raw_snippet=None,
             interface_status=node.get("interface_status", "unknown"),
             body_status=node.get("body_status", "unknown"),
             summary_version=f"v{node.get('version_number', 1)}",
             summary_source="incremental_ast_analysis",
-            granularity="fine" if node.get("level") in ("function", "class") else "coarse",
+            granularity=chosen_granularity,
             relevance_score=score,
         ))
         tokens_used += est_tokens
         hierarchy_paths_used.add(path)
 
-    # Check for coverage warning
-    # If pass 3 found nodes that we couldn't fit, warn about potential gaps
-    graph_discovered_not_included = set(p3_scores.keys()) - hierarchy_paths_used
+    # Check for coverage warning -- only for candidates that were relevant
+    # enough to keep (above the relevance floor) but didn't fit the budget.
+    # A node correctly excluded for being below the relevance floor is
+    # working as intended, not a coverage gap, so it must not trigger this.
+    graph_discovered_not_included = (set(p3_scores.keys()) - hierarchy_paths_used) & skipped_for_budget
     if graph_discovered_not_included and len(selected_nodes) > 0:
         coverage_warning = (
             f"cross-cutting query — hierarchy may have missed related nodes; "
             f"graph traversal found {len(graph_discovered_not_included)} additional "
-            f"candidates that did not fit in the token budget"
+            f"relevant candidates that did not fit in the token budget"
         )
 
     contract = ContextContract(

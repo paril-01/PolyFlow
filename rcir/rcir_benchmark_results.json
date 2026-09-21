@@ -1,0 +1,160 @@
+{
+  "benchmark_timestamp": "2026-09-21T07:37:55Z",
+  "generated_by": "rcir.benchmarks.benchmark_ab (v7 unified suite)",
+  "tasks": [
+    {
+      "task_id": "polyflow_1_validation_rule",
+      "suite": "PolyFlow (Single-Repo Python)",
+      "title": "Debug Guard Violation in Rule Validation Engine",
+      "query": "guards rule validation execution and AST inspection",
+      "method_a_conventional": {
+        "total_tokens": 7226,
+        "files_ingested": 3,
+        "missing_files": []
+      },
+      "method_b_rcir": {
+        "total_tokens": 1996,
+        "token_budget": 2000,
+        "nodes_selected": 10,
+        "sample_nodes": [
+          "polyflow/guards.py::PolyGuardEngine.inspect_ast",
+          "polyflow/guards.py",
+          "polyflow/runtime.py::ExecutionContext",
+          "polyflow/parser.py::PolyAST",
+          "polyflow/schema.py::SchemaValidationError"
+        ]
+      },
+      "metrics": {
+        "token_savings_percent": 72.4,
+        "ground_truth_recall": 1.0,
+        "target_nodes_retrieved": "3/3"
+      }
+    },
+    {
+      "task_id": "polyflow_2_merkle_audit",
+      "suite": "PolyFlow (Single-Repo Python)",
+      "title": "Verify Merkle Hash Chain Integrity & Audit Entries",
+      "query": "audit merkle hash chain ledger verify chain record entry",
+      "method_a_conventional": {
+        "total_tokens": 7489,
+        "files_ingested": 3,
+        "missing_files": []
+      },
+      "method_b_rcir": {
+        "total_tokens": 1945,
+        "token_budget": 2000,
+        "nodes_selected": 15,
+        "sample_nodes": [
+          "polyflow/governance.py::MerkleLedger.record_entry",
+          "polyflow/governance.py::MerkleLedger.verify_chain",
+          "tests/test_polyflow.py::TestPolyFlowEngine.test_merkle_ledger_audit",
+          "polyflow/governance.py::MerkleLedger",
+          "polyflow/governance.py::MerkleLedger.__init__"
+        ]
+      },
+      "metrics": {
+        "token_savings_percent": 74.0,
+        "ground_truth_recall": 1.0,
+        "target_nodes_retrieved": "3/3"
+      }
+    },
+    {
+      "task_id": "ob_1_cart_grpc",
+      "suite": "Online Boutique (Cross-Service Microservices)",
+      "title": "CartService AddItem gRPC Contract & Data Models",
+      "query": "CartService AddItem request item and empty response",
+      "method_a_conventional": {
+        "total_tokens": 2492,
+        "files_ingested": 3,
+        "missing_files": []
+      },
+      "method_b_rcir": {
+        "total_tokens": 1998,
+        "token_budget": 2000,
+        "nodes_selected": 42,
+        "sample_nodes": [
+          "protos/demo.proto::CartService.AddItem",
+          "src/cartservice/src/protos/Cart.proto::CartService.AddItem",
+          "src/currencyservice/proto/demo.proto::CartService.AddItem",
+          "src/paymentservice/proto/demo.proto::CartService.AddItem",
+          "src/adservice/src/main/proto/demo.proto::CartService.AddItem"
+        ]
+      },
+      "metrics": {
+        "token_savings_percent": 19.8,
+        "ground_truth_recall": 1.0,
+        "target_nodes_retrieved": "3/3"
+      }
+    },
+    {
+      "task_id": "ob_2_email_service",
+      "suite": "Online Boutique (Cross-Service Microservices)",
+      "title": "EmailService Order Confirmation & gRPC Server Implementation",
+      "query": "SendOrderConfirmation in EmailService with order details",
+      "method_a_conventional": {
+        "total_tokens": 11067,
+        "files_ingested": 4,
+        "missing_files": []
+      },
+      "method_b_rcir": {
+        "total_tokens": 1988,
+        "token_budget": 2000,
+        "nodes_selected": 20,
+        "sample_nodes": [
+          "src/adservice/src/main/proto/demo.proto::EmailService.SendOrderConfirmation",
+          "protos/demo.proto::EmailService.SendOrderConfirmation",
+          "src/emailservice/email_server.py::EmailService.SendOrderConfirmation",
+          "src/currencyservice/proto/demo.proto::EmailService.SendOrderConfirmation",
+          "src/paymentservice/proto/demo.proto::EmailService.SendOrderConfirmation"
+        ]
+      },
+      "metrics": {
+        "token_savings_percent": 82.0,
+        "ground_truth_recall": 1.0,
+        "target_nodes_retrieved": "3/3"
+      }
+    },
+    {
+      "task_id": "ob_3_product_catalog",
+      "suite": "Online Boutique (Cross-Service Microservices)",
+      "title": "ProductCatalogService Search & Recommendation Cross-Service Flow",
+      "query": "ProductCatalogService SearchProducts query and results",
+      "method_a_conventional": {
+        "total_tokens": 10573,
+        "files_ingested": 3,
+        "missing_files": []
+      },
+      "method_b_rcir": {
+        "total_tokens": 1989,
+        "token_budget": 2000,
+        "nodes_selected": 26,
+        "sample_nodes": [
+          "protos/demo.proto::ProductCatalogService.SearchProducts",
+          "src/currencyservice/proto/demo.proto::ProductCatalogService.SearchProducts",
+          "src/paymentservice/proto/demo.proto::ProductCatalogService.SearchProducts",
+          "src/adservice/src/main/proto/demo.proto::ProductCatalogService.SearchProducts",
+          "src/emailservice/demo_pb2_grpc.py::ProductCatalogServiceServicer.SearchProducts"
+        ]
+      },
+      "metrics": {
+        "token_savings_percent": 81.2,
+        "ground_truth_recall": 0.33,
+        "target_nodes_retrieved": "1/3"
+      }
+    }
+  ],
+  "aggregate": {
+    "total_tasks_evaluated": 5,
+    "average_tokens_per_prompt": {
+      "method_a_conventional": 7769,
+      "method_b_rcir": 1983
+    },
+    "average_token_savings_percent": 65.9,
+    "average_ground_truth_recall": 0.87,
+    "caveats": [
+      "Method A measures whole-file loading of the files directly touched by the task.",
+      "Method B (RCIR) strictly caps context to 2,000 tokens while prioritizing relevant AST/proto nodes.",
+      "Cross-service evaluations rely on real cloned Google Cloud microservices-demo in scratch directory."
+    ]
+  }
+}

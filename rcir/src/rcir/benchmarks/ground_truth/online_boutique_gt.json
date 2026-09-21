@@ -1,0 +1,196 @@
+{
+  "metadata": {
+    "benchmark": "Online Boutique (Google Cloud Microservices Demo)",
+    "description": "Ground truth edge set established by manual inspection of protos/demo.proto and Python service implementations (emailservice, recommendationservice).",
+    "version": "1.0",
+    "anti_fabrication": "All edges verified against actual repository code cloned from https://github.com/GoogleCloudPlatform/microservices-demo"
+  },
+  "edges": [
+    {
+      "source": "protos/demo.proto::CartService.AddItem",
+      "target": "AddItemRequest",
+      "edge_class": "static_exact",
+      "description": "CartService.AddItem consumes AddItemRequest"
+    },
+    {
+      "source": "protos/demo.proto::CartService.AddItem",
+      "target": "Empty",
+      "edge_class": "static_exact",
+      "description": "CartService.AddItem returns Empty"
+    },
+    {
+      "source": "protos/demo.proto::CartService.GetCart",
+      "target": "GetCartRequest",
+      "edge_class": "static_exact",
+      "description": "CartService.GetCart consumes GetCartRequest"
+    },
+    {
+      "source": "protos/demo.proto::CartService.GetCart",
+      "target": "Cart",
+      "edge_class": "static_exact",
+      "description": "CartService.GetCart returns Cart"
+    },
+    {
+      "source": "protos/demo.proto::CartService.EmptyCart",
+      "target": "EmptyCartRequest",
+      "edge_class": "static_exact",
+      "description": "CartService.EmptyCart consumes EmptyCartRequest"
+    },
+    {
+      "source": "protos/demo.proto::CartService.EmptyCart",
+      "target": "Empty",
+      "edge_class": "static_exact",
+      "description": "CartService.EmptyCart returns Empty"
+    },
+    {
+      "source": "protos/demo.proto::RecommendationService.ListRecommendations",
+      "target": "ListRecommendationsRequest",
+      "edge_class": "static_exact",
+      "description": "RecommendationService.ListRecommendations consumes ListRecommendationsRequest"
+    },
+    {
+      "source": "protos/demo.proto::RecommendationService.ListRecommendations",
+      "target": "ListRecommendationsResponse",
+      "edge_class": "static_exact",
+      "description": "RecommendationService.ListRecommendations returns ListRecommendationsResponse"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.ListProducts",
+      "target": "Empty",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.ListProducts consumes Empty"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.ListProducts",
+      "target": "ListProductsResponse",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.ListProducts returns ListProductsResponse"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.GetProduct",
+      "target": "GetProductRequest",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.GetProduct consumes GetProductRequest"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.GetProduct",
+      "target": "Product",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.GetProduct returns Product"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.SearchProducts",
+      "target": "SearchProductsRequest",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.SearchProducts consumes SearchProductsRequest"
+    },
+    {
+      "source": "protos/demo.proto::ProductCatalogService.SearchProducts",
+      "target": "SearchProductsResponse",
+      "edge_class": "static_exact",
+      "description": "ProductCatalogService.SearchProducts returns SearchProductsResponse"
+    },
+    {
+      "source": "protos/demo.proto::ShippingService.GetQuote",
+      "target": "GetQuoteRequest",
+      "edge_class": "static_exact",
+      "description": "ShippingService.GetQuote consumes GetQuoteRequest"
+    },
+    {
+      "source": "protos/demo.proto::ShippingService.GetQuote",
+      "target": "GetQuoteResponse",
+      "edge_class": "static_exact",
+      "description": "ShippingService.GetQuote returns GetQuoteResponse"
+    },
+    {
+      "source": "protos/demo.proto::ShippingService.ShipOrder",
+      "target": "ShipOrderRequest",
+      "edge_class": "static_exact",
+      "description": "ShippingService.ShipOrder consumes ShipOrderRequest"
+    },
+    {
+      "source": "protos/demo.proto::ShippingService.ShipOrder",
+      "target": "ShipOrderResponse",
+      "edge_class": "static_exact",
+      "description": "ShippingService.ShipOrder returns ShipOrderResponse"
+    },
+    {
+      "source": "protos/demo.proto::PaymentService.Charge",
+      "target": "ChargeRequest",
+      "edge_class": "static_exact",
+      "description": "PaymentService.Charge consumes ChargeRequest"
+    },
+    {
+      "source": "protos/demo.proto::PaymentService.Charge",
+      "target": "ChargeResponse",
+      "edge_class": "static_exact",
+      "description": "PaymentService.Charge returns ChargeResponse"
+    },
+    {
+      "source": "protos/demo.proto::EmailService.SendOrderConfirmation",
+      "target": "SendOrderConfirmationRequest",
+      "edge_class": "static_exact",
+      "description": "EmailService.SendOrderConfirmation consumes SendOrderConfirmationRequest"
+    },
+    {
+      "source": "protos/demo.proto::EmailService.SendOrderConfirmation",
+      "target": "Empty",
+      "edge_class": "static_exact",
+      "description": "EmailService.SendOrderConfirmation returns Empty"
+    },
+    {
+      "source": "protos/demo.proto::CheckoutService.PlaceOrder",
+      "target": "PlaceOrderRequest",
+      "edge_class": "static_exact",
+      "description": "CheckoutService.PlaceOrder consumes PlaceOrderRequest"
+    },
+    {
+      "source": "protos/demo.proto::CheckoutService.PlaceOrder",
+      "target": "PlaceOrderResponse",
+      "edge_class": "static_exact",
+      "description": "CheckoutService.PlaceOrder returns PlaceOrderResponse"
+    },
+    {
+      "source": "protos/demo.proto::CurrencyService.GetSupportedCurrencies",
+      "target": "Empty",
+      "edge_class": "static_exact",
+      "description": "CurrencyService.GetSupportedCurrencies consumes Empty"
+    },
+    {
+      "source": "protos/demo.proto::CurrencyService.GetSupportedCurrencies",
+      "target": "GetSupportedCurrenciesResponse",
+      "edge_class": "static_exact",
+      "description": "CurrencyService.GetSupportedCurrencies returns GetSupportedCurrenciesResponse"
+    },
+    {
+      "source": "protos/demo.proto::CurrencyService.Convert",
+      "target": "CurrencyConversionRequest",
+      "edge_class": "static_exact",
+      "description": "CurrencyService.Convert consumes CurrencyConversionRequest"
+    },
+    {
+      "source": "protos/demo.proto::CurrencyService.Convert",
+      "target": "Money",
+      "edge_class": "static_exact",
+      "description": "CurrencyService.Convert returns Money"
+    },
+    {
+      "source": "protos/demo.proto::AdService.GetAds",
+      "target": "AdRequest",
+      "edge_class": "static_exact",
+      "description": "AdService.GetAds consumes AdRequest"
+    },
+    {
+      "source": "protos/demo.proto::AdService.GetAds",
+      "target": "AdResponse",
+      "edge_class": "static_exact",
+      "description": "AdService.GetAds returns AdResponse"
+    },
+    {
+      "source": "src/emailservice/email_server.py::EmailService.SendOrderConfirmation",
+      "target": "EmailService.send_email",
+      "edge_class": "static_exact",
+      "description": "SendOrderConfirmation calls EmailService.send_email helper"
+    }
+  ]
+}
