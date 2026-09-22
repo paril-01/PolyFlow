@@ -252,13 +252,29 @@ def parse_proto_files(repo_path: str | Path) -> ProtoParseResult:
             if f.endswith(".proto"):
                 proto_files.append(Path(root) / f)
 
+    def _proto_sort_key(p: Path) -> tuple[int, int, str]:
+        rel = p.relative_to(repo_path).as_posix()
+        is_canonical = 0 if (rel.startswith("protos/") or rel.startswith("proto/") or rel.startswith("api/")) else 1
+        return (is_canonical, len(rel.split("/")), rel)
+
+    proto_files.sort(key=_proto_sort_key)
+
+    seen_services: set[str] = set()
+    seen_messages: set[str] = set()
+
     for proto_file in proto_files:
         try:
             content = proto_file.read_text(encoding="utf-8", errors="replace")
             rel_path = proto_file.relative_to(repo_path).as_posix()
             result = parse_proto_content(content, file_path=rel_path)
-            combined.services.extend(result.services)
-            combined.messages.extend(result.messages)
+            for service in result.services:
+                if service.name not in seen_services:
+                    seen_services.add(service.name)
+                    combined.services.append(service)
+            for message in result.messages:
+                if message.name not in seen_messages:
+                    seen_messages.add(message.name)
+                    combined.messages.append(message)
             combined.files_parsed += 1
         except Exception as e:
             combined.files_failed += 1

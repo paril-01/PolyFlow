@@ -105,7 +105,7 @@ _JAVA_SERVER_BASE = re.compile(
 
 # JavaScript / TypeScript patterns
 _JS_GRPC_CLIENT = re.compile(
-    r'new\s+(?:proto\.)?([A-Z]\w+?)(?:Client)?\s*\(',
+    r'new\s+(?:proto\.([A-Z]\w+?)|([A-Z]\w+?)Client)\s*\(',
     re.MULTILINE,
 )
 _JS_HTTP_ROUTE = re.compile(
@@ -114,6 +114,28 @@ _JS_HTTP_ROUTE = re.compile(
 )
 _JS_HTTP_CALL = re.compile(
     r'(?:axios\.(get|post|put|delete)|fetch)\s*\(\s*[\'"`]([^\'"`]+)[\'"`]',
+    re.MULTILINE,
+)
+
+# Python patterns
+_PY_GRPC_STUB_ASSIGN = re.compile(
+    r'(\w+)\s*=\s*(?:[a-zA-Z0-9_]+\.)?([A-Z]\w*?)Stub\s*\(',
+    re.MULTILINE,
+)
+_PY_GRPC_DIRECT_CALL = re.compile(
+    r'(?:[a-zA-Z0-9_]+\.)?([A-Z]\w*?)Stub\s*\([^)]*\)\.([A-Z]\w+)\s*\(',
+    re.MULTILINE,
+)
+_PY_METHOD_CALL = re.compile(
+    r'(\w+)\.([A-Z]\w+)\s*\(',
+    re.MULTILINE,
+)
+_PY_SERVER_BASE = re.compile(
+    r'class\s+([A-Z]\w+)\s*\([^)]*?(?:[a-zA-Z0-9_]+\.)?([A-Z]\w*?)Servicer\b',
+    re.MULTILINE,
+)
+_PY_REGISTER_SERVER = re.compile(
+    r'(?:[a-zA-Z0-9_]+\.)?add_([A-Z]\w*?)Servicer_to_server\s*\(',
     re.MULTILINE,
 )
 
@@ -229,7 +251,9 @@ def scan_source_file(
     # 4. JavaScript / TypeScript scanning
     elif ext in (".js", ".jsx", ".ts", ".tsx"):
         for m in _JS_GRPC_CLIENT.finditer(content):
-            svc_name = m.group(1)
+            svc_name = m.group(1) or m.group(2)
+            if not svc_name:
+                continue
             line_no = content[:m.start()].count("\n") + 1
             caller = _get_enclosing_func(content, line_no)
             calls.append(CrossServiceCall(
@@ -251,6 +275,72 @@ def scan_source_file(
                 service_name=route_path,
                 method_name=method,
                 endpoint_type="http",
+                line_number=line_no,
+            ))
+
+    # 5. Python scanning
+    elif ext == ".py":
+        stubs: dict[str, str] = {}
+        for m in _PY_GRPC_STUB_ASSIGN.finditer(content):
+            var_name = m.group(1)
+            svc_name = m.group(2)
+            stubs[var_name] = svc_name
+
+        # Direct chained gRPC calls
+        for m in _PY_GRPC_DIRECT_CALL.finditer(content):
+            svc_name = m.group(1)
+            method_name = m.group(2)
+            line_no = content[:m.start()].count("\n") + 1
+            caller = _get_enclosing_func(content, line_no)
+            calls.append(CrossServiceCall(
+                file_path=file_path,
+                caller_symbol=f"{file_path}::{caller}",
+                service_name=svc_name,
+                method_name=method_name,
+                call_type="grpc",
+                line_number=line_no,
+                raw_snippet=m.group(0),
+            ))
+
+        # Method calls on stubs
+        for m in _PY_METHOD_CALL.finditer(content):
+            var_name = m.group(1)
+            method_name = m.group(2)
+            if var_name in stubs:
+                svc_name = stubs[var_name]
+                line_no = content[:m.start()].count("\n") + 1
+                caller = _get_enclosing_func(content, line_no)
+                calls.append(CrossServiceCall(
+                    file_path=file_path,
+                    caller_symbol=f"{file_path}::{caller}",
+                    service_name=svc_name,
+                    method_name=method_name,
+                    call_type="grpc",
+                    line_number=line_no,
+                    raw_snippet=m.group(0),
+                ))
+
+        # Server implementations
+        for m in _PY_SERVER_BASE.finditer(content):
+            svc_name = m.group(2)
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=svc_name,
+                method_name="*",
+                endpoint_type="grpc",
+                line_number=line_no,
+            ))
+
+        # Server registrations
+        for m in _PY_REGISTER_SERVER.finditer(content):
+            svc_name = m.group(1)
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=svc_name,
+                method_name="*",
+                endpoint_type="grpc",
                 line_number=line_no,
             ))
 
@@ -300,15 +390,16 @@ def scan_polyglot_repo(
                     all_calls.extend(calls)
                     all_endpoints.extend(endpoints)
 
-                    # Add file node to hierarchy
-                    new_nodes.append({
-                        "path": rel_path,
-                        "kind": "file",
-                        "level": "file",
-                        "line": 1,
-                        "end_line": max(1, content.count("\n") + 1),
-                        "language": ext.lstrip("."),
-                    })
+                    # Add file node to hierarchy (avoid duplicating Python files parsed in pass 1)
+                    if ext != ".py":
+                        new_nodes.append({
+                            "path": rel_path,
+                            "kind": "file",
+                            "level": "file",
+                            "line": 1,
+                            "end_line": max(1, content.count("\n") + 1),
+                            "language": ext.lstrip("."),
+                        })
                 except Exception:
                     continue
 

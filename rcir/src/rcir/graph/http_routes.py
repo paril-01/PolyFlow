@@ -230,24 +230,75 @@ class _RouteVisitor(ast.NodeVisitor):
 
         Returns (url_string, is_dynamic).
         If the URL is a literal string, returns (url, False).
-        If the URL is computed, returns (None, True).
+        If the URL has dynamic parameters (f-string, concatenation), extracts the static template
+        with {PARAM} placeholders, returning (template, False).
+        If the URL is purely dynamic/opaque variable, returns (None, True).
         """
+        arg_node = None
         if call.args:
-            first_arg = call.args[0]
-            if isinstance(first_arg, ast.Constant) and isinstance(first_arg.value, str):
-                return (first_arg.value, False)
-            # Check for f-strings or concatenation — these are dynamic
-            if isinstance(first_arg, (ast.JoinedStr, ast.BinOp)):
-                return (None, True)
+            arg_node = call.args[0]
+        else:
+            for kw in call.keywords:
+                if kw.arg == "url":
+                    arg_node = kw.value
+                    break
 
-        # Check url= keyword argument
-        for kw in call.keywords:
-            if kw.arg == "url":
-                if isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, str):
-                    return (kw.value.value, False)
-                return (None, True)
+        if arg_node is None:
+            return (None, True)
+
+        # 1. Literal string constant
+        if isinstance(arg_node, ast.Constant) and isinstance(arg_node.value, str):
+            return (arg_node.value, False)
+
+        # 2. f-string (ast.JoinedStr)
+        if isinstance(arg_node, ast.JoinedStr):
+            parts = []
+            has_static = False
+            for part in arg_node.values:
+                if isinstance(part, ast.Constant) and isinstance(part.value, str):
+                    parts.append(part.value)
+                    if part.value.strip("/"):
+                        has_static = True
+                elif isinstance(part, ast.FormattedValue):
+                    parts.append("{PARAM}")
+                else:
+                    parts.append("{PARAM}")
+            if has_static:
+                return ("".join(parts), False)
+            return (None, True)
+
+        # 3. String concatenation (ast.BinOp with ast.Add)
+        if isinstance(arg_node, ast.BinOp) and isinstance(arg_node.op, ast.Add):
+            template = self._extract_binop_template(arg_node)
+            if template:
+                return (template, False)
+            return (None, True)
 
         return (None, True)
+
+    def _extract_binop_template(self, node: ast.BinOp) -> str | None:
+        """Extract static template from string concatenation tree."""
+        left = node.left
+        right = node.right
+
+        if isinstance(left, ast.Constant) and isinstance(left.value, str):
+            left_str = left.value
+        elif isinstance(left, ast.BinOp) and isinstance(left.op, ast.Add):
+            left_str = self._extract_binop_template(left)
+        else:
+            left_str = "{PARAM}"
+
+        if isinstance(right, ast.Constant) and isinstance(right.value, str):
+            right_str = right.value
+        elif isinstance(right, ast.BinOp) and isinstance(right.op, ast.Add):
+            right_str = self._extract_binop_template(right)
+        else:
+            right_str = "{PARAM}"
+
+        combined = (left_str or "") + (right_str or "")
+        if combined.replace("{PARAM}", "").strip("/"):
+            return combined
+        return None
 
 
 def extract_http_routes(
@@ -323,11 +374,12 @@ def match_client_calls_to_routes(
 
         if matched_routes:
             for route in matched_routes:
+                res = "static_inference" if "{param}" in normalized_url else "static_exact"
                 edges.append({
                     "source": call.caller_name,
                     "target": route.handler_name,
                     "edge_type": "calls",
-                    "resolution": "static_exact",
+                    "resolution": res,
                     "reason": (
                         f"HTTP {call.method} to '{call.url}' matches "
                         f"route handler {route.handler_name} at '{route.path}'"
@@ -371,29 +423,38 @@ def match_client_calls_to_routes(
 def _normalize_route_path(path: str) -> str:
     """Normalize a route path for comparison.
 
-    Strips trailing slashes, lowercases, replaces {param} with a placeholder.
+    Strips scheme+host, trailing slashes, lowercases, replaces {param} with a placeholder.
     """
+    path = path.strip()
+    # Strip scheme + host/port: e.g. http://order-service:8080/orders -> /orders
+    path = re.sub(r'^https?://[^/]+', '', path)
+    if not path.startswith("/") and path:
+        path = "/" + path
     path = path.rstrip("/").lower()
     # Replace path parameters like {id} or <id> or :id with a placeholder
-    path = re.sub(r'\{[^}]+\}', '{PARAM}', path)
-    path = re.sub(r'<[^>]+>', '{PARAM}', path)
-    path = re.sub(r':(\w+)', '{PARAM}', path)
+    path = re.sub(r'\{[^}]+\}', '{param}', path)
+    path = re.sub(r'<[^>]+>', '{param}', path)
+    path = re.sub(r':(\w+)', '{param}', path)
     return path
 
 
 def _route_pattern_matches(url: str, route_pattern: str) -> bool:
-    """Check if a literal URL matches a route pattern with parameters.
+    """Check if a literal or parameterized URL matches a route pattern with parameters.
 
-    e.g., "/api/users/123" matches "/api/users/{PARAM}"
+    e.g., "http://order-service/api/users/123" matches "/api/users/{param}"
+    e.g., "http://order-service/api/users/{PARAM}" matches "/api/users/{param}"
     """
-    url_parts = url.rstrip("/").lower().split("/")
-    pattern_parts = route_pattern.split("/")
+    normalized_url = _normalize_route_path(url)
+    normalized_pattern = _normalize_route_path(route_pattern)
+
+    url_parts = normalized_url.strip("/").split("/")
+    pattern_parts = normalized_pattern.strip("/").split("/")
 
     if len(url_parts) != len(pattern_parts):
         return False
 
     for url_part, pattern_part in zip(url_parts, pattern_parts):
-        if pattern_part == "{param}":
+        if pattern_part == "{param}" or url_part == "{param}":
             continue  # wildcard matches anything
         if url_part != pattern_part:
             return False

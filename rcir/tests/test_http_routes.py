@@ -159,7 +159,7 @@ def fetch_product(product_id):
         assert call.is_dynamic is True
         assert call.url is None
 
-    def test_fstring_url_flagged_dynamic(self):
+    def test_fstring_url_extracts_template(self):
         source = '''
 def fetch_item(item_id):
     response = requests.get(f"http://api/items/{item_id}")
@@ -167,7 +167,21 @@ def fetch_item(item_id):
 '''
         result = extract_http_routes(source, "client.py")
         assert len(result.client_calls) == 1
-        assert result.client_calls[0].is_dynamic is True
+        call = result.client_calls[0]
+        assert call.is_dynamic is False
+        assert call.url == "http://api/items/{PARAM}"
+
+    def test_concat_url_extracts_template(self):
+        source = '''
+def fetch_item(item_id):
+    response = requests.get("http://api/items/" + item_id)
+    return response.json()
+'''
+        result = extract_http_routes(source, "client.py")
+        assert len(result.client_calls) == 1
+        call = result.client_calls[0]
+        assert call.is_dynamic is False
+        assert call.url == "http://api/items/{PARAM}"
 
     def test_httpx_detected(self):
         source = '''
@@ -246,3 +260,29 @@ class TestRouteMatching:
         edges = match_client_calls_to_routes(routes, calls)
         for edge in edges:
             assert edge["reason"], f"Edge missing reason: {edge}"
+
+    def test_url_with_host_matches_route(self):
+        """requests.get('http://order-service/orders') matches @app.route('/orders')."""
+        routes = [
+            RouteHandler("/orders", ["GET"], "app.py::get_orders", "app.py", "flask"),
+        ]
+        calls = [
+            HTTPClientCall("http://order-service/orders", "GET", "client.py::call_orders", "client.py", "requests"),
+        ]
+        edges = match_client_calls_to_routes(routes, calls)
+        assert len(edges) == 1
+        assert edges[0]["target"] == "app.py::get_orders"
+        assert edges[0]["resolution"] == "static_exact"
+
+    def test_fstring_template_matches_parameterized_route(self):
+        """requests.get(f'http://order-service/orders/{id}') matches @app.route('/orders/<id>')."""
+        routes = [
+            RouteHandler("/orders/<order_id>", ["GET"], "app.py::get_order", "app.py", "flask"),
+        ]
+        calls = [
+            HTTPClientCall("http://order-service/orders/{PARAM}", "GET", "client.py::call_order", "client.py", "requests"),
+        ]
+        edges = match_client_calls_to_routes(routes, calls)
+        assert len(edges) == 1
+        assert edges[0]["target"] == "app.py::get_order"
+        assert edges[0]["resolution"] == "static_inference"

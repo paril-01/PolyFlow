@@ -191,6 +191,168 @@
       "target": "EmailService.send_email",
       "edge_class": "static_exact",
       "description": "SendOrderConfirmation calls EmailService.send_email helper"
+    },
+    {
+      "source": "src/checkoutservice/main.go::chargeCard",
+      "target": "PaymentService.Charge",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice chargeCard calls PaymentService.Charge via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::getUserCart",
+      "target": "CartService.GetCart",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice getUserCart calls CartService.GetCart via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::emptyUserCart",
+      "target": "CartService.EmptyCart",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice emptyUserCart calls CartService.EmptyCart via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::convertCurrency",
+      "target": "CurrencyService.Convert",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice convertCurrency calls CurrencyService.Convert via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::sendOrderConfirmation",
+      "target": "EmailService.SendOrderConfirmation",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice sendOrderConfirmation calls EmailService.SendOrderConfirmation via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::shipOrder",
+      "target": "ShippingService.ShipOrder",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice shipOrder calls ShippingService.ShipOrder via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::getCart",
+      "target": "CartService.GetCart",
+      "edge_class": "static_exact",
+      "description": "Go frontend getCart calls CartService.GetCart via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::emptyCart",
+      "target": "CartService.EmptyCart",
+      "edge_class": "static_exact",
+      "description": "Go frontend emptyCart calls CartService.EmptyCart via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::insertCart",
+      "target": "CartService.AddItem",
+      "edge_class": "static_exact",
+      "description": "Go frontend insertCart calls CartService.AddItem via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::getShippingQuote",
+      "target": "ShippingService.GetQuote",
+      "edge_class": "static_exact",
+      "description": "Go frontend getShippingQuote calls ShippingService.GetQuote via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::getRecommendations",
+      "target": "RecommendationService.ListRecommendations",
+      "edge_class": "static_exact",
+      "description": "Go frontend getRecommendations calls RecommendationService.ListRecommendations via gRPC"
+    },
+    {
+      "source": "src/frontend/rpc.go::getAd",
+      "target": "AdService.GetAds",
+      "edge_class": "static_exact",
+      "description": "Go frontend getAd calls AdService.GetAds via gRPC"
+    },
+    {
+      "source": "src/adservice/src/main/java/hipstershop/AdServiceClient.java::AdServiceClient",
+      "target": "AdService",
+      "edge_class": "static_exact",
+      "description": "Java AdServiceClient binds to AdService gRPC stub"
+    },
+    {
+      "source": "src/recommendationservice/recommendation_server.py::RecommendationService.ListRecommendations",
+      "target": "ProductCatalogService.ListProducts",
+      "edge_class": "static_exact",
+      "description": "Python RecommendationService.ListRecommendations calls ProductCatalogService.ListProducts via gRPC"
+    },
+    {
+      "source": "src/emailservice/email_client.py::send_confirmation_email",
+      "target": "EmailService.SendOrderConfirmation",
+      "edge_class": "static_exact",
+      "description": "Python email_client.py send_confirmation_email calls EmailService.SendOrderConfirmation via gRPC"
+    },
+    {
+      "source": "src/checkoutservice/main.go::CheckoutService",
+      "target": "CheckoutService",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice registers CheckoutService gRPC implementation"
+    },
+    {
+      "source": "src/productcatalogservice/server.go::ProductCatalogService",
+      "target": "ProductCatalogService",
+      "edge_class": "static_exact",
+      "description": "Go productcatalogservice registers ProductCatalogService gRPC implementation"
+    },
+    {
+      "source": "src/shippingservice/main.go::ShippingService",
+      "target": "ShippingService",
+      "edge_class": "static_exact",
+      "description": "Go shippingservice registers ShippingService gRPC implementation"
+    },
+    {
+      "source": "protos/grpc/health/v1/health.proto::Health.Check",
+      "target": "HealthCheckRequest",
+      "edge_class": "static_exact",
+      "description": "Health.Check consumes HealthCheckRequest"
+    },
+    {
+      "source": "protos/grpc/health/v1/health.proto::Health.Check",
+      "target": "HealthCheckResponse",
+      "edge_class": "static_exact",
+      "description": "Health.Check returns HealthCheckResponse"
+    },
+    {
+      "source": "src/emailservice/email_server.py::BaseEmailService",
+      "target": "EmailService",
+      "edge_class": "static_exact",
+      "description": "Python email_server BaseEmailService implements EmailService"
+    },
+    {
+      "source": "src/recommendationservice/recommendation_server.py::RecommendationService",
+      "target": "RecommendationService",
+      "edge_class": "static_exact",
+      "description": "Python recommendation_server RecommendationService implements RecommendationService"
+    },
+    {
+      "source": "src/recommendationservice/client.py",
+      "target": "RecommendationService.ListRecommendations",
+      "edge_class": "static_exact",
+      "description": "Python client.py calls RecommendationService.ListRecommendations via gRPC"
+    },
+    {
+      "source": "src/cartservice/src/services/HealthCheckService.cs::Health",
+      "target": "Health",
+      "edge_class": "static_exact",
+      "description": "C# cartservice registers Health service implementation"
+    },
+    {
+      "source": "src/checkoutservice/main.go::Health",
+      "target": "Health",
+      "edge_class": "static_exact",
+      "description": "Go checkoutservice registers Health service implementation"
+    },
+    {
+      "source": "src/productcatalogservice/server.go::Health",
+      "target": "Health",
+      "edge_class": "static_exact",
+      "description": "Go productcatalogservice registers Health service implementation"
+    },
+    {
+      "source": "src/shippingservice/main.go::Health",
+      "target": "Health",
+      "edge_class": "static_exact",
+      "description": "Go shippingservice registers Health service implementation"
     }
   ]
 }

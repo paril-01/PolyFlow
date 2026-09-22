@@ -23,6 +23,7 @@ from rcir.retrieval.hybrid import hybrid_retrieve
 from rcir.evaluation.ground_truth import (
     DiscoveredEdge,
     compute_precision_recall,
+    is_cross_service_candidate,
     load_ground_truth,
     PrecisionRecallReport,
 )
@@ -79,6 +80,7 @@ def run_online_boutique_benchmark(
             edge_class=e.get("resolution", "static_exact"),
             confidence=e.get("confidence", 1.0),
             reason=e.get("reason", ""),
+            edge_type=e.get("type", e.get("edge_type", "calls")),
         )
         for e in graph["edges"]
     ]
@@ -86,6 +88,7 @@ def run_online_boutique_benchmark(
     pr_report: PrecisionRecallReport = compute_precision_recall(
         discovered=discovered_edges,
         ground_truth=ground_truth,
+        candidate_filter=is_cross_service_candidate,
     )
 
     # 4. Retrieval Benchmark Tasks

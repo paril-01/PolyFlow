@@ -18,7 +18,7 @@ Metrics computed:
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal
 
 
 # Edge classes per v7 §1
@@ -61,11 +61,13 @@ class DiscoveredEdge:
     edge_class: EdgeClass
     confidence: float
     reason: str = ""
+    edge_type: str = "calls"
 
     def to_dict(self) -> dict:
         d = {
             "source": self.source, "target": self.target,
             "edge_class": self.edge_class, "confidence": self.confidence,
+            "edge_type": self.edge_type,
         }
         if self.reason:
             d["reason"] = self.reason
@@ -125,6 +127,9 @@ class PrecisionRecallReport:
     This is the concrete measurement of v7 §1's three separated properties:
     soundness (precision), recall, and auditability (unresolved rate + reasons).
     """
+    total_graph_edges: int = 0
+    candidates_evaluated: int = 0
+    ground_truth_edges: int = 0
     per_class: dict[str, EdgeClassMetrics] = field(default_factory=dict)
     # Edges RCIR found that don't match any ground truth edge
     false_positive_details: list[dict] = field(default_factory=list)
@@ -168,6 +173,9 @@ class PrecisionRecallReport:
                 "precision": self.overall_precision,
                 "recall": self.overall_recall,
                 "unresolved_rate": self.overall_unresolved_rate,
+                "total_graph_edges": self.total_graph_edges,
+                "candidates_evaluated": self.candidates_evaluated,
+                "ground_truth_edges": self.ground_truth_edges,
             },
             "per_class": {k: v.to_dict() for k, v in self.per_class.items()},
             "false_positive_details": self.false_positive_details,
@@ -181,9 +189,62 @@ def _edge_key(source: str, target: str) -> tuple[str, str]:
     return (source, target)
 
 
+def is_cross_service_candidate(edge: DiscoveredEdge) -> bool:
+    """Determine if a discovered edge is a candidate for cross-service evaluation.
+
+    Includes:
+    - Proto RPC and message definitions (.proto file as source or target)
+    - Cross-language / gRPC calls (reason has 'cross-language' or 'grpc')
+    - HTTP route handlers and calls (target has EXTERNAL_HTTP, UNRESOLVED_HTTP, or reason has 'http')
+    - Service implementations (edge_type is 'implements' or reason has 'implementation')
+    - Calls targeting gRPC services or methods (target has Service. or Servicer.)
+
+    Excludes:
+    - Ordinary intra-file plumbing (import os, sys, json, logging, time, etc.)
+    - Generated protobuf bindings & internal libraries (google.protobuf, opentelemetry, grpc_health, jinja2)
+    - Standard library inheritance
+    """
+    src = edge.source
+    tgt = edge.target
+    reason_lower = edge.reason.lower()
+
+    # Exclude library/framework imports & internal plumbing
+    if tgt.startswith((
+        "google.protobuf", "opentelemetry", "grpc.", "grpc_health",
+        "jinja2", "logging", "logger", "os", "sys", "time", "random",
+    )):
+        return False
+    if src.endswith(("_pb2.py", "_pb2_grpc.py")):
+        return False
+
+    # 1. Proto definitions (.proto file as source or target)
+    if src.endswith(".proto") or ".proto::" in src or tgt.endswith(".proto") or ".proto::" in tgt:
+        return True
+
+    # 2. Cross-language / RPC calls
+    if "cross-language" in reason_lower or "grpc" in reason_lower:
+        return True
+
+    # 3. HTTP routes and client calls
+    if "http" in reason_lower or "external_http" in tgt.lower() or "unresolved_http" in tgt.lower():
+        return True
+
+    # 4. Service implementations
+    if edge.edge_type == "implements" or "implementation" in reason_lower:
+        return True
+
+    # 5. Calls to Service or Service.Method
+    target_clean = tgt.split("::")[-1]
+    if any(s in target_clean for s in ["Service.", "Servicer."]):
+        return True
+
+    return False
+
+
 def compute_precision_recall(
     discovered: list[DiscoveredEdge],
     ground_truth: list[GroundTruthEdge],
+    candidate_filter: Callable[[DiscoveredEdge], bool] | None = None,
 ) -> PrecisionRecallReport:
     """Compute per-edge-class precision and recall.
 
@@ -196,10 +257,15 @@ def compute_precision_recall(
       dynamic_unresolved or unsupported (RCIR knows it can't resolve it —
       this is an explicitly-reported gap, different from a silent miss).
 
-    The distinction between false_negative and unresolved is the auditability
-    difference v7 §1 is built around: "I found 244/247 and here are the 3 I
-    couldn't verify" is a stronger claim than silently reporting 244/247.
+    The candidate_filter allows scoping evaluation to like-with-like candidates
+    (e.g., cross-service/contract edges) so intra-file plumbing edges (like import os)
+    are not falsely counted as false positives against a cross-service ground truth.
     """
+    total_graph_edges = len(discovered)
+    if candidate_filter is not None:
+        discovered = [e for e in discovered if candidate_filter(e)]
+    candidates_evaluated = len(discovered)
+
     # Index ground truth by (source, target)
     gt_by_key: dict[tuple[str, str], GroundTruthEdge] = {}
     for gt_edge in ground_truth:
@@ -219,7 +285,11 @@ def compute_precision_recall(
     for d in discovered:
         all_classes.add(d.edge_class)
 
-    report = PrecisionRecallReport()
+    report = PrecisionRecallReport(
+        total_graph_edges=total_graph_edges,
+        candidates_evaluated=candidates_evaluated,
+        ground_truth_edges=len(ground_truth),
+    )
     for cls in sorted(all_classes):
         report.per_class[cls] = EdgeClassMetrics(edge_class=cls)
 
@@ -233,8 +303,6 @@ def compute_precision_recall(
             matched_gt_keys.add(key)
 
             if disc.edge_class in ("dynamic_unresolved", "unsupported"):
-                # RCIR found it but flagged it as unresolvable — this is an
-                # explicitly-reported gap, not a true positive
                 cls_name = gt.edge_class
                 if cls_name not in report.per_class:
                     report.per_class[cls_name] = EdgeClassMetrics(edge_class=cls_name)
@@ -247,7 +315,6 @@ def compute_precision_recall(
                     "reason": disc.reason,
                 })
             else:
-                # True positive
                 cls_name = gt.edge_class
                 if cls_name not in report.per_class:
                     report.per_class[cls_name] = EdgeClassMetrics(edge_class=cls_name)

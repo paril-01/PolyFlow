@@ -31,6 +31,7 @@ from rcir.contract.schema import ContextContract, validate_contract
 from rcir.evaluation.ground_truth import (
     DiscoveredEdge,
     compute_precision_recall,
+    is_cross_service_candidate,
     load_ground_truth,
     PrecisionRecallReport,
 )
@@ -111,10 +112,15 @@ class FormalBenchmarkRunner:
                     edge_class=e.get("resolution", "static_exact"),
                     confidence=e.get("confidence", 1.0),
                     reason=e.get("reason", ""),
+                    edge_type=e.get("type", e.get("edge_type", "calls")),
                 )
                 for e in graph["edges"]
             ]
-            pr_report = compute_precision_recall(discovered, gt_edges)
+            pr_report = compute_precision_recall(
+                discovered=discovered,
+                ground_truth=gt_edges,
+                candidate_filter=is_cross_service_candidate,
+            )
             pr_data = pr_report.to_dict()
 
         # 4. Context Retrieval Tasks

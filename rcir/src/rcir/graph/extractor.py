@@ -17,6 +17,7 @@ import os
 import sys
 from pathlib import Path
 from collections import defaultdict
+import re
 from typing import Any
 
 from rcir.graph.edges import Edge, make_edge, EdgeType, ResolutionType
@@ -129,7 +130,7 @@ class _EdgeCollector(ast.NodeVisitor):
     """Second pass: extract edges (calls, imports, inheritance) with
     confidence/resolution tagging."""
 
-    def __init__(self, rel_path: str, known_symbols: set[str]):
+    def __init__(self, rel_path: str, known_symbols: set[str], tree: ast.AST | None = None):
         self.rel_path = rel_path
         self.known_symbols = known_symbols
         self.edges: list[Edge] = []
@@ -137,6 +138,54 @@ class _EdgeCollector(ast.NodeVisitor):
         self._class_stack: list[str] = []
         # Track imports for resolution
         self._imports: dict[str, str] = {}  # alias -> module path
+        # Track gRPC stub assignments: var_name -> ServiceName
+        self._grpc_stubs: dict[str, str] = {}
+
+        if tree is not None:
+            self._precollect_stubs(tree)
+
+    def _precollect_stubs(self, tree: ast.AST):
+        """Pre-scan the entire AST for gRPC stub assignments so stubs defined in
+        `if __name__ == '__main__':` or at module level are known regardless of traversal order.
+        """
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                self._check_grpc_stub_assign(node)
+            elif isinstance(node, ast.AnnAssign):
+                self._check_grpc_stub_ann_assign(node)
+
+    def visit_Assign(self, node: ast.Assign):
+        self._check_grpc_stub_assign(node)
+        self.generic_visit(node)
+
+    def visit_AnnAssign(self, node: ast.AnnAssign):
+        self._check_grpc_stub_ann_assign(node)
+        self.generic_visit(node)
+
+    def _check_grpc_stub_assign(self, node: ast.Assign):
+        if isinstance(node.value, ast.Call):
+            svc = self._extract_stub_service(node.value)
+            if svc:
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        self._grpc_stubs[target.id] = svc
+                    elif isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name):
+                        self._grpc_stubs[f"{target.value.id}.{target.attr}"] = svc
+
+    def _check_grpc_stub_ann_assign(self, node: ast.AnnAssign):
+        if node.value and isinstance(node.value, ast.Call):
+            svc = self._extract_stub_service(node.value)
+            if svc and isinstance(node.target, ast.Name):
+                self._grpc_stubs[node.target.id] = svc
+
+    def _extract_stub_service(self, call_node: ast.Call) -> str | None:
+        """Check if a Call node is a gRPC stub instantiation: FooServiceStub(...)"""
+        func_name = self._resolve_name(call_node.func)
+        if func_name:
+            m = re.search(r'([A-Z]\w*?)Stub$', func_name)
+            if m:
+                return m.group(1)
+        return None
 
     def visit_Import(self, node: ast.Import):
         source = _qualified_name(self.rel_path, *self._scope_stack) if self._scope_stack else self.rel_path
@@ -172,6 +221,18 @@ class _EdgeCollector(ast.NodeVisitor):
         for base in node.bases:
             base_name = self._resolve_name(base)
             if base_name:
+                # Check if this class implements a gRPC Servicer: e.g. EmailServiceServicer
+                servicer_match = re.search(r'([A-Z]\w*?)Servicer$', base_name)
+                if servicer_match:
+                    svc = servicer_match.group(1)
+                    self.edges.append(make_edge(
+                        source=class_qname,
+                        target=svc,
+                        edge_type="implements",
+                        resolution="static_exact",
+                        reason=f"Service {svc} implementation class {node.name}",
+                    ))
+
                 # Check if we can resolve the base to a known symbol
                 resolution = self._classify_resolution(base_name)
                 self.edges.append(make_edge(
@@ -218,6 +279,7 @@ class _EdgeCollector(ast.NodeVisitor):
 
         - Direct name call (foo()) → static_exact if known, static_inference otherwise
         - Attribute call (obj.method()) → static_inference (we infer, can't be sure)
+        - gRPC stub call (stub.method()) → static_exact if service known, static_inference otherwise
         - getattr / dynamic → dynamic_unresolved
         """
         func = node.func
@@ -232,11 +294,24 @@ class _EdgeCollector(ast.NodeVisitor):
             return name, resolution
 
         elif isinstance(func, ast.Attribute):
-            # obj.method() — we can get the attribute name but not
-            # definitively resolve which class's method it is
             attr = func.attr
-            # Try to resolve the object
             obj_name = self._resolve_name(func.value)
+
+            # Check if calling a method on a known gRPC stub!
+            if obj_name and obj_name in self._grpc_stubs:
+                svc = self._grpc_stubs[obj_name]
+                full_target = f"{svc}.{attr}"
+                resolution = "static_exact" if (svc in self.known_symbols or full_target in self.known_symbols) else "static_inference"
+                return full_target, resolution
+
+            # Check chained call: demo_pb2_grpc.EmailServiceStub(channel).SendOrderConfirmation(...)
+            if isinstance(func.value, ast.Call):
+                svc = self._extract_stub_service(func.value)
+                if svc:
+                    full_target = f"{svc}.{attr}"
+                    resolution = "static_exact" if (svc in self.known_symbols or full_target in self.known_symbols) else "static_inference"
+                    return full_target, resolution
+
             if obj_name:
                 full_target = f"{obj_name}.{attr}"
                 return full_target, "static_inference"
@@ -346,7 +421,7 @@ def extract_graph(repo_path: str | Path, exclude_dirs: set[str] | None = None) -
     all_http_client_calls = []
 
     for rel_path, tree in parsed_trees.items():
-        edge_collector = _EdgeCollector(rel_path, all_symbol_names)
+        edge_collector = _EdgeCollector(rel_path, all_symbol_names, tree=tree)
         edge_collector.visit(tree)
         all_edges.extend(edge_collector.edges)
 
