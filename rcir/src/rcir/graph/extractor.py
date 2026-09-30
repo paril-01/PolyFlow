@@ -24,6 +24,15 @@ from rcir.graph.edges import Edge, make_edge, EdgeType, ResolutionType
 from rcir.graph.proto_parser import parse_proto_files, proto_edges_from_parse_result
 from rcir.graph.http_routes import extract_http_routes, match_client_calls_to_routes
 from rcir.graph.polyglot_scanner import scan_polyglot_repo
+from rcir.graph.config_discovery import (
+    parse_config_services,
+    config_nodes_from_discovery_result,
+    config_edges_from_discovery_result,
+)
+from rcir.graph.php_scanner import scan_php_repo
+from rcir.graph.php_routes import scan_repository_php_routes
+from rcir.graph.polyglot_route_linker import link_polyglot_frontend_routes
+from rcir.graph.php_config import scan_php_config_dependencies
 
 
 def _repo_relative_path(file_path: Path, repo_root: Path) -> str:
@@ -492,6 +501,39 @@ def extract_graph(repo_path: str | Path, exclude_dirs: set[str] | None = None) -
     all_nodes.extend(poly_nodes)
     all_edges.extend(poly_edges)
 
+    # PHP source scanner (classes, methods, use statements, calls, DI, events)
+    php_nodes, php_edges = scan_php_repo(
+        repo_path=repo_path,
+        exclude_dirs=exclude_dirs,
+    )
+    all_nodes.extend(php_nodes)
+    all_edges.extend(php_edges)
+
+    # Declarative PHP routes (Nextcloud, Symfony, Laravel)
+    php_route_nodes, php_route_edges, php_routes = scan_repository_php_routes(repo_path)
+    all_nodes.extend(php_route_nodes)
+    all_edges.extend(php_route_edges)
+
+    # Polyglot frontend-to-backend route linker (TS/JS/Vue -> PHP/Python)
+    if php_routes:
+        cross_boundary_edges, poly_route_metrics = link_polyglot_frontend_routes(repo_path, php_routes)
+        all_edges.extend(cross_boundary_edges)
+    else:
+        cross_boundary_edges = []
+        poly_route_metrics = {}
+
+    # PHP application config dependencies (config.php, docker-compose)
+    php_config_nodes, php_config_edges, php_config_metrics = scan_php_config_dependencies(repo_path)
+    all_nodes.extend(php_config_nodes)
+    all_edges.extend(php_config_edges)
+
+    # Tier 2 configuration-mediated service discovery (v7 §10)
+    config_result = parse_config_services(repo_path=repo_path, exclude_dirs=exclude_dirs)
+    config_nodes = config_nodes_from_discovery_result(config_result)
+    config_edges = config_edges_from_discovery_result(config_result)
+    all_nodes.extend(config_nodes)
+    all_edges.extend(config_edges)
+
     # Deduplicate edges (same source→target→type)
     seen_edges: set[tuple] = set()
     unique_edges: list[Edge] = []
@@ -514,10 +556,18 @@ def extract_graph(repo_path: str | Path, exclude_dirs: set[str] | None = None) -
             "proto_files_parsed": proto_result.files_parsed,
             "proto_services_found": len(proto_result.services),
             "proto_messages_found": len(proto_result.messages),
-            "http_routes_found": len(all_http_routes),
-            "http_client_calls_found": len(all_http_client_calls),
+            "http_routes_found": len(all_http_routes) + len(php_route_nodes),
+            "http_client_calls_found": len(all_http_client_calls) + poly_route_metrics.get("frontend_api_calls_matched", 0),
             "polyglot_nodes_found": len(poly_nodes),
             "polyglot_edges_found": len(poly_edges),
+            "config_manifests_scanned": config_result.files_scanned + (1 if php_config_nodes else 0),
+            "config_services_found": len(config_result.services) + len(php_config_nodes),
+            "config_deployments_found": len(config_result.deployments),
+            "config_edges_found": len(config_edges) + len(php_config_edges),
+            "php_nodes_found": len(php_nodes) + len(php_route_nodes) + len(php_config_nodes),
+            "php_edges_found": len(php_edges) + len(php_route_edges) + len(cross_boundary_edges) + len(php_config_edges),
+            "php_routes_found": len(php_routes),
+            "cross_boundary_edges_found": len(cross_boundary_edges),
         },
     }
 

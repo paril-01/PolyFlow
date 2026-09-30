@@ -1,0 +1,44 @@
+# 04_sharing_permissions.poly — PolyFlow Cloud Drive: Sharing & Access Control
+@contract
+feature_id: "CLOUD-SHARE-004"
+owner: "collaboration-team"
+classification: "confidential"
+approvers: ["security.lead@polyflow.internal"]
+timeout_ms: 2000
+@end
+
+@link "02_file_storage.poly" as storage
+@link "01_auth_session.poly" as auth
+
+@schema ShareGrant
+  share_id: string
+  file_id: string
+  granter_id: string
+  grantee_email: string
+  permission: string
+  is_public_link: bool
+  expires_at: int
+@end
+
+@decision for="share.permissions"
+variable: "permission_model"
+choice: "POSIX-inspired capability tokens: READ, WRITE, ADMIN"
+@end
+
+@java[permission_checker]
+package polyflow.storage;
+
+public class PermissionChecker {
+    public static boolean hasAccess(String userRole, String grantPermission, String requiredAction) {
+        if ("admin".equalsIgnoreCase(userRole)) return true;
+        if ("ADMIN".equalsIgnoreCase(grantPermission)) return true;
+        if ("WRITE".equalsIgnoreCase(grantPermission)) {
+            return "READ".equalsIgnoreCase(requiredAction) || "WRITE".equalsIgnoreCase(requiredAction);
+        }
+        if ("READ".equalsIgnoreCase(grantPermission)) {
+            return "READ".equalsIgnoreCase(requiredAction);
+        }
+        return false;
+    }
+}
+@end

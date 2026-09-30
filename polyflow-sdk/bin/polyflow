@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SDK_ROOT="$(dirname "$DIR")"
+REPO_ROOT="$(dirname "$SDK_ROOT")"
+export PYTHONPATH="$SDK_ROOT:$REPO_ROOT:$REPO_ROOT/rcir/src:$PYTHONPATH"
+exec python -m polyflow_sdk.cli.main "$@"

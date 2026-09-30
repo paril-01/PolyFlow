@@ -1,0 +1,85 @@
+{
+  "repository": "https://github.com/nextcloud/server",
+  "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "total_edges": 109089,
+  "resolution_breakdown": {
+    "static_exact": 66161,
+    "static_inference": 42928,
+    "dynamic_unresolved": 0,
+    "unsupported": 0
+  },
+  "edge_classes": {
+    "call": {
+      "total_edges": 53834,
+      "static_exact": 10906,
+      "static_inferred": 42928,
+      "precision": 0.598,
+      "recall": 0.622,
+      "silent_miss_rate": 0.378,
+      "evidence": "PHP method invocation scanner ($this->method, Class::method, $container->get)"
+    },
+    "import": {
+      "total_edges": 50310,
+      "static_exact": 50310,
+      "static_inferred": 0,
+      "precision": 1.000,
+      "recall": 1.000,
+      "silent_miss_rate": 0.000,
+      "evidence": "PHP use namespace statements and TypeScript import declarations"
+    },
+    "inheritance": {
+      "total_edges": 4945,
+      "static_exact": 4945,
+      "static_inferred": 0,
+      "precision": 1.000,
+      "recall": 1.000,
+      "silent_miss_rate": 0.000,
+      "evidence": "PHP class extends, interface extends, and class implements clauses"
+    },
+    "route": {
+      "total_edges": 0,
+      "static_exact": 0,
+      "static_inferred": 0,
+      "precision": 0.000,
+      "recall": 0.000,
+      "silent_miss_rate": 1.000,
+      "evidence": "Nextcloud routes defined in appinfo/routes.php returning array structures"
+    },
+    "configuration": {
+      "total_edges": 0,
+      "static_exact": 0,
+      "static_inferred": 0,
+      "precision": "NOT_MEASURED",
+      "recall": "NOT_MEASURED",
+      "silent_miss_rate": "NOT_MEASURED",
+      "evidence": "config/config.php"
+    },
+    "generated": {
+      "total_edges": 0,
+      "static_exact": 0,
+      "static_inferred": 0,
+      "precision": "NOT_MEASURED",
+      "recall": "NOT_MEASURED",
+      "silent_miss_rate": "NOT_MEASURED",
+      "evidence": "No protobuf or openapi code generation detected in server core"
+    },
+    "event": {
+      "total_edges": 29,
+      "static_exact": 26,
+      "static_inferred": 3,
+      "precision": 1.000,
+      "recall": 0.889,
+      "silent_miss_rate": 0.111,
+      "evidence": "PSR-14 IEventDispatcher dispatch calls"
+    },
+    "cross_boundary": {
+      "total_edges": 0,
+      "static_exact": 0,
+      "static_inferred": 0,
+      "precision": 0.000,
+      "recall": 0.000,
+      "silent_miss_rate": 1.000,
+      "evidence": "TypeScript Vue client (Files.ts) -> PHP OCS API route boundary"
+    }
+  }
+}

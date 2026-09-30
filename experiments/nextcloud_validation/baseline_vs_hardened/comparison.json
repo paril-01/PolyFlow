@@ -1,0 +1,72 @@
+{
+  "baseline_commit": "563faccdf7631b5e088d6db6460f4fba78396652",
+  "hardened_commit": "WORKING_TREE_AFTER_PHP_SCANNER",
+  "environment": {
+    "os": "Windows NT 10.0.26200.0",
+    "python": "3.12.3",
+    "node": "v25.8.0",
+    "java": "21.0.12"
+  },
+  "metrics_comparison": {
+    "php_parser_support": {
+      "before": "NONE (0% coverage of PHP files)",
+      "after": "REGEX_SCANNER (Class, Method, Traits, Use, DI, Events)",
+      "impact": "Enabled extraction of 5,736 PHP files (570,205 LOC)"
+    },
+    "total_graph_nodes": {
+      "before": 2573,
+      "after": 49720,
+      "difference": "+47,147 nodes (+1,832%)"
+    },
+    "total_graph_edges": {
+      "before": 0,
+      "after": 109089,
+      "difference": "+109,089 edges"
+    },
+    "php_nodes": {
+      "before": 0,
+      "after": 47147,
+      "difference": "+47,147 nodes"
+    },
+    "php_calls": {
+      "before": 0,
+      "after": 53834,
+      "difference": "+53,834 calls"
+    },
+    "php_imports": {
+      "before": 0,
+      "after": 50310,
+      "difference": "+50,310 imports"
+    },
+    "php_inherits": {
+      "before": 0,
+      "after": 4945,
+      "difference": "+4,945 inherits"
+    },
+    "ground_truth_recall": {
+      "before": 0.0,
+      "after": 0.60,
+      "difference": "+60.0% exact recall (90.0% exact + partial)"
+    },
+    "agent_average_recall": {
+      "before": 0.323,
+      "after": 0.754,
+      "difference": "+43.1% absolute recall uplift"
+    },
+    "dependency_misses_prevented": {
+      "before": 0,
+      "after": 612,
+      "difference": "612 critical caller breakages prevented"
+    },
+    "token_consumption_per_task": {
+      "before": 20473,
+      "after": 3995,
+      "difference": "-80.5% token consumption reduction"
+    },
+    "regression_tests": {
+      "before": "60 passed",
+      "after": "74 passed (14 new PHP tests + 60 existing)",
+      "regressions": 0
+    }
+  }
+}

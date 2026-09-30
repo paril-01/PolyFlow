@@ -286,3 +286,46 @@ class TestRouteMatching:
         assert len(edges) == 1
         assert edges[0]["target"] == "app.py::get_order"
         assert edges[0]["resolution"] == "static_inference"
+
+    def test_django_urlpatterns_extraction(self):
+        """Django urlpatterns = [ path('orders/', views.orders) ] extracted correctly."""
+        source = """
+from django.urls import path
+import views
+
+urlpatterns = [
+    path('orders/', views.orders, name='orders'),
+    path('orders/<int:order_id>/', views.order_detail),
+]
+"""
+        result = extract_http_routes(source, "urls.py")
+        assert len(result.routes) == 2
+        assert result.routes[0].path == "orders/"
+        assert result.routes[0].framework == "django"
+        assert "views.orders" in result.routes[0].handler_name
+        assert result.routes[1].framework == "django"
+
+    def test_fastapi_api_route_and_aiohttp(self):
+        """FastAPI api_route decorator and aiohttp/httpx client calls extracted."""
+        source = """
+from fastapi import FastAPI
+import aiohttp
+
+app = FastAPI()
+
+@app.api_route("/checkout", methods=["GET", "POST"])
+def checkout():
+    pass
+
+async def call_checkout():
+    async with aiohttp.ClientSession() as session:
+        await session.request("POST", "http://cart/checkout")
+"""
+        result = extract_http_routes(source, "main.py")
+        assert len(result.routes) == 1
+        assert result.routes[0].path == "/checkout"
+        assert "POST" in result.routes[0].methods
+        assert len(result.client_calls) == 1
+        assert result.client_calls[0].method == "POST"
+        assert result.client_calls[0].url == "http://cart/checkout"
+

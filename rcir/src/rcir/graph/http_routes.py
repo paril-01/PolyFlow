@@ -141,6 +141,20 @@ class _RouteVisitor(ast.NodeVisitor):
                         framework="flask",
                     )
 
+            # FastAPI api_route: @app.api_route("/path", methods=["GET", "POST"])
+            if (isinstance(func, ast.Attribute) and func.attr == "api_route"
+                    and decorator.args):
+                path = self._extract_string_arg(decorator.args[0])
+                if path is not None:
+                    methods = self._extract_methods_kwarg(decorator)
+                    return RouteHandler(
+                        path=path,
+                        methods=methods or ["GET"],
+                        handler_name=handler_name,
+                        file_path=self.file_path,
+                        framework="fastapi",
+                    )
+
             # FastAPI: @router.get("/path"), @app.post("/path"), etc.
             if isinstance(func, ast.Attribute) and func.attr in (
                 "get", "post", "put", "delete", "patch", "head", "options"
@@ -157,6 +171,52 @@ class _RouteVisitor(ast.NodeVisitor):
                         )
 
         return None
+
+    def visit_Assign(self, node: ast.Assign):
+        self._check_django_urlpatterns(node)
+        self.generic_visit(node)
+
+    def _check_django_urlpatterns(self, node: ast.Assign):
+        """Check for Django urlpatterns: urlpatterns = [ path('orders/', views.orders), ... ]"""
+        is_urlpatterns = False
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id == "urlpatterns":
+                is_urlpatterns = True
+                break
+        if not is_urlpatterns or not isinstance(node.value, (ast.List, ast.Tuple)):
+            return
+
+        for elt in node.value.elts:
+            if isinstance(elt, ast.Call):
+                func_name = ""
+                if isinstance(elt.func, ast.Name):
+                    func_name = elt.func.id
+                elif isinstance(elt.func, ast.Attribute):
+                    func_name = elt.func.attr
+
+                if func_name in ("path", "re_path") and len(elt.args) >= 2:
+                    path_str = self._extract_string_arg(elt.args[0])
+                    if path_str is not None:
+                        if func_name == "re_path":
+                            path_str = path_str.lstrip("^").rstrip("$")
+                        handler_name = self._resolve_expr_name(elt.args[1])
+                        self.routes.append(RouteHandler(
+                            path=path_str,
+                            methods=["GET", "POST"],
+                            handler_name=f"{self.file_path}::{handler_name}",
+                            file_path=self.file_path,
+                            framework="django",
+                        ))
+
+    def _resolve_expr_name(self, node: ast.expr) -> str:
+        """Resolve a handler expression (e.g. views.orders, OrderView.as_view) to string."""
+        if isinstance(node, ast.Name):
+            return node.id
+        elif isinstance(node, ast.Attribute):
+            return f"{self._resolve_expr_name(node.value)}.{node.attr}"
+        elif isinstance(node, ast.Call):
+            return self._resolve_expr_name(node.func)
+        return "view_handler"
 
     def _extract_string_arg(self, node: ast.expr) -> str | None:
         """Extract a literal string from an AST node."""
@@ -192,17 +252,17 @@ class _RouteVisitor(ast.NodeVisitor):
     ) -> HTTPClientCall | None:
         """Check if a Call node is an HTTP client call.
 
-        Detects: requests.get/post, httpx.get/post, aiohttp patterns.
+        Detects: requests.get/post/request, httpx.get/post/request, aiohttp patterns.
         """
         func = call.func
 
-        # requests.get("url"), requests.post("url"), etc.
+        # requests.get("url"), requests.post("url"), httpx.get("url"), etc.
         if isinstance(func, ast.Attribute) and func.attr in (
             "get", "post", "put", "delete", "patch", "head", "options"
         ):
             obj_name = self._get_object_name(func.value)
-            if obj_name in ("requests", "httpx", "self.client", "client", "session"):
-                library = obj_name if obj_name in ("requests", "httpx") else "http_client"
+            if obj_name in ("requests", "httpx", "self.client", "client", "session", "aiohttp"):
+                library = obj_name if obj_name in ("requests", "httpx", "aiohttp") else "http_client"
                 url, is_dynamic = self._extract_url_arg(call)
                 return HTTPClientCall(
                     url=url,
@@ -212,6 +272,24 @@ class _RouteVisitor(ast.NodeVisitor):
                     library=library,
                     is_dynamic=is_dynamic,
                 )
+
+        # requests.request("GET", "url"), httpx.request("POST", "url"), etc.
+        if isinstance(func, ast.Attribute) and func.attr == "request":
+            obj_name = self._get_object_name(func.value)
+            if obj_name in ("requests", "httpx", "self.client", "client", "session", "aiohttp"):
+                if len(call.args) >= 2:
+                    method_str = self._extract_string_arg(call.args[0]) or "GET"
+                    # URL is 2nd argument
+                    url, is_dynamic = self._extract_url_from_node(call.args[1])
+                    library = obj_name if obj_name in ("requests", "httpx", "aiohttp") else "http_client"
+                    return HTTPClientCall(
+                        url=url,
+                        method=method_str.upper(),
+                        caller_name=caller_name,
+                        file_path=self.file_path,
+                        library=library,
+                        is_dynamic=is_dynamic,
+                    )
 
         return None
 
@@ -226,14 +304,7 @@ class _RouteVisitor(ast.NodeVisitor):
         return None
 
     def _extract_url_arg(self, call: ast.Call) -> tuple[str | None, bool]:
-        """Extract the URL from an HTTP client call.
-
-        Returns (url_string, is_dynamic).
-        If the URL is a literal string, returns (url, False).
-        If the URL has dynamic parameters (f-string, concatenation), extracts the static template
-        with {PARAM} placeholders, returning (template, False).
-        If the URL is purely dynamic/opaque variable, returns (None, True).
-        """
+        """Extract the URL from an HTTP client call."""
         arg_node = None
         if call.args:
             arg_node = call.args[0]
@@ -242,7 +313,10 @@ class _RouteVisitor(ast.NodeVisitor):
                 if kw.arg == "url":
                     arg_node = kw.value
                     break
+        return self._extract_url_from_node(arg_node)
 
+    def _extract_url_from_node(self, arg_node: ast.expr | None) -> tuple[str | None, bool]:
+        """Extract the URL string or template from an AST expression node."""
         if arg_node is None:
             return (None, True)
 

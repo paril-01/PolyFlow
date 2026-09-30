@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "tasks_evaluated": 3,
+    "baseline_average_recall": 0.522,
+    "rcir_average_recall": 0.328,
+    "recall_gain": "-19.5%"
+  },
+  "tasks": [
+    {
+      "task_id": "POLY-TASK-1",
+      "title": "Cross-Stack Checksum Rename",
+      "ground_truth_files": 5,
+      "baseline_recall": 0.4,
+      "rcir_recall": 0.4,
+      "baseline_misses": 3,
+      "rcir_misses": 3,
+      "tokens_consumed": 1204
+    },
+    {
+      "task_id": "POLY-TASK-2",
+      "title": "Permission Capability Action Refactoring",
+      "ground_truth_files": 4,
+      "baseline_recall": 0.5,
+      "rcir_recall": 0.25,
+      "baseline_misses": 2,
+      "rcir_misses": 3,
+      "tokens_consumed": 16
+    },
+    {
+      "task_id": "POLY-TASK-3",
+      "title": "Thumbnail Metadata Contract Evolution",
+      "ground_truth_files": 3,
+      "baseline_recall": 0.667,
+      "rcir_recall": 0.333,
+      "baseline_misses": 1,
+      "rcir_misses": 2,
+      "tokens_consumed": 484
+    }
+  ]
+}

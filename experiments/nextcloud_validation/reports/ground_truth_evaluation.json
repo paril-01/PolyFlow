@@ -1,0 +1,301 @@
+{
+  "summary": {
+    "total_ground_truth_edges": 10,
+    "true_positives": 7,
+    "silent_misses": 0,
+    "known_unresolved": 0,
+    "partial_matches": 3,
+    "edge_recall": 0.7,
+    "silent_miss_rate": 0.0,
+    "known_unresolved_rate": 0.0
+  },
+  "per_category": {
+    "inheritance": {
+      "tp": 2,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 2
+    },
+    "imports": {
+      "tp": 1,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 1
+    },
+    "dependency_injection": {
+      "tp": 1,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 1
+    },
+    "interface_implementation": {
+      "tp": 1,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 1
+    },
+    "route": {
+      "tp": 1,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 1
+    },
+    "method_call": {
+      "tp": 0,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 1,
+      "total": 1
+    },
+    "static_call": {
+      "tp": 1,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 0,
+      "total": 1
+    },
+    "event": {
+      "tp": 0,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 1,
+      "total": 1
+    },
+    "frontend_backend": {
+      "tp": 0,
+      "fn": 0,
+      "unresolved": 0,
+      "partial": 1,
+      "total": 1
+    }
+  },
+  "detailed_results": [
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "apps/files/lib/Controller/ApiController.php",
+        "target": "OCP\\AppFramework\\Controller",
+        "type": "imports",
+        "edge_type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "PHP use statement: use OCP\\AppFramework\\Controller"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-001",
+        "category": "inheritance",
+        "source": "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController",
+        "target": "OCP\\AppFramework\\Controller",
+        "edge_type": "inherits",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Line: 'class ApiController extends Controller' in apps/files/lib/Controller/ApiController.php",
+        "verification_method": "grep -n 'class ApiController extends Controller' apps/files/lib/Controller/ApiController.php",
+        "difficulty": "easy"
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "apps/files/lib/Controller/ApiController.php",
+        "target": "OCA\\Files\\Service\\TagService",
+        "type": "imports",
+        "edge_type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "PHP use statement: use OCA\\Files\\Service\\TagService"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-002",
+        "category": "imports",
+        "source": "apps/files/lib/Controller/ApiController.php",
+        "target": "OCA\\Files\\Service\\TagService",
+        "edge_type": "imports",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Line: 'use OCA\\Files\\Service\\TagService;' in apps/files/lib/Controller/ApiController.php",
+        "verification_method": "grep -n 'use OCA.*TagService' apps/files/lib/Controller/ApiController.php",
+        "difficulty": "easy"
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "apps/files/lib/Controller/ApiController.php",
+        "target": "OCA\\Files\\Service\\TagService",
+        "type": "imports",
+        "edge_type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "PHP use statement: use OCA\\Files\\Service\\TagService"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-003",
+        "category": "dependency_injection",
+        "source": "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::__construct",
+        "target": "OCA\\Files\\Service\\TagService",
+        "edge_type": "imports",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Constructor parameter: 'private TagService $tagService' in ApiController.__construct()",
+        "verification_method": "grep -n 'TagService' apps/files/lib/Controller/ApiController.php",
+        "difficulty": "medium",
+        "notes": "DI container resolves TagService at runtime. RCIR must detect the type hint."
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "lib/private/ServerContainer.php",
+        "target": "OC\\AppFramework\\Utility\\SimpleContainer",
+        "type": "imports",
+        "edge_type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "PHP use statement: use OC\\AppFramework\\Utility\\SimpleContainer"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-004",
+        "category": "inheritance",
+        "source": "lib/private/ServerContainer.php::OC\\ServerContainer",
+        "target": "OC\\AppFramework\\Utility\\SimpleContainer",
+        "edge_type": "inherits",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Line: 'class ServerContainer extends SimpleContainer' in lib/private/ServerContainer.php",
+        "verification_method": "grep -n 'extends SimpleContainer' lib/private/ServerContainer.php",
+        "difficulty": "easy"
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "lib/private/Files/Node/File.php::OC\\Files\\Node\\File",
+        "target": "OCP\\Files\\File",
+        "type": "inherits",
+        "edge_type": "inherits",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "File implements \\OCP\\Files\\File"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-005",
+        "category": "interface_implementation",
+        "source": "lib/private/Files/Node/File.php",
+        "target": "OCP\\Files\\File",
+        "edge_type": "inherits",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Class File extends Node implements \\OCP\\Files\\File",
+        "verification_method": "grep -n 'implements' lib/private/Files/Node/File.php",
+        "difficulty": "medium",
+        "notes": "Tests interface-to-implementation resolution across OC\\Files and OCP\\Files namespaces"
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "apps/files/appinfo/routes.php",
+        "target": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+        "type": "route",
+        "edge_type": "route",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "Nextcloud routes to controller action"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-006",
+        "category": "route",
+        "source": "apps/files/appinfo/routes.php",
+        "target": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+        "edge_type": "calls",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "'name' => 'Api#getThumbnail', 'url' => '/api/v1/thumbnail/{x}/{y}/{file}'",
+        "verification_method": "grep -n 'getThumbnail' apps/files/appinfo/routes.php",
+        "difficulty": "hard",
+        "notes": "Nextcloud routes use 'ControllerShortName#method' convention. RCIR must resolve 'Api#getThumbnail' to ApiController::getThumbnail. This is framework indirection."
+      }
+    },
+    {
+      "status": "partial_match",
+      "notes": "Target 'OC\\ServerContainer::registerNamespace' found in graph but not with expected source 'lib/private/ServerContainer.php::OC\\ServerContainer::__construct'",
+      "ground_truth": {
+        "case_id": "GT-007",
+        "category": "method_call",
+        "source": "lib/private/ServerContainer.php::OC\\ServerContainer::__construct",
+        "target": "OC\\ServerContainer::registerNamespace",
+        "edge_type": "calls",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "$this->registerNamespace() called within ServerContainer methods",
+        "verification_method": "grep -n 'this->registerNamespace' lib/private/ServerContainer.php",
+        "difficulty": "easy"
+      }
+    },
+    {
+      "status": "true_positive",
+      "matched_edge": {
+        "source": "lib/private/ServerContainer.php",
+        "target": "OC\\AppFramework\\App",
+        "type": "imports",
+        "edge_type": "imports",
+        "confidence": 1.0,
+        "resolution": "static_exact",
+        "reason": "PHP use statement: use OC\\AppFramework\\App"
+      },
+      "resolution": "static_exact",
+      "ground_truth": {
+        "case_id": "GT-008",
+        "category": "static_call",
+        "source": "lib/private/ServerContainer.php::OC\\ServerContainer::registerAppContainer",
+        "target": "OC\\AppFramework\\App::buildAppNamespace",
+        "edge_type": "calls",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "App::buildAppNamespace($appName) called in registerAppContainer()",
+        "verification_method": "grep -n 'App::buildAppNamespace' lib/private/ServerContainer.php",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "status": "partial_match",
+      "notes": "Target 'OCP\\Files\\Events\\Node\\NodeDeletedEvent' found in graph but not with expected source 'lib/private/Files/Node/Node.php'",
+      "ground_truth": {
+        "case_id": "GT-009",
+        "category": "event",
+        "source": "lib/private/Files/Node/Node.php",
+        "target": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+        "edge_type": "calls",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "Event dispatched when a file/folder is deleted",
+        "verification_method": "grep -rn 'NodeDeletedEvent' lib/private/Files/",
+        "difficulty": "hard",
+        "notes": "Event dispatch + listener registration is a common source of silent misses. The event class is in OCP, dispatched from OC, listened to in apps."
+      }
+    },
+    {
+      "status": "partial_match",
+      "notes": "Target '/apps/files/api/v1/recent/' found in graph but not with expected source 'apps/files/src/services/Files.ts'",
+      "ground_truth": {
+        "case_id": "GT-010",
+        "category": "frontend_backend",
+        "source": "apps/files/src/services/Files.ts",
+        "target": "/apps/files/api/v1/recent/",
+        "edge_type": "calls",
+        "evidence_source": "manual_source_inspection",
+        "evidence_detail": "TypeScript frontend calls PHP backend OCS API endpoint for recent files",
+        "verification_method": "grep -rn 'recent' apps/files/src/services/",
+        "difficulty": "very_hard",
+        "notes": "Cross-language boundary: TypeScript -> HTTP -> PHP. RCIR must detect the URL string in JS/TS and match it to the PHP route."
+      }
+    }
+  ],
+  "graph_stats": {
+    "total_nodes": 50346,
+    "total_edges": 110854
+  }
+}

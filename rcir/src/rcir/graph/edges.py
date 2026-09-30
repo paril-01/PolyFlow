@@ -10,7 +10,9 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 
-EdgeType = Literal["calls", "imports", "inherits"]
+EdgeType = Literal[
+    "calls", "imports", "inherits", "implements", "route", "config", "event", "cross_boundary"
+]
 ResolutionType = Literal[
     "static_exact",       # resolved via protobuf/typed interface, no ambiguity
     "static_inference",   # resolved via pattern-matching (route strings, naming conventions)
@@ -51,6 +53,7 @@ class Edge:
             "source": self.source,
             "target": self.target,
             "type": self.edge_type,
+            "edge_type": self.edge_type,
             "confidence": self.confidence,
             "resolution": self.resolution,
         }
@@ -63,7 +66,7 @@ class Edge:
         return cls(
             source=d["source"],
             target=d["target"],
-            edge_type=d["type"],
+            edge_type=d.get("edge_type", d.get("type", "calls")),
             confidence=d["confidence"],
             resolution=d["resolution"],
             reason=d.get("reason", ""),

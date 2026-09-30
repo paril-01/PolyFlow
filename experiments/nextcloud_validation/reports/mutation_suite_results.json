@@ -1,0 +1,232 @@
+{
+  "summary": {
+    "total_mutations": 7,
+    "macro_precision": 0.59,
+    "macro_recall": 0.745,
+    "micro_precision": 0.571,
+    "micro_recall": 0.623,
+    "total_true_positives": 830,
+    "total_false_positives": 623,
+    "total_false_negatives": 503,
+    "total_ground_truth_references": 1333,
+    "average_impact_latency_ms": 45.15
+  },
+  "mutations": [
+    {
+      "mutation_id": "MUT-001",
+      "name": "Rename Controller Method",
+      "entity": "ApiController::getThumbnail",
+      "symbol": "getThumbnail",
+      "category": "controller_method",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "rcir_latency_ms": 43.24,
+      "rcir_total_affected_call_sites": 87,
+      "rcir_exact_call_sites": 56,
+      "rcir_inferred_call_sites": 31,
+      "rcir_affected_files_count": 18,
+      "rcir_confidence": 0.644,
+      "ground_truth_files_count": 25,
+      "true_positives_count": 17,
+      "false_positives_count": 1,
+      "false_negatives_count": 8,
+      "precision": 0.944,
+      "recall": 0.68,
+      "sample_missed_files": [
+        "apps/files/tests/Controller/ApiControllerTest.php",
+        "lib/private/Preview/Generator.php",
+        "lib/private/Preview/ProviderV2.php",
+        "tests/lib/Preview/GeneratorTest.php",
+        "tests/lib/Preview/MovieTestRemoteFile.php"
+      ],
+      "sample_detected_files": [
+        "apps/files/appinfo/routes.php",
+        "apps/files/lib/Controller/ApiController.php",
+        "lib/private/Preview/Bitmap.php",
+        "lib/private/Preview/CDR.php",
+        "lib/private/Preview/GeneratorHelper.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-002",
+      "name": "Rename Core Service Class",
+      "entity": "OC\\Files\\Node\\Node",
+      "symbol": "Node",
+      "category": "service_class",
+      "target_file": "lib/private/Files/Node/Node.php",
+      "rcir_latency_ms": 47.27,
+      "rcir_total_affected_call_sites": 2918,
+      "rcir_exact_call_sites": 1731,
+      "rcir_inferred_call_sites": 1187,
+      "rcir_affected_files_count": 284,
+      "rcir_confidence": 0.593,
+      "ground_truth_files_count": 333,
+      "true_positives_count": 189,
+      "false_positives_count": 95,
+      "false_negatives_count": 144,
+      "precision": 0.665,
+      "recall": 0.568,
+      "sample_missed_files": [
+        "apps/dav/composer/composer/autoload_classmap.php",
+        "apps/dav/composer/composer/autoload_static.php",
+        "apps/dav/lib/CalDAV/AppCalendar/AppCalendar.php",
+        "apps/dav/lib/CalDAV/CalDavBackend.php",
+        "apps/dav/lib/CalDAV/Federation/RemoteUserCalendarHome.php"
+      ],
+      "sample_detected_files": [
+        "apps/admin_audit/lib/Actions/Files.php",
+        "apps/admin_audit/lib/AppInfo/Application.php",
+        "apps/comments/lib/Search/CommentsSearchProvider.php",
+        "apps/comments/tests/Unit/Activity/ListenerTest.php",
+        "apps/comments/tests/Unit/Controller/NotificationsTest.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-003",
+      "name": "Rename Interface",
+      "entity": "OCP\\Files\\Node",
+      "symbol": "Node",
+      "category": "interface",
+      "target_file": "lib/public/Files/Node.php",
+      "rcir_latency_ms": 49.69,
+      "rcir_total_affected_call_sites": 2918,
+      "rcir_exact_call_sites": 1731,
+      "rcir_inferred_call_sites": 1187,
+      "rcir_affected_files_count": 284,
+      "rcir_confidence": 0.593,
+      "ground_truth_files_count": 20,
+      "true_positives_count": 19,
+      "false_positives_count": 265,
+      "false_negatives_count": 1,
+      "precision": 0.067,
+      "recall": 0.95,
+      "sample_missed_files": [
+        "dist/5862-5862.js"
+      ],
+      "sample_detected_files": [
+        "apps/dav/lib/Comments/CommentNode.php",
+        "apps/dav/lib/Connector/Sabre/Node.php",
+        "apps/dav/lib/Provisioning/Apple/AppleProvisioningNode.php",
+        "apps/dav/lib/SystemTag/SystemTagMappingNode.php",
+        "apps/files/lib/Listener/NodeAddedToFavoriteListener.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-004",
+      "name": "Rename Event Class",
+      "entity": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "symbol": "NodeDeletedEvent",
+      "category": "event",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "rcir_latency_ms": 46.36,
+      "rcir_total_affected_call_sites": 29,
+      "rcir_exact_call_sites": 26,
+      "rcir_inferred_call_sites": 3,
+      "rcir_affected_files_count": 16,
+      "rcir_confidence": 0.897,
+      "ground_truth_files_count": 18,
+      "true_positives_count": 16,
+      "false_positives_count": 0,
+      "false_negatives_count": 2,
+      "precision": 1.0,
+      "recall": 0.889,
+      "sample_missed_files": [
+        "lib/composer/composer/autoload_classmap.php",
+        "lib/composer/composer/autoload_static.php"
+      ],
+      "sample_detected_files": [
+        "apps/admin_audit/lib/Actions/Files.php",
+        "apps/admin_audit/lib/AppInfo/Application.php",
+        "apps/files/lib/AppInfo/Application.php",
+        "apps/files/lib/Listener/SyncLivePhotosListener.php",
+        "apps/files/lib/Sharing/Source/NodeShareSourceType.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-005",
+      "name": "Change DI Service Lookup",
+      "entity": "OCP\\IConfig",
+      "symbol": "IConfig",
+      "category": "dependency_injection",
+      "target_file": "lib/public/IConfig.php",
+      "rcir_latency_ms": 43.72,
+      "rcir_total_affected_call_sites": 1212,
+      "rcir_exact_call_sites": 1209,
+      "rcir_inferred_call_sites": 3,
+      "rcir_affected_files_count": 780,
+      "rcir_confidence": 0.998,
+      "ground_truth_files_count": 538,
+      "true_positives_count": 536,
+      "false_positives_count": 244,
+      "false_negatives_count": 2,
+      "precision": 0.687,
+      "recall": 0.996,
+      "sample_missed_files": [
+        "lib/public/ServerVersion.php",
+        "lib/public/Util.php"
+      ],
+      "sample_detected_files": [
+        "apps/admin_audit/lib/AuditLogger.php",
+        "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
+        "apps/appstore/lib/Controller/ApiController.php",
+        "apps/appstore/lib/Controller/PageController.php",
+        "apps/comments/lib/MaxAutoCompleteResultsInitialState.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-006",
+      "name": "Rename Interface Method",
+      "entity": "OCP\\Files\\Node::getId",
+      "symbol": "getId",
+      "category": "interface_method",
+      "target_file": "lib/public/Files/Node.php",
+      "rcir_latency_ms": 44.19,
+      "rcir_total_affected_call_sites": 104,
+      "rcir_exact_call_sites": 15,
+      "rcir_inferred_call_sites": 89,
+      "rcir_affected_files_count": 69,
+      "rcir_confidence": 0.144,
+      "ground_truth_files_count": 399,
+      "true_positives_count": 53,
+      "false_positives_count": 16,
+      "false_negatives_count": 346,
+      "precision": 0.768,
+      "recall": 0.133,
+      "sample_missed_files": [
+        "apps/admin_audit/lib/Actions/Files.php",
+        "apps/admin_audit/lib/Listener/FileEventListener.php",
+        "apps/admin_audit/lib/Listener/SharingEventListener.php",
+        "apps/cloud_federation_api/lib/Controller/TokenController.php",
+        "apps/comments/lib/Activity/Listener.php"
+      ],
+      "sample_detected_files": [
+        "apps/dav/lib/BackgroundJob/UserStatusAutomation.php",
+        "apps/dav/lib/CalDAV/Federation/FederatedCalendarEntity.php",
+        "apps/dav/lib/Connector/Sabre/File.php",
+        "apps/dav/lib/Db/Absence.php",
+        "apps/dav/lib/UserMigration/CalendarMigrator.php"
+      ]
+    },
+    {
+      "mutation_id": "MUT-007",
+      "name": "Rename Public Util Static Method",
+      "entity": "OCP\\Util::isLoaded",
+      "symbol": "isLoaded",
+      "category": "static_method",
+      "target_file": "lib/public/Util.php",
+      "rcir_latency_ms": 41.55,
+      "rcir_total_affected_call_sites": 2,
+      "rcir_exact_call_sites": 0,
+      "rcir_inferred_call_sites": 2,
+      "rcir_affected_files_count": 2,
+      "rcir_confidence": 0.0,
+      "ground_truth_files_count": 0,
+      "true_positives_count": 0,
+      "false_positives_count": 2,
+      "false_negatives_count": 0,
+      "precision": 0.0,
+      "recall": 1.0,
+      "sample_missed_files": [],
+      "sample_detected_files": []
+    }
+  ]
+}

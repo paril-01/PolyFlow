@@ -1,0 +1,48 @@
+# 02_file_storage.poly — PolyFlow Cloud Drive: File Storage & Metadata
+@contract
+feature_id: "CLOUD-STORAGE-002"
+owner: "storage-platform"
+classification: "confidential"
+approvers: ["storage.architect@polyflow.internal"]
+timeout_ms: 3000
+@end
+
+@link "01_auth_session.poly" as auth
+
+@schema FileMetadata
+  file_id: string
+  owner_id: string
+  name: string
+  size_bytes: int
+  mime_type: string
+  storage_path: string
+  checksum_sha256: string
+  status: string
+  created_at: int
+@end
+
+@schema UploadRequest
+  session_token: string
+  file_name: string
+  size_bytes: int
+  mime_type: string
+  content_bytes: bytes
+@end
+
+@decision for="storage.backend"
+variable: "storage_provider"
+choice: "Local Content-Addressable Blob Storage with deduplication by SHA-256"
+@end
+
+@java[storage_validator]
+package polyflow.storage;
+
+public class StorageValidator {
+    public static boolean validateUpload(String fileName, long sizeBytes, String mimeType) {
+        if (fileName == null || fileName.trim().isEmpty()) return false;
+        if (sizeBytes <= 0 || sizeBytes > 500L * 1024 * 1024) return false; // 500MB cap
+        if (mimeType == null || !mimeType.contains("/")) return false;
+        return true;
+    }
+}
+@end

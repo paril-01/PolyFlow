@@ -1,0 +1,37 @@
+{
+  "overall_status": "PASS",
+  "isolation_mechanism": "socket monkey-patching (Python-level)",
+  "timestamp": "2026-10-01T01:48:37+0530",
+  "tests_passed": 4,
+  "tests_total": 4,
+  "total_network_attempts": 0,
+  "network_attempts": [],
+  "results": {
+    "graph_extraction": {
+      "status": "PASS",
+      "nodes": 2029,
+      "edges": 4468,
+      "time_seconds": 1.954,
+      "network_attempts": []
+    },
+    "hierarchy_building": {
+      "status": "PASS",
+      "hierarchy_nodes": 5,
+      "time_seconds": 0.001,
+      "network_attempts": []
+    },
+    "retrieval": {
+      "status": "PASS",
+      "nodes_retrieved": 5,
+      "tokens_used": 981,
+      "time_seconds": 0.001,
+      "network_attempts": []
+    },
+    "impact_query": {
+      "status": "PASS",
+      "affected_call_sites": 1,
+      "time_seconds": 0.0,
+      "network_attempts": []
+    }
+  }
+}

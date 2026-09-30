@@ -63,11 +63,15 @@ _GO_GRPC_NEW_CLIENT = re.compile(
     re.MULTILINE,
 )
 _GO_GRPC_DIRECT_CALL = re.compile(
-    r'(?:pb\.)?New([A-Z]\w+?)Client\s*\([^)]*\)\.([A-Z]\w+)\s*\(',
+    r'(?:pb\.)?New([A-Z]\w+?)Client\s*\([^)]*\)\s*\.\s*([A-Z]\w+)\s*\(',
     re.MULTILINE,
 )
 _GO_METHOD_CALL = re.compile(
-    r'(\w+Client|\bcs\.\w+)\.([A-Z]\w+)\s*\(\s*(?:ctx|context\.\w+)',
+    r'(\w+Client|\bcs\.\w+|\bmock\w+|\bcl|\bclient)\.([A-Z]\w+)\s*\(\s*(?:context\.Background\(\)|ctx|context\.\w+)',
+    re.MULTILINE,
+)
+_GO_SERVER_METHOD = re.compile(
+    r'func\s*\(\s*\w+\s+\*?(\w+)\s*\)\s*([A-Z]\w+)\s*\(\s*(?:context\.Context|ctx\s+context\.Context)\s*,\s*[^)]*\*\s*(?:pb\.)?([A-Za-z0-9_]+)',
     re.MULTILINE,
 )
 _GO_REGISTER_SERVER = re.compile(
@@ -78,28 +82,64 @@ _GO_FUNC_DEF = re.compile(
     r'func\s+(?:\([^)]+\)\s+)?([A-Z]\w*|\b[a-z]\w*)\s*\(',
     re.MULTILINE,
 )
+_GO_HTTP_ROUTE = re.compile(
+    r'(?:http\.HandleFunc|(?:r|router|e|engine|g|app)\.(?:GET|POST|PUT|DELETE|PATCH))\s*\(\s*["\']([^"\']+)["\']',
+    re.MULTILINE,
+)
+_GO_HTTP_CALL = re.compile(
+    r'(?:http\.(?:Get|Post|Head)|(?:client|c)\.(?:Get|Post))\s*\(\s*["\']([^"\']+)["\']',
+    re.MULTILINE,
+)
 
 # C# patterns
 _CS_GRPC_CLIENT = re.compile(
-    r'new\s+([A-Z]\w+?)(?:\.[A-Z]\w+?)?\.([A-Z]\w+?)Client\s*\(',
+    r'(?:(?:var|[A-Z]\w+)\s+)?(\w+)\s*=\s*new\s+(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Client\s*\(',
+    re.MULTILINE,
+)
+_CS_GRPC_CLIENT_DIRECT = re.compile(
+    r'new\s+(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Client\s*\(',
     re.MULTILINE,
 )
 _CS_METHOD_CALL = re.compile(
-    r'(\w+Client|\b_client)\.([A-Z]\w+?)(?:Async)?\s*\(',
+    r'(\w+Client|\b_?client|\b\w+)\.([A-Z]\w+?)(?:Async)?\s*\(',
     re.MULTILINE,
 )
 _CS_SERVER_BASE = re.compile(
-    r'class\s+([A-Z]\w+)\s*:\s*(?:[A-Z]\w+\.)?([A-Z]\w+?)Base\b',
+    r'class\s+([A-Z]\w+)\s*:\s*(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Base\b',
+    re.MULTILINE,
+)
+_CS_RPC_METHOD_DEF = re.compile(
+    r'public\s+(?:async\s+)?(?:override\s+)?Task<\w+>\s+([A-Z]\w+)\s*\(',
     re.MULTILINE,
 )
 
 # Java patterns
 _JAVA_GRPC_STUB = re.compile(
-    r'([A-Z]\w+?)Grpc\.new(?:Blocking)?Stub\s*\(',
+    r'(?:(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Grpc\.(?:[A-Z]\w+?)Stub\s+)?(\w+)\s*=\s*(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Grpc\.new(?:Blocking)?Stub\s*\(',
+    re.MULTILINE,
+)
+_JAVA_GRPC_STUB_DIRECT = re.compile(
+    r'(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Grpc\.new(?:Blocking)?Stub\s*\(',
+    re.MULTILINE,
+)
+_JAVA_METHOD_CALL = re.compile(
+    r'(\w+Stub|\bclient|\b_client|\b\w+)\.([a-zA-Z]\w*)\s*\(\s*(?:[A-Za-z0-9_]+Request|req|request)',
     re.MULTILINE,
 )
 _JAVA_SERVER_BASE = re.compile(
-    r'class\s+([A-Z]\w+)\s+extends\s+([A-Z]\w+?)Grpc\.([A-Z]\w+?)ImplBase\b',
+    r'class\s+([A-Z]\w+)\s+extends\s+(?:[A-Za-z0-9_]+\.)*([A-Z]\w+?)Grpc\.([A-Z]\w+?)ImplBase\b',
+    re.MULTILINE,
+)
+_JAVA_RPC_METHOD_DEF = re.compile(
+    r'@Override\s+public\s+void\s+([a-zA-Z]\w*)\s*\(\s*([A-Za-z0-9_]+Request)\b',
+    re.MULTILINE,
+)
+_JAVA_SPRING_MAPPING = re.compile(
+    r'@(Get|Post|Put|Delete|Patch)Mapping\s*\(\s*(?:value\s*=\s*)?["\']([^"\']+)["\']',
+    re.MULTILINE,
+)
+_JAVA_SPRING_REQUEST_MAPPING = re.compile(
+    r'@RequestMapping\s*\(\s*(?:value\s*=\s*)?["\']([^"\']+)["\']',
     re.MULTILINE,
 )
 
@@ -182,6 +222,24 @@ def scan_source_file(
                 raw_snippet=m.group(0),
             ))
 
+        # Method calls: cl.GetProduct(ctx, ...), mockCatalog.ListProducts(...)
+        for m in _GO_METHOD_CALL.finditer(content):
+            var_name = m.group(1)
+            method_name = m.group(2)
+            line_no = content[:m.start()].count("\n") + 1
+            caller = _get_enclosing_func(content, line_no)
+            prefix = var_name.lower().replace("mock", "").replace("client", "").replace("cs.", "").replace("fe.", "")
+            svc_name = prefix.capitalize() + "Service" if prefix else "Service"
+            calls.append(CrossServiceCall(
+                file_path=file_path,
+                caller_symbol=f"{file_path}::{caller}",
+                service_name=svc_name,
+                method_name=method_name,
+                call_type="grpc",
+                line_number=line_no,
+                raw_snippet=m.group(0),
+            ))
+
         # Server registrations: pb.RegisterCheckoutServiceServer(srv, svc)
         for m in _GO_REGISTER_SERVER.finditer(content):
             svc_name = m.group(1)
@@ -194,9 +252,59 @@ def scan_source_file(
                 line_number=line_no,
             ))
 
+        # Go server method implementations: func (p *productCatalog) ListProducts(ctx context.Context, ...)
+        for m in _GO_SERVER_METHOD.finditer(content):
+            rcv_type = m.group(1)
+            method_name = m.group(2)
+            svc_name = rcv_type.capitalize()
+            if not svc_name.endswith("Service"):
+                svc_name = svc_name + "Service"
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=svc_name,
+                method_name=method_name,
+                endpoint_type="grpc",
+                line_number=line_no,
+            ))
+
+        # Go HTTP routes: r.GET("/orders", ...), http.HandleFunc("/orders", ...)
+        for m in _GO_HTTP_ROUTE.finditer(content):
+            route_path = m.group(1)
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=route_path,
+                method_name="*",
+                endpoint_type="http",
+                line_number=line_no,
+            ))
+
+        # Go HTTP client calls: http.Get("http://order-service/orders")
+        for m in _GO_HTTP_CALL.finditer(content):
+            url_str = m.group(1)
+            line_no = content[:m.start()].count("\n") + 1
+            caller = _get_enclosing_func(content, line_no)
+            calls.append(CrossServiceCall(
+                file_path=file_path,
+                caller_symbol=f"{file_path}::{caller}",
+                service_name=url_str,
+                method_name="*",
+                call_type="http",
+                line_number=line_no,
+                raw_snippet=m.group(0),
+            ))
+
     # 2. C# scanning
     elif ext == ".cs":
+        cs_stubs: dict[str, str] = {}
         for m in _CS_GRPC_CLIENT.finditer(content):
+            var_name = m.group(1)
+            svc_name = m.group(2)
+            if var_name and svc_name:
+                cs_stubs[var_name] = svc_name
+
+        for m in _CS_GRPC_CLIENT_DIRECT.finditer(content):
             svc_name = m.group(1)
             line_no = content[:m.start()].count("\n") + 1
             caller = _get_enclosing_func(content, line_no)
@@ -209,6 +317,26 @@ def scan_source_file(
                 line_number=line_no,
                 raw_snippet=m.group(0),
             ))
+
+        for m in _CS_METHOD_CALL.finditer(content):
+            var_name = m.group(1)
+            method_name = m.group(2)
+            svc_name = cs_stubs.get(var_name)
+            if not svc_name and "client" in var_name.lower():
+                prefix = var_name.lower().replace("client", "").replace("_", "")
+                svc_name = prefix.capitalize() + "Service" if prefix else None
+            if svc_name:
+                line_no = content[:m.start()].count("\n") + 1
+                caller = _get_enclosing_func(content, line_no)
+                calls.append(CrossServiceCall(
+                    file_path=file_path,
+                    caller_symbol=f"{file_path}::{caller}",
+                    service_name=svc_name,
+                    method_name=method_name,
+                    call_type="grpc",
+                    line_number=line_no,
+                    raw_snippet=m.group(0),
+                ))
 
         for m in _CS_SERVER_BASE.finditer(content):
             svc_name = m.group(2)
@@ -220,10 +348,27 @@ def scan_source_file(
                 endpoint_type="grpc",
                 line_number=line_no,
             ))
+            for m_def in _CS_RPC_METHOD_DEF.finditer(content):
+                m_name = m_def.group(1)
+                m_line = content[:m_def.start()].count("\n") + 1
+                endpoints.append(CrossServiceEndpoint(
+                    file_path=file_path,
+                    service_name=svc_name,
+                    method_name=m_name,
+                    endpoint_type="grpc",
+                    line_number=m_line,
+                ))
 
     # 3. Java scanning
     elif ext == ".java":
+        java_stubs: dict[str, str] = {}
         for m in _JAVA_GRPC_STUB.finditer(content):
+            svc_name = m.group(3) or m.group(1)
+            var_name = m.group(2)
+            if var_name and svc_name:
+                java_stubs[var_name] = svc_name
+
+        for m in _JAVA_GRPC_STUB_DIRECT.finditer(content):
             svc_name = m.group(1)
             line_no = content[:m.start()].count("\n") + 1
             caller = _get_enclosing_func(content, line_no)
@@ -237,14 +382,70 @@ def scan_source_file(
                 raw_snippet=m.group(0),
             ))
 
+        for m in _JAVA_METHOD_CALL.finditer(content):
+            var_name = m.group(1)
+            method_name = m.group(2)
+            svc_name = java_stubs.get(var_name)
+            if not svc_name and "stub" in var_name.lower():
+                prefix = var_name.lower().replace("blockingstub", "").replace("stub", "").replace("_", "")
+                svc_name = prefix.capitalize() + "Service" if prefix else None
+            if svc_name:
+                m_cap = method_name[0].upper() + method_name[1:] if method_name else method_name
+                line_no = content[:m.start()].count("\n") + 1
+                caller = _get_enclosing_func(content, line_no)
+                calls.append(CrossServiceCall(
+                    file_path=file_path,
+                    caller_symbol=f"{file_path}::{caller}",
+                    service_name=svc_name,
+                    method_name=m_cap,
+                    call_type="grpc",
+                    line_number=line_no,
+                    raw_snippet=m.group(0),
+                ))
+
         for m in _JAVA_SERVER_BASE.finditer(content):
-            svc_name = m.group(2)
+            svc_name = m.group(3) or m.group(2)
             line_no = content[:m.start()].count("\n") + 1
             endpoints.append(CrossServiceEndpoint(
                 file_path=file_path,
                 service_name=svc_name,
                 method_name="*",
                 endpoint_type="grpc",
+                line_number=line_no,
+            ))
+            for m_def in _JAVA_RPC_METHOD_DEF.finditer(content):
+                m_name = m_def.group(1)
+                m_cap = m_name[0].upper() + m_name[1:] if m_name else m_name
+                m_line = content[:m_def.start()].count("\n") + 1
+                endpoints.append(CrossServiceEndpoint(
+                    file_path=file_path,
+                    service_name=svc_name,
+                    method_name=m_cap,
+                    endpoint_type="grpc",
+                    line_number=m_line,
+                ))
+
+        # Java Spring HTTP routes: @GetMapping("/orders"), @PostMapping(...)
+        for m in _JAVA_SPRING_MAPPING.finditer(content):
+            http_method = m.group(1).upper()
+            route_path = m.group(2)
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=route_path,
+                method_name=http_method,
+                endpoint_type="http",
+                line_number=line_no,
+            ))
+
+        for m in _JAVA_SPRING_REQUEST_MAPPING.finditer(content):
+            route_path = m.group(1)
+            line_no = content[:m.start()].count("\n") + 1
+            endpoints.append(CrossServiceEndpoint(
+                file_path=file_path,
+                service_name=route_path,
+                method_name="*",
+                endpoint_type="http",
                 line_number=line_no,
             ))
 
@@ -403,6 +604,9 @@ def scan_polyglot_repo(
                 except Exception:
                     continue
 
+    # Create case-insensitive lookup for known proto services
+    known_lookup = {s.lower(): s for s in known_proto_services} if known_proto_services else {}
+
     # Resolve calls to proto services or declared endpoints
     for call in all_calls:
         # Create caller node if not already present
@@ -415,8 +619,11 @@ def scan_polyglot_repo(
         })
 
         target_service = call.service_name
+        if target_service.lower() in known_lookup:
+            target_service = known_lookup[target_service.lower()]
+
         # Match against known proto services
-        is_exact = known_proto_services and target_service in known_proto_services
+        is_exact = bool(known_proto_services and target_service in known_proto_services)
 
         if call.method_name and call.method_name != "*":
             target = f"{target_service}.{call.method_name}"
@@ -437,7 +644,19 @@ def scan_polyglot_repo(
 
     # Resolve declared server endpoints
     for ep in all_endpoints:
-        ep_node = f"{ep.file_path}::{ep.service_name}"
+        ep_svc = ep.service_name
+        if ep_svc.lower() in known_lookup:
+            ep_svc = known_lookup[ep_svc.lower()]
+
+        if ep.method_name and ep.method_name != "*":
+            target = f"{ep_svc}.{ep.method_name}"
+            ep_node = f"{ep.file_path}::{target}"
+            reason = f"Method {target} implementation registered in {ep.file_path}"
+        else:
+            target = ep_svc
+            ep_node = f"{ep.file_path}::{ep_svc}"
+            reason = f"Service {ep_svc} implementation registered in {ep.file_path}"
+
         new_nodes.append({
             "path": ep_node,
             "kind": "service_implementation",
@@ -447,10 +666,10 @@ def scan_polyglot_repo(
         })
         new_edges.append(make_edge(
             source=ep_node,
-            target=ep.service_name,
+            target=target,
             edge_type="implements",
             resolution="static_exact",
-            reason=f"Service {ep.service_name} implementation registered in {ep.file_path}",
+            reason=reason,
         ))
 
     return new_nodes, new_edges

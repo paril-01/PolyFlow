@@ -1,0 +1,52 @@
+{
+  "scale_test_results": [
+    {
+      "scale_point": "Subset 1: lib/private/Files",
+      "files": 126,
+      "loc": 29819,
+      "nodes": 2029,
+      "edges": 4468,
+      "extraction_time_s": 9.69,
+      "peak_memory_mb": 4.0,
+      "hierarchy_time_s": 0.037,
+      "retrieval_latency_ms": 63.14,
+      "impact_latency_ms": 2.58
+    },
+    {
+      "scale_point": "Subset 2: apps/files",
+      "files": 446,
+      "loc": 84449,
+      "nodes": 1015,
+      "edges": 2397,
+      "extraction_time_s": 1.98,
+      "peak_memory_mb": 2.2,
+      "hierarchy_time_s": 0.04,
+      "retrieval_latency_ms": 38.09,
+      "impact_latency_ms": 1.45
+    },
+    {
+      "scale_point": "Subset 3: lib/private",
+      "files": 944,
+      "loc": 158400,
+      "nodes": 9897,
+      "edges": 20175,
+      "extraction_time_s": 38.42,
+      "peak_memory_mb": 19.4,
+      "hierarchy_time_s": 0.262,
+      "retrieval_latency_ms": 372.54,
+      "impact_latency_ms": 8.49
+    },
+    {
+      "scale_point": "Subset 4: Full Repository",
+      "files": 11793,
+      "loc": 926080,
+      "nodes": 50346,
+      "edges": 110854,
+      "extraction_time_s": 379.61,
+      "peak_memory_mb": 116.18,
+      "hierarchy_time_s": 5.1608,
+      "retrieval_latency_ms": 2614.38,
+      "impact_latency_ms": 52.3
+    }
+  ]
+}

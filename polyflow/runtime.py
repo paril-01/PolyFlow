@@ -7,6 +7,7 @@ Enforces resource timeouts, captures outputs, and provides fail-partial resilien
 
 import os
 import sys
+import re
 import json
 import time
 import hashlib
@@ -94,8 +95,26 @@ class ExecutionContext:
     def emit_audit(self, event, **kwargs):
         self.audit_logs.append({"event": event, "data": kwargs})
 
+def _ensure_toolchains_on_path():
+    """Ensure host toolchains (Go, PHP, Node, JDK) are available in PATH."""
+    paths = [
+        os.path.expanduser(r"~\go_sdk\go\bin"),
+        os.path.expanduser(r"~\AppData\Local\Microsoft\WinGet\Packages\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe"),
+        r"C:\Program Files\Go\bin",
+        r"C:\php",
+    ]
+    cur_path = os.environ.get("PATH", "")
+    for p in paths:
+        if os.path.isdir(p) and p not in cur_path:
+            os.environ["PATH"] = p + os.pathsep + os.environ["PATH"]
+            cur_path = os.environ["PATH"]
+
+_ensure_toolchains_on_path()
+
+
 class PolyCellRuntime:
     def __init__(self, default_timeout_ms: int = 5000, fast_native_mode: bool = True):
+        _ensure_toolchains_on_path()
         self.default_timeout_ms = default_timeout_ms
         self.fast_native_mode = fast_native_mode
 
@@ -122,13 +141,17 @@ class PolyCellRuntime:
             return self._execute_java_cell(block, payload, timeout_sec, context_vars, start_time)
         elif lang in ("go", "golang"):
             return self._execute_go_cell(block, payload, timeout_sec, context_vars, start_time)
+        elif lang in ("php",):
+            return self._execute_php_cell(block, payload, timeout_sec, context_vars, start_time)
         else:
             elapsed = (time.time() - start_time) * 1000.0
+            err_msg = f"Unsupported cell language: {block.language}"
+            log_polyflow_error(block.tag, block.language, "Unsupported Language", err_msg)
             return CellResult(
                 language=block.language,
                 tag=block.tag,
-                status="success",
-                output={"status": "executed", "notice": f"Cell executed for {block.language}"},
+                status="failed",
+                error=err_msg,
                 execution_time_ms=elapsed
             )
 
@@ -206,7 +229,7 @@ class PolyCellRuntime:
         context_vars: Optional[Dict[str, Any]],
         start_time: float
     ) -> CellResult:
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
             script_path = os.path.join(tmpdir, "cell.py")
             payload_path = os.path.join(tmpdir, "payload.json")
             output_path = os.path.join(tmpdir, "output.json")
@@ -239,12 +262,29 @@ ctx = ExecutionContext(_ctx_raw)
 # User Cell Code End
 
 _result = None
-if 'process' in locals() and callable(locals()['process']):
-    _result = locals()['process'](req)
-elif 'login' in locals() and callable(locals()['login']):
-    _result = locals()['login'](req)
-elif 'main' in locals() and callable(locals()['main']):
-    _result = locals()['main'](req)
+import inspect
+for entry_candidate in ('process', 'authenticate', 'login', 'main', 'handle', 'compute'):
+    if entry_candidate in locals() and callable(locals()[entry_candidate]):
+        fn = locals()[entry_candidate]
+        sig = inspect.signature(fn)
+        if len(sig.parameters) == 1:
+            _result = fn(req)
+        else:
+            kwargs = {{k: (v.encode('utf-8') if isinstance(v, str) and (k.endswith('_bytes') or k == 'bytes') else v) for k, v in req.items() if k in sig.parameters}}
+            _result = fn(**kwargs)
+        break
+
+if _result is None:
+    # Check if a single user-defined function exists
+    user_fns = [v for k, v in locals().items() if callable(v) and not k.startswith('_') and k not in ('json', 'sys', 'hashlib', 'time', 'base64', 'ExecutionContext', 'ctx', 'inspect')]
+    if len(user_fns) == 1:
+        fn = user_fns[0]
+        sig = inspect.signature(fn)
+        if len(sig.parameters) == 1:
+            _result = fn(req)
+        else:
+            kwargs = {{k: (v.encode('utf-8') if isinstance(v, str) and (k.endswith('_bytes') or k == 'bytes') else v) for k, v in req.items() if k in sig.parameters}}
+            _result = fn(**kwargs)
 
 with open(r"{output_path}", "w", encoding="utf-8") as f:
     json.dump({{"result": _result, "audit": ctx.audit_logs}}, f, default=str)
@@ -311,7 +351,7 @@ with open(r"{output_path}", "w", encoding="utf-8") as f:
         context_vars: Optional[Dict[str, Any]],
         start_time: float
     ) -> CellResult:
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
             script_path = os.path.join(tmpdir, "cell.js")
             payload_path = os.path.join(tmpdir, "payload.json")
             output_path = os.path.join(tmpdir, "output.json")
@@ -319,13 +359,18 @@ with open(r"{output_path}", "w", encoding="utf-8") as f:
             with open(payload_path, "w", encoding="utf-8") as f:
                 json.dump({"payload": payload, "context": context_vars or {}}, f)
 
+            # Strip TypeScript types / interfaces and export qualifiers for clean Node execution
+            clean_code = re.sub(r'\bexport\s+(interface|type|const|let|var|function|class)\b', r'\1', block.code)
+            clean_code = re.sub(r'(?:interface|type)\s+[A-Za-z0-9_]+\s*(?:<[^>]+>)?\s*\{[^}]*\}', '', clean_code)
+            clean_code = re.sub(r':\s*[A-Za-z0-9_\[\]<>, |]+(?=[,)={])', '', clean_code)
+
             clean_script = f"""
 const fs = require('fs');
 const rawData = fs.readFileSync({json.dumps(payload_path)}, 'utf8');
 const _data = JSON.parse(rawData);
 const req = _data.payload || {{}};
 
-{block.code}
+{clean_code}
 
 let _result = null;
 if (typeof process === 'function') {{
@@ -382,13 +427,26 @@ fs.writeFileSync({json.dumps(output_path)}, JSON.stringify({{ result: _result }}
                         execution_time_ms=elapsed
                     )
 
-            except (FileNotFoundError, Exception):
+            except subprocess.TimeoutExpired:
                 elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Node execution timed out after {timeout_sec}s"
+                log_polyflow_error(block.tag, block.language, err_msg, "")
                 return CellResult(
                     language=block.language,
                     tag=block.tag,
-                    status="success",
-                    output={"status": "success", "engine": "node-cell", "result": "Node JS Cell Executed Successfully"},
+                    status="timeout",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+            except Exception as e:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Node execution error: {str(e)}"
+                log_polyflow_error(block.tag, block.language, "Node Execution Error", err_msg)
+                return CellResult(
+                    language=block.language,
+                    tag=block.tag,
+                    status="failed",
+                    error=err_msg,
                     execution_time_ms=elapsed
                 )
 
@@ -400,20 +458,148 @@ fs.writeFileSync({json.dumps(output_path)}, JSON.stringify({{ result: _result }}
         context_vars: Optional[Dict[str, Any]],
         start_time: float
     ) -> CellResult:
-        elapsed = (time.time() - start_time) * 1000.0
-        # If JDK is available, run java cell; otherwise return JDK cell result
-        return CellResult(
-            language="java",
-            tag=block.tag,
-            status="success",
-            output={
-                "status": "java_backend_executed",
-                "cell": f"Java[{block.tag}]",
-                "execution_mode": "JVM-Container",
-                "payload_processed": payload.get("user_id", payload.get("product_id", "java_ok"))
-            },
-            execution_time_ms=elapsed
-        )
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
+            payload_path = os.path.join(tmpdir, "payload.json")
+            output_path = os.path.join(tmpdir, "output.json")
+
+            with open(payload_path, "w", encoding="utf-8") as f:
+                json.dump({"payload": payload, "context": context_vars or {}}, f)
+
+            clean_payload_path = payload_path.replace("\\", "/")
+            clean_output_path = output_path.replace("\\", "/")
+
+            pkg_match = re.search(r'package\s+([A-Za-z0-9_.]+)\s*;', block.code)
+            pkg = pkg_match.group(1) if pkg_match else None
+            if pkg:
+                pkg_dir = os.path.join(tmpdir, *pkg.split("."))
+                os.makedirs(pkg_dir, exist_ok=True)
+            else:
+                pkg_dir = tmpdir
+
+            class_match = re.search(r'(?:public\s+)?class\s+([A-Za-z0-9_]+)', block.code)
+            has_main = "public static void main" in block.code
+
+            if class_match and has_main:
+                class_name = class_match.group(1)
+                java_file = os.path.join(pkg_dir, f"{class_name}.java")
+                with open(java_file, "w", encoding="utf-8") as f:
+                    f.write(block.code)
+                run_class = f"{pkg}.{class_name}" if pkg else class_name
+            elif class_match and not has_main:
+                orig_class_name = class_match.group(1)
+                stripped_code = re.sub(r'\bpublic\s+class\s+' + orig_class_name, r'class ' + orig_class_name, block.code)
+                runner_code = f"""{stripped_code}
+
+public class PolyFlowJavaRunner {{
+    public static void main(String[] args) throws Exception {{
+        {orig_class_name} instance = new {orig_class_name}();
+        System.out.println("Java class {orig_class_name} executed successfully.");
+    }}
+}}
+"""
+                class_name = "PolyFlowJavaRunner"
+                java_file = os.path.join(pkg_dir, "PolyFlowJavaRunner.java")
+                with open(java_file, "w", encoding="utf-8") as f:
+                    f.write(runner_code)
+                run_class = f"{pkg}.PolyFlowJavaRunner" if pkg else "PolyFlowJavaRunner"
+            else:
+                class_name = "CellRunner"
+                runner_code = f"""
+import java.io.*;
+import java.nio.file.*;
+
+public class CellRunner {{
+    public static void main(String[] args) throws Exception {{
+        String payloadJson = Files.readString(Paths.get("{clean_payload_path}"));
+        {block.code}
+    }}
+}}
+"""
+                java_file = os.path.join(tmpdir, "CellRunner.java")
+                with open(java_file, "w", encoding="utf-8") as f:
+                    f.write(runner_code)
+                run_class = "CellRunner"
+
+            try:
+                compile_proc = subprocess.run(
+                    ["javac", "-encoding", "UTF-8", java_file],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_sec
+                )
+                if compile_proc.returncode != 0:
+                    elapsed = (time.time() - start_time) * 1000.0
+                    err = compile_proc.stderr.strip() or compile_proc.stdout.strip()
+                    log_polyflow_error(block.tag, block.language, "Java Compilation Error", err)
+                    return CellResult(
+                        language="java",
+                        tag=block.tag,
+                        status="failed",
+                        error=err,
+                        execution_time_ms=elapsed
+                    )
+
+                run_proc = subprocess.run(
+                    ["java", "-cp", ".", run_class],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_sec
+                )
+                elapsed = (time.time() - start_time) * 1000.0
+
+                if run_proc.returncode != 0:
+                    err = run_proc.stderr.strip() or run_proc.stdout.strip()
+                    log_polyflow_error(block.tag, block.language, "Java Execution Error", err)
+                    return CellResult(
+                        language="java",
+                        tag=block.tag,
+                        status="failed",
+                        error=err,
+                        execution_time_ms=elapsed
+                    )
+
+                if os.path.exists(output_path):
+                    with open(output_path, "r", encoding="utf-8") as f:
+                        out_data = json.load(f)
+                    return CellResult(
+                        language="java",
+                        tag=block.tag,
+                        status="success",
+                        output=out_data,
+                        execution_time_ms=elapsed
+                    )
+                else:
+                    return CellResult(
+                        language="java",
+                        tag=block.tag,
+                        status="success",
+                        output={"stdout": run_proc.stdout.strip(), "status": "executed"},
+                        execution_time_ms=elapsed
+                    )
+            except subprocess.TimeoutExpired:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Java execution timed out after {timeout_sec}s"
+                log_polyflow_error(block.tag, block.language, err_msg, "")
+                return CellResult(
+                    language="java",
+                    tag=block.tag,
+                    status="timeout",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+            except Exception as e:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Java execution failed: {str(e)}"
+                log_polyflow_error(block.tag, block.language, "Java Execution Error", err_msg)
+                return CellResult(
+                    language="java",
+                    tag=block.tag,
+                    status="failed",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
 
     def _execute_go_cell(
         self,
@@ -423,16 +609,216 @@ fs.writeFileSync({json.dumps(output_path)}, JSON.stringify({{ result: _result }}
         context_vars: Optional[Dict[str, Any]],
         start_time: float
     ) -> CellResult:
-        elapsed = (time.time() - start_time) * 1000.0
-        return CellResult(
-            language="go",
-            tag=block.tag,
-            status="success",
-            output={
-                "status": "go_gateway_executed",
-                "cell": f"Go[{block.tag}]",
-                "execution_mode": "Go-Goroutine-Cell",
-                "throughput_qps": 50000
-            },
-            execution_time_ms=elapsed
-        )
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
+            payload_path = os.path.join(tmpdir, "payload.json")
+            output_path = os.path.join(tmpdir, "output.json")
+
+            with open(payload_path, "w", encoding="utf-8") as f:
+                json.dump({"payload": payload, "context": context_vars or {}}, f)
+
+            clean_payload_path = payload_path.replace("\\", "/")
+            clean_output_path = output_path.replace("\\", "/")
+
+            code = block.code.strip()
+            if "package " not in code:
+                has_main = "func main()" in code
+                if has_main:
+                    go_code = f"package main\n\nimport (\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"os\"\n)\n\n{code}"
+                else:
+                    go_code = f"""package main
+
+import (
+\t"encoding/json"
+\t"fmt"
+\t"os"
+)
+
+func main() {{
+\tpayloadBytes, _ := os.ReadFile("{clean_payload_path}")
+\tvar data map[string]interface{{}}
+\t_ = json.Unmarshal(payloadBytes, &data)
+
+\t// Cell logic
+\t{code}
+}}
+"""
+            else:
+                go_code = code
+
+            go_file = os.path.join(tmpdir, "main.go")
+            with open(go_file, "w", encoding="utf-8") as f:
+                f.write(go_code)
+
+            try:
+                proc = subprocess.run(
+                    ["go", "run", "main.go"],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_sec
+                )
+                elapsed = (time.time() - start_time) * 1000.0
+
+                if proc.returncode != 0:
+                    err = proc.stderr.strip() or proc.stdout.strip()
+                    log_polyflow_error(block.tag, block.language, "Go Execution Error", err)
+                    return CellResult(
+                        language="go",
+                        tag=block.tag,
+                        status="failed",
+                        error=err,
+                        execution_time_ms=elapsed
+                    )
+
+                if os.path.exists(output_path):
+                    with open(output_path, "r", encoding="utf-8") as f:
+                        out_data = json.load(f)
+                    return CellResult(
+                        language="go",
+                        tag=block.tag,
+                        status="success",
+                        output=out_data,
+                        execution_time_ms=elapsed
+                    )
+                else:
+                    return CellResult(
+                        language="go",
+                        tag=block.tag,
+                        status="success",
+                        output={"stdout": proc.stdout.strip(), "status": "executed"},
+                        execution_time_ms=elapsed
+                    )
+            except subprocess.TimeoutExpired:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Go execution timed out after {timeout_sec}s"
+                log_polyflow_error(block.tag, block.language, err_msg, "")
+                return CellResult(
+                    language="go",
+                    tag=block.tag,
+                    status="timeout",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+            except Exception as e:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"Go execution failed: {str(e)}"
+                log_polyflow_error(block.tag, block.language, "Go Execution Error", err_msg)
+                return CellResult(
+                    language="go",
+                    tag=block.tag,
+                    status="failed",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+
+    def _execute_php_cell(
+        self,
+        block: LanguageBlock,
+        payload: Dict[str, Any],
+        timeout_sec: float,
+        context_vars: Optional[Dict[str, Any]],
+        start_time: float
+    ) -> CellResult:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
+            payload_path = os.path.join(tmpdir, "payload.json")
+            output_path = os.path.join(tmpdir, "output.json")
+
+            with open(payload_path, "w", encoding="utf-8") as f:
+                json.dump({"payload": payload, "context": context_vars or {}}, f)
+
+            clean_payload_path = payload_path.replace("\\", "/")
+            clean_output_path = output_path.replace("\\", "/")
+
+            code = block.code.strip()
+            if not code.startswith("<?php"):
+                code = "<?php\n" + code
+
+            wrapper_code = f"""{code}
+
+// PolyFlow Runner Epilogue
+$rawPayload = @file_get_contents('{clean_payload_path}');
+$payloadData = json_decode($rawPayload, true);
+$req = $payloadData['payload'] ?? [];
+
+$res = null;
+if (function_exists('process')) {{
+    $res = process($req);
+}} elseif (function_exists('main')) {{
+    $res = main($req);
+}} elseif (function_exists('handle')) {{
+    $res = handle($req);
+}}
+
+if ($res !== null) {{
+    @file_put_contents('{clean_output_path}', json_encode(['result' => $res]));
+}}
+"""
+            php_file = os.path.join(tmpdir, "cell.php")
+            with open(php_file, "w", encoding="utf-8") as f:
+                f.write(wrapper_code)
+
+            try:
+                proc = subprocess.run(
+                    ["php", php_file],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_sec
+                )
+                elapsed = (time.time() - start_time) * 1000.0
+
+                if proc.returncode != 0:
+                    err = proc.stderr.strip() or proc.stdout.strip()
+                    log_polyflow_error(block.tag, block.language, "PHP Execution Error", err)
+                    return CellResult(
+                        language="php",
+                        tag=block.tag,
+                        status="failed",
+                        error=err,
+                        execution_time_ms=elapsed
+                    )
+
+                if os.path.exists(output_path):
+                    with open(output_path, "r", encoding="utf-8") as f:
+                        out_data = json.load(f)
+                    return CellResult(
+                        language="php",
+                        tag=block.tag,
+                        status="success",
+                        output=out_data.get("result"),
+                        execution_time_ms=elapsed
+                    )
+                else:
+                    return CellResult(
+                        language="php",
+                        tag=block.tag,
+                        status="success",
+                        output={"stdout": proc.stdout.strip(), "status": "executed"},
+                        execution_time_ms=elapsed
+                    )
+            except subprocess.TimeoutExpired:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"PHP execution timed out after {timeout_sec}s"
+                log_polyflow_error(block.tag, block.language, err_msg, "")
+                return CellResult(
+                    language="php",
+                    tag=block.tag,
+                    status="timeout",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+            except Exception as e:
+                elapsed = (time.time() - start_time) * 1000.0
+                err_msg = f"PHP execution failed: {str(e)}"
+                log_polyflow_error(block.tag, block.language, "PHP Execution Error", err_msg)
+                return CellResult(
+                    language="php",
+                    tag=block.tag,
+                    status="failed",
+                    error=err_msg,
+                    execution_time_ms=elapsed
+                )
+
+# Module-level aliases
+CellRuntime = PolyCellRuntime
+

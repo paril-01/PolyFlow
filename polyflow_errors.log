@@ -77,3 +77,186 @@ Traceback (most recent call last):
     return 1 / 0
 ZeroDivisionError: division by zero
 ========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:00:40
+[MODULE/TAG]     : go_test (GO)
+[SIMPLE SUMMARY] : Execution exception in @go[go_test] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : Go Execution Error
+[RAW ERROR]      : 
+Go execution failed: [WinError 2] The system cannot find the file specified
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:00:41
+[MODULE/TAG]     : php_test (PHP)
+[SIMPLE SUMMARY] : Execution exception in @php[php_test] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : PHP Execution Error
+[RAW ERROR]      : 
+PHP execution failed: [WinError 2] The system cannot find the file specified
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:00:41
+[MODULE/TAG]     : py_simple (PYTHON)
+[SIMPLE SUMMARY] : Undefined variable or symbol in @python[py_simple] code block.
+[RECOMMENDED FIX]: Verify that all referenced variables and functions are declared or imported before call site.
+[DETAILS]        : Process returned non-zero exit code.
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpukrvakgt\cell.py", line 25, in <module>
+    with open(output_path, 'w') as f:
+              ^^^^^^^^^^^
+NameError: name 'output_path' is not defined
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:03:53
+[MODULE/TAG]     : go_test (GO)
+[SIMPLE SUMMARY] : Execution timeout in @go[go_test] block.
+[RECOMMENDED FIX]: Increase timeout_ms in @contract or optimize heavy loops/external HTTP calls.
+[DETAILS]        : Go execution timed out after 5.0s
+[RAW ERROR]      : 
+
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:04:29
+[MODULE/TAG]     : go_test (GO)
+[SIMPLE SUMMARY] : Execution timeout in @go[go_test] block.
+[RECOMMENDED FIX]: Increase timeout_ms in @contract or optimize heavy loops/external HTTP calls.
+[DETAILS]        : Go execution timed out after 15.0s
+[RAW ERROR]      : 
+
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:05:12
+[MODULE/TAG]     : go_test (GO)
+[SIMPLE SUMMARY] : Execution timeout in @go[go_test] block.
+[RECOMMENDED FIX]: Increase timeout_ms in @contract or optimize heavy loops/external HTTP calls.
+[DETAILS]        : Go execution timed out after 15.0s
+[RAW ERROR]      : 
+
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:13:48
+[MODULE/TAG]     : auth_service (PYTHON)
+[SIMPLE SUMMARY] : Data type mismatch in @python[auth_service] code block.
+[RECOMMENDED FIX]: Check argument types passed to functions (e.g., converting string to int or dict access).
+[DETAILS]        : Process returned non-zero exit code.
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpitxkmwr9\cell.py", line 52, in <module>
+    _result = fn(**kwargs)
+              ^^^^^^^^^^^^
+TypeError: authenticate() missing 2 required positional arguments: 'email' and 'password'
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:13:48
+[MODULE/TAG]     : storage_validator (JAVA)
+[SIMPLE SUMMARY] : Execution exception in @java[storage_validator] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : Java Compilation Error
+[RAW ERROR]      : 
+C:\Users\Paril Rupani\AppData\Local\Temp\tmpnkx0qthv\PolyFlowJavaRunner.java:4: error: class StorageValidator is public, should be declared in a file named StorageValidator.java
+public class StorageValidator {
+       ^
+1 error
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:13:48
+[MODULE/TAG]     : folder_client (TYPESCRIPT)
+[SIMPLE SUMMARY] : Syntax error in @typescript[folder_client] code block.
+[RECOMMENDED FIX]: Check for missing colons, closing brackets, quotes, or indentation errors.
+[DETAILS]        : Process returned non-zero exit code.
+[RAW ERROR]      : 
+file:///C:/Users/Paril%20Rupani/AppData/Local/Temp/tmplg6noulc/cell.js:7
+export interface FolderTreeItem {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at compileSourceTextModule (node:internal/modules/esm/utils:354:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:91:18)
+    at #translate (node:internal/modules/esm/loader:451:20)
+    at afterLoad (node:internal/modules/esm/loader:507:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:512:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:555:36)
+    at afterResolve (node:internal/modules/esm/loader:603:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:609:12)
+    at node:internal/modules/esm/loader:628:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14)
+
+Node.js v25.8.0
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:13:49
+[MODULE/TAG]     : permission_checker (JAVA)
+[SIMPLE SUMMARY] : Execution exception in @java[permission_checker] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : Java Compilation Error
+[RAW ERROR]      : 
+C:\Users\Paril Rupani\AppData\Local\Temp\tmp887y98le\PolyFlowJavaRunner.java:4: error: class PermissionChecker is public, should be declared in a file named PermissionChecker.java
+public class PermissionChecker {
+       ^
+1 error
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:13:49
+[MODULE/TAG]     : worker_processor (PYTHON)
+[SIMPLE SUMMARY] : Data type mismatch in @python[worker_processor] code block.
+[RECOMMENDED FIX]: Check argument types passed to functions (e.g., converting string to int or dict access).
+[DETAILS]        : Process returned non-zero exit code.
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmpaoo_x28x\cell.py", line 62, in <module>
+    _result = fn(**kwargs)
+              ^^^^^^^^^^^^
+TypeError: process_file_metadata() missing 2 required positional arguments: 'file_bytes' and 'file_name'
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:14:44
+[MODULE/TAG]     : storage_validator (JAVA)
+[SIMPLE SUMMARY] : Execution exception in @java[storage_validator] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : Java Execution Error
+[RAW ERROR]      : 
+Error: Could not find or load main class PolyFlowJavaRunner
+Caused by: java.lang.NoClassDefFoundError: PolyFlowJavaRunner (wrong name: polyflow/storage/PolyFlowJavaRunner)
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:14:45
+[MODULE/TAG]     : permission_checker (JAVA)
+[SIMPLE SUMMARY] : Execution exception in @java[permission_checker] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : Java Execution Error
+[RAW ERROR]      : 
+Error: Could not find or load main class PolyFlowJavaRunner
+Caused by: java.lang.NoClassDefFoundError: PolyFlowJavaRunner (wrong name: polyflow/storage/PolyFlowJavaRunner)
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-01 03:14:46
+[MODULE/TAG]     : worker_processor (PYTHON)
+[SIMPLE SUMMARY] : Data type mismatch in @python[worker_processor] code block.
+[RECOMMENDED FIX]: Check argument types passed to functions (e.g., converting string to int or dict access).
+[DETAILS]        : Process returned non-zero exit code.
+[RAW ERROR]      : 
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmps08j772t\cell.py", line 62, in <module>
+    _result = fn(**kwargs)
+              ^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Temp\tmps08j772t\cell.py", line 27, in process_file_metadata
+    checksum = hashlib.sha256(file_bytes).hexdigest()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Strings must be encoded before hashing
+========================================================================

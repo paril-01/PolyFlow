@@ -1,0 +1,234 @@
+{
+  "repo_path": "C:\\Users\\Paril Rupani\\.gemini\\antigravity-ide\\brain\\214c90a1-3995-48a9-a408-5acad77eafd5\\scratch\\microservices-demo",
+  "repo_name": "microservices-demo",
+  "total_files_scanned": 59,
+  "graph_nodes_count": 452,
+  "graph_edges_count": 719,
+  "cross_service_edges_count": 1,
+  "synthetic_mutations": {
+    "summary": {
+      "total_mutations": 5,
+      "total_expected_call_sites": 17,
+      "total_detected": 16,
+      "total_missed_silent": 1,
+      "total_false_positives": 2,
+      "overall_recall": 0.9412,
+      "overall_precision": 0.8889
+    },
+    "mutation_details": [
+      {
+        "mutation_id": "mut_rpc_GetCart",
+        "mutation_type": "rpc_rename",
+        "target_file": "protos/demo.proto",
+        "original_symbol": "GetCart",
+        "mutated_symbol": "GetCart_MUTATED_v1",
+        "expected": 4,
+        "detected": 4,
+        "missed": 0,
+        "recall": 1.0,
+        "precision": 1.0,
+        "missed_call_sites": []
+      },
+      {
+        "mutation_id": "mut_rpc_AddItem",
+        "mutation_type": "rpc_rename",
+        "target_file": "protos/demo.proto",
+        "original_symbol": "AddItem",
+        "mutated_symbol": "AddItem_MUTATED_v1",
+        "expected": 3,
+        "detected": 3,
+        "missed": 0,
+        "recall": 1.0,
+        "precision": 1.0,
+        "missed_call_sites": []
+      },
+      {
+        "mutation_id": "mut_rpc_EmptyCart",
+        "mutation_type": "rpc_rename",
+        "target_file": "protos/demo.proto",
+        "original_symbol": "EmptyCart",
+        "mutated_symbol": "EmptyCart_MUTATED_v1",
+        "expected": 4,
+        "detected": 4,
+        "missed": 0,
+        "recall": 1.0,
+        "precision": 1.0,
+        "missed_call_sites": []
+      },
+      {
+        "mutation_id": "mut_rpc_GetProduct",
+        "mutation_type": "rpc_rename",
+        "target_file": "protos/demo.proto",
+        "original_symbol": "GetProduct",
+        "mutated_symbol": "GetProduct_MUTATED_v1",
+        "expected": 3,
+        "detected": 3,
+        "missed": 0,
+        "recall": 1.0,
+        "precision": 0.75,
+        "missed_call_sites": []
+      },
+      {
+        "mutation_id": "mut_rpc_GetQuote",
+        "mutation_type": "rpc_rename",
+        "target_file": "protos/demo.proto",
+        "original_symbol": "GetQuote",
+        "mutated_symbol": "GetQuote_MUTATED_v1",
+        "expected": 3,
+        "detected": 2,
+        "missed": 1,
+        "recall": 0.6667,
+        "precision": 0.6667,
+        "missed_call_sites": [
+          {
+            "file": "src/shippingservice/shippingservice_test.go",
+            "line": 50,
+            "snippet": "res, err := s.GetQuote(context.Background(), req)"
+          },
+          {
+            "file": "src/shippingservice/shippingservice_test.go",
+            "line": 73,
+            "snippet": "res, err := s.GetQuote(context.Background(), req)"
+          }
+        ]
+      }
+    ]
+  },
+  "task_success": {
+    "summary": {
+      "total_tasks": 5,
+      "successful_tasks": 4,
+      "contract_coverage_rate": 0.9,
+      "overall_success_rate": 0.8
+    },
+    "tasks": [
+      {
+        "task_id": "dyn_task_cartservice_additem",
+        "title": "Refactor CartService.AddItem to CartService.AddItemV2",
+        "target_symbol": "CartService.AddItem",
+        "expected_files": [
+          "protos/demo.proto",
+          "src/cartservice/src/services/CartService.cs",
+          "src/cartservice/tests/CartServiceTests.cs",
+          "src/frontend/rpc.go"
+        ],
+        "contract_files": [
+          "protos/demo.proto",
+          "src/cartservice/src/services/CartService.cs",
+          "src/cartservice/tests/CartServiceTests.cs",
+          "src/emailservice/demo_pb2_grpc.py",
+          "src/frontend/rpc.go",
+          "src/recommendationservice/demo_pb2_grpc.py"
+        ],
+        "contract_coverage": 1.0,
+        "contract_complete": true,
+        "patch_applied": true,
+        "syntax_valid": true,
+        "overall_success": true,
+        "details": "protos/demo.proto: PROTO syntactic structure valid; src/cartservice/src/services/CartService.cs: CS syntactic structure valid; src/cartservice/tests/CartServiceTests.cs: CS syntactic structure valid; src/frontend/rpc.go: GO syntactic structure valid"
+      },
+      {
+        "task_id": "dyn_task_recommendationservice_listrecommendations",
+        "title": "Refactor RecommendationService.ListRecommendations to RecommendationService.ListRecommendationsV2",
+        "target_symbol": "RecommendationService.ListRecommendations",
+        "expected_files": [
+          "protos/demo.proto",
+          "src/frontend/rpc.go",
+          "src/recommendationservice/client.py",
+          "src/recommendationservice/recommendation_server.py"
+        ],
+        "contract_files": [
+          "protos/demo.proto",
+          "src/emailservice/demo_pb2_grpc.py",
+          "src/frontend/rpc.go",
+          "src/recommendationservice/client.py",
+          "src/recommendationservice/demo_pb2_grpc.py",
+          "src/recommendationservice/recommendation_server.py"
+        ],
+        "contract_coverage": 1.0,
+        "contract_complete": true,
+        "patch_applied": true,
+        "syntax_valid": true,
+        "overall_success": true,
+        "details": "protos/demo.proto: PROTO syntactic structure valid; src/frontend/rpc.go: GO syntactic structure valid; src/recommendationservice/client.py: Python AST valid; src/recommendationservice/recommendation_server.py: Python AST valid"
+      },
+      {
+        "task_id": "dyn_task_productcatalogservice_listproducts",
+        "title": "Refactor ProductCatalogService.ListProducts to ProductCatalogService.ListProductsV2",
+        "target_symbol": "ProductCatalogService.ListProducts",
+        "expected_files": [
+          "protos/demo.proto",
+          "src/productcatalogservice/product_catalog.go",
+          "src/productcatalogservice/product_catalog_test.go",
+          "src/recommendationservice/recommendation_server.py"
+        ],
+        "contract_files": [
+          "protos/demo.proto",
+          "src/emailservice/demo_pb2_grpc.py",
+          "src/frontend/rpc.go",
+          "src/productcatalogservice/product_catalog.go",
+          "src/productcatalogservice/product_catalog_test.go",
+          "src/recommendationservice/demo_pb2_grpc.py",
+          "src/recommendationservice/recommendation_server.py"
+        ],
+        "contract_coverage": 1.0,
+        "contract_complete": true,
+        "patch_applied": true,
+        "syntax_valid": true,
+        "overall_success": true,
+        "details": "protos/demo.proto: PROTO syntactic structure valid; src/productcatalogservice/product_catalog.go: GO syntactic structure valid; src/productcatalogservice/product_catalog_test.go: GO syntactic structure valid; src/recommendationservice/recommendation_server.py: Python AST valid"
+      },
+      {
+        "task_id": "dyn_task_shippingservice_getquote",
+        "title": "Refactor ShippingService.GetQuote to ShippingService.GetQuoteV2",
+        "target_symbol": "ShippingService.GetQuote",
+        "expected_files": [
+          "protos/demo.proto",
+          "src/frontend/rpc.go",
+          "src/shippingservice/main.go",
+          "src/shippingservice/shippingservice_test.go"
+        ],
+        "contract_files": [
+          "protos/demo.proto",
+          "src/checkoutservice/main.go",
+          "src/emailservice/demo_pb2_grpc.py",
+          "src/frontend/rpc.go",
+          "src/recommendationservice/demo_pb2_grpc.py"
+        ],
+        "contract_coverage": 0.5,
+        "contract_complete": false,
+        "patch_applied": true,
+        "syntax_valid": true,
+        "overall_success": false,
+        "details": "protos/demo.proto: PROTO syntactic structure valid; src/frontend/rpc.go: GO syntactic structure valid; src/shippingservice/main.go: GO syntactic structure valid; src/shippingservice/shippingservice_test.go: GO syntactic structure valid"
+      },
+      {
+        "task_id": "dyn_task_emailservice_sendorderconfirmation",
+        "title": "Refactor EmailService.SendOrderConfirmation to EmailService.SendOrderConfirmationV2",
+        "target_symbol": "EmailService.SendOrderConfirmation",
+        "expected_files": [
+          "protos/demo.proto",
+          "src/checkoutservice/main.go",
+          "src/emailservice/email_client.py",
+          "src/emailservice/email_server.py"
+        ],
+        "contract_files": [
+          "protos/demo.proto",
+          "src/checkoutservice/main.go",
+          "src/emailservice/demo_pb2_grpc.py",
+          "src/emailservice/email_client.py",
+          "src/emailservice/email_server.py",
+          "src/recommendationservice/demo_pb2_grpc.py"
+        ],
+        "contract_coverage": 1.0,
+        "contract_complete": true,
+        "patch_applied": true,
+        "syntax_valid": true,
+        "overall_success": true,
+        "details": "protos/demo.proto: PROTO syntactic structure valid; src/checkoutservice/main.go: GO syntactic structure valid; src/emailservice/email_client.py: Python AST valid; src/emailservice/email_server.py: Python AST valid"
+      }
+    ]
+  },
+  "duration_seconds": 12.25,
+  "zero_cloud_verified": true
+}

@@ -1,0 +1,37 @@
+# 05_async_worker.poly — PolyFlow Cloud Drive: Async Thumbnail & Processing
+@contract
+feature_id: "CLOUD-WORKER-005"
+owner: "media-processing"
+classification: "standard"
+approvers: ["platform.engineer@polyflow.internal"]
+timeout_ms: 10000
+@end
+
+@link "02_file_storage.poly" as storage
+
+@schema ProcessingTask
+  task_id: string
+  file_id: string
+  action: string
+  status: string
+  created_at: int
+  completed_at: int
+@end
+
+@python[worker_processor]
+import hashlib
+import time
+
+def process_file_metadata(file_bytes, file_name):
+    # Compute SHA-256 content address
+    checksum = hashlib.sha256(file_bytes).hexdigest()
+    # Simulated thumbnail generation / metadata extraction
+    thumbnail_descriptor = f"thumb_{checksum[:16]}_{len(file_bytes)}b"
+    return {
+        "checksum": checksum,
+        "size_bytes": len(file_bytes),
+        "thumbnail_ref": thumbnail_descriptor,
+        "processed_at": int(time.time()),
+        "status": "READY"
+    }
+@end

@@ -1,0 +1,840 @@
+{
+  "repo_path": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\nextcloud_validation\\nextcloud-server",
+  "analysis_timestamp": "2026-10-01T01:39:46+0530",
+  "analysis_duration_seconds": 1.47,
+  "summary": {
+    "total_files": 11793,
+    "code_files": 8724,
+    "total_code_loc": 926080
+  },
+  "language_distribution": [
+    {
+      "language": "PHP",
+      "file_count": 5736,
+      "percentage": 48.6,
+      "loc": 570205
+    },
+    {
+      "language": "JSON",
+      "file_count": 1942,
+      "percentage": 16.5,
+      "loc": 0
+    },
+    {
+      "language": "JavaScript",
+      "file_count": 1918,
+      "percentage": 16.3,
+      "loc": 259200
+    },
+    {
+      "language": "TypeScript",
+      "file_count": 655,
+      "percentage": 5.6,
+      "loc": 42688
+    },
+    {
+      "language": "Vue",
+      "file_count": 373,
+      "percentage": 3.2,
+      "loc": 52599
+    },
+    {
+      "language": "SVG",
+      "file_count": 368,
+      "percentage": 3.1,
+      "loc": 0
+    },
+    {
+      "language": "No extension",
+      "file_count": 127,
+      "percentage": 1.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.license)",
+      "file_count": 110,
+      "percentage": 0.9,
+      "loc": 0
+    },
+    {
+      "language": "XML",
+      "file_count": 84,
+      "percentage": 0.7,
+      "loc": 0
+    },
+    {
+      "language": "Text",
+      "file_count": 51,
+      "percentage": 0.4,
+      "loc": 0
+    },
+    {
+      "language": "JPEG",
+      "file_count": 51,
+      "percentage": 0.4,
+      "loc": 0
+    },
+    {
+      "language": "PNG",
+      "file_count": 48,
+      "percentage": 0.4,
+      "loc": 0
+    },
+    {
+      "language": "Shell",
+      "file_count": 42,
+      "percentage": 0.4,
+      "loc": 1388
+    },
+    {
+      "language": "Lock",
+      "file_count": 41,
+      "percentage": 0.3,
+      "loc": 0
+    },
+    {
+      "language": "CSS",
+      "file_count": 34,
+      "percentage": 0.3,
+      "loc": 0
+    },
+    {
+      "language": "Other (.ics)",
+      "file_count": 33,
+      "percentage": 0.3,
+      "loc": 0
+    },
+    {
+      "language": "SCSS",
+      "file_count": 31,
+      "percentage": 0.3,
+      "loc": 0
+    },
+    {
+      "language": "SourceMap",
+      "file_count": 23,
+      "percentage": 0.2,
+      "loc": 0
+    },
+    {
+      "language": "Markdown",
+      "file_count": 16,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.woff2)",
+      "file_count": 16,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.vcf)",
+      "file_count": 12,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.crt)",
+      "file_count": 10,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "HTML",
+      "file_count": 7,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.webp)",
+      "file_count": 7,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "GIF",
+      "file_count": 7,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.ttf)",
+      "file_count": 7,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.toml)",
+      "file_count": 6,
+      "percentage": 0.1,
+      "loc": 0
+    },
+    {
+      "language": "Other (.gz)",
+      "file_count": 4,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "YAML",
+      "file_count": 3,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.zip)",
+      "file_count": 3,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.key)",
+      "file_count": 3,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "INI",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.pdf)",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.otf)",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "ICO",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.xsd)",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.mp4)",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.cnf)",
+      "file_count": 2,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.nix)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.dtd)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.mjs)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.crl)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.webm)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.avif)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.eps)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.heic)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.jp2)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.mp3)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    },
+    {
+      "language": "Other (.odt)",
+      "file_count": 1,
+      "percentage": 0.0,
+      "loc": 0
+    }
+  ],
+  "top_level_structure": {
+    "3rdparty": {
+      "type": "directory",
+      "file_count": 0
+    },
+    "__mocks__": {
+      "type": "file",
+      "size_bytes": 24
+    },
+    "__tests__": {
+      "type": "file",
+      "size_bytes": 24
+    },
+    "AGENTS.md": {
+      "type": "file",
+      "size_bytes": 8632
+    },
+    "apps": {
+      "type": "directory",
+      "file_count": 7284
+    },
+    "AUTHORS": {
+      "type": "file",
+      "size_bytes": 27058
+    },
+    "autotest-checkers.sh": {
+      "type": "file",
+      "size_bytes": 465
+    },
+    "autotest-external.sh": {
+      "type": "file",
+      "size_bytes": 8705
+    },
+    "autotest.sh": {
+      "type": "file",
+      "size_bytes": 14589
+    },
+    "Caddyfile": {
+      "type": "file",
+      "size_bytes": 2007
+    },
+    "CHANGELOG.md": {
+      "type": "file",
+      "size_bytes": 249
+    },
+    "CLAUDE.md": {
+      "type": "file",
+      "size_bytes": 12
+    },
+    "CODE_OF_CONDUCT.md": {
+      "type": "file",
+      "size_bytes": 1080
+    },
+    "codecov.yml": {
+      "type": "file",
+      "size_bytes": 435
+    },
+    "composer.json": {
+      "type": "file",
+      "size_bytes": 3622
+    },
+    "composer.lock": {
+      "type": "file",
+      "size_bytes": 3527
+    },
+    "config": {
+      "type": "directory",
+      "file_count": 3
+    },
+    "console.php": {
+      "type": "file",
+      "size_bytes": 4342
+    },
+    "contribute": {
+      "type": "directory",
+      "file_count": 3
+    },
+    "COPYING": {
+      "type": "file",
+      "size_bytes": 35181
+    },
+    "COPYING-README": {
+      "type": "file",
+      "size_bytes": 713
+    },
+    "core": {
+      "type": "directory",
+      "file_count": 987
+    },
+    "cron.php": {
+      "type": "file",
+      "size_bytes": 1990
+    },
+    "custom.d.ts": {
+      "type": "file",
+      "size_bytes": 436
+    },
+    "DESIGN.md": {
+      "type": "file",
+      "size_bytes": 1358
+    },
+    "eslint.config.js": {
+      "type": "file",
+      "size_bytes": 2217
+    },
+    "flake.lock": {
+      "type": "file",
+      "size_bytes": 6139
+    },
+    "flake.nix": {
+      "type": "file",
+      "size_bytes": 3403
+    },
+    "index.html": {
+      "type": "file",
+      "size_bytes": 343
+    },
+    "index.php": {
+      "type": "file",
+      "size_bytes": 3975
+    },
+    "lib": {
+      "type": "directory",
+      "file_count": 2353
+    },
+    "LICENSES": {
+      "type": "directory",
+      "file_count": 31
+    },
+    "Makefile": {
+      "type": "file",
+      "size_bytes": 537
+    },
+    "occ": {
+      "type": "file",
+      "size_bytes": 1167
+    },
+    "ocs": {
+      "type": "directory",
+      "file_count": 2
+    },
+    "ocs-provider": {
+      "type": "directory",
+      "file_count": 1
+    },
+    "openapi.json": {
+      "type": "file",
+      "size_bytes": 2239346
+    },
+    "package-lock.json": {
+      "type": "file",
+      "size_bytes": 578113
+    },
+    "package.json": {
+      "type": "file",
+      "size_bytes": 4008
+    },
+    "playwright.config.ts": {
+      "type": "file",
+      "size_bytes": 2743
+    },
+    "psalm-ncu.xml": {
+      "type": "file",
+      "size_bytes": 731
+    },
+    "psalm-ocp.xml": {
+      "type": "file",
+      "size_bytes": 1083
+    },
+    "psalm-strict.xml": {
+      "type": "file",
+      "size_bytes": 5133
+    },
+    "psalm.xml": {
+      "type": "file",
+      "size_bytes": 10451
+    },
+    "public.php": {
+      "type": "file",
+      "size_bytes": 3212
+    },
+    "README.md": {
+      "type": "file",
+      "size_bytes": 6653
+    },
+    "remote.php": {
+      "type": "file",
+      "size_bytes": 5125
+    },
+    "resources": {
+      "type": "directory",
+      "file_count": 22
+    },
+    "REUSE.toml": {
+      "type": "file",
+      "size_bytes": 31132
+    },
+    "robots.txt": {
+      "type": "file",
+      "size_bytes": 28
+    },
+    "SECURITY.md": {
+      "type": "file",
+      "size_bytes": 3164
+    },
+    "status.php": {
+      "type": "file",
+      "size_bytes": 1541
+    },
+    "stylelint.config.js": {
+      "type": "file",
+      "size_bytes": 917
+    },
+    "tests": {
+      "type": "directory",
+      "file_count": 1004
+    },
+    "themes": {
+      "type": "directory",
+      "file_count": 13
+    },
+    "tsconfig.json": {
+      "type": "file",
+      "size_bytes": 707
+    },
+    "vendor-bin": {
+      "type": "directory",
+      "file_count": 12
+    },
+    "version.php": {
+      "type": "file",
+      "size_bytes": 913
+    },
+    "vite.config.ts": {
+      "type": "file",
+      "size_bytes": 203
+    },
+    "vitest.config.ts": {
+      "type": "file",
+      "size_bytes": 1095
+    },
+    "window.d.ts": {
+      "type": "file",
+      "size_bytes": 1066
+    }
+  },
+  "framework_patterns": {
+    "has_composer_json": true,
+    "has_package_json": true,
+    "has_webpack_config": false,
+    "has_docker_compose": false,
+    "has_dockerfile": false,
+    "has_makefile": true,
+    "has_phpunit": false,
+    "has_jest_config": false,
+    "has_psalm": true,
+    "has_phpstan": false,
+    "has_occ": true,
+    "has_lib_private": true,
+    "has_lib_public": true,
+    "has_core": true,
+    "has_apps": true,
+    "has_config": true
+  },
+  "test_structure": {
+    "test_directories": [
+      {
+        "path": "apps/admin_audit/tests/Listener",
+        "test_files": 3
+      },
+      {
+        "path": "apps/appstore/tests/Controller",
+        "test_files": 2
+      },
+      {
+        "path": "apps/cloud_federation_api/tests/Controller",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit/Activity",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit/AppInfo",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit/Collaboration",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit/Controller",
+        "test_files": 1
+      },
+      {
+        "path": "apps/comments/tests/Unit/Notification",
+        "test_files": 2
+      },
+      {
+        "path": "apps/contactsinteraction/tests/Db",
+        "test_files": 1
+      },
+      {
+        "path": "apps/dashboard/tests",
+        "test_files": 1
+      },
+      {
+        "path": "apps/dav/tests/integration/DAV/Sharing",
+        "test_files": 2
+      },
+      {
+        "path": "apps/dav/tests/integration/Db",
+        "test_files": 1
+      },
+      {
+        "path": "apps/dav/tests/integration/UserMigration",
+        "test_files": 2
+      },
+      {
+        "path": "apps/dav/tests/unit",
+        "test_files": 3
+      },
+      {
+        "path": "apps/dav/tests/unit/AppInfo",
+        "test_files": 2
+      },
+      {
+        "path": "apps/dav/tests/unit/Avatars",
+        "test_files": 2
+      },
+      {
+        "path": "apps/dav/tests/unit/BackgroundJob",
+        "test_files": 10
+      },
+      {
+        "path": "apps/dav/tests/unit/CalDAV",
+        "test_files": 22
+      },
+      {
+        "path": "apps/dav/tests/unit/CalDAV/Activity",
+        "test_files": 1
+      }
+    ],
+    "total_test_files": 1476
+  },
+  "database_migrations": {
+    "migration_files_found": 298,
+    "sample_paths": [
+      "apps/cloud_federation_api/lib/Migration/Version1016Date202502262004.php",
+      "apps/cloud_federation_api/lib/Migration/Version1017Date20260306120000.php",
+      "apps/cloud_federation_api/lib/Migration/Version2000Date20260919141251.php",
+      "apps/contactsinteraction/lib/Migration/FixVcardCategory.php",
+      "apps/contactsinteraction/lib/Migration/Version010000Date20200304152605.php",
+      "apps/dav/lib/Migration/BuildCalendarSearchIndex.php",
+      "apps/dav/lib/Migration/BuildCalendarSearchIndexBackgroundJob.php",
+      "apps/dav/lib/Migration/BuildSocialSearchIndex.php",
+      "apps/dav/lib/Migration/BuildSocialSearchIndexBackgroundJob.php",
+      "apps/dav/lib/Migration/CalDAVRemoveEmptyValue.php"
+    ]
+  },
+  "app_architecture": {
+    "app_count": 33,
+    "apps": [
+      {
+        "name": "admin_audit",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "appstore",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "cloud_federation_api",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "comments",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "contactsinteraction",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "dashboard",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "dav",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "encryption",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "federatedfilesharing",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "federation",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files_external",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files_reminders",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files_sharing",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files_trashbin",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "files_versions",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "lookup_server_connector",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "oauth2",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "profile",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "provisioning_api",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "settings",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "sharebymail",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "sharing",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "systemtags",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "testing",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "theming",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "twofactor_backupcodes",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "updatenotification",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "user_ldap",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "user_status",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "weather_status",
+        "has_info_xml": true,
+        "has_routes": true
+      },
+      {
+        "name": "webhook_listeners",
+        "has_info_xml": true,
+        "has_routes": false
+      },
+      {
+        "name": "workflowengine",
+        "has_info_xml": true,
+        "has_routes": false
+      }
+    ]
+  }
+}

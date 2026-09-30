@@ -1,0 +1,95 @@
+{
+  "target": "Nextcloud Server",
+  "repository": "https://github.com/nextcloud/server",
+  "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "timestamp": "2026-10-01T02:30:00+0530",
+  "repository_profile": {
+    "total_files": 11793,
+    "code_files": 8724,
+    "total_loc": 926080,
+    "languages": {
+      "php": {"files": 5736, "loc": 570205, "percent_loc": 61.6},
+      "javascript": {"files": 1918, "loc": 259200, "percent_loc": 28.0},
+      "vue": {"files": 373, "loc": 52599, "percent_loc": 5.7},
+      "typescript": {"files": 655, "loc": 42688, "percent_loc": 4.6},
+      "css": {"files": 42, "loc": 1388, "percent_loc": 0.1}
+    }
+  },
+  "rcir_graph_extraction": {
+    "status": "SUCCESS",
+    "extraction_time_s": 312.55,
+    "peak_memory_mb": 107.29,
+    "total_nodes": 49720,
+    "total_edges": 109089,
+    "edges_by_type": {
+      "calls": 53834,
+      "imports": 50310,
+      "inherits": 4945
+    },
+    "edges_by_resolution": {
+      "static_exact": 66161,
+      "static_inference": 42928
+    }
+  },
+  "scale_scaling_curve": [
+    {"subset": "lib/private/Files", "files": 126, "nodes": 2029, "edges": 4468, "extract_s": 9.69, "ram_mb": 4.0, "impact_ms": 2.58},
+    {"subset": "apps/files", "files": 446, "nodes": 1015, "edges": 2397, "extract_s": 1.98, "ram_mb": 2.2, "impact_ms": 1.45},
+    {"subset": "lib/private", "files": 944, "nodes": 9897, "edges": 20175, "extract_s": 38.42, "ram_mb": 19.4, "impact_ms": 8.49},
+    {"subset": "Full Repository", "files": 11793, "nodes": 49720, "edges": 109089, "extract_s": 312.55, "ram_mb": 107.3, "impact_ms": 41.44}
+  ],
+  "ground_truth_correctness": {
+    "total_cases": 10,
+    "true_positives": 6,
+    "partial_matches": 3,
+    "silent_misses": 1,
+    "exact_recall": 0.60,
+    "exact_plus_partial_recall": 0.90,
+    "silent_miss_rate": 0.10
+  },
+  "controlled_mutations": {
+    "total_mutations": 7,
+    "total_ground_truth_references": 1333,
+    "rcir_identified": 1451,
+    "true_positives": 829,
+    "false_positives": 622,
+    "false_negatives": 504,
+    "macro_precision": 0.598,
+    "macro_recall": 0.739,
+    "micro_precision": 0.571,
+    "micro_recall": 0.622,
+    "average_impact_query_latency_ms": 51.16
+  },
+  "historical_pr_changes": {
+    "total_historical_cases": 5,
+    "ground_truth_files": 27,
+    "true_positives": 12,
+    "false_negatives": 15,
+    "overall_recall": 0.444
+  },
+  "agent_benchmark": {
+    "tasks_evaluated": 5,
+    "baseline_average_recall": 0.323,
+    "rcir_average_recall": 0.754,
+    "recall_improvement": "+43.1%",
+    "dependency_misses_prevented": 612,
+    "baseline_tokens_avg": 20473,
+    "rcir_tokens_avg": 3995,
+    "token_savings_percent": "80.5%"
+  },
+  "zero_cloud_validation": {
+    "overall_status": "PASS",
+    "isolation_mechanism": "socket monkey-patching (Python-level)",
+    "tests_passed": 4,
+    "tests_total": 4,
+    "outbound_network_calls_attempted": 0
+  },
+  "polyflow_app_benchmark": {
+    "status": "PASSED",
+    "polyglot_execution_verified": {
+      "java_jvm_21": "PASS (javac + java TestStorageSuite)",
+      "node_v25": "PASS (node test_frontend.js)",
+      "python_3_12": "PASS (StorageWorker + SQLite migrations)",
+      "integration_test": "PASS (test_polyflow_cloud_drive.py)"
+    }
+  }
+}

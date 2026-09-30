@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "total_historical_cases": 5,
+    "macro_precision": 0.251,
+    "macro_recall": 0.496,
+    "total_ground_truth_files": 27,
+    "total_true_positives": 13,
+    "total_false_negatives": 14,
+    "overall_recall": 0.481
+  },
+  "cases": [
+    {
+      "case_id": "HIST-001",
+      "title": "PR #64289: Encryption Access List Caching",
+      "target_symbol": "getAccessList",
+      "category": "service_method",
+      "historical_pr": "https://github.com/nextcloud/server/pull/64289",
+      "rcir_latency_ms": 42.47,
+      "rcir_confidence": 0.5,
+      "exact_call_sites": 3,
+      "inferred_call_sites": 3,
+      "rcir_files_identified": 4,
+      "ground_truth_files_count": 9,
+      "true_positives": [
+        "lib/private/Encryption/File.php",
+        "lib/private/Share20/Manager.php",
+        "lib/public/Share/IManager.php",
+        "lib/public/Share/IShareProvider.php"
+      ],
+      "false_negatives": [
+        "apps/encryption/lib/Recovery.php",
+        "apps/federatedfilesharing/lib/FederatedShareProvider.php",
+        "apps/sharebymail/lib/ShareByMailProvider.php",
+        "lib/private/Share20/DefaultShareProvider.php",
+        "lib/public/Encryption/IFile.php"
+      ],
+      "false_positives_count": 0,
+      "precision": 1.0,
+      "recall": 0.444
+    },
+    {
+      "case_id": "HIST-002",
+      "title": "PR Filesystem Node Deletion & Trashbin Contract",
+      "target_symbol": "delete",
+      "category": "interface_method",
+      "historical_pr": "Nextcloud Files Subsystem Core",
+      "rcir_latency_ms": 51.8,
+      "rcir_confidence": 0.433,
+      "exact_call_sites": 279,
+      "inferred_call_sites": 365,
+      "rcir_files_identified": 229,
+      "ground_truth_files_count": 6,
+      "true_positives": [
+        "lib/private/Files/Node/File.php",
+        "lib/private/Files/Node/Folder.php",
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/private/Files/Node/Root.php"
+      ],
+      "false_negatives": [
+        "lib/private/Files/Node/Node.php",
+        "lib/public/Files/Node.php"
+      ],
+      "false_positives_count": 225,
+      "precision": 0.017,
+      "recall": 0.667
+    },
+    {
+      "case_id": "HIST-003",
+      "title": "PR OCS API Thumbnail Controller Endpoint",
+      "target_symbol": "getThumbnail",
+      "category": "controller_route",
+      "historical_pr": "Nextcloud Files API Controller",
+      "rcir_latency_ms": 47.59,
+      "rcir_confidence": 0.644,
+      "exact_call_sites": 56,
+      "inferred_call_sites": 31,
+      "rcir_files_identified": 18,
+      "ground_truth_files_count": 4,
+      "true_positives": [
+        "apps/files/appinfo/routes.php",
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "false_negatives": [
+        "lib/private/Preview/Generator.php",
+        "lib/private/Preview/ProviderV2.php"
+      ],
+      "false_positives_count": 16,
+      "precision": 0.111,
+      "recall": 0.5
+    },
+    {
+      "case_id": "HIST-004",
+      "title": "PR ServerContainer IConfig Resolution",
+      "target_symbol": "IConfig",
+      "category": "dependency_injection",
+      "historical_pr": "Nextcloud DI Architecture",
+      "rcir_latency_ms": 47.12,
+      "rcir_confidence": 0.998,
+      "exact_call_sites": 1209,
+      "inferred_call_sites": 3,
+      "rcir_files_identified": 780,
+      "ground_truth_files_count": 5,
+      "true_positives": [
+        "lib/private/Server.php"
+      ],
+      "false_negatives": [
+        "lib/base.php",
+        "lib/private/Config.php",
+        "lib/private/ServerContainer.php",
+        "lib/public/IConfig.php"
+      ],
+      "false_positives_count": 779,
+      "precision": 0.001,
+      "recall": 0.2
+    },
+    {
+      "case_id": "HIST-005",
+      "title": "PR PSR-14 NodeDeletedEvent Evolution",
+      "target_symbol": "NodeDeletedEvent",
+      "category": "event_contract",
+      "historical_pr": "Nextcloud Event Dispatcher Migration",
+      "rcir_latency_ms": 55.33,
+      "rcir_confidence": 0.897,
+      "exact_call_sites": 26,
+      "inferred_call_sites": 3,
+      "rcir_files_identified": 16,
+      "ground_truth_files_count": 3,
+      "true_positives": [
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+      ],
+      "false_negatives": [
+        "lib/private/Files/Node/Node.php"
+      ],
+      "false_positives_count": 14,
+      "precision": 0.125,
+      "recall": 0.667
+    }
+  ]
+}

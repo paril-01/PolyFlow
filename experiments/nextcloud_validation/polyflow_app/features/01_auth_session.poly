@@ -1,0 +1,51 @@
+# 01_auth_session.poly — PolyFlow Cloud Drive: Authentication & Session
+@contract
+feature_id: "CLOUD-AUTH-001"
+owner: "identity-team"
+classification: "sensitive"
+approvers: ["security.lead@polyflow.internal"]
+timeout_ms: 1500
+@end
+
+@schema AuthCredentials
+  email: string<format:email>
+  password: string<min:8,max:128>
+@end
+
+@schema SessionContext
+  user_id: string
+  email: string
+  session_token: string
+  role: string
+  expires_at: int
+@end
+
+@decision for="auth.hash"
+variable: "password_hashing"
+choice: "PBKDF2-HMAC-SHA256 with 100,000 iterations and per-user salt"
+@end
+
+@standard language="python"
+allowed_imports: ["hashlib", "time", "uuid", "sqlite3"]
+@end
+
+@python[auth_service]
+import hashlib
+import time
+import uuid
+
+def authenticate(email, password, salt="polyflow_salt_2026"):
+    if not email or not password or len(password) < 8:
+        raise ValueError("Invalid credentials supplied")
+    derived = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 100000).hex()
+    user_id = f"usr_{hashlib.sha256(email.encode()).hexdigest()[:12]}"
+    token = f"sess_{uuid.uuid4().hex}"
+    expires = int(time.time()) + 86400
+    return {
+        "user_id": user_id,
+        "email": email,
+        "session_token": token,
+        "role": "admin" if email.startswith("admin@") else "user",
+        "expires_at": expires
+    }
+@end

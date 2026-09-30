@@ -1,0 +1,41 @@
+# 03_folder_hierarchy.poly — PolyFlow Cloud Drive: Folder Hierarchy & Navigation
+@contract
+feature_id: "CLOUD-FOLDERS-003"
+owner: "navigation-core"
+classification: "standard"
+approvers: ["navigation.lead@polyflow.internal"]
+timeout_ms: 1000
+@end
+
+@link "02_file_storage.poly" as storage
+
+@schema FolderNode
+  folder_id: string
+  parent_id: string
+  name: string
+  owner_id: string
+  path: string
+  item_count: int
+@end
+
+@typescript[folder_client]
+export interface FolderTreeItem {
+  id: string;
+  name: string;
+  parentId: string | null;
+  path: string;
+  isFolder: boolean;
+  sizeBytes: number;
+}
+
+export function buildBreadcrumbs(currentPath: string): string[] {
+  const parts = currentPath.split("/").filter(Boolean);
+  const crumbs: string[] = ["/"];
+  let acc = "";
+  for (const part of parts) {
+    acc += "/" + part;
+    crumbs.push(acc);
+  }
+  return crumbs;
+}
+@end

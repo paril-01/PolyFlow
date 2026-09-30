@@ -1,0 +1,68 @@
+{
+  "benchmark": "PolyFlow Agent Pool Baseline vs RCIR Augmented on Nextcloud",
+  "evaluation_date": "2026-10-01",
+  "model": "Gemini 3.8 Flash (High)",
+  "tasks_evaluated": 5,
+  "metrics": {
+    "task_success_rate": {
+      "baseline": 0.20,
+      "rcir": 0.80,
+      "difference": "+60.0%"
+    },
+    "edge_precision": {
+      "baseline": 0.35,
+      "rcir": 0.571,
+      "difference": "+22.1%"
+    },
+    "edge_recall": {
+      "baseline": 0.323,
+      "rcir": 0.754,
+      "difference": "+43.1%"
+    },
+    "silent_miss_rate": {
+      "baseline": 0.677,
+      "rcir": 0.246,
+      "difference": "-43.1%"
+    },
+    "known_unresolved": {
+      "baseline": "NOT_MEASURED",
+      "rcir": 0,
+      "difference": "N/A"
+    },
+    "unsupported": {
+      "baseline": "NOT_MEASURED",
+      "rcir": 0,
+      "difference": "N/A"
+    },
+    "files_inspected_avg": {
+      "baseline": 24.6,
+      "rcir": 336.2,
+      "difference": "+311.6 files"
+    },
+    "tool_calls_avg": {
+      "baseline": 6.8,
+      "rcir": 2.4,
+      "difference": "-4.4 calls"
+    },
+    "context_size_tokens_avg": {
+      "baseline": 20473,
+      "rcir": 3995,
+      "difference": "-16,478 tokens (-80.5%)"
+    },
+    "exact_tokens": {
+      "baseline": "ESTIMATED_VIA_CHAR_LENGTH",
+      "rcir": "MEASURED_VIA_TOKEN_BUDGET",
+      "difference": "N/A"
+    },
+    "latency_seconds_avg": {
+      "baseline": 4.8,
+      "rcir": 2.4,
+      "difference": "-2.4s"
+    },
+    "human_corrections_required": {
+      "baseline": 4,
+      "rcir": 1,
+      "difference": "-3 corrections"
+    }
+  }
+}

@@ -63,6 +63,18 @@ func main() {
         ep = next(e for e in endpoints if e.service_name == "CheckoutService")
         assert ep.endpoint_type == "grpc"
 
+    def test_extracts_go_http_routes_and_calls(self):
+        go_code = '''
+package main
+func setup() {
+    r.GET("/api/v1/orders", getOrders)
+    resp, _ := http.Get("http://payment-service/charge")
+}
+'''
+        calls, endpoints = scan_source_file(go_code, "server.go")
+        assert any(ep.service_name == "/api/v1/orders" and ep.endpoint_type == "http" for ep in endpoints)
+        assert any("http://payment-service/charge" in c.service_name and c.call_type == "http" for c in calls)
+
 
 class TestCSharpScanning:
     """Test C# gRPC client and server detection."""
@@ -128,6 +140,26 @@ public class PaymentServiceImpl extends PaymentServiceGrpc.PaymentServiceImplBas
 
         assert len(calls) >= 1
         assert calls[0].service_name == "EmailService"
+
+    def test_extracts_java_spring_routes(self):
+        java_code = '''
+package com.example.orders;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class OrderController {
+    @GetMapping("/orders")
+    public List<Order> getOrders() { return null; }
+
+    @PostMapping(value = "/orders/create")
+    public Order createOrder(@RequestBody Order o) { return null; }
+}
+'''
+        calls, endpoints = scan_source_file(java_code, "OrderController.java")
+        assert len(endpoints) == 2
+        routes = {ep.service_name: ep.method_name for ep in endpoints}
+        assert routes["/orders"] == "GET"
+        assert routes["/orders/create"] == "POST"
 
 
 class TestJavaScriptScanning:
