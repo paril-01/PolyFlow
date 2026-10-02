@@ -21,6 +21,7 @@ import { useAgent } from './hooks/useAgent';
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [manifest, setManifest] = useState([]);
 
   // Load Manifest
@@ -36,6 +37,7 @@ export default function App() {
     datasetId,
     setDatasetId,
     data,
+    edgeIndex,
     loading,
     error,
     layout,
@@ -89,6 +91,8 @@ export default function App() {
         datasetInfo={datasetInfo}
         nodeCount={totalNodes}
         edgeCount={totalEdges}
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Main Viewport */}
@@ -104,6 +108,7 @@ export default function App() {
           onSearchChange={setSearchQuery}
           onResetCamera={resetCamera}
           onOpenProofModal={() => setIsProofModalOpen(true)}
+          onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
           totalNodes={totalNodes}
           totalEdges={totalEdges}
         />
@@ -167,12 +172,14 @@ export default function App() {
                     />
                   )}
 
-                  {/* Right Slide-out Inspector */}
+                  {/* Right Slide-out / Bottom Sheet Inspector */}
                   {selectedNode && (
-                    <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 25 }}>
+                    <div className="inspector-wrapper">
+                      <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
                       <NodeInspector
                         node={selectedNode}
                         graphData={data}
+                        edgeIndex={edgeIndex}
                         onClose={() => setSelectedNode(null)}
                         onSelectNodeByPath={selectNodeByPath}
                       />
@@ -193,12 +200,16 @@ export default function App() {
                     }}
                   />
                   {selectedNode && (
-                    <NodeInspector
-                      node={selectedNode}
-                      graphData={data}
-                      onClose={() => setSelectedNode(null)}
-                      onSelectNodeByPath={selectNodeByPath}
-                    />
+                    <div className="inspector-wrapper">
+                      <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
+                      <NodeInspector
+                        node={selectedNode}
+                        graphData={data}
+                        edgeIndex={edgeIndex}
+                        onClose={() => setSelectedNode(null)}
+                        onSelectNodeByPath={selectNodeByPath}
+                      />
+                    </div>
                   )}
                 </div>
               )}

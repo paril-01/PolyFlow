@@ -26,7 +26,7 @@ export function Graph3DCanvas({
 
   const [moduleFilter, setModuleFilter] = useState('all');
   const [kindFilter, setKindFilter] = useState('all');
-  const [maxNodes, setMaxNodes] = useState(600);
+  const [maxNodes, setMaxNodes] = useState(200);
 
   // Extract raw nodes and edges from dataset
   const rawNodes = data?.graph?.nodes || [];
@@ -106,6 +106,9 @@ export function Graph3DCanvas({
     const graph = ForceGraph3D()(mountRef.current)
       .backgroundColor('#070a13')
       .nodeId('id')
+      .warmupTicks(30)
+      .cooldownTicks(40)
+      .enableNodeDrag(false)
       .nodeLabel(node => `
         <div style="background: rgba(11, 16, 28, 0.95); padding: 8px 12px; border-radius: 6px; border: 1px solid #38bdf8; font-family: monospace; font-size: 11px; color: #fff; max-width: 320px; box-shadow: 0 4px 18px rgba(0,0,0,0.5);">
           <strong style="color: #38bdf8; font-size: 12px;">${node.name}</strong><br/>
@@ -117,7 +120,7 @@ export function Graph3DCanvas({
         </div>
       `)
       .nodeColor(node => {
-        if (selectedNode && selectedNode.path === node.id) {
+        if (selectedNode && (selectedNode.path === node.id || selectedNode.id === node.id)) {
           return '#38bdf8'; // Glowing cyan for selected
         }
         return getNodeColor(node);
@@ -129,9 +132,15 @@ export function Graph3DCanvas({
         if (k === 'file') return 6;
         return 4;
       })
-      .linkDirectionalParticles(2)
-      .linkDirectionalParticleSpeed(0.005)
-      .linkDirectionalParticleWidth(1.4)
+      .linkDirectionalParticles(link => {
+        if (!selectedNode) return 0;
+        const src = typeof link.source === 'object' ? link.source.id : link.source;
+        const tgt = typeof link.target === 'object' ? link.target.id : link.target;
+        const selPath = selectedNode.path || selectedNode.id;
+        return (src === selPath || tgt === selPath) ? 3 : 0;
+      })
+      .linkDirectionalParticleSpeed(0.008)
+      .linkDirectionalParticleWidth(1.6)
       .linkColor(link => {
         if (link.edge_type === 'calls') return 'rgba(56, 189, 248, 0.45)';
         if (link.edge_type === 'imports') return 'rgba(168, 85, 247, 0.4)';
@@ -140,14 +149,20 @@ export function Graph3DCanvas({
       .linkOpacity(0.28)
       .onNodeClick(node => {
         // Aim camera smoothly at node
-        const distance = 90;
+        const distance = 80;
         const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
         graph.cameraPosition(
           { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
           node,
-          1500
+          1200
         );
-        if (onSelectNode) onSelectNode(node);
+        if (onSelectNode) {
+          onSelectNode({
+            ...node,
+            path: node.id || node.path,
+            name: node.name || (node.path ? node.path.split('/').pop().split('::').pop() : '')
+          });
+        }
       })
       .showNavInfo(false);
 
@@ -164,6 +179,13 @@ export function Graph3DCanvas({
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (graphInstanceRef.current && graphInstanceRef.current._destructor) {
+        try {
+          graphInstanceRef.current._destructor();
+        } catch (err) {
+          // destructor safety
+        }
+      }
       if (mountRef.current) {
         mountRef.current.innerHTML = '';
       }
@@ -177,14 +199,23 @@ export function Graph3DCanvas({
     }
   }, [filteredGraphData]);
 
-  // Handle selected node highlight
+  // Handle selected node highlight and targeted particles
   useEffect(() => {
     if (graphInstanceRef.current) {
+      const selPath = selectedNode ? (selectedNode.path || selectedNode.id) : null;
       graphInstanceRef.current.nodeColor(node => {
-        if (selectedNode && selectedNode.path === node.id) {
+        if (selPath && (node.id === selPath || node.path === selPath)) {
           return '#38bdf8';
         }
         return getNodeColor(node);
+      });
+
+      // Particles ONLY on active links of selected node to guarantee 60 FPS
+      graphInstanceRef.current.linkDirectionalParticles(link => {
+        if (!selPath) return 0;
+        const src = typeof link.source === 'object' ? link.source.id : link.source;
+        const tgt = typeof link.target === 'object' ? link.target.id : link.target;
+        return (src === selPath || tgt === selPath) ? 2 : 0;
       });
     }
   }, [selectedNode]);
@@ -202,22 +233,7 @@ export function Graph3DCanvas({
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
 
       {/* Floating 3D Control Bar & Filters */}
-      <div style={{ 
-        position: 'absolute', 
-        top: 14, 
-        left: 14, 
-        zIndex: 20, 
-        display: 'flex', 
-        gap: 8, 
-        alignItems: 'center', 
-        flexWrap: 'wrap',
-        background: 'rgba(11, 16, 28, 0.85)',
-        backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: 10,
-        padding: '8px 12px',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
-      }}>
+      <div className="graph-3d-controls">
         {/* Module Filter */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Filter className="w-3.5 h-3.5 text-cyan-400" />
@@ -281,10 +297,10 @@ export function Graph3DCanvas({
               outline: 'none'
             }}
           >
-            <option value={300}>300 Nodes (Ultra Fast)</option>
-            <option value={600}>600 Nodes (Balanced 60 FPS)</option>
-            <option value={1200}>1,200 Nodes (Detailed)</option>
-            <option value={2500}>2,500 Nodes (Full Core)</option>
+            <option value={150}>150 Nodes (Ultra Fluid 60 FPS)</option>
+            <option value={200}>200 Nodes (Core Architecture)</option>
+            <option value={400}>400 Nodes (Extended Graph)</option>
+            <option value={800}>800 Nodes (Full Subsystem)</option>
           </select>
         </div>
 
@@ -311,50 +327,20 @@ export function Graph3DCanvas({
       </div>
 
       {/* 3D Navigation Controls Legend (Bottom Left) */}
-      <div style={{ 
-        position: 'absolute', 
-        bottom: 14, 
-        left: 14, 
-        zIndex: 20, 
-        background: 'rgba(11, 16, 28, 0.85)', 
-        backdropFilter: 'blur(10px)', 
-        border: '1px solid rgba(255, 255, 255, 0.08)', 
-        borderRadius: 8, 
-        padding: '8px 12px', 
-        fontSize: 11, 
-        color: '#94a3b8',
-        display: 'flex',
-        gap: 12
-      }}>
-        <span><strong style={{ color: '#38bdf8' }}>Left Drag:</strong> 3D Orbit</span>
+      <div className="graph-3d-legend">
+        <span><strong style={{ color: '#38bdf8' }}>Left Drag:</strong> Orbit</span>
         <span><strong style={{ color: '#818cf8' }}>Right Drag:</strong> Pan</span>
-        <span><strong style={{ color: '#10b981' }}>Wheel:</strong> Infinite Zoom</span>
-        <span><strong style={{ color: '#fbbf24' }}>Click Node:</strong> Fly & Inspect</span>
+        <span><strong style={{ color: '#10b981' }}>Wheel:</strong> Zoom</span>
+        <span><strong style={{ color: '#fbbf24' }}>Click:</strong> Inspect</span>
       </div>
 
       {/* Visible Node / Link Stats (Bottom Right) */}
-      <div style={{ 
-        position: 'absolute', 
-        bottom: 14, 
-        right: 14, 
-        zIndex: 20, 
-        background: 'rgba(11, 16, 28, 0.85)', 
-        backdropFilter: 'blur(10px)', 
-        border: '1px solid rgba(255, 255, 255, 0.08)', 
-        borderRadius: 8, 
-        padding: '8px 14px', 
-        fontSize: 11, 
-        fontFamily: 'var(--font-mono)',
-        color: '#e2e8f0',
-        display: 'flex',
-        gap: 10,
-        alignItems: 'center'
-      }}>
-        <span style={{ color: '#38bdf8' }}>{filteredGraphData.nodes.length} Nodes Rendered</span>
+      <div className="graph-3d-stats">
+        <span style={{ color: '#38bdf8' }}>{filteredGraphData.nodes.length} Nodes</span>
         <span style={{ color: '#64748b' }}>•</span>
-        <span style={{ color: '#10b981' }}>{filteredGraphData.links.length} Active Edges</span>
+        <span style={{ color: '#10b981' }}>{filteredGraphData.links.length} Edges</span>
         <span style={{ color: '#64748b' }}>•</span>
-        <span style={{ color: '#a855f7' }}>60 FPS WebGL</span>
+        <span style={{ color: '#a855f7' }}>60 FPS</span>
       </div>
     </div>
   );

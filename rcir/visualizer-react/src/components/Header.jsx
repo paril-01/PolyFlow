@@ -1,5 +1,5 @@
 import React from 'react';
-import { Network, Search, RefreshCw, ShieldCheck, Compass, GitBranch } from 'lucide-react';
+import { Network, Search, RefreshCw, ShieldCheck, Compass, GitBranch, Menu } from 'lucide-react';
 
 export function Header({
   manifest = [],
@@ -10,47 +10,59 @@ export function Header({
   searchQuery,
   onSearchChange,
   onResetCamera,
-  onOpenProofModal
+  onOpenProofModal,
+  onToggleMobileSidebar
 }) {
   return (
     <header className="top-header">
       {/* Brand & Dataset Select */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+        {/* Mobile Hamburger Menu Toggle */}
+        <button
+          className="mobile-menu-btn"
+          onClick={onToggleMobileSidebar}
+          aria-label="Open Navigation Menu"
+        >
+          <Menu size={18} />
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
           <div style={{
-            width: 30,
-            height: 30,
+            width: 28,
+            height: 28,
             borderRadius: 6,
             background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Network size={16} color="#fff" />
+            <Network size={15} color="#fff" />
           </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ fontWeight: 800, fontSize: 14, color: '#ffffff', letterSpacing: '-0.01em' }}>RCIR</span>
-            <span style={{ fontSize: 9.5, padding: '1px 5px', background: '#252a3f', color: '#a5b4fc', borderRadius: 4, border: '1px solid #3d4668', fontWeight: 600 }}>v3.4</span>
+          <div className="header-brand-title" style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
+            <span style={{ fontWeight: 800, fontSize: 13.5, color: '#ffffff', letterSpacing: '-0.01em' }}>RCIR</span>
+            <span style={{ fontSize: 9, padding: '1px 4px', background: '#252a3f', color: '#a5b4fc', borderRadius: 4, border: '1px solid #3d4668', fontWeight: 600 }}>v3.4</span>
           </div>
         </div>
 
         <select
           value={currentDatasetId}
           onChange={(e) => onSelectDataset(e.target.value)}
+          className="header-dataset-select"
           style={{
             background: '#161928',
             border: '1px solid #333c56',
             color: '#ffffff',
-            padding: '5px 12px',
+            padding: '5px 10px',
             borderRadius: 6,
             fontSize: 12,
             fontWeight: 500,
             cursor: 'pointer',
-            outline: 'none'
+            outline: 'none',
+            maxWidth: 260
           }}
         >
           <optgroup label="Enterprise Core Target (Validated Subject)">
-            <option value="nextcloud">☁️ Nextcloud Server Core (50,346 nodes · 143,225 edges · 926k LOC)</option>
+            <option value="nextcloud">☁️ Nextcloud Server Core (50k nodes · 143k edges)</option>
           </optgroup>
           <optgroup label="Microservice Reference Benchmarks">
             <option value="otel_recommendation">🔭 OTel Astronomy Shop — Recommendation (101 nodes)</option>
@@ -65,11 +77,11 @@ export function Header({
       </div>
 
       {/* Center Search Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', position: 'relative', width: 280 }}>
+      <div className="header-search-bar" style={{ display: 'flex', alignItems: 'center', position: 'relative', width: 240 }}>
         <Search size={14} style={{ position: 'absolute', left: 9, color: '#94a3b8' }} />
         <input
           type="text"
-          className="input-text"
+          className="input-text header-search-input"
           placeholder="Filter nodes (e.g. Service)..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
@@ -86,7 +98,7 @@ export function Header({
       </div>
 
       {/* Right Action Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {/* Layout Switcher */}
         <div style={{ display: 'flex', background: '#161928', borderRadius: 6, border: '1px solid #2d354e', padding: 2 }}>
           <button

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Network, FolderTree, Cpu, BarChart3, Bot, Sparkles, ShieldCheck } from 'lucide-react';
+import { Network, FolderTree, Cpu, BarChart3, Bot, Sparkles, ShieldCheck, X } from 'lucide-react';
 import { LEVEL_COLORS } from '../lib/colors';
 
-export function Sidebar({ activeTab, onSelectTab, datasetInfo, nodeCount = 0, edgeCount = 0 }) {
+export function Sidebar({ activeTab, onSelectTab, datasetInfo, nodeCount = 0, edgeCount = 0, isOpen, onClose }) {
   const tabs = [
     { id: 'overview', label: 'Executive Overview', icon: Sparkles, badge: 'Key Proofs', highlight: true },
-    { id: 'graph', label: 'Nextcloud 50k Graph', icon: Network, badge: '110k Edges' },
+    { id: 'graph', label: 'Nextcloud 50k Graph', icon: Network, badge: '143k Edges' },
     { id: 'agent', label: '6-Stage Agent Pool', icon: Bot, badge: 'AEF Gatekeeper' },
     { id: 'benchmarks', label: 'Benchmark Arena', icon: BarChart3, badge: 'Empirical' },
     { id: 'studio', label: 'Polyglot Studio', icon: Cpu, badge: 'Native SDK' },
@@ -15,22 +15,41 @@ export function Sidebar({ activeTab, onSelectTab, datasetInfo, nodeCount = 0, ed
   ];
 
   return (
-    <aside className="sidebar-panel">
-      {/* Navigation Items */}
-      <div style={{ padding: '14px 10px', display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
-        <div style={{ fontSize: 10.5, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0 8px 8px' }}>
-          System Modules
+    <>
+      {isOpen && (
+        <div 
+          className="mobile-overlay" 
+          onClick={onClose} 
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', zIndex: 90 }} 
+        />
+      )}
+      <aside className={`sidebar-panel ${isOpen ? 'mobile-open' : ''}`}>
+        {/* Mobile Header with Close Button */}
+        <div className="mobile-sidebar-header" style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'none', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 13, fontWeight: 800, color: '#fff' }}>PolyFlow Suite</span>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+            <X size={18} />
+          </button>
         </div>
 
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <div
-              key={tab.id}
-              className={`nav-item ${isActive ? 'active' : ''}`}
-              onClick={() => onSelectTab(tab.id)}
-            >
+        {/* Navigation Items */}
+        <div style={{ padding: '14px 10px', display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflowY: 'auto' }}>
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0 8px 8px' }}>
+            System Modules
+          </div>
+
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <div
+                key={tab.id}
+                className={`nav-item ${isActive ? 'active' : ''}`}
+                onClick={() => {
+                  onSelectTab(tab.id);
+                  if (onClose) onClose();
+                }}
+              >
               <Icon size={16} color={isActive ? '#818cf8' : tab.highlight ? '#ec4899' : '#cbd5e1'} />
               <span style={{ flex: 1 }}>{tab.label}</span>
               {tab.highlight ? (
@@ -88,5 +107,6 @@ export function Sidebar({ activeTab, onSelectTab, datasetInfo, nodeCount = 0, ed
         </div>
       </div>
     </aside>
+    </>
   );
 }
