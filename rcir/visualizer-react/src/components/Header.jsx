@@ -1,5 +1,5 @@
 import React from 'react';
-import { Network, Search, RefreshCw, ShieldCheck, Compass, GitBranch, Menu } from 'lucide-react';
+import { Network, Search, RefreshCw, ShieldCheck, Compass, GitBranch, Menu, PanelLeft } from 'lucide-react';
 
 export function Header({
   manifest = [],
@@ -11,7 +11,9 @@ export function Header({
   onSearchChange,
   onResetCamera,
   onOpenProofModal,
-  onToggleMobileSidebar
+  onToggleMobileSidebar,
+  isSidebarCollapsed = false,
+  onToggleSidebarCollapse
 }) {
   return (
     <header className="top-header">
@@ -24,6 +26,29 @@ export function Header({
           aria-label="Open Navigation Menu"
         >
           <Menu size={18} />
+        </button>
+
+        {/* Desktop Sidebar Collapse Toggle */}
+        <button
+          className="header-sidebar-toggle"
+          onClick={onToggleSidebarCollapse}
+          title={isSidebarCollapsed ? "Expand sidebar (Ctrl+B)" : "Collapse sidebar (Ctrl+B)"}
+          aria-label="Toggle Sidebar"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 28,
+            height: 28,
+            borderRadius: 6,
+            background: isSidebarCollapsed ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+            border: isSidebarCollapsed ? '1px solid #6366f1' : '1px solid var(--border-subtle)',
+            color: isSidebarCollapsed ? '#818cf8' : '#cbd5e1',
+            cursor: 'pointer',
+            flexShrink: 0
+          }}
+        >
+          <PanelLeft size={15} />
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>

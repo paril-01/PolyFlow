@@ -22,6 +22,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [manifest, setManifest] = useState([]);
 
   // Load Manifest
@@ -30,6 +31,18 @@ export default function App() {
       .then(res => res.json())
       .then(data => setManifest(data))
       .catch(err => console.warn('Could not load manifest.json', err));
+  }, []);
+
+  // Keyboard shortcut Ctrl+B / Cmd+B to toggle sidebar collapse
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        setIsSidebarCollapsed(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Primary Graph Data Hook
@@ -93,6 +106,8 @@ export default function App() {
         edgeCount={totalEdges}
         isOpen={isMobileSidebarOpen}
         onClose={() => setIsMobileSidebarOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(prev => !prev)}
       />
 
       {/* Main Viewport */}
@@ -109,6 +124,8 @@ export default function App() {
           onResetCamera={resetCamera}
           onOpenProofModal={() => setIsProofModalOpen(true)}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebarCollapse={() => setIsSidebarCollapsed(prev => !prev)}
           totalNodes={totalNodes}
           totalEdges={totalEdges}
         />
@@ -138,7 +155,7 @@ export default function App() {
 
               {/* Tab 1: Obsidian Graph Canvas (3D Space or 2D Flow) */}
               {activeTab === 'graph' && (
-                <div style={{ flex: 1, position: 'relative', height: '100%' }}>
+                <div style={{ flex: 1, position: 'relative', height: '100%', width: '100%', minWidth: 0, overflow: 'hidden' }}>
                   {layoutMode === '3d' ? (
                     <Graph3DCanvas
                       data={data}
@@ -174,23 +191,25 @@ export default function App() {
 
                   {/* Right Slide-out / Bottom Sheet Inspector */}
                   {selectedNode && (
-                    <div className="inspector-wrapper">
+                    <>
                       <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
-                      <NodeInspector
-                        node={selectedNode}
-                        graphData={data}
-                        edgeIndex={edgeIndex}
-                        onClose={() => setSelectedNode(null)}
-                        onSelectNodeByPath={selectNodeByPath}
-                      />
-                    </div>
+                      <div className="inspector-wrapper">
+                        <NodeInspector
+                          node={selectedNode}
+                          graphData={data}
+                          edgeIndex={edgeIndex}
+                          onClose={() => setSelectedNode(null)}
+                          onSelectNodeByPath={selectNodeByPath}
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               )}
 
               {/* Tab 2: Tree Explorer */}
               {activeTab === 'tree' && (
-                <div style={{ flex: 1, display: 'flex', height: '100%', position: 'relative' }}>
+                <div style={{ flex: 1, display: 'flex', height: '100%', width: '100%', minWidth: 0, overflow: 'hidden', position: 'relative' }}>
                   <TreeExplorer
                     hierarchy={data?.hierarchy}
                     selectedNode={selectedNode}
@@ -200,16 +219,18 @@ export default function App() {
                     }}
                   />
                   {selectedNode && (
-                    <div className="inspector-wrapper">
+                    <>
                       <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
-                      <NodeInspector
-                        node={selectedNode}
-                        graphData={data}
-                        edgeIndex={edgeIndex}
-                        onClose={() => setSelectedNode(null)}
-                        onSelectNodeByPath={selectNodeByPath}
-                      />
-                    </div>
+                      <div className="inspector-wrapper">
+                        <NodeInspector
+                          node={selectedNode}
+                          graphData={data}
+                          edgeIndex={edgeIndex}
+                          onClose={() => setSelectedNode(null)}
+                          onSelectNodeByPath={selectNodeByPath}
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               )}

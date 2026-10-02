@@ -84,40 +84,42 @@ export function NodeInspector({ node, graphData, edgeIndex, onClose, onSelectNod
       </div>
       {/* Header */}
       <div style={{
-        padding: '12px 16px',
+        padding: '12px 14px',
         borderBottom: '1px solid var(--border-default)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: '#0f1422'
+        background: '#0f1422',
+        flexShrink: 0
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1, marginRight: 8 }}>
           <span style={{ width: 10, height: 10, borderRadius: '50%', background: nodeColor, boxShadow: `0 0 8px ${nodeColor}`, flexShrink: 0 }} />
-          <div style={{ minWidth: 0 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {nodeName}
             </div>
-            <div style={{ fontSize: 10.5, color: '#94a3b8' }}>
+            <div style={{ fontSize: 10.5, color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {node.level || node.kind || 'AST Node'} • {node.language ? node.language.toUpperCase() : 'POLYGLOT'}
             </div>
           </div>
         </div>
         <button 
           onClick={onClose} 
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#cbd5e1', cursor: 'pointer' }}
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#cbd5e1', cursor: 'pointer', flexShrink: 0 }}
           title="Close Inspector"
+          aria-label="Close Inspector"
         >
           <X size={15} />
         </button>
       </div>
 
       {/* Mini Tabs */}
-      <div style={{ display: 'flex', background: '#0a0d16', borderBottom: '1px solid var(--border-subtle)', padding: '2px 8px' }}>
+      <div style={{ display: 'flex', flexShrink: 0, background: '#0a0d16', borderBottom: '1px solid var(--border-subtle)', padding: '2px 8px' }}>
         <button
           onClick={() => setActiveTab('overview')}
           style={{
             flex: 1,
-            padding: '6px 4px',
+            padding: '7px 4px',
             fontSize: 11,
             fontWeight: 700,
             border: 'none',
@@ -133,7 +135,7 @@ export function NodeInspector({ node, graphData, edgeIndex, onClose, onSelectNod
           onClick={() => setActiveTab('calls')}
           style={{
             flex: 1,
-            padding: '6px 4px',
+            padding: '7px 4px',
             fontSize: 11,
             fontWeight: 700,
             border: 'none',
@@ -149,7 +151,7 @@ export function NodeInspector({ node, graphData, edgeIndex, onClose, onSelectNod
           onClick={() => setActiveTab('invariants')}
           style={{
             flex: 1,
-            padding: '6px 4px',
+            padding: '7px 4px',
             fontSize: 11,
             fontWeight: 700,
             border: 'none',
@@ -164,7 +166,7 @@ export function NodeInspector({ node, graphData, edgeIndex, onClose, onSelectNod
       </div>
 
       {/* Content Scroll Area */}
-      <div style={{ padding: 14, overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="inspector-scroll-area" style={{ padding: 14, overflowY: 'auto', overflowX: 'hidden', flex: 1, minHeight: 0, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <>
