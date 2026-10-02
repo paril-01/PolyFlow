@@ -9,6 +9,8 @@ import sys
 class LLMProvider:
     def __init__(self, provider_name: str = "auto"):
         self.provider_name = provider_name.lower()
+        self.last_usage: dict[str, int] = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+        self.total_tokens_consumed: int = 0
         if self.provider_name == "auto":
             if os.environ.get("OPENAI_API_KEY"):
                 self.provider_name = "openai"
@@ -34,16 +36,35 @@ class LLMProvider:
     def _call_openai(self, system_prompt: str, user_prompt: str) -> str:
         try:
             import openai
-            client = openai.OpenAI()
+            base_url = os.environ.get("OPENAI_BASE_URL")
+            client = openai.OpenAI(base_url=base_url, timeout=120.0) if base_url else openai.OpenAI(timeout=120.0)
+            model_name = os.environ.get("AEF_MODEL")
+            if not model_name:
+                base_str = str(getattr(client, "base_url", ""))
+                if "11434" in base_str or os.environ.get("OPENAI_API_KEY") == "ollama":
+                    model_name = "qwen2.5:0.5b"
+                else:
+                    model_name = "gpt-4o"
+
+            max_tokens = int(os.environ.get("AEF_MAX_TOKENS", "400"))
             response = client.chat.completions.create(
-                model=os.environ.get("AEF_MODEL", "gpt-4o"),
+                model=model_name,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=0.2
+                temperature=0.2,
+                max_tokens=max_tokens,
             )
-            return response.choices[0].message.content
+            if hasattr(response, "usage") and response.usage:
+                self.last_usage = {
+                    "prompt_tokens": getattr(response.usage, "prompt_tokens", 0) or 0,
+                    "completion_tokens": getattr(response.usage, "completion_tokens", 0) or 0,
+                    "total_tokens": getattr(response.usage, "total_tokens", 0) or 0,
+                }
+                self.total_tokens_consumed += self.last_usage["total_tokens"]
+
+            return response.choices[0].message.content or ""
         except Exception as e:
             print(f"[AEF Provider Warning] OpenAI call failed: {e}. Falling back to dry-run mode.", file=sys.stderr)
             return self._simulated_response(system_prompt, user_prompt)

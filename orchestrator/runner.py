@@ -135,9 +135,13 @@ class OrchestratorRunner:
         results["stage6_historian"] = stage6_output
         (self.output_dir / "06_historian_memory_log.md").write_text(stage6_output, encoding="utf-8")
 
+        results["total_tokens_consumed"] = getattr(self.provider, "total_tokens_consumed", 0)
+        results["gatekeeper_decision_text"] = stage5_output
+
         if verbose:
             _safe_print("\n==================================================")
             _safe_print("PIPELINE EXECUTION COMPLETE!")
+            _safe_print(f"Total LLM Tokens: {results['total_tokens_consumed']}")
             _safe_print(f"Artifacts saved to: {self.output_dir}")
             _safe_print("==================================================\n")
 

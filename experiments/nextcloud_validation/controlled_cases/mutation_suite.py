@@ -96,7 +96,8 @@ MUTATIONS = [
         "category": "interface_method",
         "target_file": "lib/public/Files/Node.php",
         "grep_pattern": "->getId\\(\\)",
-        "description": "Rename getId() method on Node interface and implementations",
+        "semantic_filter": "node_scope",
+        "description": "Rename getId() method on Node interface and implementations (semantically scoped to OCP\\Files\\Node)",
     },
     {
         "id": "MUT-007",
@@ -110,9 +111,19 @@ MUTATIONS = [
     },
 ]
 
+NODE_SCOPE_RE = re.compile(
+    r"use\s+OCP\\Files\\(Node|File|Folder)|use\s+OC\\Files\\Node|"
+    r"Node\s+\$|File\s+\$|Folder\s+\$|@(?:param|return|var)\s+(?:\\?[A-Za-z0-9_\\]*\\)?(Node|File|Folder)"
+)
 
-def find_ground_truth_references(repo_path: Path, grep_pattern: str, file_ext: str = "*.php") -> list[str]:
-    """Find actual references in codebase using ripgrep or python search."""
+
+def find_ground_truth_references(
+    repo_path: Path,
+    grep_pattern: str,
+    semantic_filter: str | None = None,
+    file_ext: str = "*.php",
+) -> list[str]:
+    """Find actual references in codebase using regex search with semantic scope verification."""
     matched_files = set()
     regex = re.compile(grep_pattern)
 
@@ -121,11 +132,21 @@ def find_ground_truth_references(repo_path: Path, grep_pattern: str, file_ext: s
         if any(skip in root for skip in [".git", "vendor", "3rdparty", "node_modules"]):
             continue
         for f in files:
-            if f.endswith(".php") or f.endswith(".ts") or f.endswith(".js"):
+            if f.endswith((".php", ".ts", ".js")):
                 fp = Path(root) / f
                 try:
                     content = fp.read_text(encoding="utf-8", errors="ignore")
                     if regex.search(content):
+                        # Apply semantic verification if required
+                        if semantic_filter == "node_scope":
+                            rel_posix = fp.relative_to(repo_path).as_posix()
+                            has_node_context = (
+                                bool(NODE_SCOPE_RE.search(content))
+                                or "Files/Node" in rel_posix
+                                or "lib/public/Files" in rel_posix
+                            )
+                            if not has_node_context:
+                                continue
                         rel = fp.relative_to(repo_path).as_posix()
                         matched_files.add(rel)
                 except Exception:
@@ -163,9 +184,15 @@ def evaluate_mutation(mutation: dict[str, Any], full_graph: dict[str, Any], repo
         if src_file:
             rcir_affected_files.add(src_file)
 
-    # 2. Independent ground truth search
+    # 2. Independent ground truth search (semantically verified)
     t_gt0 = time.perf_counter()
-    gt_files = set(find_ground_truth_references(repo_path, mutation["grep_pattern"]))
+    gt_files = set(
+        find_ground_truth_references(
+            repo_path,
+            mutation["grep_pattern"],
+            semantic_filter=mutation.get("semantic_filter"),
+        )
+    )
     gt_time_s = time.perf_counter() - t_gt0
 
     # Normalize target file

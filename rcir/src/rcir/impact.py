@@ -51,9 +51,23 @@ class ChangeImpactReport:
     unresolved_locations: list[UnresolvedItem] = field(default_factory=list)
     config_dependencies_count: int = 0
     config_dependencies: list[dict[str, str]] = field(default_factory=list)
-    confidence: float = 1.0
+    exact_resolution_fraction: float = 1.0
     zero_cloud_verified: bool = True
     affected_edges: list[dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def confidence(self) -> float:
+        """Backward-compatible alias for exact_resolution_fraction."""
+        return self.exact_resolution_fraction
+
+    @property
+    def resolution_breakdown(self) -> dict[str, int]:
+        return {
+            "exact": self.exact_call_sites,
+            "inferred": self.inferred_call_sites,
+            "unresolved": self.unresolved_count,
+            "total_evaluated": self.exact_call_sites + self.inferred_call_sites + self.unresolved_count,
+        }
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -80,7 +94,9 @@ class ChangeImpactReport:
                     for u in self.unresolved_locations
                 ],
             },
-            "confidence_percentage": round(self.confidence * 100, 1),
+            "resolution_breakdown": self.resolution_breakdown,
+            "exact_resolution_fraction": round(self.exact_resolution_fraction, 4),
+            "confidence_percentage": round(self.exact_resolution_fraction * 100, 1),
             "configuration_dependent": {
                 "count": self.config_dependencies_count,
                 "dependencies": self.config_dependencies,
@@ -103,13 +119,18 @@ class ChangeImpactReport:
         ]
 
         if self.unresolved_count == 0:
-            lines.append("Unresolved: 0 — no manual review required")
+            lines.append("Unresolved: 0 - no manual review required")
         else:
-            lines.append(f"Unresolved: {self.unresolved_count} — manual review required:")
+            lines.append(f"Unresolved: {self.unresolved_count} - manual review required:")
             for item in self.unresolved_locations:
                 lines.append(f"  - {item.location} ({item.edge_class}): {item.reason}")
 
-        lines.append(f"Confidence: {round(self.confidence * 100, 1)}%")
+        frac_pct = round(self.exact_resolution_fraction * 100, 1)
+        lines.append(
+            f"Exact Resolution Fraction: {frac_pct}% "
+            f"[Exact: {self.exact_call_sites} | Inferred: {self.inferred_call_sites} | Unresolved: {self.unresolved_count}]"
+        )
+        lines.append("  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)")
 
         if self.config_dependencies_count > 0:
             lines.append(f"Configuration-dependent: {self.config_dependencies_count}")
@@ -222,7 +243,7 @@ def generate_change_impact_report(
             {"source": e.get("source", ""), "target": e.get("target", ""), "reason": e.get("reason", "")}
             for e in config_deps
         ],
-        confidence=confidence,
+        exact_resolution_fraction=confidence,
         zero_cloud_verified=True,
         affected_edges=affected_callers,
     )

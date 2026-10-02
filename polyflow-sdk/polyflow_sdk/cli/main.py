@@ -16,6 +16,11 @@ import argparse
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
+from pathlib import Path
+_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
 from polyflow_sdk import __version__
 from polyflow_sdk.cli.commands.doctor import execute_doctor
 from polyflow_sdk.cli.commands.run import execute_run

@@ -1,31 +1,31 @@
 """
-PHP Source Code Scanner for RCIR.
+PHP Source Code Scanner for RCIR (Heuristic Pattern Extractor).
 
-Provides regex-based PHP dependency extraction covering:
-1. Classes, abstract classes
-2. Interfaces
-3. Traits (declaration and use)
-4. Methods (public/protected/private, static, abstract)
-5. Namespaces
-6. Use statements (imports)
-7. Class inheritance (extends) and interface implementation (implements)
-8. Function/method calls ($this->method(), ClassName::staticMethod())
-9. Dependency Injection patterns ($container->get(Service::class))
-10. Type hints in function parameters and return types
-11. PHPDoc @param/@return type references
+Architectural Classification:
+- This is a high-throughput, regex- and lexical pattern-based heuristic scanner,
+  NOT a full semantic PHP compiler or complete type-inference engine.
+- Designed for fast, zero-dependency static extraction of PHP classes, methods, traits,
+  DI type-hints, and static/instance invocations across large codebases (>50k symbols)
+  without requiring a full PHP runtime, Composer autoloader execution, or whole-program
+  type solvers.
 
-Limitations (documented, not hidden):
-- Regex-based, not AST-based — cannot resolve complex expressions
-- Cannot trace through variable assignments (e.g., $svc = getService(); $svc->method())
-- Cannot resolve dynamic class instantiation (new $className())
-- Cannot resolve string-based service identifiers without ::class
-- Cannot resolve closures/anonymous classes as dependency sources
-- Cannot resolve conditional includes/requires
-- Framework-specific patterns (Laravel, Symfony, Nextcloud OCS) require
-  explicit pattern additions — this scanner covers common PHP patterns
+Extracted Structural Elements:
+1. Classes, abstract classes, interfaces, traits, and enums
+2. Namespaces and use/import declarations
+3. Inheritance (extends) and interface realization (implements)
+4. Static invocations (Class::method()) and lexical $this->method() calls
+5. Dependency Injection container lookups (e.g. $c->get(Service::class))
+6. Lexical parameter type hints and PHPDoc references
+
+Explicit Limitations (Documented, not hidden):
+- Heuristic pattern-based, not full AST semantic compiler: cannot perform interprocedural dataflow
+- Cannot trace through variable reassignments (e.g., $svc = getService(); $svc->method())
+- Cannot resolve dynamic invocations (e.g., $this->$dynamicMethod(), new $className())
+- Cannot resolve string-based service identifiers without ::class or registered container bindings
+- Does not execute PHP code or Composer autoloader logic
 
 Anti-Fabrication & Zero-Cloud:
-- Pure Python regex parsing with zero external dependencies.
+- Pure Python pattern parsing with zero external dependencies.
 - Operates entirely locally with zero outbound network calls.
 """
 

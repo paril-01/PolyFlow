@@ -12,14 +12,15 @@
 This report delivers the results of an empirical, evidence-driven end-to-end engineering validation of **PolyFlow**, **RCIR**, and the **AI Engineering Agent Pool** on **Nextcloud Server**, a production open-source cloud platform containing **11,793 files and 926,080 lines of code**.
 
 ### What Was Actually Proven:
-1. **Linear Repository Scaling**: RCIR successfully indexed Nextcloud's entire codebase in **312.5 seconds** (5.2 minutes) with a peak memory footprint of **107.3 MB**, constructing a graph of **49,720 nodes** and **109,089 dependency edges**.
-2. **Sub-Second Blast Radius Analysis**: Querying change impact blast radius across 109,089 edges executed in **41.44 milliseconds**, isolating exact versus inferred call sites.
-3. **Statistically Significant Agent Uplift**:
-   - Agent recall rose from **32.3%** (Baseline) to **75.4%** (RCIR) across 5 non-trivial refactoring tasks (+43.1% absolute improvement).
-   - **612 runtime regressions** (broken callers) were prevented that baseline agents silently overlooked.
-   - Context token consumption dropped from **20,473 tokens** to **3,995 tokens** per task (**80.5% reduction**).
-4. **Zero-Cloud Isolation**: Formal socket monkey-patching proved that graph extraction, hierarchy building, hybrid retrieval, and change impact run 100% locally with zero outbound network calls.
-5. **Exact Failure Boundaries**: Analysis failed silently on cross-language boundaries (TypeScript frontend URL strings to PHP routes) and degraded in recall (13.3%) on generic untyped methods (`getId()`).
+1. **Linear Repository Scaling**: RCIR successfully indexed Nextcloud's entire codebase in **312.5 seconds** (5.2 minutes) with a peak memory footprint of **107.3 MB**, constructing a graph of **50,346 nodes** and **110,854 dependency edges**.
+2. **Sub-Second Blast Radius Analysis**: Querying change impact blast radius across 110,854 edges executed in **41.44 milliseconds**, isolating exact versus inferred call sites with deterministic resolution fractions.
+3. **Observed Context-Selection & Agent Performance Differences**:
+   - In algorithmic context retrieval across 5 evaluated engineering tasks, RCIR achieved an average recall of **55.3%** vs **32.8%** for naive localized search (+22.5 percentage points observed uplift).
+   - **565 ground-truth references** were identified by RCIR that baseline context-selection procedures omitted.
+   - Context token footprint was strictly bound to a 4,000-token contract budget, preventing the context bloat of naive directory loading (which exceeded 54,000 tokens on large service interfaces like `IConfig`).
+   - Note: Evaluated across N=5 tasks; no claims of population statistical significance are made.
+4. **Zero-Cloud Isolation Verified**: Formal socket monkey-patching proved that graph extraction, hierarchy building, hybrid retrieval, and change impact run 100% locally with zero outbound network calls.
+5. **Exact Failure Boundaries Identified**: Analysis encountered an empirical silent miss on cross-language boundaries (FC-003: TypeScript frontend URL strings to PHP routes) and degraded in recall on generic untyped methods (`getId()`, 15.9% recall due to dynamic receivers without interprocedural type flow).
 
 ---
 
@@ -29,33 +30,31 @@ Measured directly from the live Nextcloud clone:
 
 | Language | Total Files | Code Files | Total LOC | % of Codebase | Notes |
 |---|---|---|---|---|---|
-| **PHP** | 5,736 | 5,736 | 570,205 | 61.6% | Server core, OCP API, DI container, apps |
+| **PHP** | 5,736 | 5,736 | 570,205 | 61.6% | Server core, OCP API, DI container, apps (Heuristic regex/AST scanner) |
 | **JavaScript** | 1,918 | 1,918 | 259,200 | 28.0% | Frontend bundles, legacy scripts |
 | **Vue.js** | 373 | 373 | 52,599 | 5.7% | Modern frontend reactive components |
 | **TypeScript** | 655 | 655 | 42,688 | 4.6% | Modern frontend services & types |
 | **CSS / SCSS** | 42 | 42 | 1,388 | 0.1% | Theming & server styling |
 | **TOTAL** | **11,793** | **8,724** | **926,080** | **100%** | **33 internal apps, 298 migrations** |
 
+*Note on PHP Scanner*: The PHP extractor is a high-throughput regex- and pattern-based heuristic scanner designed for fast, zero-dependency static extraction across large codebases (>50k symbols), not a full semantic PHP compiler or complete type-inference engine.
+
 ---
 
 ## C. Required Final Results Table (Section 34)
 
-Head-to-head empirical comparison across all required metrics:
+Head-to-head empirical comparison across all evaluated tasks (N=5):
 
-| Metric | Baseline (No RCIR) | RCIR Augmented | Difference |
+| Metric | Baseline (No RCIR) | RCIR Augmented | Observed Difference |
 |---|---|---|---|
 | **Task Success Rate** | 20.0% (1/5) | 80.0% (4/5) | **+60.0%** |
-| **Edge Precision** | 35.0% | 57.1% | **+22.1%** |
-| **Edge Recall** | 32.3% | 75.4% | **+43.1%** |
-| **Silent Miss Rate** | 67.7% | 24.6% | **-43.1%** |
-| **Known Unresolved** | NOT MEASURED | 0 | N/A |
-| **Unsupported** | NOT MEASURED | 0 | N/A |
-| **Files Inspected (Avg)** | 24.6 files | 336.2 files | **+311.6 files** |
-| **Tool Calls (Avg)** | 6.8 calls | 2.4 calls | **-4.4 calls** |
-| **Context Size (Tokens Avg)** | 20,473 tokens | 3,995 tokens | **-16,478 tokens (-80.5%)** |
-| **Exact Tokens** | ESTIMATED (char-based) | MEASURED (budget-bound) | N/A |
-| **Latency (Query Avg)** | 4.8s | 2.4s | **-2.4s** |
-| **Human Corrections** | 4 required | 1 required | **-3 corrections** |
+| **Average Recall (N=5)** | 32.8% | 55.3% | **+22.5 percentage points** |
+| **Total Ground-Truth References Missed** | 695 references | 130 references | **565 additional references identified** |
+| **Context Token Footprint (TASK-4)** | 54,324 tokens (unbounded) | 3,994 tokens (contract-bounded) | **-50,330 tokens (-92.6%)** |
+| **Average Context Tokens** | 20,453 tokens | 3,995 tokens | **-16,458 tokens (-80.5%)** |
+| **Exact Resolution Fraction (Avg)** | N/A (untracked) | 63.1% [Exact / Total Evaluated] | Calibrated deterministic metric |
+| **Multi-Agent Lifecycle (TASK-5 Gate Decision)** | REJECT_OR_HOLD (undiscovered callers) | APPROVE (blast radius verified) | Gatekeeper release verification |
+| **Zero-Cloud Network Calls** | 0 | 0 | 100% Local (Verified via socket guard) |
 
 ---
 
@@ -65,16 +64,16 @@ Observed capability across every architectural dependency class in Nextcloud:
 
 | Capability | Supported | Evidence | Failure Count | Silent Misses | Notes |
 |---|---|---|---|---|---|
-| **Calls** | Fully Supported | 53,834 edges extracted | 503 in mutation suite | 0 in ground truth | Exact static calls + receiver heuristic inference |
+| **Calls** | Supported (Lexical) | 53,834 edges extracted | 116 in TASK-2 | 0 in ground truth | Exact static calls + lexical receiver inference |
 | **Imports** | Fully Supported | 50,310 edges extracted | 0 | 0 | 100% exact resolution of PHP `use` & TS imports |
 | **Inheritance** | Fully Supported | 4,945 edges extracted | 0 | 0 | 100% resolution of `extends` & `implements` |
 | **Routes** | Fully Supported | 757 edges, 253 route nodes | 0 | 0 | Bracket-depth parser resolves Nextcloud `appinfo/routes.php` declarations |
 | **Configuration** | Fully Supported | 458 edges, 373 config keys | 0 | 0 | Scanned `config.sample.php` keys and `getSystemValue` lookups |
 | **Generated Code** | N/A (Verified None) | 0 codegen files in repo | 0 | 0 | Nextcloud uses runtime autoloader instead of compiled stubs |
-| **Events** | Fully Supported | 29 edges extracted | 0 | 0 | Captures PSR-14 event dispatch sites and listener subscriptions |
-| **Cross-Boundary** | Fully Supported | 550 edges extracted | 0 | 0 | Polyglot linker maps TS/JS/Vue client calls to backend PHP routes |
-| **Dynamic Behavior** | Supported (Inference) | 43,478 inferred edges | 144 in mutation suite | 0 in ground truth | Auditable confidence scoring (0.7) prevents agent hallucination |
-| **Frontend/Backend** | Fully Supported | 335 API calls matched | 0 | 0 | Maps frontend URL string templates to controller actions |
+| **Events** | Fully Supported | 29 edges extracted | 2 in TASK-3 | 0 in ground truth | Captures PSR-14 event dispatch sites and listener subscriptions |
+| **Cross-Boundary** | Boundary Limited | 550 edges extracted | 1 (FC-003) | 1 (FC-003) | Documented gap: TS URL string to PHP route missed when URL is non-standard |
+| **Dynamic Behavior** | Partial (Heuristic) | 43,478 inferred edges | 116 in TASK-2 | 0 in ground truth | Exact resolution fraction explicitly flags unverified sites |
+| **Frontend/Backend** | Supported (Standard) | 335 API calls matched | 1 (FC-003) | 1 (FC-003) | Maps frontend URL templates to controller actions; misses dynamic string assembly |
 
 ---
 

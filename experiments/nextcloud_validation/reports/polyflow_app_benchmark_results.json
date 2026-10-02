@@ -1,29 +1,33 @@
 {
   "summary": {
+    "application_description": "PolyFlow Cloud Drive Experimental Polyglot Prototype (Java, Python, TypeScript, .poly)",
     "tasks_evaluated": 3,
-    "baseline_average_recall": 0.522,
+    "baseline_average_recall": 0.889,
     "rcir_average_recall": 0.328,
-    "recall_gain": "-19.5%"
+    "observed_recall_gain_points": -56.1,
+    "methodology_note": "Genuine file content search vs RCIR graph contract. Real AEF pipeline executed with local LLM."
   },
   "tasks": [
     {
       "task_id": "POLY-TASK-1",
       "title": "Cross-Stack Checksum Rename",
       "ground_truth_files": 5,
-      "baseline_recall": 0.4,
+      "baseline_recall": 1.0,
       "rcir_recall": 0.4,
-      "baseline_misses": 3,
+      "baseline_misses": 0,
       "rcir_misses": 3,
-      "tokens_consumed": 1204
+      "exact_resolution_fraction": 1.0,
+      "tokens_consumed": 1502
     },
     {
       "task_id": "POLY-TASK-2",
       "title": "Permission Capability Action Refactoring",
       "ground_truth_files": 4,
-      "baseline_recall": 0.5,
+      "baseline_recall": 1.0,
       "rcir_recall": 0.25,
-      "baseline_misses": 2,
+      "baseline_misses": 0,
       "rcir_misses": 3,
+      "exact_resolution_fraction": 1.0,
       "tokens_consumed": 16
     },
     {
@@ -34,7 +38,19 @@
       "rcir_recall": 0.333,
       "baseline_misses": 1,
       "rcir_misses": 2,
-      "tokens_consumed": 484
+      "exact_resolution_fraction": 1.0,
+      "tokens_consumed": 782
+    }
+  ],
+  "agent_executions": [
+    {
+      "task_id": "POLY-TASK-1",
+      "title": "Cross-Stack Checksum Rename",
+      "duration_seconds": 121.97,
+      "total_llm_tokens": 12404,
+      "gatekeeper_decision": "APPROVE",
+      "maker_summary": "## Problem Statement The user requests a task to refactor the checksum_sha256 across Python worker, TypeScript types, and .poly contract. The goal is to ensure cross-stack synchronization between these components.  ## Requirements ### Functional Requ",
+      "gatekeeper_summary": "## Gate Review Report  ### Summary The code has been reviewed and found several issues. The main problem is the incorrect implementation of the `update_checksum_sha256` function. The function should update the checksum_sha256 value across Python work"
     }
   ]
 }

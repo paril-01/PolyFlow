@@ -1,24 +1,22 @@
 {
   "summary": {
-    "tasks_evaluated": 5,
-    "baseline_average_recall": 0.323,
-    "rcir_average_recall": 0.754,
-    "recall_improvement": "+43.1%",
-    "baseline_total_dependency_misses": 956,
-    "rcir_total_dependency_misses": 344,
-    "misses_prevented": 612,
-    "baseline_average_tokens": 20473.0,
-    "rcir_average_tokens": 3994.0,
-    "token_savings_percent": "80.5%"
+    "tasks_evaluated_retrieval": 5,
+    "baseline_average_recall": 0.328,
+    "rcir_average_recall": 0.553,
+    "observed_recall_difference_points": 22.5,
+    "baseline_total_dependency_misses": 695,
+    "rcir_total_dependency_misses": 130,
+    "ground_truth_references_identified_by_rcir_missed_by_baseline": 565,
+    "statistical_note": "Sample size N=5 tasks; observed difference reported. Not claiming population statistical significance."
   },
-  "tasks": [
+  "algorithmic_retrieval_benchmarks": [
     {
       "task_id": "TASK-1",
       "title": "Refactor Controller Endpoint",
       "category": "controller_route",
       "ground_truth_files": 25,
       "baseline": {
-        "condition": "Baseline (No RCIR)",
+        "condition": "Baseline Retrieval (No RCIR)",
         "files_identified": 13,
         "ground_truth_total": 25,
         "true_positives": 5,
@@ -26,13 +24,22 @@
         "false_positives": 8,
         "precision": 0.385,
         "recall": 0.2,
-        "tokens_consumed": 18731,
-        "reviewer_catches": 1,
-        "gatekeeper_decision": "RELEASE_REJECTED (Undetected Callers)",
-        "regression_risk": "HIGH"
+        "context_tokens": 18731,
+        "discovered_files": [
+          "apps/files/appinfo/routes.php",
+          "apps/files/lib/Controller/ApiController.php",
+          "apps/files/lib/Controller/ConversionApiController.php",
+          "apps/files/lib/Controller/DirectEditingController.php",
+          "apps/files/lib/Controller/DirectEditingViewController.php",
+          "apps/files/lib/Controller/FilenamesController.php",
+          "apps/files/lib/Controller/OpenLocalEditorController.php",
+          "apps/files/lib/Controller/TemplateController.php",
+          "apps/files/lib/Controller/TransferOwnershipController.php",
+          "apps/files/lib/Controller/ViewController.php"
+        ]
       },
       "rcir": {
-        "condition": "RCIR Augmented",
+        "condition": "RCIR Retrieval",
         "files_identified": 170,
         "ground_truth_total": 25,
         "true_positives": 18,
@@ -40,50 +47,81 @@
         "false_positives": 152,
         "precision": 0.106,
         "recall": 0.72,
-        "tokens_consumed": 3998,
-        "rcir_confidence": 0.644,
+        "context_tokens": 3998,
+        "exact_resolution_fraction": 0.6437,
         "exact_call_sites": 56,
         "inferred_call_sites": 31,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "GATE_HOLD (Confidence 64.4%, 7 unverified sites)",
-        "regression_risk": "MEDIUM"
+        "unresolved_count": 0,
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getThumbnail\n======================================================================\n\nAffected: 87 static call sites (56 exact, 31 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 64.4% [Exact: 56 | Inferred: 31 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "discovered_files": [
+          "apps/appstore/lib/Controller",
+          "apps/appstore/tests/Controller",
+          "apps/cloud_federation_api/lib/Controller",
+          "apps/cloud_federation_api/tests/Controller",
+          "apps/comments/lib/Controller",
+          "apps/comments/tests/Unit/Controller",
+          "apps/contactsinteraction/lib/Card.php",
+          "apps/dashboard/lib/Controller",
+          "apps/dav/lib/Avatars/AvatarNode.php",
+          "apps/dav/lib/CalDAV/CachedSubscriptionObject.php"
+        ]
       }
     },
     {
       "task_id": "TASK-2",
       "title": "Filesystem Node Contract Evolution",
       "category": "interface_method",
-      "ground_truth_files": 399,
+      "ground_truth_files": 138,
       "baseline": {
-        "condition": "Baseline (No RCIR)",
+        "condition": "Baseline Retrieval (No RCIR)",
         "files_identified": 41,
-        "ground_truth_total": 399,
+        "ground_truth_total": 138,
         "true_positives": 5,
-        "dependency_misses": 394,
+        "dependency_misses": 133,
         "false_positives": 36,
         "precision": 0.122,
-        "recall": 0.013,
-        "tokens_consumed": 18142,
-        "reviewer_catches": 1,
-        "gatekeeper_decision": "RELEASE_REJECTED (Undetected Callers)",
-        "regression_risk": "HIGH"
+        "recall": 0.036,
+        "context_tokens": 16983,
+        "discovered_files": [
+          "apps/admin_audit/lib/Actions/Files.php",
+          "apps/comments/lib/Activity/Listener.php",
+          "apps/comments/lib/Controller/NotificationsController.php",
+          "apps/comments/lib/Notification/Notifier.php",
+          "apps/comments/lib/Search/CommentsSearchProvider.php",
+          "lib/public/Files/AlreadyExistsException.php",
+          "lib/public/Files/ConnectionLostException.php",
+          "lib/public/Files/DavUtil.php",
+          "lib/public/Files/EmptyFileNameException.php",
+          "lib/public/Files/EntityTooLargeException.php"
+        ]
       },
       "rcir": {
-        "condition": "RCIR Augmented",
+        "condition": "RCIR Retrieval",
         "files_identified": 182,
-        "ground_truth_total": 399,
-        "true_positives": 66,
-        "dependency_misses": 333,
-        "false_positives": 116,
-        "precision": 0.363,
-        "recall": 0.165,
-        "tokens_consumed": 3992,
-        "rcir_confidence": 0.144,
+        "ground_truth_total": 138,
+        "true_positives": 22,
+        "dependency_misses": 116,
+        "false_positives": 160,
+        "precision": 0.121,
+        "recall": 0.159,
+        "context_tokens": 3992,
+        "exact_resolution_fraction": 0.1442,
         "exact_call_sites": 15,
         "inferred_call_sites": 89,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "GATE_HOLD (Confidence 14.4%, 333 unverified sites)",
-        "regression_risk": "MEDIUM"
+        "unresolved_count": 0,
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getId\n======================================================================\n\nAffected: 104 static call sites (15 exact, 89 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 14.4% [Exact: 15 | Inferred: 89 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "discovered_files": [
+          "apps/contactsinteraction/lib/Card.php",
+          "apps/dav/lib/Avatars/AvatarNode.php",
+          "apps/dav/lib/BackgroundJob/UserStatusAutomation.php",
+          "apps/dav/lib/CalDAV/AppCalendar/CalendarObject.php",
+          "apps/dav/lib/CalDAV/CachedSubscriptionObject.php",
+          "apps/dav/lib/CalDAV/CalendarObject.php",
+          "apps/dav/lib/CalDAV/Federation/FederatedCalendarEntity.php",
+          "apps/dav/lib/CalDAV/Federation/FederatedCalendarObject.php",
+          "apps/dav/lib/CalDAV/Trashbin/DeletedCalendarObject.php",
+          "apps/dav/lib/CardDAV/PhotoCache.php"
+        ]
       }
     },
     {
@@ -92,7 +130,7 @@
       "category": "event_contract",
       "ground_truth_files": 18,
       "baseline": {
-        "condition": "Baseline (No RCIR)",
+        "condition": "Baseline Retrieval (No RCIR)",
         "files_identified": 21,
         "ground_truth_total": 18,
         "true_positives": 7,
@@ -100,13 +138,22 @@
         "false_positives": 14,
         "precision": 0.333,
         "recall": 0.389,
-        "tokens_consumed": 10382,
-        "reviewer_catches": 1,
-        "gatekeeper_decision": "RELEASE_REJECTED (Undetected Callers)",
-        "regression_risk": "HIGH"
+        "context_tokens": 10382,
+        "discovered_files": [
+          "apps/admin_audit/lib/Actions/Files.php",
+          "apps/admin_audit/lib/AppInfo/Application.php",
+          "apps/files/lib/AppInfo/Application.php",
+          "apps/files/lib/Listener/SyncLivePhotosListener.php",
+          "apps/files/lib/Sharing/Source/NodeShareSourceType.php",
+          "lib/public/Files/Events/Node/AbstractNodeEvent.php",
+          "lib/public/Files/Events/Node/AbstractNodesEvent.php",
+          "lib/public/Files/Events/Node/BeforeNodeCopiedEvent.php",
+          "lib/public/Files/Events/Node/BeforeNodeCreatedEvent.php",
+          "lib/public/Files/Events/Node/BeforeNodeDeletedEvent.php"
+        ]
       },
       "rcir": {
-        "condition": "RCIR Augmented",
+        "condition": "RCIR Retrieval",
         "files_identified": 165,
         "ground_truth_total": 18,
         "true_positives": 16,
@@ -114,13 +161,24 @@
         "false_positives": 149,
         "precision": 0.097,
         "recall": 0.889,
-        "tokens_consumed": 3987,
-        "rcir_confidence": 0.897,
+        "context_tokens": 4000,
+        "exact_resolution_fraction": 0.8966,
         "exact_call_sites": 26,
         "inferred_call_sites": 3,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "RELEASE_APPROVED",
-        "regression_risk": "LOW"
+        "unresolved_count": 0,
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: NodeDeletedEvent\n======================================================================\n\nAffected: 29 static call sites (26 exact, 3 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 89.7% [Exact: 26 | Inferred: 3 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "discovered_files": [
+          "apps/admin_audit/lib/Actions/Files.php",
+          "apps/admin_audit/lib/Actions/Trashbin.php",
+          "apps/admin_audit/lib/Actions/Versions.php",
+          "apps/admin_audit/lib/AppInfo/Application.php",
+          "apps/admin_audit/lib/Listener",
+          "apps/admin_audit/tests/Listener",
+          "apps/comments/lib/Listener",
+          "apps/contactsinteraction/lib/AddressBook.php",
+          "apps/contactsinteraction/lib/Card.php",
+          "apps/dav/lib/Avatars/AvatarHome.php"
+        ]
       }
     },
     {
@@ -129,7 +187,7 @@
       "category": "dependency_injection",
       "ground_truth_files": 538,
       "baseline": {
-        "condition": "Baseline (No RCIR)",
+        "condition": "Baseline Retrieval (No RCIR)",
         "files_identified": 67,
         "ground_truth_total": 538,
         "true_positives": 7,
@@ -137,13 +195,22 @@
         "false_positives": 60,
         "precision": 0.104,
         "recall": 0.013,
-        "tokens_consumed": 54324,
-        "reviewer_catches": 1,
-        "gatekeeper_decision": "RELEASE_REJECTED (Undetected Callers)",
-        "regression_risk": "HIGH"
+        "context_tokens": 54324,
+        "discovered_files": [
+          "apps/admin_audit/lib/AuditLogger.php",
+          "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
+          "apps/appstore/lib/Controller/ApiController.php",
+          "apps/appstore/lib/Controller/PageController.php",
+          "apps/comments/lib/MaxAutoCompleteResultsInitialState.php",
+          "lib/public/AutoloadNotAllowedException.php",
+          "lib/public/BeforeSabrePubliclyLoadedEvent.php",
+          "lib/public/Color.php",
+          "lib/public/Constants.php",
+          "lib/public/Defaults.php"
+        ]
       },
       "rcir": {
-        "condition": "RCIR Augmented",
+        "condition": "RCIR Retrieval",
         "files_identified": 917,
         "ground_truth_total": 538,
         "true_positives": 536,
@@ -151,50 +218,120 @@
         "false_positives": 381,
         "precision": 0.585,
         "recall": 0.996,
-        "tokens_consumed": 3994,
-        "rcir_confidence": 0.998,
+        "context_tokens": 3994,
+        "exact_resolution_fraction": 0.9975,
         "exact_call_sites": 1209,
         "inferred_call_sites": 3,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "RELEASE_APPROVED",
-        "regression_risk": "LOW"
+        "unresolved_count": 0,
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: IConfig\n======================================================================\n\nAffected: 1212 static call sites (1209 exact, 3 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 99.8% [Exact: 1209 | Inferred: 3 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "discovered_files": [
+          "apps/admin_audit/lib/AuditLogger.php",
+          "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
+          "apps/appstore/lib/Controller/ApiController.php",
+          "apps/appstore/lib/Controller/PageController.php",
+          "apps/appstore/src/service",
+          "apps/appstore/tests/Controller/ApiControllerTest.php",
+          "apps/appstore/tests/Controller/PageControllerTest.php",
+          "apps/comments/lib/MaxAutoCompleteResultsInitialState.php",
+          "apps/contactsinteraction/lib/Card.php",
+          "apps/dashboard/lib/Controller/DashboardController.php"
+        ]
       }
     },
     {
       "task_id": "TASK-5",
       "title": "Cross-Stack API Contract Boundary",
       "category": "cross_stack",
-      "ground_truth_files": 0,
+      "ground_truth_files": 3,
       "baseline": {
-        "condition": "Baseline (No RCIR)",
-        "files_identified": 1,
-        "ground_truth_total": 0,
-        "true_positives": 0,
+        "condition": "Baseline Retrieval (No RCIR)",
+        "files_identified": 3,
+        "ground_truth_total": 3,
+        "true_positives": 3,
         "dependency_misses": 0,
-        "false_positives": 1,
-        "precision": 0.0,
+        "false_positives": 0,
+        "precision": 1.0,
         "recall": 1.0,
-        "tokens_consumed": 786,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "RELEASE_APPROVED",
-        "regression_risk": "LOW"
+        "context_tokens": 1848,
+        "discovered_files": [
+          "apps/files/src/init.ts",
+          "apps/files/src/services/Recent.ts",
+          "apps/files/src/views/recent.ts"
+        ]
       },
       "rcir": {
-        "condition": "RCIR Augmented",
-        "files_identified": 249,
-        "ground_truth_total": 0,
+        "condition": "RCIR Retrieval",
+        "files_identified": 164,
+        "ground_truth_total": 3,
         "true_positives": 0,
-        "dependency_misses": 0,
-        "false_positives": 249,
+        "dependency_misses": 3,
+        "false_positives": 164,
         "precision": 0.0,
-        "recall": 1.0,
-        "tokens_consumed": 3997,
-        "rcir_confidence": 1.0,
-        "exact_call_sites": 4,
-        "inferred_call_sites": 0,
-        "reviewer_catches": 0,
-        "gatekeeper_decision": "RELEASE_APPROVED",
-        "regression_risk": "LOW"
+        "recall": 0.0,
+        "context_tokens": 3992,
+        "exact_resolution_fraction": 0.4714,
+        "exact_call_sites": 66,
+        "inferred_call_sites": 74,
+        "unresolved_count": 0,
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: Recent\n======================================================================\n\nAffected: 140 static call sites (66 exact, 74 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 47.1% [Exact: 66 | Inferred: 74 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "discovered_files": [
+          "apps/appstore/lib/Search",
+          "apps/appstore/lib/Search/AppSearch.php",
+          "apps/comments/lib/Search",
+          "apps/comments/lib/Search/CommentsSearchProvider.php",
+          "apps/contactsinteraction/lib/AddressBook.php",
+          "apps/contactsinteraction/lib/AddressBookProvider.php",
+          "apps/contactsinteraction/lib/BackgroundJob/CleanupJob.php",
+          "apps/contactsinteraction/lib/Card.php",
+          "apps/contactsinteraction/lib/Db/RecentContact.php",
+          "apps/contactsinteraction/lib/Db/RecentContactMapper.php"
+        ]
+      }
+    }
+  ],
+  "real_agent_workflow_runs": [
+    {
+      "task_id": "TASK-1",
+      "title": "Refactor Controller Endpoint",
+      "baseline_agent": {
+        "condition": "Condition A (Baseline)",
+        "duration_seconds": 138.09,
+        "total_llm_tokens": 12405,
+        "gatekeeper_decision": "APPROVE",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary - **Correctness**: The implementation does not match the requirements. - **Security**: Injection vulnerabilities are present. - **Performance**: N+1 query problems are present. - **Scalability**: Single points of fa",
+        "maker_excerpt": "## Problem Statement Refactor Controller Endpoint: TASK-1 - Refactor ApiController thumbnail endpoint and update all affected callers and routes.  ## Requirements ### Functional Requirements - **Functional Requirements**: Refactor the ApiController t",
+        "code_review_excerpt": "## Review Summary  ### Correctness - **Issue**: The implementation does not match the requirements. - **Severity**: P1 - **Dimension**: 1 - **Location**: 1 - **Description**: The implementation does not follow the validated design, which is crucial f"
+      },
+      "rcir_agent": {
+        "condition": "Condition B (RCIR-Augmented)",
+        "duration_seconds": 125.01,
+        "total_llm_tokens": 13365,
+        "gatekeeper_decision": "APPROVE",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The implementation of the `getThumbnail` method in the `ApiController` class has been reviewed and approved. The changes are necessary to ensure that the implementation meets the requirements and adheres to the Engi",
+        "maker_excerpt": "## Problem Statement The user is requesting a refactor of the `ApiController` endpoint in the `appstore/lib/Controller` directory. The goal is to update all affected callers and routes while ensuring that the changes do not introduce any new risks.  ",
+        "code_review_excerpt": "## Review Summary  ### Correctness - **Issue**: The implementation does not match the requirements. - **Severity**: P0 - **Dimension**: 1 - **Location**: 1 - **Description**: The code does not follow the validated design, which is crucial for correct"
+      }
+    },
+    {
+      "task_id": "TASK-5",
+      "title": "Cross-Stack API Contract Boundary",
+      "baseline_agent": {
+        "condition": "Condition A (Baseline)",
+        "duration_seconds": 118.81,
+        "total_llm_tokens": 12336,
+        "gatekeeper_decision": "REJECT_OR_HOLD",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The code and tests for the `Recent` service in the `apps/files/src/services` directory are well-structured and adhere to the Engineering Constitution. However, there are a few areas that need improvement:  ### Corre",
+        "maker_excerpt": "## Problem Statement The user requests a cross-stack API contract boundary for the `Recent` service in the `apps/files/src/services` directory. The service is responsible for fetching and processing recent files from the frontend client.  ## Requirem",
+        "code_review_excerpt": "## Review Summary The code and tests for the `Recent` service in the `apps/files/src/services` directory are well-structured and adhere to the Engineering Constitution. However, there are a few areas that need improvement:  ### Correctness - **Cross-"
+      },
+      "rcir_agent": {
+        "condition": "Condition B (RCIR-Augmented)",
+        "duration_seconds": 116.26,
+        "total_llm_tokens": 12961,
+        "gatekeeper_decision": "APPROVE",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary This review is thorough, covering all 12 engineering dimensions. It identifies and addresses critical issues, provides constructive feedback, and offers actionable insights. The review is structured to ensure that e",
+        "maker_excerpt": "## Problem Statement The user requests a cross-stack API contract boundary for the `Recent` service in the `appstore/lib/Search` component. The current implementation relies on a static call site to the backend DAV / files endpoint, which is not scal",
+        "code_review_excerpt": "## Review Summary This review is thorough, covering all 12 engineering dimensions. It identifies and addresses critical issues, provides constructive feedback, and offers actionable insights. The review is structured to ensure that every dimension is"
       }
     }
   ]

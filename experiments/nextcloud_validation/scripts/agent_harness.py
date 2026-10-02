@@ -1,25 +1,24 @@
 """
-Phase E: AI Engineering Agent Harness for Nextcloud.
+Phase E: AI Engineering Agent Harness & Algorithmic Retrieval Benchmark for Nextcloud.
 
-Evaluates AI engineering agent performance across 5 non-trivial engineering tasks
-comparing:
-- Condition A (Baseline): Agent with localized file context and standard grep search (no RCIR)
-- Condition B (RCIR): Agent augmented with RCIR Context Contract & Change Impact Report
+Evaluates AI engineering agent performance and retrieval context selection across 5 non-trivial engineering tasks:
+- Condition A (Baseline): Naive localized file context + keyword search (no RCIR)
+- Condition B (RCIR): RCIR Context Contract & Change Impact Report (graph intelligence)
 
 Tasks evaluated:
 1. TASK-1: Refactor Controller Endpoint (ApiController::getThumbnail)
-2. TASK-2: Filesystem Node Contract Refactoring (OCP\\Files\\Node::getId)
+2. TASK-2: Filesystem Node Contract Evolution (OCP\\Files\\Node::getId) [Semantically verified]
 3. TASK-3: Event Contract Evolution (NodeDeletedEvent)
 4. TASK-4: Dependency Injection Service Resolution (OCP\\IConfig)
 5. TASK-5: Cross-Stack API Contract Boundary (apps/files Frontend -> Backend)
 
 Evaluates:
-- Context Contract Coverage (% of ground-truth affected files identified)
-- Context Token Footprint
-- Dependency Misses (broken callers that would cause runtime regressions)
-- False Positives (unrelated files pulled into context)
-- Reviewer Catch Rate (whether Reviewer flags missing callers)
-- Gatekeeper Decision (RELEASE_APPROVED vs RELEASE_REJECTED)
+- Algorithmic Retrieval Coverage: % of semantically verified ground-truth affected files identified
+- Context Token Footprint: estimated token footprint of context payload
+- Dependency Misses: ground-truth references missed by the context selection procedure
+- Real LLM Multi-Agent Pipeline: Maker -> Reviewer -> Implementer -> Reviewer -> Gatekeeper -> Historian
+  executed with real model inference (Ollama local zero-cloud verified), measuring real token usage,
+  Reviewer findings, and Gatekeeper decisions.
 """
 
 import json
@@ -38,10 +37,12 @@ if hasattr(sys.stdout, "reconfigure"):
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(REPO_ROOT / "rcir" / "src"))
+sys.path.insert(0, str(REPO_ROOT))
 
 from rcir.impact import generate_change_impact_report
 from rcir.hierarchy.builder import build_hierarchy
 from rcir.retrieval.hybrid import hybrid_retrieve
+from orchestrator.runner import OrchestratorRunner
 
 
 TASKS = [
@@ -54,6 +55,7 @@ TASKS = [
         "query": "ApiController getThumbnail thumbnail generation preview",
         "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes",
         "ground_truth_grep": "getThumbnail",
+        "semantic_filter": None,
     },
     {
         "task_id": "TASK-2",
@@ -64,6 +66,7 @@ TASKS = [
         "query": "Node getId filesystem node identifier",
         "description": "Refactor Node::getId() method contract and identify affected consumers",
         "ground_truth_grep": "->getId\\(\\)",
+        "semantic_filter": "node_scope",
     },
     {
         "task_id": "TASK-3",
@@ -74,6 +77,7 @@ TASKS = [
         "query": "NodeDeletedEvent delete node event dispatcher listener",
         "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated",
         "ground_truth_grep": "NodeDeletedEvent",
+        "semantic_filter": None,
     },
     {
         "task_id": "TASK-4",
@@ -84,26 +88,33 @@ TASKS = [
         "query": "IConfig get config service container",
         "description": "Refactor IConfig interface and update all container lookups and consumers",
         "ground_truth_grep": "get\\(IConfig::class\\)|get\\(['\"]IConfig['\"]\\)|IConfig \\$",
+        "semantic_filter": None,
     },
     {
         "task_id": "TASK-5",
         "title": "Cross-Stack API Contract Boundary",
-        "target_symbol": "recent",
-        "target_file": "apps/files/src/services/Files.ts",
+        "target_symbol": "Recent",
+        "target_file": "apps/files/src/services/Recent.ts",
         "category": "cross_stack",
-        "query": "recent files api endpoint ApiController Files.ts",
-        "description": "Trace recent files frontend client call across language boundary to backend PHP endpoint",
-        "ground_truth_grep": "/apps/files/api/v1/recent|ApiController.*recent",
+        "query": "Recent getRecentSearch getContents dav endpoint",
+        "description": "Trace recent files frontend client call across language boundary to backend DAV / files endpoint",
+        "ground_truth_grep": "getRecentSearch|services/Recent\\.ts|views/recent\\.ts",
+        "semantic_filter": None,
     },
 ]
+
+NODE_SCOPE_RE = re.compile(
+    r"use\s+OCP\\Files\\(Node|File|Folder)|use\s+OC\\Files\\Node|"
+    r"Node\s+\$|File\s+\$|Folder\s+\$|@(?:param|return|var)\s+(?:\\?[A-Za-z0-9_\\]*\\)?(Node|File|Folder)"
+)
 
 
 def estimate_tokens(text: str) -> int:
     return max(1, math.ceil(len(text) / 4))
 
 
-def get_ground_truth_files(repo_path: Path, grep_pattern: str) -> list[str]:
-    """Find all ground truth files matching the pattern."""
+def get_ground_truth_files(repo_path: Path, grep_pattern: str, semantic_filter: str | None = None) -> list[str]:
+    """Find all ground truth files matching the pattern with semantic verification."""
     regex = re.compile(grep_pattern)
     matched = set()
     for root, _, files in os.walk(repo_path):
@@ -115,6 +126,15 @@ def get_ground_truth_files(repo_path: Path, grep_pattern: str) -> list[str]:
                 try:
                     c = fp.read_text(encoding="utf-8", errors="ignore")
                     if regex.search(c):
+                        if semantic_filter == "node_scope":
+                            rel_posix = fp.relative_to(repo_path).as_posix()
+                            has_node_context = (
+                                bool(NODE_SCOPE_RE.search(c))
+                                or "Files/Node" in rel_posix
+                                or "lib/public/Files" in rel_posix
+                            )
+                            if not has_node_context:
+                                continue
                         rel = fp.relative_to(repo_path).as_posix()
                         matched.add(rel)
                 except Exception:
@@ -122,8 +142,8 @@ def get_ground_truth_files(repo_path: Path, grep_pattern: str) -> list[str]:
     return sorted(list(matched))
 
 
-def simulate_baseline_agent(task: dict[str, Any], repo_path: Path, gt_files: list[str]) -> dict[str, Any]:
-    """Simulate Condition A: Baseline Agent with standard local context + keyword search.
+def evaluate_baseline_retrieval(task: dict[str, Any], repo_path: Path, gt_files: list[str]) -> dict[str, Any]:
+    """Condition A (Baseline Retrieval): Naive localized context + keyword grep.
 
     Conventional AI coding assistants inspect:
     1. The target file itself.
@@ -134,17 +154,13 @@ def simulate_baseline_agent(task: dict[str, Any], repo_path: Path, gt_files: lis
     target_path = repo_path / target_file
 
     discovered_files = set()
-    # 1. Target file itself
     if target_path.exists():
         discovered_files.add(target_file)
-        # Scan neighboring files in same dir
         parent = target_path.parent
         for sib in parent.glob("*.php"):
             rel = sib.relative_to(repo_path).as_posix()
             discovered_files.add(rel)
 
-    # 2. Add top 5 keyword search results
-    symbol = task["target_symbol"]
     count = 0
     for gf in gt_files:
         if count >= 5:
@@ -154,7 +170,6 @@ def simulate_baseline_agent(task: dict[str, Any], repo_path: Path, gt_files: lis
 
     discovered_list = sorted(list(discovered_files))
 
-    # Calculate token footprint of discovered whole files
     total_tokens = 0
     for f in discovered_list:
         fp = repo_path / f
@@ -172,14 +187,8 @@ def simulate_baseline_agent(task: dict[str, Any], repo_path: Path, gt_files: lis
     recall = tp / len(gt_set) if gt_set else 1.0
     precision = tp / len(disc_set) if disc_set else 0.0
 
-    # Reviewer & Gatekeeper evaluation
-    # In baseline, without complete blast radius, Reviewer has no independent ground truth
-    # and Gatekeeper suffers from silent misses if critical callers were missed.
-    gatekeeper_pass = (fn == 0)
-    decision = "RELEASE_APPROVED" if gatekeeper_pass else "RELEASE_REJECTED (Undetected Callers)"
-
     return {
-        "condition": "Baseline (No RCIR)",
+        "condition": "Baseline Retrieval (No RCIR)",
         "files_identified": len(disc_set),
         "ground_truth_total": len(gt_set),
         "true_positives": tp,
@@ -187,21 +196,19 @@ def simulate_baseline_agent(task: dict[str, Any], repo_path: Path, gt_files: lis
         "false_positives": fp,
         "precision": round(precision, 3),
         "recall": round(recall, 3),
-        "tokens_consumed": total_tokens,
-        "reviewer_catches": 1 if fn > 0 else 0,
-        "gatekeeper_decision": decision,
-        "regression_risk": "HIGH" if fn > 5 else ("MEDIUM" if fn > 0 else "LOW"),
+        "context_tokens": total_tokens,
+        "discovered_files": discovered_list[:10],
     }
 
 
-def simulate_rcir_agent(
+def evaluate_rcir_retrieval(
     task: dict[str, Any],
     repo_path: Path,
     graph: dict[str, Any],
     hierarchy: dict[str, Any],
     gt_files: list[str],
 ) -> dict[str, Any]:
-    """Simulate Condition B: RCIR-Augmented Agent with Context Contract + Change Impact Report."""
+    """Condition B (RCIR Retrieval): Context Contract + Change Impact Report."""
     target_symbol = task["target_symbol"]
 
     # 1. Hybrid Retrieval Contract (bounded token budget)
@@ -219,7 +226,6 @@ def simulate_rcir_agent(
         graph=graph,
     )
 
-    # Collect all affected files identified by RCIR impact analysis
     rcir_files = set()
     for edge in impact_report.affected_edges:
         src = edge.get("source", "")
@@ -229,7 +235,6 @@ def simulate_rcir_agent(
         if src:
             rcir_files.add(src)
 
-    # Also include nodes retrieved in contract
     for node in contract.nodes:
         p = node.path
         if "::" in p:
@@ -245,14 +250,8 @@ def simulate_rcir_agent(
     recall = tp / len(gt_set) if gt_set else 1.0
     precision = tp / len(rcir_files) if rcir_files else 0.0
 
-    # RCIR Reviewer has the Change Impact Report with exact confidence scores
-    # Gatekeeper enforces explicit audit verification
-    confidence = impact_report.confidence
-    gatekeeper_pass = (confidence >= 0.8 and fn <= 2)
-    decision = "RELEASE_APPROVED" if gatekeeper_pass else f"GATE_HOLD (Confidence {confidence:.1%}, {fn} unverified sites)"
-
     return {
-        "condition": "RCIR Augmented",
+        "condition": "RCIR Retrieval",
         "files_identified": len(rcir_files),
         "ground_truth_total": len(gt_set),
         "true_positives": tp,
@@ -260,23 +259,70 @@ def simulate_rcir_agent(
         "false_positives": fp,
         "precision": round(precision, 3),
         "recall": round(recall, 3),
-        "tokens_consumed": contract.token_budget_used,
-        "rcir_confidence": round(confidence, 3),
+        "context_tokens": contract.token_budget_used,
+        "exact_resolution_fraction": round(impact_report.exact_resolution_fraction, 4),
         "exact_call_sites": impact_report.exact_call_sites,
         "inferred_call_sites": impact_report.inferred_call_sites,
-        "reviewer_catches": len(impact_report.unresolved_locations),
+        "unresolved_count": impact_report.unresolved_count,
+        "impact_report_markdown": impact_report.to_markdown(),
+        "discovered_files": sorted(list(rcir_files))[:10],
+    }
+
+
+def run_real_agent_workflow(
+    task: dict[str, Any],
+    condition_name: str,
+    context_description: str,
+    impact_summary: str,
+    verbose: bool = False,
+) -> dict[str, Any]:
+    """Execute the real 6-stage AEF Agent Pool using OrchestratorRunner and real LLM inference."""
+    t0 = time.perf_counter()
+    runner = OrchestratorRunner()
+
+    user_request = (
+        f"Task: {task['task_id']} - {task['title']}\n"
+        f"Target File: {task['target_file']}\n"
+        f"Target Symbol: {task['target_symbol']}\n"
+        f"Requirement: {task['description']}\n\n"
+        f"Context Available ({condition_name}):\n{context_description}\n\n"
+        f"Dependency Intelligence:\n{impact_summary}\n"
+    )
+
+    results = runner.run_pipeline(user_request=user_request, verbose=verbose)
+    duration_s = time.perf_counter() - t0
+
+    gatekeeper_output = results.get("stage5_gatekeeper", "")
+    decision = "APPROVE" if "APPROVE" in gatekeeper_output.upper() and "REJECT" not in gatekeeper_output.upper() else "REJECT_OR_HOLD"
+
+    return {
+        "condition": condition_name,
+        "duration_seconds": round(duration_s, 2),
+        "total_llm_tokens": results.get("total_tokens_consumed", 0),
         "gatekeeper_decision": decision,
-        "regression_risk": "LOW" if fn <= 2 else "MEDIUM",
+        "gatekeeper_excerpt": gatekeeper_output[:250].replace("\n", " "),
+        "maker_excerpt": results.get("stage1_maker", "")[:250].replace("\n", " "),
+        "code_review_excerpt": results.get("stage4_reviewer_code", "")[:250].replace("\n", " "),
     }
 
 
 def main():
-    print("=" * 60)
-    print("PHASE E: AI ENGINEERING AGENT BENCHMARK ON NEXTCLOUD")
-    print("=" * 60)
+    print("=" * 70)
+    print("PHASE E: NEXTCLOUD AI AGENT BENCHMARK & RETRIEVAL VALIDATION")
+    print("=" * 70)
 
     repo_path = REPO_ROOT / "experiments" / "nextcloud_validation" / "nextcloud-server"
     graph_path = REPO_ROOT / "experiments" / "nextcloud_validation" / "rcir" / "nextcloud_graph.json"
+
+    # Preflight Check for Nextcloud Submodule
+    if not repo_path.exists() or not any(repo_path.iterdir()):
+        print(f"\n[ERROR] Nextcloud submodule directory is missing or empty at:\n  {repo_path}")
+        print("\nTo initialize the required external repository commit, run:")
+        print("  git submodule update --init --recursive experiments/nextcloud_validation/nextcloud-server")
+        print("\nOr clone directly:")
+        print("  git clone https://github.com/nextcloud/server experiments/nextcloud_validation/nextcloud-server")
+        print("  cd experiments/nextcloud_validation/nextcloud-server && git checkout da57df078d0808a7235a0177bd99d23c010b472e")
+        sys.exit(1)
 
     if not graph_path.exists():
         print(f"Error: Dependency graph not found at {graph_path}")
@@ -293,81 +339,134 @@ def main():
     hierarchy = build_hierarchy(graph)
     print(f"Hierarchy built in {time.perf_counter() - t_h0:.2f}s")
 
-    task_comparisons = []
+    retrieval_comparisons = []
+    agent_workflow_results = []
+
+    print("\n" + "=" * 70)
+    print("PART 1: ALGORITHMIC CONTEXT RETRIEVAL EVALUATION")
+    print("=" * 70)
 
     for task in TASKS:
         t_id = task["task_id"]
         title = task["title"]
-        print(f"\n{'='*40}")
-        print(f"Running {t_id}: {title}")
-        print(f"Symbol: {task['target_symbol']} | Category: {task['category']}")
+        print(f"\n--- Evaluating {t_id}: {title} (Target: {task['target_symbol']}) ---")
 
-        # 1. Establish ground truth files via grep
+        # 1. Establish ground truth files (semantically verified)
         t_gt0 = time.perf_counter()
-        gt_files = get_ground_truth_files(repo_path, task["ground_truth_grep"])
+        gt_files = get_ground_truth_files(
+            repo_path,
+            task["ground_truth_grep"],
+            semantic_filter=task.get("semantic_filter"),
+        )
         print(f"Ground truth references found: {len(gt_files)} files ({time.perf_counter() - t_gt0:.2f}s)")
 
-        # 2. Run Baseline Agent
-        baseline_res = simulate_baseline_agent(task, repo_path, gt_files)
-        print(f"  [Baseline] Found {baseline_res['files_identified']} files | Recall: {baseline_res['recall']:.1%} | Missed: {baseline_res['dependency_misses']} | Tokens: {baseline_res['tokens_consumed']:,}")
+        # 2. Evaluate Baseline Retrieval
+        base_res = evaluate_baseline_retrieval(task, repo_path, gt_files)
+        print(f"  [Baseline Retrieval] Recall: {base_res['recall']:.1%} | Missed: {base_res['dependency_misses']} files | Est. Tokens: {base_res['context_tokens']:,}")
 
-        # 3. Run RCIR Agent
-        rcir_res = simulate_rcir_agent(task, repo_path, graph, hierarchy, gt_files)
-        print(f"  [RCIR]     Found {rcir_res['files_identified']} files | Recall: {rcir_res['recall']:.1%} | Missed: {rcir_res['dependency_misses']} | Tokens: {rcir_res['tokens_consumed']:,} | Conf: {rcir_res['rcir_confidence']:.1%}")
+        # 3. Evaluate RCIR Retrieval
+        rcir_res = evaluate_rcir_retrieval(task, repo_path, graph, hierarchy, gt_files)
+        print(f"  [RCIR Retrieval]     Recall: {rcir_res['recall']:.1%} | Missed: {rcir_res['dependency_misses']} files | Est. Tokens: {rcir_res['context_tokens']:,} | Exact Res Frac: {rcir_res['exact_resolution_fraction']:.1%}")
 
-        task_comparisons.append({
+        retrieval_comparisons.append({
             "task_id": t_id,
             "title": title,
             "category": task["category"],
             "ground_truth_files": len(gt_files),
-            "baseline": baseline_res,
+            "baseline": base_res,
             "rcir": rcir_res,
         })
 
-    # Summary metrics
-    base_avg_recall = sum(t["baseline"]["recall"] for t in task_comparisons) / len(task_comparisons)
-    rcir_avg_recall = sum(t["rcir"]["recall"] for t in task_comparisons) / len(task_comparisons)
-    base_total_misses = sum(t["baseline"]["dependency_misses"] for t in task_comparisons)
-    rcir_total_misses = sum(t["rcir"]["dependency_misses"] for t in task_comparisons)
-    base_avg_tokens = sum(t["baseline"]["tokens_consumed"] for t in task_comparisons) / len(task_comparisons)
-    rcir_avg_tokens = sum(t["rcir"]["tokens_consumed"] for t in task_comparisons) / len(task_comparisons)
+    # Summary metrics for retrieval
+    base_avg_recall = sum(t["baseline"]["recall"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    rcir_avg_recall = sum(t["rcir"]["recall"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    base_total_misses = sum(t["baseline"]["dependency_misses"] for t in retrieval_comparisons)
+    rcir_total_misses = sum(t["rcir"]["dependency_misses"] for t in retrieval_comparisons)
+    misses_identified = base_total_misses - rcir_total_misses
 
+    print("\n" + "=" * 70)
+    print("PART 2: REAL MULTI-AGENT WORKFLOW EXECUTION (AEF AGENT POOL)")
+    print("=" * 70)
+    print("Executing Maker -> Reviewer -> Implementer -> Reviewer -> Gatekeeper -> Historian")
+    print("Running with local LLM provider (Zero-Cloud Verified, real token telemetry)...\n")
+
+    # Run real agent pipeline on TASK-1 (Controller Endpoint) and TASK-5 (Cross-Stack) for both conditions
+    sample_tasks = [TASKS[0], TASKS[4]]
+    for task in sample_tasks:
+        t_id = task["task_id"]
+        print(f"-> Running Agent Pipeline on {t_id} ({task['title']}):")
+
+        # Condition A: Baseline Agent Workflow
+        base_ctx = f"Target File: {task['target_file']}\nNeighboring files in directory."
+        base_impact = "No global impact analysis available. Local edits only."
+        base_agent = run_real_agent_workflow(
+            task=task,
+            condition_name="Condition A (Baseline)",
+            context_description=base_ctx,
+            impact_summary=base_impact,
+            verbose=False,
+        )
+        print(f"   [Baseline Agent] Tokens: {base_agent['total_llm_tokens']} | Decision: {base_agent['gatekeeper_decision']} ({base_agent['duration_seconds']}s)")
+
+        # Condition B: RCIR-Augmented Agent Workflow
+        rcir_match = next(r for r in retrieval_comparisons if r["task_id"] == t_id)
+        rcir_ctx = f"Target File: {task['target_file']}\nRetrieved Nodes:\n" + "\n".join(rcir_match["rcir"]["discovered_files"])
+        rcir_impact = rcir_match["rcir"]["impact_report_markdown"]
+        rcir_agent = run_real_agent_workflow(
+            task=task,
+            condition_name="Condition B (RCIR-Augmented)",
+            context_description=rcir_ctx,
+            impact_summary=rcir_impact,
+            verbose=False,
+        )
+        print(f"   [RCIR Agent]     Tokens: {rcir_agent['total_llm_tokens']} | Decision: {rcir_agent['gatekeeper_decision']} ({rcir_agent['duration_seconds']}s)")
+
+        agent_workflow_results.append({
+            "task_id": t_id,
+            "title": task["title"],
+            "baseline_agent": base_agent,
+            "rcir_agent": rcir_agent,
+        })
+
+    # Save comprehensive results JSON
     summary = {
-        "tasks_evaluated": len(task_comparisons),
+        "tasks_evaluated_retrieval": len(retrieval_comparisons),
         "baseline_average_recall": round(base_avg_recall, 3),
         "rcir_average_recall": round(rcir_avg_recall, 3),
-        "recall_improvement": f"{(rcir_avg_recall - base_avg_recall) * 100:+.1f}%",
+        "observed_recall_difference_points": round((rcir_avg_recall - base_avg_recall) * 100, 1),
         "baseline_total_dependency_misses": base_total_misses,
         "rcir_total_dependency_misses": rcir_total_misses,
-        "misses_prevented": base_total_misses - rcir_total_misses,
-        "baseline_average_tokens": round(base_avg_tokens, 0),
-        "rcir_average_tokens": round(rcir_avg_tokens, 0),
-        "token_savings_percent": f"{(1 - rcir_avg_tokens / base_avg_tokens) * 100:.1f}%",
+        "ground_truth_references_identified_by_rcir_missed_by_baseline": misses_identified,
+        "statistical_note": "Sample size N=5 tasks; observed difference reported. Not claiming population statistical significance.",
     }
 
-    report = {
+    full_output = {
         "summary": summary,
-        "tasks": task_comparisons,
+        "algorithmic_retrieval_benchmarks": retrieval_comparisons,
+        "real_agent_workflow_runs": agent_workflow_results,
     }
 
-    report_path = REPO_ROOT / "experiments" / "nextcloud_validation" / "reports" / "agent_benchmark_results.json"
-    report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    print(f"\n[OK] Agent benchmark report saved to: {report_path}")
+    out_file = REPO_ROOT / "experiments" / "nextcloud_validation" / "reports" / "agent_benchmark_results.json"
+    out_file.parent.mkdir(parents=True, exist_ok=True)
+    out_file.write_text(json.dumps(full_output, indent=2), encoding="utf-8")
+    print(f"\n[OK] Results written to: {out_file}")
 
-    # Print summary table
+    # Print clean summary table
     print("\n" + "=" * 90)
-    print("PHASE E: AGENT BENCHMARK COMPARISON SUMMARY")
+    print("EMPIRICAL BENCHMARK SUMMARY (N=5 TASKS)")
     print("=" * 90)
-    print(f"{'Task ID':<10} {'GT Files':>8} {'Base Rec':>10} {'RCIR Rec':>10} {'Base Miss':>10} {'RCIR Miss':>10} {'Base Tok':>10} {'RCIR Tok':>10}")
+    print(f"{'Task ID':<10} {'GT Files':>8} {'Base Rec':>10} {'RCIR Rec':>10} {'Base Miss':>10} {'RCIR Miss':>10} {'Exact Res Frac':>16}")
     print("-" * 90)
-    for t in task_comparisons:
+    for t in retrieval_comparisons:
         b = t["baseline"]
         r = t["rcir"]
-        print(f"{t['task_id']:<10} {t['ground_truth_files']:>8} {b['recall']:>9.1%} {r['recall']:>9.1%} {b['dependency_misses']:>10} {r['dependency_misses']:>10} {b['tokens_consumed']:>10,} {r['tokens_consumed']:>10,}")
+        print(f"{t['task_id']:<10} {t['ground_truth_files']:>8} {b['recall']:>9.1%} {r['recall']:>9.1%} {b['dependency_misses']:>10} {r['dependency_misses']:>10} {r['exact_resolution_fraction']:>15.1%}")
     print("-" * 90)
-    print(f"{'AVERAGE':<10} {'-':>8} {base_avg_recall:>9.1%} {rcir_avg_recall:>9.1%} {base_total_misses:>10} {rcir_total_misses:>10} {int(base_avg_tokens):>10,} {int(rcir_avg_tokens):>10,}")
+    print(f"{'AVERAGE':<10} {'-':>8} {base_avg_recall:>9.1%} {rcir_avg_recall:>9.1%} {base_total_misses:>10} {rcir_total_misses:>10} {'-':>16}")
     print("=" * 90)
+    print(f"Observed Recall Uplift: {(rcir_avg_recall - base_avg_recall)*100:+.1f} percentage points")
+    print(f"Ground-Truth References Identified by RCIR Missed by Baseline Context Selection: {misses_identified}")
+    print("Note: Evaluated across N=5 tasks. No claims of population statistical significance are made.")
 
 
 if __name__ == "__main__":
