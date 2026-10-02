@@ -10,222 +10,352 @@ import {
   Terminal, 
   Lock, 
   GitBranch, 
-  FileCode2 
+  FileCode2,
+  FolderGit2,
+  Cpu,
+  Boxes,
+  ArrowRight,
+  Flame,
+  Check
 } from 'lucide-react';
 import { 
   NEXTCLOUD_BENCHMARK, 
+  OPENTELEMETRY_BENCHMARK,
   E2E_CODING_BENCHMARK, 
   COLOCATION_FINDING 
 } from '../data/benchmarkData';
 
 export function BenchmarkArena() {
-  const [activeView, setActiveView] = useState('nextcloud'); // 'nextcloud' | 'e2e' | 'colocation'
+  const [activeProject, setActiveProject] = useState('nextcloud'); // 'nextcloud' | 'opentelemetry'
+  const [activeTab, setActiveTab] = useState('retrieval'); // 'retrieval' | 'e2e' | 'colocation'
   const [selectedTaskIdx, setSelectedTaskIdx] = useState(0);
 
-  const { scale, primaryMetrics, tasks } = NEXTCLOUD_BENCHMARK;
-  const currentTask = tasks[selectedTaskIdx];
+  const projectData = activeProject === 'nextcloud' ? NEXTCLOUD_BENCHMARK : OPENTELEMETRY_BENCHMARK;
+  const { scale, primaryMetrics, tasks } = projectData;
+  const currentTask = tasks[selectedTaskIdx] || tasks[0];
 
   return (
-    <div className="benchmark-arena">
-      {/* Header and View Selector */}
-      <div className="arena-header">
+    <div className="benchmark-arena" style={{ display: 'flex', flexDirection: 'column', gap: 22, paddingBottom: 40 }}>
+      {/* Header and Project Selector */}
+      <div className="arena-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 14 }}>
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <BarChart3 className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-xl font-bold text-white">Empirical Benchmark Arena</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+              Generalized Empirical Benchmark Arena
+            </h2>
           </div>
-          <p className="text-xs text-slate-400">
-            Rule 0.1 Compliant — 100% Real Repository Runs, Native Compilers, and Local Inference
+          <p style={{ fontSize: 12.5, color: '#94a3b8', margin: 0 }}>
+            Universal Evaluation Framework: Dependency Completeness · Bounded Context Budgets · Gatekeeper Release Authority
           </p>
         </div>
 
-        {/* View Switcher Pills */}
-        <div className="view-switcher">
+        {/* Global View Selector Tabs */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button 
-            className={`view-pill ${activeView === 'nextcloud' ? 'active' : ''}`}
-            onClick={() => setActiveView('nextcloud')}
+            className={`view-pill ${activeTab === 'retrieval' ? 'active' : ''}`}
+            onClick={() => setActiveTab('retrieval')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 8,
+              border: activeTab === 'retrieval' ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+              background: activeTab === 'retrieval' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.6)',
+              color: activeTab === 'retrieval' ? '#38bdf8' : '#94a3b8',
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
           >
-            <span>Nextcloud Core (50k Nodes)</span>
+            Dependency Intelligence
           </button>
           <button 
-            className={`view-pill ${activeView === 'e2e' ? 'active' : ''}`}
-            onClick={() => setActiveView('e2e')}
+            className={`view-pill ${activeTab === 'e2e' ? 'active' : ''}`}
+            onClick={() => setActiveTab('e2e')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 8,
+              border: activeTab === 'e2e' ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+              background: activeTab === 'e2e' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.6)',
+              color: activeTab === 'e2e' ? '#38bdf8' : '#94a3b8',
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
           >
-            <span>E2E Coding Benchmark</span>
+            Real E2E Coding Loops
           </button>
           <button 
-            className={`view-pill ${activeView === 'colocation' ? 'active' : ''}`}
-            onClick={() => setActiveView('colocation')}
+            className={`view-pill ${activeTab === 'colocation' ? 'active' : ''}`}
+            onClick={() => setActiveTab('colocation')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 8,
+              border: activeTab === 'colocation' ? '1px solid #38bdf8' : '1px solid var(--border-subtle)',
+              background: activeTab === 'colocation' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.6)',
+              color: activeTab === 'colocation' ? '#38bdf8' : '#94a3b8',
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
           >
-            <span>Colocation vs Fragmentation</span>
+            Colocation vs Fragmentation
           </button>
         </div>
       </div>
 
-      {/* VIEW 1: NEXTCLOUD PRIMARY BENCHMARK */}
-      {activeView === 'nextcloud' && (
-        <div className="arena-view-content">
-          {/* Top Aggregate Summary Cards */}
-          <div className="summary-cards-grid">
-            <div className="summary-stat-card border-cyan-500/30">
-              <span className="stat-label text-cyan-300">Average Edge Recall</span>
-              <div className="stat-number text-cyan-400">{primaryMetrics.rcirEdgeRecall}</div>
-              <span className="stat-delta text-emerald-400">
-                <TrendingUp className="w-3.5 h-3.5 mr-1" />
-                {primaryMetrics.observedUplift} vs Baseline ({primaryMetrics.baselineEdgeRecall})
+      {/* TAB 1: GENERALIZED DEPENDENCY BENCHMARK WITH RICH GRAPHICAL COMPARISON BARS */}
+      {activeTab === 'retrieval' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {/* Multi-Project Architecture Switcher */}
+          <div className="glass-panel" style={{ padding: '14px 18px', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FolderGit2 className="w-4 h-4 text-cyan-400" />
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: '#f8fafc' }}>Select Target Repository:</span>
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => { setActiveProject('nextcloud'); setSelectedTaskIdx(0); }}
+                style={{
+                  padding: '7px 14px',
+                  borderRadius: 6,
+                  border: activeProject === 'nextcloud' ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                  background: activeProject === 'nextcloud' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(15, 23, 42, 0.5)',
+                  color: activeProject === 'nextcloud' ? '#10b981' : '#94a3b8',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                Nextcloud Server Core (50k Nodes Monolith)
+              </button>
+              <button
+                onClick={() => { setActiveProject('opentelemetry'); setSelectedTaskIdx(0); }}
+                style={{
+                  padding: '7px 14px',
+                  borderRadius: 6,
+                  border: activeProject === 'opentelemetry' ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                  background: activeProject === 'opentelemetry' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(15, 23, 42, 0.5)',
+                  color: activeProject === 'opentelemetry' ? '#10b981' : '#94a3b8',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                OpenTelemetry Demo (14 Polyglot Microservices)
+              </button>
+            </div>
+          </div>
+
+          {/* Top Aggregate Summary Stat Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+            <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: 10, border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Average Edge Recall
+              </div>
+              <div style={{ fontSize: 32, fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>
+                {primaryMetrics.rcirEdgeRecall}
+              </div>
+              <div style={{ fontSize: 11.5, color: '#10b981', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>{primaryMetrics.observedUplift} vs Baseline</span>
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: 10, border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Rescued Dependencies
+              </div>
+              <div style={{ fontSize: 32, fontWeight: 800, color: '#10b981', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>
+                +{primaryMetrics.referencesRescued}
+              </div>
+              <div style={{ fontSize: 11.5, color: '#94a3b8' }}>
+                Silent misses: {primaryMetrics.silentMissesBaseline} ➔ {primaryMetrics.silentMissesRcir}
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: 10, border: '1px solid rgba(129, 140, 248, 0.3)' }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Context Token Savings
+              </div>
+              <div style={{ fontSize: 32, fontWeight: 800, color: '#818cf8', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>
+                -{primaryMetrics.tokenReduction}
+              </div>
+              <div style={{ fontSize: 11.5, color: '#94a3b8' }}>
+                Strict 4,000-token contract cap
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '16px 20px', borderRadius: 10, border: '1px solid rgba(251, 191, 36, 0.3)' }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Model & Provenance
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: '#f8fafc', margin: '4px 0' }}>
+                qwen2.5-coder:1.5b
+              </div>
+              <div style={{ fontSize: 11.5, color: '#10b981' }}>
+                Air-Gapped Local Inference (Exit 0)
+              </div>
+            </div>
+          </div>
+
+          {/* Graphical Task Comparison Bars */}
+          <div className="glass-panel" style={{ padding: 22, borderRadius: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 10 }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
+                  Graphical Head-to-Head Comparison: Baseline Search vs RCIR Graph
+                </h3>
+                <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>
+                  Evaluated across genuine AST call graphs, interface bindings, and dependency injection services.
+                </p>
+              </div>
+              <span className="hero-pill text-emerald-400" style={{ fontSize: 11 }}>
+                N={tasks.length} Real Tasks
               </span>
             </div>
 
-            <div className="summary-stat-card border-emerald-500/30">
-              <span className="stat-label text-emerald-300">References Rescued</span>
-              <div className="stat-number text-emerald-400">+{primaryMetrics.referencesRescued}</div>
-              <span className="stat-sub">Ground-truth edges identified by RCIR missed by baseline</span>
-            </div>
+            {/* Task Comparison Bars List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {tasks.map((task, idx) => (
+                <div 
+                  key={task.id} 
+                  style={{ 
+                    background: 'rgba(15, 23, 42, 0.6)', 
+                    border: selectedTaskIdx === idx ? '1px solid #38bdf8' : '1px solid var(--border-subtle)', 
+                    borderRadius: 10, 
+                    padding: 16,
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => setSelectedTaskIdx(idx)}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+                    <div>
+                      <span style={{ fontSize: 13, fontWeight: 800, color: '#f8fafc' }}>
+                        {task.id}: {task.title}
+                      </span>
+                      <span style={{ fontSize: 11.5, color: '#94a3b8', marginLeft: 8 }}>
+                        Target: <code style={{ color: '#38bdf8' }}>{task.targetSymbol}</code>
+                      </span>
+                    </div>
 
-            <div className="summary-stat-card border-indigo-500/30">
-              <span className="stat-label text-indigo-300">Context Token Savings</span>
-              <div className="stat-number text-indigo-400">-{primaryMetrics.tokenReduction}</div>
-              <span className="stat-sub">Strict 4,000-token contract cap avoids context explosion</span>
-            </div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      <span className="hero-pill" style={{ fontSize: 10.5 }}>{task.category}</span>
+                      <span className="hero-pill text-cyan-400" style={{ fontSize: 10.5 }}>{task.gtFiles} GT Files</span>
+                      <span className="hero-pill text-emerald-400" style={{ fontSize: 10.5, fontWeight: 700 }}>
+                        +{Math.round(task.rcirRecall - task.baseRecall)}% Uplift
+                      </span>
+                    </div>
+                  </div>
 
-            <div className="summary-stat-card border-amber-500/30">
-              <span className="stat-label text-amber-300">Zero-Cloud Isolation</span>
-              <div className="stat-number text-amber-400">100% Local</div>
-              <span className="stat-sub">Socket monkey-patch verified (0 network calls)</span>
-            </div>
-          </div>
+                  {/* Graphical Comparison Bar Visualizer */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {/* Baseline Bar */}
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                        <span style={{ color: '#f43f5e', fontWeight: 600 }}>Condition A: Baseline (Naive Localized Search)</span>
+                        <span style={{ color: '#f43f5e', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                          {task.baseRecall}% Recall ({task.baseMisses} silent misses) · {task.tokensBase.toLocaleString()} tokens
+                        </span>
+                      </div>
+                      <div style={{ width: '100%', height: 10, background: 'rgba(255, 255, 255, 0.05)', borderRadius: 5, overflow: 'hidden' }}>
+                        <div style={{ 
+                          width: `${Math.max(2, task.baseRecall)}%`, 
+                          height: '100%', 
+                          background: 'linear-gradient(90deg, #f43f5e, #fb7185)', 
+                          borderRadius: 5,
+                          transition: 'width 0.6s ease'
+                        }} />
+                      </div>
+                    </div>
 
-          {/* Task Navigation Selector */}
-          <div className="task-nav-bar">
-            {tasks.map((t, idx) => (
-              <button
-                key={t.id}
-                className={`task-tab-btn ${selectedTaskIdx === idx ? 'active' : ''}`}
-                onClick={() => setSelectedTaskIdx(idx)}
-              >
-                <span className="task-tab-id">{t.id}</span>
-                <span className="task-tab-title">{t.title}</span>
-              </button>
-            ))}
-          </div>
+                    {/* RCIR Bar */}
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                        <span style={{ color: '#10b981', fontWeight: 600 }}>Condition B: PolyFlow RCIR (AST Dependency Graph)</span>
+                        <span style={{ color: '#10b981', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                          {task.rcirRecall}% Recall ({task.rcirMisses} misses) · {task.tokensRcir.toLocaleString()} tokens
+                        </span>
+                      </div>
+                      <div style={{ width: '100%', height: 10, background: 'rgba(255, 255, 255, 0.05)', borderRadius: 5, overflow: 'hidden' }}>
+                        <div style={{ 
+                          width: `${Math.max(2, task.rcirRecall)}%`, 
+                          height: '100%', 
+                          background: 'linear-gradient(90deg, #06b6d4, #10b981)', 
+                          borderRadius: 5,
+                          transition: 'width 0.6s ease'
+                        }} />
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Selected Task Detailed Comparison */}
-          <div className="task-detail-card">
-            <div className="task-header-row">
-              <div>
-                <h3 className="text-base font-bold text-white">{currentTask.title} ({currentTask.id})</h3>
-                <span className="text-xs text-slate-400">
-                  Target: <code className="text-cyan-300">{currentTask.targetSymbol}</code> • Category: <span className="text-amber-300">{currentTask.category}</span>
-                </span>
-              </div>
-              <div className="task-badge">
-                <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-emerald-400" />
-                <span>{currentTask.gtFiles} Ground Truth Files Verified</span>
-              </div>
-            </div>
-
-            <div className="task-comparison-grid">
-              {/* Baseline Condition */}
-              <div className="condition-card baseline-card">
-                <div className="condition-title text-rose-400">Condition A: Baseline (Naive Localized)</div>
-                <div className="condition-metrics">
-                  <div className="cond-metric-row">
-                    <span>Edge Recall:</span>
-                    <strong className="text-rose-400">{currentTask.baseRecall}</strong>
-                  </div>
-                  <div className="cond-metric-row">
-                    <span>Silent Misses:</span>
-                    <strong className="text-rose-400">{currentTask.baseMisses} files</strong>
-                  </div>
-                  <div className="cond-metric-row">
-                    <span>Context Tokens:</span>
-                    <span className="font-mono">{currentTask.tokensBase.toLocaleString()} tokens</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* RCIR Condition */}
-              <div className="condition-card rcir-card">
-                <div className="condition-title text-emerald-400">Condition B: RCIR Dependency Graph</div>
-                <div className="condition-metrics">
-                  <div className="cond-metric-row">
-                    <span>Edge Recall:</span>
-                    <strong className="text-emerald-400">{currentTask.rcirRecall}</strong>
-                  </div>
-                  <div className="cond-metric-row">
-                    <span>Silent Misses:</span>
-                    <strong className="text-emerald-400">{currentTask.rcirMisses} files</strong>
-                  </div>
-                  <div className="cond-metric-row">
-                    <span>Exact Resolution Fraction:</span>
-                    <span className="font-mono text-cyan-300">{currentTask.exactResFrac}</span>
-                  </div>
-                  <div className="cond-metric-row">
-                    <span>Context Tokens:</span>
-                    <span className="font-mono text-emerald-400">{currentTask.tokensRcir.toLocaleString()} tokens</span>
+                  {/* Notes / Findings */}
+                  <div style={{ marginTop: 10, fontSize: 11.5, color: '#cbd5e1', lineHeight: 1.4 }}>
+                    <strong>Finding: </strong> {task.notes}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="task-notes-footer">
-              <span className="font-semibold text-slate-300">Empirical Verification Note: </span>
-              <span className="text-slate-400">{currentTask.notes}</span>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* VIEW 2: E2E CODING BENCHMARK WITH BUILD & TEST VERIFICATION */}
-      {activeView === 'e2e' && (
-        <div className="arena-view-content">
-          <div className="e2e-banner glass-panel">
-            <div className="flex items-center gap-3">
-              <Terminal className="w-6 h-6 text-cyan-400" />
+      {/* TAB 2: REAL E2E CODING LOOPS */}
+      {activeTab === 'e2e' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="glass-panel" style={{ padding: 18, borderRadius: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Terminal className="w-5 h-5 text-cyan-400" />
               <div>
-                <h3 className="text-base font-bold text-white">End-to-End Coding Agent Benchmark</h3>
-                <p className="text-xs text-slate-400">
-                  Tests genuine coding agents operating with concrete tools on the PolyFlow cloud drive application across 
-                  <strong> Java 21 JDK (`javac`), Node.js v25, Python 3.12, and SQLite</strong>.
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                  End-to-End Autonomous Coding Agent Benchmark
+                </h3>
+                <p style={{ fontSize: 12, color: '#94a3b8', margin: '2px 0 0 0' }}>
+                  Evaluates real agents executing concrete repo tools (<code>inspect_file</code>, <code>edit_file</code>, <code>run_command</code>) 
+                  against Adoptium Java 21, Python 3.12, Node.js v25, and SQLite runtimes with local model reasoning.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="e2e-tasks-list">
-            {E2E_CODING_BENCHMARK.tasks.map((task) => (
-              <div key={task.id} className="e2e-task-card glass-panel">
-                <div className="flex justify-between items-start mb-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {E2E_CODING_BENCHMARK.tasks.map(t => (
+              <div key={t.id} className="glass-panel" style={{ padding: 18, borderRadius: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
                   <div>
-                    <h4 className="text-base font-bold text-white">{task.id}: {task.title}</h4>
-                    <span className="text-xs text-slate-400">Target: <code>{task.targetFile}</code></span>
+                    <h4 style={{ fontSize: 15, fontWeight: 700, color: '#f8fafc', margin: 0 }}>
+                      {t.id}: {t.title}
+                    </h4>
+                    <span style={{ fontSize: 11.5, color: '#94a3b8' }}>Target: <code>{t.targetFile}</code></span>
                   </div>
-                  <span className="e2e-verdict-badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="hero-pill text-emerald-400" style={{ fontSize: 11 }}>
                     <ShieldCheck className="w-3.5 h-3.5 mr-1" />
-                    GATEKEEPER {task.gatekeeperVerdict}
+                    GATEKEEPER {t.gatekeeperVerdict}
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-300 mb-3">{task.requirement}</p>
+                <p style={{ fontSize: 12, color: '#cbd5e1', marginBottom: 12 }}>{t.requirement}</p>
 
-                <div className="e2e-verification-badges">
-                  <span className="toolchain-badge text-emerald-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                <div style={{ background: '#070a12', borderRadius: 6, border: '1px solid var(--border-subtle)', padding: 10, marginBottom: 12 }}>
+                  <div style={{ fontSize: 11, color: '#64748b', marginBottom: 4 }}>Verified Unified Git Diff:</div>
+                  <pre style={{ margin: 0, fontSize: 11.5, fontFamily: 'var(--font-mono)', color: '#38bdf8' }}>
+                    <code>{t.gitDiffSummary}</code>
+                  </pre>
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', fontSize: 11.5, color: '#10b981' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                     Java 21 Unit Tests PASSED
                   </span>
-                  <span className="toolchain-badge text-emerald-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                     Multi-Language Vertical Slice PASSED
                   </span>
-                  <span className="toolchain-badge text-cyan-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                    Zero Mocks / Local Ollama (qwen2.5:0.5b)
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#38bdf8' }}>
+                    <Cpu className="w-3.5 h-3.5" />
+                    Local Ollama (qwen2.5-coder:1.5b)
                   </span>
-                </div>
-
-                <div className="diff-preview-box">
-                  <div className="diff-header">Verified Git Diff Output:</div>
-                  <pre className="diff-pre"><code>{task.gitDiffSummary}</code></pre>
                 </div>
               </div>
             ))}
@@ -233,44 +363,39 @@ export function BenchmarkArena() {
         </div>
       )}
 
-      {/* VIEW 3: COLOCATION VS FRAGMENTATION EMPIRICAL FINDING */}
-      {activeView === 'colocation' && (
-        <div className="arena-view-content">
-          <div className="colocation-hero glass-panel">
-            <h3 className="text-lg font-bold text-white mb-2">{COLOCATION_FINDING.title}</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+      {/* TAB 3: COLOCATION VS FRAGMENTATION FINDING */}
+      {activeTab === 'colocation' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="glass-panel" style={{ padding: 20, borderRadius: 10 }}>
+            <h3 style={{ fontSize: 17, fontWeight: 800, color: '#f8fafc', marginBottom: 6 }}>
+              {COLOCATION_FINDING.title}
+            </h3>
+            <p style={{ fontSize: 12.5, color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
               {COLOCATION_FINDING.thesis}
             </p>
           </div>
 
-          <div className="colocation-table-container glass-panel">
-            <table className="colocation-table">
-              <thead>
-                <tr>
-                  <th>Architectural Dimension</th>
-                  <th>PolyFlow Cloud Drive Prototype</th>
-                  <th>Nextcloud Server Core</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COLOCATION_FINDING.comparison.map((row, idx) => (
-                  <tr key={idx}>
-                    <td className="font-semibold text-slate-300">{row.dimension}</td>
-                    <td className="text-cyan-300">{row.polyflowApp}</td>
-                    <td className="text-emerald-300">{row.nextcloudServer}</td>
+          <div className="glass-panel" style={{ padding: 20, borderRadius: 10 }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-subtle)', textAlign: 'left', color: '#94a3b8' }}>
+                    <th style={{ padding: '10px 14px' }}>Architectural Dimension</th>
+                    <th style={{ padding: '10px 14px' }}>PolyFlow Cloud Drive Prototype</th>
+                    <th style={{ padding: '10px 14px' }}>Nextcloud Server Core</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="thesis-summary-box glass-panel border-cyan-500/30">
-            <h4 className="text-sm font-bold text-cyan-300 mb-1">Key Research Takeaway for Evaluators</h4>
-            <p className="text-xs text-slate-300">
-              RCIR's lower recall on the compact PolyFlow prototype (32.8% vs 88.9%) is not a flaw—it is vital research proof. 
-              In tiny repositories where related code is already colocated, lexical search has 0 overhead. RCIR’s decisive advantage 
-              emerges when systems scale to enterprise fragmentation (Nextcloud: 11,793 files), where lexical search completely collapses.
-            </p>
+                </thead>
+                <tbody>
+                  {COLOCATION_FINDING.comparison.map((r, idx) => (
+                    <tr key={idx} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                      <td style={{ padding: '10px 14px', fontWeight: 600, color: '#cbd5e1' }}>{r.dimension}</td>
+                      <td style={{ padding: '10px 14px', color: '#38bdf8' }}>{r.polyflowApp}</td>
+                      <td style={{ padding: '10px 14px', color: '#10b981', fontWeight: 600 }}>{r.nextcloudServer}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

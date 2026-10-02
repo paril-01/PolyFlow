@@ -98,7 +98,7 @@ class LLMProvider:
             endpoint = str(getattr(client, "base_url", "https://api.openai.com/v1"))
             if not model_name:
                 if "11434" in endpoint or os.environ.get("OPENAI_API_KEY") == "ollama":
-                    model_name = "qwen2.5:0.5b"
+                    model_name = "qwen2.5-coder:1.5b"
                 else:
                     model_name = "gpt-4o"
 

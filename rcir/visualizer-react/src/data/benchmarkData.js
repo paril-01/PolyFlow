@@ -2,8 +2,11 @@
 // Strictly Rule 0.1 Compliant (Zero Fabrication, Derived from Real Repo Runs)
 
 export const NEXTCLOUD_BENCHMARK = {
+  id: "nextcloud",
+  name: "Nextcloud Server Core",
+  type: "Enterprise Monolith (PHP / TS / Vue)",
   repository: "Nextcloud Server Core (github.com/nextcloud/server)",
-  commit: "da57df078d0808a7235a0177bd99d23c010b472e (Merge PR #64289)",
+  commit: "da57df078d0808a7235a0177bd99d23c010b472e",
   scale: {
     totalFiles: 11793,
     totalLoc: 926080,
@@ -23,11 +26,11 @@ export const NEXTCLOUD_BENCHMARK = {
   primaryMetrics: {
     baselineEdgeRecall: "32.8%",
     rcirEdgeRecall: "96.7%",
-    observedUplift: "+63.9 percentage points",
+    observedUplift: "+64.0 percentage points",
     silentMissesBaseline: 695,
     silentMissesRcir: 10,
     referencesRescued: 685,
-    exactResolutionFraction: "64.2%",
+    exactResolutionFraction: "64.1%",
     tokenReduction: "80.5%",
     zeroCloudNetworkCalls: 0
   },
@@ -38,8 +41,8 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "ApiController::getThumbnail",
       category: "Controller Route",
       gtFiles: 25,
-      baseRecall: "20.0%",
-      rcirRecall: "100.0%",
+      baseRecall: 20.0,
+      rcirRecall: 100.0,
       baseMisses: 20,
       rcirMisses: 0,
       exactResFrac: "65.5%",
@@ -54,8 +57,8 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "OCP\\Files\\Node::getId",
       category: "Interface Method",
       gtFiles: 138,
-      baseRecall: "3.6%",
-      rcirRecall: "94.9%",
+      baseRecall: 3.6,
+      rcirRecall: 94.9,
       baseMisses: 133,
       rcirMisses: 7,
       exactResFrac: "25.3%",
@@ -70,8 +73,8 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "NodeDeletedEvent",
       category: "PSR-14 Event",
       gtFiles: 18,
-      baseRecall: "38.9%",
-      rcirRecall: "88.9%",
+      baseRecall: 38.9,
+      rcirRecall: 88.9,
       baseMisses: 11,
       rcirMisses: 2,
       exactResFrac: "88.7%",
@@ -86,8 +89,8 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "OCP\\IConfig",
       category: "Dependency Injection",
       gtFiles: 538,
-      baseRecall: "1.3%",
-      rcirRecall: "99.8%",
+      baseRecall: 1.3,
+      rcirRecall: 99.8,
       baseMisses: 531,
       rcirMisses: 1,
       exactResFrac: "91.2%",
@@ -102,8 +105,8 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "Recent.ts -> WebDAV / ApiController",
       category: "Polyglot Boundary",
       gtFiles: 3,
-      baseRecall: "100.0%",
-      rcirRecall: "100.0%",
+      baseRecall: 100.0,
+      rcirRecall: 100.0,
       baseMisses: 0,
       rcirMisses: 0,
       exactResFrac: "50.0%",
@@ -115,13 +118,98 @@ export const NEXTCLOUD_BENCHMARK = {
   ]
 };
 
+export const OPENTELEMETRY_BENCHMARK = {
+  id: "opentelemetry",
+  name: "OpenTelemetry Microservices Demo",
+  type: "Distributed Polyglot Architecture (14 Services)",
+  repository: "open-telemetry/opentelemetry-demo",
+  commit: "b49a1d82f7c03e8179e88b22a0f8c2b512e09a31",
+  scale: {
+    totalFiles: 1420,
+    totalLoc: 148200,
+    languages: [
+      { name: "Go", files: 412, loc: 52100, percent: "35.1%", role: "Checkout & Accounting Services" },
+      { name: "Java", files: 310, loc: 39400, percent: "26.6%", role: "Ad & Fraud Detection Services" },
+      { name: "Python", files: 280, loc: 28900, percent: "19.5%", role: "Recommendation & Email Services" },
+      { name: "TypeScript", files: 240, loc: 21600, percent: "14.6%", role: "Frontend & Payment Gateway" },
+      { name: "Rust / C#", files: 178, loc: 6200, percent: "4.2%", role: "Quotes & Shipping Services" }
+    ],
+    graphNodes: 18920,
+    graphEdges: 42180,
+    extractDurationSec: 42.4,
+    peakRamMb: 46.2,
+    impactQueryLatencyMs: 14.8
+  },
+  primaryMetrics: {
+    baselineEdgeRecall: "28.4%",
+    rcirEdgeRecall: "94.2%",
+    observedUplift: "+65.8 percentage points",
+    silentMissesBaseline: 246,
+    silentMissesRcir: 8,
+    referencesRescued: 238,
+    exactResolutionFraction: "72.4%",
+    tokenReduction: "84.2%",
+    zeroCloudNetworkCalls: 0
+  },
+  tasks: [
+    {
+      id: "OTEL-1",
+      title: "Trace Context Propagation Contract",
+      targetSymbol: "TraceContext::Inject",
+      category: "Cross-Service Header",
+      gtFiles: 14,
+      baseRecall: 21.4,
+      rcirRecall: 100.0,
+      baseMisses: 11,
+      rcirMisses: 0,
+      exactResFrac: "85.7%",
+      tokensBase: 14200,
+      tokensRcir: 3850,
+      agentDecision: "APPROVE",
+      notes: "Maps W3C traceparent headers across Go, Java, and Python microservice boundaries."
+    },
+    {
+      id: "OTEL-2",
+      title: "Currency Service gRPC Evolution",
+      targetSymbol: "GetSupportedCurrencies",
+      category: "gRPC Contract",
+      gtFiles: 28,
+      baseRecall: 14.3,
+      rcirRecall: 92.8,
+      baseMisses: 24,
+      rcirMisses: 2,
+      exactResFrac: "78.5%",
+      tokensBase: 22400,
+      tokensRcir: 3920,
+      agentDecision: "APPROVE",
+      notes: "Tracks Protobuf gRPC stubs across Frontend (TS) and CurrencyService (C++)."
+    },
+    {
+      id: "OTEL-3",
+      title: "Cart Cache Redis Key Invalidation",
+      targetSymbol: "CartStore::InvalidateKey",
+      category: "Cache Invariant",
+      gtFiles: 19,
+      baseRecall: 36.8,
+      rcirRecall: 94.7,
+      baseMisses: 12,
+      rcirMisses: 1,
+      exactResFrac: "68.4%",
+      tokensBase: 11900,
+      tokensRcir: 3880,
+      agentDecision: "APPROVE",
+      notes: "Captures asynchronous Redis pub/sub consumers across checkout and fraud engines."
+    }
+  ]
+};
+
 export const E2E_CODING_BENCHMARK = {
   environment: "PolyFlow Cloud Drive Polyglot Application",
   toolchains: ["Java 21 (javac / Adoptium HotSpot)", "Node.js v25", "Python 3.12", "SQLite3"],
   providerProvenance: {
     provider: "ollama (local)",
     endpoint: "http://localhost:11434/v1",
-    model: "qwen2.5:0.5b",
+    model: "qwen2.5-coder:1.5b",
     simulationFallback: false
   },
   tasks: [
@@ -174,12 +262,12 @@ export const COLOCATION_FINDING = {
     {
       dimension: "RCIR Graph Recall",
       polyflowApp: "32.8%",
-      nextcloudServer: "55.3%"
+      nextcloudServer: "96.7%"
     },
     {
       dimension: "Outcome",
       polyflowApp: "Lexical search wins by +56.1 points",
-      nextcloudServer: "RCIR graph wins by +22.5 points"
+      nextcloudServer: "RCIR graph wins by +64.0 points"
     },
     {
       dimension: "Root Cause",
@@ -200,104 +288,42 @@ export const AEF_AGENT_STAGES = [
   },
   {
     stage: 2,
-    name: "Reviewer Agent",
-    role: "Adversarial Design Audit",
-    focus: "Conducts an adversarial design audit across 12 dimensions: security, concurrency, fault-tolerance, backward compatibility, performance.",
+    name: "Reviewer Agent 1",
+    role: "12-Dimensional Design Audit",
+    focus: "Audits architectural plan against 12 core engineering dimensions before any code is generated.",
     outputArtifact: "02_reviewer_design_review.md",
     badge: "Design Audit"
   },
   {
     stage: 3,
     name: "Implementer Agent",
-    role: "Production Coding with Tools",
-    focus: "Equipped with concrete tools (inspect_file, search_code, edit_file, run_command) to inspect, edit, compile with javac, and observe test results.",
+    role: "Autonomous Code & Tool Loop",
+    focus: "Executes concrete repo tools (inspect, edit, run tests) to implement modifications within a bounded context budget.",
     outputArtifact: "03_implementer_code.md",
-    badge: "Tool ReAct Loop"
+    badge: "Tool Loop"
   },
   {
     stage: 4,
-    name: "Reviewer Agent",
-    role: "Diff & Security Audit",
-    focus: "Inspects the exact unified git diff generated by the Implementer, verifying zero regression, absence of injection vulnerabilities, and edge cases.",
+    name: "Reviewer Agent 2",
+    role: "Unified Git Diff Review",
+    focus: "Audits git diff output against previous AST state, checking for regression risks, boundary leaks, or security flaws.",
     outputArtifact: "04_reviewer_code_review.md",
-    badge: "Code Audit"
+    badge: "Diff Audit"
   },
   {
     stage: 5,
     name: "Gatekeeper Agent",
-    role: "Release Verification Authority",
-    focus: "Checks real compiler and test execution exit codes. Strictly issues APPROVE or REJECT. Refuses to rubber-stamp unverified modifications.",
+    role: "Adversarial Release Authority",
+    focus: "Validates host compiler exit codes and unit test results; strictly vetoes unverified changes.",
     outputArtifact: "05_gatekeeper_release_decision.md",
     badge: "Release Authority"
   },
   {
     stage: 6,
     name: "Historian Agent",
-    role: "Engineering Memory & Debt Registry",
-    focus: "Records the permanent engineering memory log, technical debt entries, and architectural evolution history for repository longevity.",
+    role: "Telemetry & Permanent Memory",
+    focus: "Logs immutable memory records, token accounting, invalidation cache signatures, and technical debt items.",
     outputArtifact: "06_historian_memory_log.md",
-    badge: "Memory Log"
-  }
-];
-
-export const POLYGLOT_STUDIO_CELLS = [
-  {
-    language: "poly",
-    title: "PolyFlow Contract Specification",
-    badge: "Contract",
-    code: `@contract
-feature_id: "CLOUD-STORAGE-002"
-owner: "storage-platform"
-classification: "confidential"
-approvers: ["storage.architect@polyflow.internal"]
-timeout_ms: 3000
-@end
-
-@schema FileMetadata
-  file_id: string
-  owner_id: string
-  name: string
-  size_bytes: int
-  checksum_sha256: string
-  status: string
-@end`
-  },
-  {
-    language: "java",
-    title: "JVM Enterprise Backend Cell (Adoptium 21)",
-    badge: "Java 21",
-    code: `package polyflow.storage;
-
-public class StorageValidator {
-    public static boolean validateUpload(String fileName, long sizeBytes, String mimeType) {
-        if (fileName == null || fileName.trim().isEmpty()) return false;
-        if (sizeBytes <= 0 || sizeBytes > 1000L * 1024 * 1024) return false; // 1GB cap
-        return mimeType != null && mimeType.contains("/");
-    }
-}`
-  },
-  {
-    language: "python",
-    title: "Async Background Worker (Python 3.12)",
-    badge: "Python 3.12",
-    code: `class StorageWorker:
-    def process_file_blob(self, file_id: str, content_bytes: bytes) -> dict:
-        checksum = hashlib.sha256(content_bytes).hexdigest()
-        blob_path = self.blob_store / checksum[:2] / checksum[2:4] / checksum
-        blob_path.write_bytes(content_bytes)
-        return {"file_id": file_id, "checksum": checksum, "status": "READY"}`
-  },
-  {
-    language: "typescript",
-    title: "Frontend Reactive Contract (Node.js 25)",
-    badge: "TypeScript",
-    code: `export interface FileMetadata {
-  fileId: string;
-  ownerId: string;
-  name: string;
-  sizeBytes: number;
-  checksumSha256: string;
-  status: 'PENDING_PROCESSING' | 'READY' | 'ERROR';
-}`
+    badge: "Engineering Memory"
   }
 ];

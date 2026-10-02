@@ -50,7 +50,7 @@ export function Header({
           }}
         >
           <optgroup label="Enterprise Core Target (Validated Subject)">
-            <option value="nextcloud">☁️ Nextcloud Server Core (50,346 nodes · 110,854 edges · 926k LOC)</option>
+            <option value="nextcloud">☁️ Nextcloud Server Core (50,346 nodes · 143,225 edges · 926k LOC)</option>
           </optgroup>
           <optgroup label="Microservice Reference Benchmarks">
             <option value="otel_recommendation">🔭 OTel Astronomy Shop — Recommendation (101 nodes)</option>
@@ -90,6 +90,25 @@ export function Header({
         {/* Layout Switcher */}
         <div style={{ display: 'flex', background: '#161928', borderRadius: 6, border: '1px solid #2d354e', padding: 2 }}>
           <button
+            onClick={() => onToggleLayout('3d')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              padding: '4px 8px',
+              borderRadius: 4,
+              fontSize: 11,
+              fontWeight: 700,
+              border: 'none',
+              cursor: 'pointer',
+              background: layoutMode === '3d' ? '#272f48' : 'transparent',
+              color: layoutMode === '3d' ? '#38bdf8' : '#94a3b8'
+            }}
+            title="3D WebGL Galaxy Orbit (Hardware Accelerated)"
+          >
+            <span>3D Space</span>
+          </button>
+          <button
             onClick={() => onToggleLayout('flow')}
             style={{
               display: 'flex',
@@ -106,26 +125,7 @@ export function Header({
             }}
             title="Hierarchical Architecture Flow DAG"
           >
-            <span>Flow</span>
-          </button>
-          <button
-            onClick={() => onToggleLayout('radial')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 4,
-              padding: '4px 8px',
-              borderRadius: 4,
-              fontSize: 11,
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer',
-              background: layoutMode === 'radial' ? '#272f48' : 'transparent',
-              color: layoutMode === 'radial' ? '#ffffff' : '#94a3b8'
-            }}
-            title="Concentric Stagnant Radial Tree"
-          >
-            <span>Radial</span>
+            <span>2D Flow</span>
           </button>
           <button
             onClick={() => onToggleLayout('force')}

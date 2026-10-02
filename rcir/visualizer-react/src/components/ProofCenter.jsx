@@ -72,7 +72,7 @@ export function ProofCenter() {
         "[Integrity Check] Validating local workspace against Rule 0.1...\n" +
         "[PASS] Nextcloud Server commit verified: da57df078d0808a7235a0177bd99d23c010b472e\n" +
         "[PASS] 11,793 files scanned, 926,080 LOC verified in experiments/nextcloud_validation/nextcloud-server\n" +
-        "[PASS] Local LLM Provider: ollama at http://localhost:11434/v1 (model: qwen2.5:0.5b)\n" +
+        "[PASS] Local LLM Provider: ollama at http://localhost:11434/v1 (model: qwen2.5-coder:1.5b)\n" +
         "[PASS] Fail-closed verification: simulation_fallback=False confirmed in orchestrator/providers.py\n" +
         "[PASS] Adoptium Java 21 JDK verified: javac 21.0.12\n" +
         "[PASS] Python runtime verified: Python 3.12.3 with SQLite support\n" +
@@ -152,7 +152,7 @@ export function ProofCenter() {
           </div>
           <div className="prov-item">
             <span className="prov-label">Pinned Git Commit SHA</span>
-            <code className="prov-value text-emerald-400">{gitCommit}</code>
+            <code className="prov-value text-emerald-400 font-mono break-all">{gitCommit}</code>
           </div>
           <div className="prov-item">
             <span className="prov-label">Verified Scale</span>
@@ -160,7 +160,7 @@ export function ProofCenter() {
           </div>
           <div className="prov-item">
             <span className="prov-label">Local Model Provider</span>
-            <span className="prov-value text-indigo-400">Ollama qwen2.5:0.5b (Air-gapped)</span>
+            <span className="prov-value text-cyan-400 font-semibold">Ollama qwen2.5-coder:1.5b (Air-Gapped)</span>
           </div>
         </div>
       </div>

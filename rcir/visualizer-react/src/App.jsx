@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { GraphCanvas } from './components/GraphCanvas';
+import { Graph3DCanvas } from './components/Graph3DCanvas';
 import { NodeInspector } from './components/NodeInspector';
 import { TreeExplorer } from './components/TreeExplorer';
 import { RetrievalSimulator } from './components/RetrievalSimulator';
@@ -130,31 +131,41 @@ export default function App() {
                 </div>
               )}
 
-              {/* Tab 1: Obsidian Graph Canvas */}
+              {/* Tab 1: Obsidian Graph Canvas (3D Space or 2D Flow) */}
               {activeTab === 'graph' && (
                 <div style={{ flex: 1, position: 'relative', height: '100%' }}>
-                  <GraphCanvas
-                    layout={layout}
-                    selectedNode={selectedNode}
-                    onSelectNode={setSelectedNode}
-                    hoveredNode={hoveredNode}
-                    onHoverNode={setHoveredNode}
-                    connectedNeighbors={connectedNeighbors}
-                    highlightedNodes={highlightedNodes}
-                    searchQuery={searchQuery}
-                    matchingNodePaths={matchingNodePaths}
-                    camera={camera}
-                    setCamera={setCamera}
-                    handleWheel={handleWheel}
-                    handleMouseDown={handleMouseDown}
-                    handleMouseMove={handleMouseMove}
-                    handleMouseUp={handleMouseUp}
-                    zoomIn={zoomIn}
-                    zoomOut={zoomOut}
-                    resetCamera={resetCamera}
-                    layoutMode={layoutMode}
-                    onToggleLayout={setLayoutMode}
-                  />
+                  {layoutMode === '3d' ? (
+                    <Graph3DCanvas
+                      data={data}
+                      selectedNode={selectedNode}
+                      onSelectNode={setSelectedNode}
+                      searchQuery={searchQuery}
+                      onResetCamera={resetCamera}
+                    />
+                  ) : (
+                    <GraphCanvas
+                      layout={layout}
+                      selectedNode={selectedNode}
+                      onSelectNode={setSelectedNode}
+                      hoveredNode={hoveredNode}
+                      onHoverNode={setHoveredNode}
+                      connectedNeighbors={connectedNeighbors}
+                      highlightedNodes={highlightedNodes}
+                      searchQuery={searchQuery}
+                      matchingNodePaths={matchingNodePaths}
+                      camera={camera}
+                      setCamera={setCamera}
+                      handleWheel={handleWheel}
+                      handleMouseDown={handleMouseDown}
+                      handleMouseMove={handleMouseMove}
+                      handleMouseUp={handleMouseUp}
+                      zoomIn={zoomIn}
+                      zoomOut={zoomOut}
+                      resetCamera={resetCamera}
+                      layoutMode={layoutMode}
+                      onToggleLayout={setLayoutMode}
+                    />
+                  )}
 
                   {/* Right Slide-out Inspector */}
                   {selectedNode && (

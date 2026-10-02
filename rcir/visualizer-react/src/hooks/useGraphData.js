@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { computeHierarchicalFlowLayout, computeAdaptiveRadialLayout, computeForceLayout } from '../lib/graphLayout';
 
-export function useGraphData(initialDatasetId = 'otel_recommendation') {
+export function useGraphData(initialDatasetId = 'nextcloud') {
   const [datasetId, setDatasetId] = useState(initialDatasetId);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ export function useGraphData(initialDatasetId = 'otel_recommendation') {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [highlightedNodes, setHighlightedNodes] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [layoutMode, setLayoutMode] = useState('flow'); // 'flow' (default DAG) | 'radial' | 'force'
+  const [layoutMode, setLayoutMode] = useState('3d'); // '3d' (default 3D WebGL) | 'flow' | 'force'
 
   // Fetch dataset JSON
   useEffect(() => {

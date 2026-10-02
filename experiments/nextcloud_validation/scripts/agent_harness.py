@@ -358,7 +358,7 @@ def run_real_agent_workflow(
         "provider_provenance": {
             "provider": prov.get("provider", runner.provider.provider_name),
             "endpoint": prov.get("endpoint", os.environ.get("OPENAI_BASE_URL", "http://localhost:11434/v1")),
-            "model": prov.get("model", "qwen2.5:0.5b"),
+            "model": prov.get("model", "qwen2.5-coder:1.5b"),
             "simulation_fallback": prov.get("simulation_fallback", False),
         },
         "files_modified": results.get("files_modified", []),
@@ -518,7 +518,7 @@ def main():
         "provider_provenance": {
             "provider": "ollama",
             "endpoint": os.environ.get("OPENAI_BASE_URL", "http://localhost:11434/v1"),
-            "model": "qwen2.5:0.5b",
+            "model": "qwen2.5-coder:1.5b",
             "simulation_fallback": False,
         },
         "statistical_note": "Sample size N=5 tasks; observed difference reported. Not claiming population statistical significance.",
@@ -550,7 +550,7 @@ def main():
     print("=" * 95)
     print(f"Edge Recall Difference: {(rcir_avg_edge_recall - base_avg_edge_recall)*100:+.1f} percentage points")
     print(f"Ground-Truth References Identified by RCIR Missed by Baseline: {misses_identified}")
-    print("Provider Provenance: ollama (qwen2.5:0.5b) at http://localhost:11434/v1 | simulation_fallback: false")
+    print("Provider Provenance: ollama (qwen2.5-coder:1.5b) at http://localhost:11434/v1 | simulation_fallback: false")
 
 
 if __name__ == "__main__":
