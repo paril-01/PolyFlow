@@ -208,6 +208,12 @@ _PHP_EVENT_DISPATCH = re.compile(
     re.MULTILINE,
 )
 
+# Filesystem Node scope regex (identifies files working with OCP\Files\Node hierarchy)
+_NODE_SCOPE_RE = re.compile(
+    r"use\s+OCP\\Files\\(Node|File|Folder)|use\s+OC\\Files\\Node|"
+    r"Node\s+\$|File\s+\$|Folder\s+\$|@(?:param|return|var)\s+(?:\\?[A-Za-z0-9_\\]*\\)?(Node|File|Folder)"
+)
+
 
 # ─── Helper Functions ──────────────────────────────────────────────
 
@@ -598,6 +604,55 @@ def scan_php_file(
             resolution="static_inference",
             reason=f"PHP include/require: {included_path}",
         ))
+
+    has_node_scope = bool(_NODE_SCOPE_RE.search(content)) or "Files/Node" in file_path or "lib/public/Files" in file_path
+
+    # Extract $var->method() instance calls with receiver heuristic flow
+    for m in _PHP_INSTANCE_CALL.finditer(content):
+        var_name = m.group(1)
+        method_name = m.group(2)
+        if var_name == "this":
+            continue
+
+        line_no = content[:m.start()].count('\n') + 1
+        caller = _get_enclosing_class_method(content, line_no)
+        source_ctx = f"{file_path}::{namespace}\\{caller}" if namespace and caller != "file_level" else f"{file_path}::{caller}"
+
+        # Heuristic receiver tracking for filesystem node contracts (e.g. Node::getId)
+        if method_name == "getId":
+            if var_name in ("node", "item", "file", "folder", "targetNode", "sourceNode", "rootNode", "parentNode", "child") or has_node_scope:
+                edges.append(make_edge(
+                    source=source_ctx,
+                    target="OCP\\Files\\Node::getId",
+                    edge_type="calls",
+                    resolution="static_inference",
+                    reason=f"Instance call ${var_name}->getId() matches OCP\\Files\\Node contract",
+                ))
+            else:
+                edges.append(make_edge(
+                    source=source_ctx,
+                    target=f"inferred::{method_name}",
+                    edge_type="calls",
+                    resolution="static_inference",
+                    reason=f"Instance call ${var_name}->{method_name}()",
+                ))
+        elif var_name in ("config", "serverContainer", "container"):
+            if "IConfig" in use_map or "OCP\\IConfig" in content:
+                edges.append(make_edge(
+                    source=source_ctx,
+                    target="OCP\\IConfig",
+                    edge_type="calls",
+                    resolution="static_inference",
+                    reason=f"Instance call ${var_name}->{method_name}() on config container",
+                ))
+        else:
+            edges.append(make_edge(
+                source=source_ctx,
+                target=f"inferred::{method_name}",
+                edge_type="calls",
+                resolution="static_inference",
+                reason=f"Instance call ${var_name}->{method_name}()",
+            ))
 
     return nodes, edges
 

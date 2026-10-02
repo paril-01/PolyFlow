@@ -7,6 +7,9 @@ import { TreeExplorer } from './components/TreeExplorer';
 import { RetrievalSimulator } from './components/RetrievalSimulator';
 import { BenchmarkArena } from './components/BenchmarkArena';
 import { AgentPipeline } from './components/AgentPipeline';
+import { ExecutiveHero } from './components/ExecutiveHero';
+import { PolyglotStudio } from './components/PolyglotStudio';
+import { ProofCenter } from './components/ProofCenter';
 import { ProofModal } from './components/ProofModal';
 import { StatsBar } from './components/StatsBar';
 
@@ -15,7 +18,7 @@ import { useCamera } from './hooks/useCamera';
 import { useAgent } from './hooks/useAgent';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('graph');
+  const [activeTab, setActiveTab] = useState('overview');
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [manifest, setManifest] = useState([]);
 
@@ -48,7 +51,7 @@ export default function App() {
     matchingNodePaths,
     connectedNeighbors,
     selectNodeByPath
-  } = useGraphData('otel_recommendation');
+  } = useGraphData('nextcloud');
 
   // Camera Hook
   const {
@@ -120,6 +123,13 @@ export default function App() {
             </div>
           ) : (
             <>
+              {/* Tab 0: Executive Overview */}
+              {activeTab === 'overview' && (
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+                  <ExecutiveHero onNavigate={setActiveTab} />
+                </div>
+              )}
+
               {/* Tab 1: Obsidian Graph Canvas */}
               {activeTab === 'graph' && (
                 <div style={{ flex: 1, position: 'relative', height: '100%' }}>
@@ -196,18 +206,36 @@ export default function App() {
 
               {/* Tab 4: Benchmark Arena */}
               {activeTab === 'benchmarks' && (
-                <BenchmarkArena />
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  <BenchmarkArena />
+                </div>
               )}
 
               {/* Tab 5: Agent Pipeline */}
               {activeTab === 'agent' && (
-                <AgentPipeline
-                  agentState={agentState}
-                  onRunPipeline={agentState.runPipeline}
-                  onCancelPipeline={agentState.cancelPipeline}
-                  currentRepoName={datasetId}
-                  onHighlightTouchedNodes={handleHighlightTouchedNodes}
-                />
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  <AgentPipeline
+                    agentState={agentState}
+                    onRunPipeline={agentState.runPipeline}
+                    onCancelPipeline={agentState.cancelPipeline}
+                    currentRepoName={datasetId}
+                    onHighlightTouchedNodes={handleHighlightTouchedNodes}
+                  />
+                </div>
+              )}
+
+              {/* Tab 6: Polyglot Studio */}
+              {activeTab === 'studio' && (
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+                  <PolyglotStudio />
+                </div>
+              )}
+
+              {/* Tab 7: Proof & Audit Center */}
+              {activeTab === 'proof' && (
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+                  <ProofCenter />
+                </div>
               )}
             </>
           )}

@@ -1,12 +1,27 @@
 {
   "summary": {
-    "tasks_evaluated_retrieval": 5,
-    "baseline_average_recall": 0.328,
-    "rcir_average_recall": 0.553,
-    "observed_recall_difference_points": 22.5,
-    "baseline_total_dependency_misses": 695,
-    "rcir_total_dependency_misses": 130,
-    "ground_truth_references_identified_by_rcir_missed_by_baseline": 565,
+    "primary_dependency_metrics": {
+      "baseline_average_edge_recall": 0.328,
+      "rcir_average_edge_recall": 0.967,
+      "rcir_average_edge_precision": 0.056,
+      "baseline_total_silent_misses": 695,
+      "rcir_total_silent_misses": 10,
+      "ground_truth_references_identified_by_rcir_missed_by_baseline": 685,
+      "rcir_total_known_unresolved": 0,
+      "rcir_average_exact_resolution_fraction": 0.6414
+    },
+    "secondary_context_metrics": {
+      "tasks_evaluated": 5,
+      "baseline_average_recall": 0.328,
+      "rcir_average_recall": 0.967,
+      "observed_recall_difference_points": 64.0
+    },
+    "provider_provenance": {
+      "provider": "ollama",
+      "endpoint": "http://localhost:11434/v1",
+      "model": "qwen2.5:0.5b",
+      "simulation_fallback": false
+    },
     "statistical_note": "Sample size N=5 tasks; observed difference reported. Not claiming population statistical significance."
   },
   "algorithmic_retrieval_benchmarks": [
@@ -17,6 +32,37 @@
       "ground_truth_files": 25,
       "baseline": {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+          "edge_precision": 0.0,
+          "edge_recall": 0.2,
+          "silent_misses": 20,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 8,
+          "change_impact_recall": 0.2,
+          "change_impact_precision": 0.385,
+          "exact_resolution_fraction": 0.0
+        },
+        "secondary_context_metrics": {
+          "files_identified": 13,
+          "ground_truth_total": 25,
+          "true_positives": 5,
+          "recall": 0.2,
+          "precision": 0.385,
+          "context_tokens": 18731,
+          "discovered_files": [
+            "apps/files/appinfo/routes.php",
+            "apps/files/lib/Controller/ApiController.php",
+            "apps/files/lib/Controller/ConversionApiController.php",
+            "apps/files/lib/Controller/DirectEditingController.php",
+            "apps/files/lib/Controller/DirectEditingViewController.php",
+            "apps/files/lib/Controller/FilenamesController.php",
+            "apps/files/lib/Controller/OpenLocalEditorController.php",
+            "apps/files/lib/Controller/TemplateController.php",
+            "apps/files/lib/Controller/TransferOwnershipController.php",
+            "apps/files/lib/Controller/ViewController.php"
+          ]
+        },
         "files_identified": 13,
         "ground_truth_total": 25,
         "true_positives": 5,
@@ -25,6 +71,7 @@
         "precision": 0.385,
         "recall": 0.2,
         "context_tokens": 18731,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": [
           "apps/files/appinfo/routes.php",
           "apps/files/lib/Controller/ApiController.php",
@@ -40,30 +87,63 @@
       },
       "rcir": {
         "condition": "RCIR Retrieval",
-        "files_identified": 170,
+        "dependency_intelligence": {
+          "edge_precision": 0.016,
+          "edge_recall": 1.0,
+          "silent_misses": 0,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 1586,
+          "change_impact_recall": 1.0,
+          "change_impact_precision": 0.016,
+          "exact_resolution_fraction": 0.6555,
+          "exact_call_sites": 3642,
+          "inferred_call_sites": 1914
+        },
+        "secondary_context_metrics": {
+          "files_identified": 1611,
+          "ground_truth_total": 25,
+          "true_positives": 25,
+          "recall": 1.0,
+          "precision": 0.016,
+          "context_tokens": 3998,
+          "discovered_files": [
+            "Exception",
+            "Imagick",
+            "ImagickPixel",
+            "OC/Files/Node/File",
+            "OC/Preview/Bitmap",
+            "OC/Preview/CDR",
+            "OC/Preview/Heif",
+            "OC/Preview/Image",
+            "OC/Preview/Imaginary",
+            "OC/Preview/Krita"
+          ]
+        },
+        "files_identified": 1611,
         "ground_truth_total": 25,
-        "true_positives": 18,
-        "dependency_misses": 7,
-        "false_positives": 152,
-        "precision": 0.106,
-        "recall": 0.72,
+        "true_positives": 25,
+        "dependency_misses": 0,
+        "false_positives": 1586,
+        "precision": 0.016,
+        "recall": 1.0,
         "context_tokens": 3998,
-        "exact_resolution_fraction": 0.6437,
-        "exact_call_sites": 56,
-        "inferred_call_sites": 31,
+        "exact_resolution_fraction": 0.6555,
+        "exact_call_sites": 3642,
+        "inferred_call_sites": 1914,
         "unresolved_count": 0,
-        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getThumbnail\n======================================================================\n\nAffected: 87 static call sites (56 exact, 31 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 64.4% [Exact: 56 | Inferred: 31 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getThumbnail\n======================================================================\n\nAffected: 5556 static call sites (3642 exact, 1914 inferred)\nCross-service: 3 (core, services, utils)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 65.6% [Exact: 3642 | Inferred: 1914 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
         "discovered_files": [
-          "apps/appstore/lib/Controller",
-          "apps/appstore/tests/Controller",
-          "apps/cloud_federation_api/lib/Controller",
-          "apps/cloud_federation_api/tests/Controller",
-          "apps/comments/lib/Controller",
-          "apps/comments/tests/Unit/Controller",
-          "apps/contactsinteraction/lib/Card.php",
-          "apps/dashboard/lib/Controller",
-          "apps/dav/lib/Avatars/AvatarNode.php",
-          "apps/dav/lib/CalDAV/CachedSubscriptionObject.php"
+          "Exception",
+          "Imagick",
+          "ImagickPixel",
+          "OC/Files/Node/File",
+          "OC/Preview/Bitmap",
+          "OC/Preview/CDR",
+          "OC/Preview/Heif",
+          "OC/Preview/Image",
+          "OC/Preview/Imaginary",
+          "OC/Preview/Krita"
         ]
       }
     },
@@ -74,6 +154,37 @@
       "ground_truth_files": 138,
       "baseline": {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+          "edge_precision": 0.0,
+          "edge_recall": 0.036,
+          "silent_misses": 133,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 36,
+          "change_impact_recall": 0.036,
+          "change_impact_precision": 0.122,
+          "exact_resolution_fraction": 0.0
+        },
+        "secondary_context_metrics": {
+          "files_identified": 41,
+          "ground_truth_total": 138,
+          "true_positives": 5,
+          "recall": 0.036,
+          "precision": 0.122,
+          "context_tokens": 16983,
+          "discovered_files": [
+            "apps/admin_audit/lib/Actions/Files.php",
+            "apps/comments/lib/Activity/Listener.php",
+            "apps/comments/lib/Controller/NotificationsController.php",
+            "apps/comments/lib/Notification/Notifier.php",
+            "apps/comments/lib/Search/CommentsSearchProvider.php",
+            "lib/public/Files/AlreadyExistsException.php",
+            "lib/public/Files/ConnectionLostException.php",
+            "lib/public/Files/DavUtil.php",
+            "lib/public/Files/EmptyFileNameException.php",
+            "lib/public/Files/EntityTooLargeException.php"
+          ]
+        },
         "files_identified": 41,
         "ground_truth_total": 138,
         "true_positives": 5,
@@ -82,6 +193,7 @@
         "precision": 0.122,
         "recall": 0.036,
         "context_tokens": 16983,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": [
           "apps/admin_audit/lib/Actions/Files.php",
           "apps/comments/lib/Activity/Listener.php",
@@ -97,30 +209,63 @@
       },
       "rcir": {
         "condition": "RCIR Retrieval",
-        "files_identified": 182,
+        "dependency_intelligence": {
+          "edge_precision": 0.059,
+          "edge_recall": 0.949,
+          "silent_misses": 7,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 2081,
+          "change_impact_recall": 0.949,
+          "change_impact_precision": 0.059,
+          "exact_resolution_fraction": 0.2526,
+          "exact_call_sites": 3495,
+          "inferred_call_sites": 10341
+        },
+        "secondary_context_metrics": {
+          "files_identified": 2212,
+          "ground_truth_total": 138,
+          "true_positives": 131,
+          "recall": 0.949,
+          "precision": 0.059,
+          "context_tokens": 3992,
+          "discovered_files": [
+            "BadMethodCallException",
+            "CallbackFilterIterator",
+            "DateInterval",
+            "DateTime",
+            "DateTimeImmutable",
+            "DateTimeZone",
+            "Exception",
+            "Firebase/JWT/JWT",
+            "Fusonic/OpenGraph/Consumer",
+            "GuzzleHttp/Psr7/LimitStream"
+          ]
+        },
+        "files_identified": 2212,
         "ground_truth_total": 138,
-        "true_positives": 22,
-        "dependency_misses": 116,
-        "false_positives": 160,
-        "precision": 0.121,
-        "recall": 0.159,
+        "true_positives": 131,
+        "dependency_misses": 7,
+        "false_positives": 2081,
+        "precision": 0.059,
+        "recall": 0.949,
         "context_tokens": 3992,
-        "exact_resolution_fraction": 0.1442,
-        "exact_call_sites": 15,
-        "inferred_call_sites": 89,
+        "exact_resolution_fraction": 0.2526,
+        "exact_call_sites": 3495,
+        "inferred_call_sites": 10341,
         "unresolved_count": 0,
-        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getId\n======================================================================\n\nAffected: 104 static call sites (15 exact, 89 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 14.4% [Exact: 15 | Inferred: 89 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: getId\n======================================================================\n\nAffected: 13836 static call sites (3495 exact, 10341 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 25.3% [Exact: 3495 | Inferred: 10341 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
         "discovered_files": [
-          "apps/contactsinteraction/lib/Card.php",
-          "apps/dav/lib/Avatars/AvatarNode.php",
-          "apps/dav/lib/BackgroundJob/UserStatusAutomation.php",
-          "apps/dav/lib/CalDAV/AppCalendar/CalendarObject.php",
-          "apps/dav/lib/CalDAV/CachedSubscriptionObject.php",
-          "apps/dav/lib/CalDAV/CalendarObject.php",
-          "apps/dav/lib/CalDAV/Federation/FederatedCalendarEntity.php",
-          "apps/dav/lib/CalDAV/Federation/FederatedCalendarObject.php",
-          "apps/dav/lib/CalDAV/Trashbin/DeletedCalendarObject.php",
-          "apps/dav/lib/CardDAV/PhotoCache.php"
+          "BadMethodCallException",
+          "CallbackFilterIterator",
+          "DateInterval",
+          "DateTime",
+          "DateTimeImmutable",
+          "DateTimeZone",
+          "Exception",
+          "Firebase/JWT/JWT",
+          "Fusonic/OpenGraph/Consumer",
+          "GuzzleHttp/Psr7/LimitStream"
         ]
       }
     },
@@ -131,6 +276,37 @@
       "ground_truth_files": 18,
       "baseline": {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+          "edge_precision": 0.0,
+          "edge_recall": 0.389,
+          "silent_misses": 11,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 14,
+          "change_impact_recall": 0.389,
+          "change_impact_precision": 0.333,
+          "exact_resolution_fraction": 0.0
+        },
+        "secondary_context_metrics": {
+          "files_identified": 21,
+          "ground_truth_total": 18,
+          "true_positives": 7,
+          "recall": 0.389,
+          "precision": 0.333,
+          "context_tokens": 10382,
+          "discovered_files": [
+            "apps/admin_audit/lib/Actions/Files.php",
+            "apps/admin_audit/lib/AppInfo/Application.php",
+            "apps/files/lib/AppInfo/Application.php",
+            "apps/files/lib/Listener/SyncLivePhotosListener.php",
+            "apps/files/lib/Sharing/Source/NodeShareSourceType.php",
+            "lib/public/Files/Events/Node/AbstractNodeEvent.php",
+            "lib/public/Files/Events/Node/AbstractNodesEvent.php",
+            "lib/public/Files/Events/Node/BeforeNodeCopiedEvent.php",
+            "lib/public/Files/Events/Node/BeforeNodeCreatedEvent.php",
+            "lib/public/Files/Events/Node/BeforeNodeDeletedEvent.php"
+          ]
+        },
         "files_identified": 21,
         "ground_truth_total": 18,
         "true_positives": 7,
@@ -139,6 +315,7 @@
         "precision": 0.333,
         "recall": 0.389,
         "context_tokens": 10382,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": [
           "apps/admin_audit/lib/Actions/Files.php",
           "apps/admin_audit/lib/AppInfo/Application.php",
@@ -154,30 +331,63 @@
       },
       "rcir": {
         "condition": "RCIR Retrieval",
-        "files_identified": 165,
+        "dependency_intelligence": {
+          "edge_precision": 0.034,
+          "edge_recall": 0.889,
+          "silent_misses": 2,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 460,
+          "change_impact_recall": 0.889,
+          "change_impact_precision": 0.034,
+          "exact_resolution_fraction": 0.8869,
+          "exact_call_sites": 486,
+          "inferred_call_sites": 62
+        },
+        "secondary_context_metrics": {
+          "files_identified": 476,
+          "ground_truth_total": 18,
+          "true_positives": 16,
+          "recall": 0.889,
+          "precision": 0.034,
+          "context_tokens": 3997,
+          "discovered_files": [
+            "Doctrine/DBAL/Exception/UniqueConstraintViolationException",
+            "Exception",
+            "MountProviderTrait",
+            "NCU/Sharing/ISharingManager",
+            "NCU/Sharing/ISharingRegistry",
+            "NCU/Sharing/ShareAccessContext",
+            "NCU/Sharing/Source/IShareSourceMetadata",
+            "NCU/Sharing/Source/IShareSourceType",
+            "NCU/Sharing/Source/ShareSource",
+            "OC/Core/Sharing/Permission/EditSharePermissionPreset"
+          ]
+        },
+        "files_identified": 476,
         "ground_truth_total": 18,
         "true_positives": 16,
         "dependency_misses": 2,
-        "false_positives": 149,
-        "precision": 0.097,
+        "false_positives": 460,
+        "precision": 0.034,
         "recall": 0.889,
-        "context_tokens": 4000,
-        "exact_resolution_fraction": 0.8966,
-        "exact_call_sites": 26,
-        "inferred_call_sites": 3,
+        "context_tokens": 3997,
+        "exact_resolution_fraction": 0.8869,
+        "exact_call_sites": 486,
+        "inferred_call_sites": 62,
         "unresolved_count": 0,
-        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: NodeDeletedEvent\n======================================================================\n\nAffected: 29 static call sites (26 exact, 3 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 89.7% [Exact: 26 | Inferred: 3 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: NodeDeletedEvent\n======================================================================\n\nAffected: 548 static call sites (486 exact, 62 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 88.7% [Exact: 486 | Inferred: 62 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
         "discovered_files": [
-          "apps/admin_audit/lib/Actions/Files.php",
-          "apps/admin_audit/lib/Actions/Trashbin.php",
-          "apps/admin_audit/lib/Actions/Versions.php",
-          "apps/admin_audit/lib/AppInfo/Application.php",
-          "apps/admin_audit/lib/Listener",
-          "apps/admin_audit/tests/Listener",
-          "apps/comments/lib/Listener",
-          "apps/contactsinteraction/lib/AddressBook.php",
-          "apps/contactsinteraction/lib/Card.php",
-          "apps/dav/lib/Avatars/AvatarHome.php"
+          "Doctrine/DBAL/Exception/UniqueConstraintViolationException",
+          "Exception",
+          "MountProviderTrait",
+          "NCU/Sharing/ISharingManager",
+          "NCU/Sharing/ISharingRegistry",
+          "NCU/Sharing/ShareAccessContext",
+          "NCU/Sharing/Source/IShareSourceMetadata",
+          "NCU/Sharing/Source/IShareSourceType",
+          "NCU/Sharing/Source/ShareSource",
+          "OC/Core/Sharing/Permission/EditSharePermissionPreset"
         ]
       }
     },
@@ -188,6 +398,37 @@
       "ground_truth_files": 538,
       "baseline": {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+          "edge_precision": 0.0,
+          "edge_recall": 0.013,
+          "silent_misses": 531,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 60,
+          "change_impact_recall": 0.013,
+          "change_impact_precision": 0.104,
+          "exact_resolution_fraction": 0.0
+        },
+        "secondary_context_metrics": {
+          "files_identified": 67,
+          "ground_truth_total": 538,
+          "true_positives": 7,
+          "recall": 0.013,
+          "precision": 0.104,
+          "context_tokens": 54324,
+          "discovered_files": [
+            "apps/admin_audit/lib/AuditLogger.php",
+            "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
+            "apps/appstore/lib/Controller/ApiController.php",
+            "apps/appstore/lib/Controller/PageController.php",
+            "apps/comments/lib/MaxAutoCompleteResultsInitialState.php",
+            "lib/public/AutoloadNotAllowedException.php",
+            "lib/public/BeforeSabrePubliclyLoadedEvent.php",
+            "lib/public/Color.php",
+            "lib/public/Constants.php",
+            "lib/public/Defaults.php"
+          ]
+        },
         "files_identified": 67,
         "ground_truth_total": 538,
         "true_positives": 7,
@@ -196,6 +437,7 @@
         "precision": 0.104,
         "recall": 0.013,
         "context_tokens": 54324,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": [
           "apps/admin_audit/lib/AuditLogger.php",
           "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
@@ -211,30 +453,63 @@
       },
       "rcir": {
         "condition": "RCIR Retrieval",
-        "files_identified": 917,
+        "dependency_intelligence": {
+          "edge_precision": 0.155,
+          "edge_recall": 0.998,
+          "silent_misses": 1,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 2938,
+          "change_impact_recall": 0.998,
+          "change_impact_precision": 0.155,
+          "exact_resolution_fraction": 0.9118,
+          "exact_call_sites": 14418,
+          "inferred_call_sites": 1395
+        },
+        "secondary_context_metrics": {
+          "files_identified": 3475,
+          "ground_truth_total": 538,
+          "true_positives": 537,
+          "recall": 0.998,
+          "precision": 0.155,
+          "context_tokens": 3994,
+          "discovered_files": [
+            "ArgumentCountError",
+            "ArrayIterator",
+            "Avatars/RootCollection",
+            "Backend/BackendInterface",
+            "BadMethodCallException",
+            "CheckServerResponseTrait",
+            "Closure",
+            "Comments/RootCollection",
+            "CommonThemeTrait",
+            "Cose/Algorithm/Signature/ECDSA/ES256"
+          ]
+        },
+        "files_identified": 3475,
         "ground_truth_total": 538,
-        "true_positives": 536,
-        "dependency_misses": 2,
-        "false_positives": 381,
-        "precision": 0.585,
-        "recall": 0.996,
+        "true_positives": 537,
+        "dependency_misses": 1,
+        "false_positives": 2938,
+        "precision": 0.155,
+        "recall": 0.998,
         "context_tokens": 3994,
-        "exact_resolution_fraction": 0.9975,
-        "exact_call_sites": 1209,
-        "inferred_call_sites": 3,
+        "exact_resolution_fraction": 0.9118,
+        "exact_call_sites": 14418,
+        "inferred_call_sites": 1395,
         "unresolved_count": 0,
-        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: IConfig\n======================================================================\n\nAffected: 1212 static call sites (1209 exact, 3 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 99.8% [Exact: 1209 | Inferred: 3 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: IConfig\n======================================================================\n\nAffected: 15813 static call sites (14418 exact, 1395 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 91.2% [Exact: 14418 | Inferred: 1395 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
         "discovered_files": [
-          "apps/admin_audit/lib/AuditLogger.php",
-          "apps/admin_audit/lib/BackgroundJobs/Rotate.php",
-          "apps/appstore/lib/Controller/ApiController.php",
-          "apps/appstore/lib/Controller/PageController.php",
-          "apps/appstore/src/service",
-          "apps/appstore/tests/Controller/ApiControllerTest.php",
-          "apps/appstore/tests/Controller/PageControllerTest.php",
-          "apps/comments/lib/MaxAutoCompleteResultsInitialState.php",
-          "apps/contactsinteraction/lib/Card.php",
-          "apps/dashboard/lib/Controller/DashboardController.php"
+          "ArgumentCountError",
+          "ArrayIterator",
+          "Avatars/RootCollection",
+          "Backend/BackendInterface",
+          "BadMethodCallException",
+          "CheckServerResponseTrait",
+          "Closure",
+          "Comments/RootCollection",
+          "CommonThemeTrait",
+          "Cose/Algorithm/Signature/ECDSA/ES256"
         ]
       }
     },
@@ -245,6 +520,30 @@
       "ground_truth_files": 3,
       "baseline": {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+          "edge_precision": 0.0,
+          "edge_recall": 1.0,
+          "silent_misses": 0,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 0,
+          "change_impact_recall": 1.0,
+          "change_impact_precision": 1.0,
+          "exact_resolution_fraction": 0.0
+        },
+        "secondary_context_metrics": {
+          "files_identified": 3,
+          "ground_truth_total": 3,
+          "true_positives": 3,
+          "recall": 1.0,
+          "precision": 1.0,
+          "context_tokens": 1848,
+          "discovered_files": [
+            "apps/files/src/init.ts",
+            "apps/files/src/services/Recent.ts",
+            "apps/files/src/views/recent.ts"
+          ]
+        },
         "files_identified": 3,
         "ground_truth_total": 3,
         "true_positives": 3,
@@ -253,6 +552,7 @@
         "precision": 1.0,
         "recall": 1.0,
         "context_tokens": 1848,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": [
           "apps/files/src/init.ts",
           "apps/files/src/services/Recent.ts",
@@ -261,30 +561,63 @@
       },
       "rcir": {
         "condition": "RCIR Retrieval",
-        "files_identified": 164,
+        "dependency_intelligence": {
+          "edge_precision": 0.014,
+          "edge_recall": 1.0,
+          "silent_misses": 0,
+          "known_unresolved": 0,
+          "unsupported": 0,
+          "false_positive_edges": 211,
+          "change_impact_recall": 1.0,
+          "change_impact_precision": 0.014,
+          "exact_resolution_fraction": 0.5,
+          "exact_call_sites": 77,
+          "inferred_call_sites": 77
+        },
+        "secondary_context_metrics": {
+          "files_identified": 214,
+          "ground_truth_total": 3,
+          "true_positives": 3,
+          "recall": 1.0,
+          "precision": 0.014,
+          "context_tokens": 3999,
+          "discovered_files": [
+            "OCA/Files/Controller/ApiController",
+            "OCA/Files/Controller/DirectEditingController",
+            "OCA/Files/Controller/DirectEditingViewController",
+            "OCA/Files/Controller/OpenLocalEditorController",
+            "OCA/Files/Controller/TemplateController",
+            "OCA/Files/Controller/TransferOwnershipController",
+            "OCA/Files/Controller/ViewController",
+            "OCA/Files_external/Controller/ApiController",
+            "OCA/Files_reminders/Controller/ApiController",
+            "OCA/Oauth2/Controller/OauthApiController"
+          ]
+        },
+        "files_identified": 214,
         "ground_truth_total": 3,
-        "true_positives": 0,
-        "dependency_misses": 3,
-        "false_positives": 164,
-        "precision": 0.0,
-        "recall": 0.0,
-        "context_tokens": 3992,
-        "exact_resolution_fraction": 0.4714,
-        "exact_call_sites": 66,
-        "inferred_call_sites": 74,
+        "true_positives": 3,
+        "dependency_misses": 0,
+        "false_positives": 211,
+        "precision": 0.014,
+        "recall": 1.0,
+        "context_tokens": 3999,
+        "exact_resolution_fraction": 0.5,
+        "exact_call_sites": 77,
+        "inferred_call_sites": 77,
         "unresolved_count": 0,
-        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: Recent\n======================================================================\n\nAffected: 140 static call sites (66 exact, 74 inferred)\nCross-service: 1 (core)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 47.1% [Exact: 66 | Inferred: 74 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
+        "impact_report_markdown": "======================================================================\nRCIR CHANGE IMPACT REPORT\nChange: Recent.ts\n======================================================================\n\nAffected: 154 static call sites (77 exact, 77 inferred)\nCross-service: 5 (core, services, store, utils, views)\nUnresolved: 0 - no manual review required\nExact Resolution Fraction: 50.0% [Exact: 77 | Inferred: 77 | Unresolved: 0]\n  (Note: Ratio of exact static bindings to total evaluated sites; not an empirical probability)\nZero-Cloud Verified: PASS (0 network calls)\n======================================================================",
         "discovered_files": [
-          "apps/appstore/lib/Search",
-          "apps/appstore/lib/Search/AppSearch.php",
-          "apps/comments/lib/Search",
-          "apps/comments/lib/Search/CommentsSearchProvider.php",
-          "apps/contactsinteraction/lib/AddressBook.php",
-          "apps/contactsinteraction/lib/AddressBookProvider.php",
-          "apps/contactsinteraction/lib/BackgroundJob/CleanupJob.php",
-          "apps/contactsinteraction/lib/Card.php",
-          "apps/contactsinteraction/lib/Db/RecentContact.php",
-          "apps/contactsinteraction/lib/Db/RecentContactMapper.php"
+          "OCA/Files/Controller/ApiController",
+          "OCA/Files/Controller/DirectEditingController",
+          "OCA/Files/Controller/DirectEditingViewController",
+          "OCA/Files/Controller/OpenLocalEditorController",
+          "OCA/Files/Controller/TemplateController",
+          "OCA/Files/Controller/TransferOwnershipController",
+          "OCA/Files/Controller/ViewController",
+          "OCA/Files_external/Controller/ApiController",
+          "OCA/Files_reminders/Controller/ApiController",
+          "OCA/Oauth2/Controller/OauthApiController"
         ]
       }
     }
@@ -295,21 +628,91 @@
       "title": "Refactor Controller Endpoint",
       "baseline_agent": {
         "condition": "Condition A (Baseline)",
-        "duration_seconds": 138.09,
-        "total_llm_tokens": 12405,
+        "duration_seconds": 190.96,
+        "total_llm_tokens": 17027,
         "gatekeeper_decision": "APPROVE",
-        "gatekeeper_excerpt": "## Gate Review Report  ### Summary - **Correctness**: The implementation does not match the requirements. - **Security**: Injection vulnerabilities are present. - **Performance**: N+1 query problems are present. - **Scalability**: Single points of fa",
-        "maker_excerpt": "## Problem Statement Refactor Controller Endpoint: TASK-1 - Refactor ApiController thumbnail endpoint and update all affected callers and routes.  ## Requirements ### Functional Requirements - **Functional Requirements**: Refactor the ApiController t",
-        "code_review_excerpt": "## Review Summary  ### Correctness - **Issue**: The implementation does not match the requirements. - **Severity**: P1 - **Dimension**: 1 - **Location**: 1 - **Description**: The implementation does not follow the validated design, which is crucial f"
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary This review is aimed at refactoring the `ApiController.php` file in the `apps/files/lib/Controller/ApiController.php` directory. The goal is to refactor the thumbnail endpoint and update all affected callers and rou",
+        "maker_excerpt": "## Problem Statement The user requests to refactor the `ApiController` endpoint in the `apps/files/lib/Controller/ApiController.php` file. The endpoint is responsible for retrieving and updating thumbnail images. The user wants to ensure that the cha",
+        "code_review_excerpt": "## Review Summary This review is aimed at refactoring the `ApiController.php` file in the `apps/files/lib/Controller/ApiController.php` directory. The goal is to refactor the thumbnail endpoint and update all affected callers and routes. The context ",
+        "provider_provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "simulation_fallback": false
+        },
+        "files_modified": [],
+        "agent_loop_result": {
+          "task_id": "AEF-TASK",
+          "condition": "tool_enabled",
+          "success": false,
+          "turns": 5,
+          "tool_calls_executed": 1,
+          "files_modified": [],
+          "git_diff_length": 0,
+          "final_test_result": null,
+          "gatekeeper_verdict": "REJECT",
+          "summary": "Completed agent run.",
+          "provenance": {
+            "provider": "ollama",
+            "endpoint": "http://localhost:11434/v1/",
+            "model": "qwen2.5:0.5b",
+            "prompt_tokens": 7168,
+            "completion_tokens": 329,
+            "total_tokens": 7497,
+            "latency_seconds": 39.428,
+            "simulation_fallback": false
+          },
+          "error": null
+        }
       },
       "rcir_agent": {
         "condition": "Condition B (RCIR-Augmented)",
-        "duration_seconds": 125.01,
-        "total_llm_tokens": 13365,
+        "duration_seconds": 150.06,
+        "total_llm_tokens": 17154,
         "gatekeeper_decision": "APPROVE",
-        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The implementation of the `getThumbnail` method in the `ApiController` class has been reviewed and approved. The changes are necessary to ensure that the implementation meets the requirements and adheres to the Engi",
-        "maker_excerpt": "## Problem Statement The user is requesting a refactor of the `ApiController` endpoint in the `appstore/lib/Controller` directory. The goal is to update all affected callers and routes while ensuring that the changes do not introduce any new risks.  ",
-        "code_review_excerpt": "## Review Summary  ### Correctness - **Issue**: The implementation does not match the requirements. - **Severity**: P0 - **Dimension**: 1 - **Location**: 1 - **Description**: The code does not follow the validated design, which is crucial for correct"
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary This review focuses on the refactor of the `ApiController` endpoint in the `Controller` file. The goal is to ensure the changes are correct, secure, and do not introduce unintended regressions or edge cases.  ### Re",
+        "maker_excerpt": "## Problem Statement The user requests to refactor the `ApiController.php` file in the `apps/files/lib/Controller/ApiController.php` directory. The goal is to update all affected callers and routes to improve the performance and maintain the integrit",
+        "code_review_excerpt": "## Review Summary This review focuses on the refactor of the `ApiController` endpoint in the `Controller` file. The goal is to ensure the changes are correct, secure, and do not introduce unintended regressions or edge cases.  ## Critical Findings (P",
+        "provider_provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "simulation_fallback": false
+        },
+        "files_modified": [
+          "apps/files/lib/Controller/ApiController.php"
+        ],
+        "agent_loop_result": {
+          "task_id": "AEF-TASK",
+          "condition": "tool_enabled",
+          "success": true,
+          "turns": 5,
+          "tool_calls_executed": 5,
+          "files_modified": [
+            "apps/files/lib/Controller/ApiController.php"
+          ],
+          "git_diff_length": 466,
+          "final_test_result": {
+            "exit_code": 2,
+            "stdout": "",
+            "stderr": "python: can't open file 'C:\\\\Users\\\\Paril Rupani\\\\OneDrive - Shri Vile Parle Kelavani Mandal\\\\Desktop\\\\project\\\\PolyFlow\\\\experiments\\\\nextcloud_validation\\\\nextcloud-server\\\\path\\\\to\\\\test.py': [Errno 2] No such file or directory\n",
+            "duration_seconds": 0.283,
+            "timed_out": false
+          },
+          "gatekeeper_verdict": "APPROVE",
+          "summary": "Completed agent run.",
+          "provenance": {
+            "provider": "ollama",
+            "endpoint": "http://localhost:11434/v1/",
+            "model": "qwen2.5:0.5b",
+            "prompt_tokens": 5947,
+            "completion_tokens": 253,
+            "total_tokens": 6200,
+            "latency_seconds": 27.052,
+            "simulation_fallback": false
+          },
+          "error": null
+        }
       }
     },
     {
@@ -317,21 +720,87 @@
       "title": "Cross-Stack API Contract Boundary",
       "baseline_agent": {
         "condition": "Condition A (Baseline)",
-        "duration_seconds": 118.81,
-        "total_llm_tokens": 12336,
-        "gatekeeper_decision": "REJECT_OR_HOLD",
-        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The code and tests for the `Recent` service in the `apps/files/src/services` directory are well-structured and adhere to the Engineering Constitution. However, there are a few areas that need improvement:  ### Corre",
-        "maker_excerpt": "## Problem Statement The user requests a cross-stack API contract boundary for the `Recent` service in the `apps/files/src/services` directory. The service is responsible for fetching and processing recent files from the frontend client.  ## Requirem",
-        "code_review_excerpt": "## Review Summary The code and tests for the `Recent` service in the `apps/files/src/services` directory are well-structured and adhere to the Engineering Constitution. However, there are a few areas that need improvement:  ### Correctness - **Cross-"
+        "duration_seconds": 165.39,
+        "total_llm_tokens": 19007,
+        "gatekeeper_decision": "APPROVE",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The review is focused on the `Recent.ts` file in the `apps/files/src/services/Recent.ts` file, which is part of a cross-stack API contract boundary. The goal is to ensure that the code correctly handles the cross-st",
+        "maker_excerpt": "## Problem Statement The user requests a task to trace the recent files frontend client call across language boundary to the backend DAV / files endpoint. The target file is `apps/files/src/services/Recent.ts`, and the target symbol is `Recent.ts`.  ",
+        "code_review_excerpt": "## Review Summary This review is focused on the `Recent.ts` file in the `apps/files/src/services/Recent.ts` file, which is part of a cross-stack API contract boundary. The goal is to ensure that the code correctly handles the cross-stack API calls an",
+        "provider_provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "simulation_fallback": false
+        },
+        "files_modified": [],
+        "agent_loop_result": {
+          "task_id": "AEF-TASK",
+          "condition": "tool_enabled",
+          "success": false,
+          "turns": 5,
+          "tool_calls_executed": 3,
+          "files_modified": [],
+          "git_diff_length": 0,
+          "final_test_result": {
+            "exit_code": 2,
+            "stdout": "",
+            "stderr": "python: can't open file 'C:\\\\Users\\\\Paril Rupani\\\\OneDrive - Shri Vile Parle Kelavani Mandal\\\\Desktop\\\\project\\\\PolyFlow\\\\experiments\\\\nextcloud_validation\\\\nextcloud-server\\\\path\\\\to\\\\test.py': [Errno 2] No such file or directory\n",
+            "duration_seconds": 0.309,
+            "timed_out": false
+          },
+          "gatekeeper_verdict": "REJECT",
+          "summary": "Completed agent run.",
+          "provenance": {
+            "provider": "ollama",
+            "endpoint": "http://localhost:11434/v1/",
+            "model": "qwen2.5:0.5b",
+            "prompt_tokens": 8188,
+            "completion_tokens": 854,
+            "total_tokens": 9042,
+            "latency_seconds": 56.642,
+            "simulation_fallback": false
+          },
+          "error": null
+        }
       },
       "rcir_agent": {
         "condition": "Condition B (RCIR-Augmented)",
-        "duration_seconds": 116.26,
-        "total_llm_tokens": 12961,
-        "gatekeeper_decision": "APPROVE",
-        "gatekeeper_excerpt": "## Gate Review Report  ### Summary This review is thorough, covering all 12 engineering dimensions. It identifies and addresses critical issues, provides constructive feedback, and offers actionable insights. The review is structured to ensure that e",
-        "maker_excerpt": "## Problem Statement The user requests a cross-stack API contract boundary for the `Recent` service in the `appstore/lib/Search` component. The current implementation relies on a static call site to the backend DAV / files endpoint, which is not scal",
-        "code_review_excerpt": "## Review Summary This review is thorough, covering all 12 engineering dimensions. It identifies and addresses critical issues, provides constructive feedback, and offers actionable insights. The review is structured to ensure that every dimension is"
+        "duration_seconds": 129.32,
+        "total_llm_tokens": 19751,
+        "gatekeeper_decision": "REJECT_OR_HOLD",
+        "gatekeeper_excerpt": "## Gate Review Report  ### Summary The task is to implement a cross-stack API contract boundary in the `Recent.ts` file. The goal is to trace recent files' frontend client calls across language boundaries to the backend DAV / files endpoint.  ### Req",
+        "maker_excerpt": "## Problem Statement The user requests a task to cross-compile the `Recent.ts` file across language boundaries to the backend DAV / files endpoint. The target file is located at `apps/files/src/services/Recent.ts`.  ## Requirements ### Functional Req",
+        "code_review_excerpt": "## Review Summary The task is to implement a cross-stack API contract boundary in the `Recent.ts` file. The goal is to trace recent files' frontend client calls across language boundaries to the backend DAV / files endpoint.  ## Critical Findings (P0",
+        "provider_provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "simulation_fallback": false
+        },
+        "files_modified": [],
+        "agent_loop_result": {
+          "task_id": "AEF-TASK",
+          "condition": "tool_enabled",
+          "success": false,
+          "turns": 5,
+          "tool_calls_executed": 5,
+          "files_modified": [],
+          "git_diff_length": 0,
+          "final_test_result": null,
+          "gatekeeper_verdict": "REJECT",
+          "summary": "Completed agent run.",
+          "provenance": {
+            "provider": "ollama",
+            "endpoint": "http://localhost:11434/v1/",
+            "model": "qwen2.5:0.5b",
+            "prompt_tokens": 8717,
+            "completion_tokens": 316,
+            "total_tokens": 9033,
+            "latency_seconds": 35.591,
+            "simulation_fallback": false
+          },
+          "error": null
+        }
       }
     }
   ]

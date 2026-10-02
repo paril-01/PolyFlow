@@ -1,14 +1,17 @@
 import React from 'react';
-import { Network, FolderTree, Cpu, BarChart3, Bot, Sparkles } from 'lucide-react';
+import { Network, FolderTree, Cpu, BarChart3, Bot, Sparkles, ShieldCheck } from 'lucide-react';
 import { LEVEL_COLORS } from '../lib/colors';
 
 export function Sidebar({ activeTab, onSelectTab, datasetInfo, nodeCount = 0, edgeCount = 0 }) {
   const tabs = [
-    { id: 'graph', label: 'Obsidian Graph', icon: Network, badge: 'Live' },
-    { id: 'tree', label: 'Tree Explorer', icon: FolderTree, badge: 'Tree' },
-    { id: 'retrieval', label: 'Retrieval Simulator', icon: Cpu, badge: 'Knapsack' },
-    { id: 'benchmarks', label: 'Benchmark Arena', icon: BarChart3, badge: 'A/B Test' },
-    { id: 'agent', label: 'AEF Agent Pipeline', icon: Bot, badge: 'AEF', highlight: true }
+    { id: 'overview', label: 'Executive Overview', icon: Sparkles, badge: 'Key Proofs', highlight: true },
+    { id: 'graph', label: 'Nextcloud 50k Graph', icon: Network, badge: '110k Edges' },
+    { id: 'agent', label: '6-Stage Agent Pool', icon: Bot, badge: 'AEF Gatekeeper' },
+    { id: 'benchmarks', label: 'Benchmark Arena', icon: BarChart3, badge: 'Empirical' },
+    { id: 'studio', label: 'Polyglot Studio', icon: Cpu, badge: 'Native SDK' },
+    { id: 'proof', label: 'Proof & Audit Center', icon: ShieldCheck, badge: 'Verifiable' },
+    { id: 'tree', label: 'Tree Explorer', icon: FolderTree, badge: 'Hierarchy' },
+    { id: 'retrieval', label: 'Retrieval Simulator', icon: Network, badge: 'Knapsack' }
   ];
 
   return (

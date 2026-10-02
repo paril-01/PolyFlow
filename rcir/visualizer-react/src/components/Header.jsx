@@ -34,7 +34,6 @@ export function Header({
           </div>
         </div>
 
-        {/* Dataset Dropdown */}
         <select
           value={currentDatasetId}
           onChange={(e) => onSelectDataset(e.target.value)}
@@ -50,7 +49,10 @@ export function Header({
             outline: 'none'
           }}
         >
-          <optgroup label="Microservice Reference (Recommended)">
+          <optgroup label="Enterprise Core Target (Validated Subject)">
+            <option value="nextcloud">☁️ Nextcloud Server Core (50,346 nodes · 110,854 edges · 926k LOC)</option>
+          </optgroup>
+          <optgroup label="Microservice Reference Benchmarks">
             <option value="otel_recommendation">🔭 OTel Astronomy Shop — Recommendation (101 nodes)</option>
             <option value="otel_agent">🤖 OTel Astronomy Shop — Agent Service (28 nodes)</option>
           </optgroup>

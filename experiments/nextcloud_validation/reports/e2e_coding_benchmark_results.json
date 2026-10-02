@@ -1,0 +1,116 @@
+{
+  "benchmark_type": "end_to_end_real_coding_agent",
+  "verification_methodology": "real compiler, JVM test execution, and multi-language vertical slice",
+  "provider_provenance": {
+    "provider": "ollama",
+    "endpoint": "http://localhost:11434/v1",
+    "model": "qwen2.5:0.5b",
+    "simulation_fallback": false
+  },
+  "tasks": [
+    {
+      "task_id": "POLY-E2E-1",
+      "title": "Auditor Role Capability Expansion",
+      "baseline": {
+        "condition": "Condition A (Baseline Coding Agent)",
+        "success": true,
+        "turns": 5,
+        "tool_calls": 5,
+        "files_modified": [],
+        "git_diff_length": 0,
+        "java_test_passed": true,
+        "integration_test_passed": true,
+        "gatekeeper_verdict": "REJECT",
+        "summary": "Completed agent run.",
+        "duration_seconds": 40.21,
+        "provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "prompt_tokens": 4824,
+          "completion_tokens": 567,
+          "total_tokens": 5391,
+          "latency_seconds": 38.746,
+          "simulation_fallback": false
+        },
+        "error": null
+      },
+      "rcir": {
+        "condition": "Condition B (RCIR-Augmented Agent)",
+        "success": true,
+        "turns": 5,
+        "tool_calls": 4,
+        "files_modified": [],
+        "git_diff_length": 0,
+        "java_test_passed": true,
+        "integration_test_passed": true,
+        "gatekeeper_verdict": "REJECT",
+        "summary": "Completed agent run.",
+        "duration_seconds": 64.15,
+        "provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "prompt_tokens": 6807,
+          "completion_tokens": 979,
+          "total_tokens": 7786,
+          "latency_seconds": 62.784,
+          "simulation_fallback": false
+        },
+        "error": null
+      }
+    },
+    {
+      "task_id": "POLY-E2E-2",
+      "title": "Storage Upload Size Cap Evolution",
+      "baseline": {
+        "condition": "Condition A (Baseline Coding Agent)",
+        "success": true,
+        "turns": 5,
+        "tool_calls": 5,
+        "files_modified": [],
+        "git_diff_length": 0,
+        "java_test_passed": true,
+        "integration_test_passed": true,
+        "gatekeeper_verdict": "REJECT",
+        "summary": "Completed agent run.",
+        "duration_seconds": 36.87,
+        "provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "prompt_tokens": 4654,
+          "completion_tokens": 470,
+          "total_tokens": 5124,
+          "latency_seconds": 35.1,
+          "simulation_fallback": false
+        },
+        "error": null
+      },
+      "rcir": {
+        "condition": "Condition B (RCIR-Augmented Agent)",
+        "success": true,
+        "turns": 5,
+        "tool_calls": 2,
+        "files_modified": [],
+        "git_diff_length": 0,
+        "java_test_passed": true,
+        "integration_test_passed": true,
+        "gatekeeper_verdict": "REJECT",
+        "summary": "Completed agent run.",
+        "duration_seconds": 31.72,
+        "provenance": {
+          "provider": "ollama",
+          "endpoint": "http://localhost:11434/v1/",
+          "model": "qwen2.5:0.5b",
+          "prompt_tokens": 5360,
+          "completion_tokens": 287,
+          "total_tokens": 5647,
+          "latency_seconds": 29.829,
+          "simulation_fallback": false
+        },
+        "error": null
+      }
+    }
+  ]
+}

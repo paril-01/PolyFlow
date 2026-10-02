@@ -1,22 +1,22 @@
 {
   "status": "SUCCESS",
-  "extraction_time_seconds": 379.61,
-  "peak_memory_mb": 116.18,
+  "extraction_time_seconds": 658.913,
+  "peak_memory_mb": 140.11,
   "graph_stats": {
     "total_nodes": 50346,
-    "total_edges": 110854
+    "total_edges": 143225
   },
   "edge_type_distribution": {
-    "imports": 50310,
-    "calls": 53834,
+    "imports": 51385,
+    "calls": 84913,
     "inherits": 4945,
     "route": 757,
-    "cross_boundary": 550,
+    "cross_boundary": 767,
     "config": 458
   },
   "resolution_distribution": {
-    "static_exact": 67376,
-    "static_inference": 43478
+    "static_exact": 68451,
+    "static_inference": 74774
   },
   "node_kind_distribution": {
     "file": 8308,
@@ -39,7 +39,7 @@
     "files_parsed": 0,
     "files_skipped": 0,
     "total_nodes": 50346,
-    "total_edges": 110854,
+    "total_edges": 143225,
     "excluded_dirs": [
       ".git",
       "3rdparty",
@@ -50,16 +50,16 @@
     "proto_services_found": 0,
     "proto_messages_found": 0,
     "http_routes_found": 253,
-    "http_client_calls_found": 335,
+    "http_client_calls_found": 531,
     "polyglot_nodes_found": 2573,
-    "polyglot_edges_found": 0,
+    "polyglot_edges_found": 1076,
     "config_manifests_scanned": 1,
     "config_services_found": 373,
     "config_deployments_found": 0,
     "config_edges_found": 680,
     "php_nodes_found": 47773,
-    "php_edges_found": 138799,
+    "php_edges_found": 192470,
     "php_routes_found": 253,
-    "cross_boundary_edges_found": 670
+    "cross_boundary_edges_found": 1062
   }
 }

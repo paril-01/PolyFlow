@@ -1,5 +1,16 @@
 [
   {
+    "id": "nextcloud",
+    "name": "Nextcloud Server Core",
+    "path": "/data/nextcloud.json",
+    "nodes": 50346,
+    "edges": 143225,
+    "visual_nodes": 8551,
+    "visual_edges": 4000,
+    "hierarchy_nodes": 50346,
+    "description": "Nextcloud Server Core (11,793 files, 926,080 LOC, 33 apps)"
+  },
+  {
     "id": "otel_recommendation",
     "name": "Otel Recommendation",
     "path": "/data/otel_recommendation.json",

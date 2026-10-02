@@ -156,6 +156,14 @@ _JS_HTTP_CALL = re.compile(
     r'(?:axios\.(get|post|put|delete)|fetch)\s*\(\s*[\'"`]([^\'"`]+)[\'"`]',
     re.MULTILINE,
 )
+_JS_IMPORT = re.compile(
+    r'''(?:import|export)\s+(?:(?:(?:\w+|\{[^}]*\}|\*\s+as\s+\w+)\s+from\s+)|(?:\s*))['"]([^'"]+)['"]''',
+    re.MULTILINE,
+)
+_JS_REQUIRE = re.compile(
+    r'''require\s*\(\s*['"]([^'"]+)['"]\s*\)''',
+    re.MULTILINE,
+)
 
 # Python patterns
 _PY_GRPC_STUB_ASSIGN = re.compile(
@@ -601,6 +609,32 @@ def scan_polyglot_repo(
                             "end_line": max(1, content.count("\n") + 1),
                             "language": ext.lstrip("."),
                         })
+
+                    # Extract ES module relative imports for JS/TS
+                    if ext in (".js", ".jsx", ".ts", ".tsx"):
+                        specifiers = []
+                        for m in _JS_IMPORT.finditer(content):
+                            specifiers.append(m.group(1))
+                        for m in _JS_REQUIRE.finditer(content):
+                            specifiers.append(m.group(1))
+
+                        file_dir = os.path.dirname(rel_path)
+                        for spec in specifiers:
+                            if spec.startswith(("./", "../")):
+                                joined = os.path.normpath(os.path.join(file_dir, spec)).replace("\\", "/")
+                                target_cand = joined
+                                for candidate_ext in ("", ".ts", ".tsx", ".js", ".jsx", "/index.ts", "/index.js"):
+                                    cand = joined + candidate_ext
+                                    if (repo / cand).exists():
+                                        target_cand = cand
+                                        break
+                                new_edges.append(make_edge(
+                                    source=rel_path,
+                                    target=target_cand,
+                                    edge_type="imports",
+                                    resolution="static_exact",
+                                    reason=f"TS/JS ES module import: {spec}",
+                                ))
                 except Exception:
                     continue
 

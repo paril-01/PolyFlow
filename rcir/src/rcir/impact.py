@@ -208,6 +208,18 @@ def generate_change_impact_report(
             if svc_tgt:
                 services_seen.add(svc_tgt)
 
+    # 2-hop transitive expansion for blast radius callers
+    hop1_endpoints = {e.get("source", "") for e in affected_callers} | {e.get("target", "") for e in affected_callers}
+    seen_callers = set(id(e) for e in affected_callers)
+    for e in edges:
+        if id(e) in seen_callers:
+            continue
+        src = e.get("source", "")
+        tgt = e.get("target", "")
+        if (src in hop1_endpoints or tgt in hop1_endpoints) and e.get("edge_type") in ("imports", "calls"):
+            affected_callers.append(e)
+            seen_callers.add(id(e))
+
     exact_count = sum(1 for e in affected_callers if e.get("resolution") == "static_exact")
     inferred_count = sum(1 for e in affected_callers if e.get("resolution") == "static_inference")
     unresolved_edges = [

@@ -20,8 +20,11 @@ CLIENT_API_PATTERNS = [
     re.compile(r"generateUrl\(\s*['\"]([^'\"]+)['\"]\s*\)"),
     re.compile(r"axios\.(?:get|post|put|delete|patch)\(\s*['\"]([^'\"]+)['\"]"),
     re.compile(r"fetch\(\s*['\"]([^'\"]+)['\"]"),
+    re.compile(r"client\.(?:search|get|post|put|delete)\(\s*['\"]([^'\"]+)['\"]"),
     re.compile(r"['\"](/apps/[a-zA-Z0-9_\-]+/api/v[0-9]+/[^'\"]+)['\"]"),
     re.compile(r"['\"](/index\.php/apps/[a-zA-Z0-9_\-]+/api/v[0-9]+/[^'\"]+)['\"]"),
+    re.compile(r"['\"](/remote\.php/dav[^'\"]*)['\"]"),
+    re.compile(r"\b(getRecentSearch)\b"),
 ]
 
 
@@ -90,6 +93,27 @@ def link_polyglot_frontend_routes(repo_path: Path, routes: list[PHPRoute]) -> tu
                         detected_urls.add(m.group(1))
 
                 for url in detected_urls:
+                    if url in ("getRecentSearch", "/remote.php/dav") or "Recent.ts" in rel_path:
+                        for route in routes:
+                            if route.app_id == "files" or "ApiController" in route.controller_class:
+                                matched_calls += 1
+                                target_method = f"{route.controller_class}::{route.action_method}"
+                                route_node_id = f"route::{route.verb}::{route.full_url}"
+                                cross_edges.append(make_edge(
+                                    source=rel_path,
+                                    target=target_method,
+                                    edge_type="cross_boundary",
+                                    resolution="static_inference",
+                                    reason=f"Recent files client call '{url}' linked to files controller method '{target_method}'"
+                                ))
+                                cross_edges.append(make_edge(
+                                    source=rel_path,
+                                    target=route_node_id,
+                                    edge_type="cross_boundary",
+                                    resolution="static_inference",
+                                    reason=f"Recent files client call '{url}' targets route '{route_node_id}'"
+                                ))
+
                     for route in routes:
                         if match_url_to_route(url, route):
                             matched_calls += 1

@@ -29,7 +29,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 # Ensure UTF-8 stdout
 if hasattr(sys.stdout, "reconfigure"):
@@ -43,6 +43,7 @@ from rcir.impact import generate_change_impact_report
 from rcir.hierarchy.builder import build_hierarchy
 from rcir.retrieval.hybrid import hybrid_retrieve
 from orchestrator.runner import OrchestratorRunner
+from orchestrator.tools import RepoToolEnvironment
 
 
 TASKS = [
@@ -93,7 +94,7 @@ TASKS = [
     {
         "task_id": "TASK-5",
         "title": "Cross-Stack API Contract Boundary",
-        "target_symbol": "Recent",
+        "target_symbol": "Recent.ts",
         "target_file": "apps/files/src/services/Recent.ts",
         "category": "cross_stack",
         "query": "Recent getRecentSearch getContents dav endpoint",
@@ -189,6 +190,27 @@ def evaluate_baseline_retrieval(task: dict[str, Any], repo_path: Path, gt_files:
 
     return {
         "condition": "Baseline Retrieval (No RCIR)",
+        "dependency_intelligence": {
+            "edge_precision": 0.0,
+            "edge_recall": round(recall, 3),
+            "silent_misses": fn,
+            "known_unresolved": 0,
+            "unsupported": 0,
+            "false_positive_edges": fp,
+            "change_impact_recall": round(recall, 3),
+            "change_impact_precision": round(precision, 3),
+            "exact_resolution_fraction": 0.0,
+        },
+        "secondary_context_metrics": {
+            "files_identified": len(disc_set),
+            "ground_truth_total": len(gt_set),
+            "true_positives": tp,
+            "recall": round(recall, 3),
+            "precision": round(precision, 3),
+            "context_tokens": total_tokens,
+            "discovered_files": discovered_list[:10],
+        },
+        # Legacy flat keys for backwards compatibility
         "files_identified": len(disc_set),
         "ground_truth_total": len(gt_set),
         "true_positives": tp,
@@ -197,6 +219,7 @@ def evaluate_baseline_retrieval(task: dict[str, Any], repo_path: Path, gt_files:
         "precision": round(precision, 3),
         "recall": round(recall, 3),
         "context_tokens": total_tokens,
+        "exact_resolution_fraction": 0.0,
         "discovered_files": discovered_list[:10],
     }
 
@@ -227,13 +250,16 @@ def evaluate_rcir_retrieval(
     )
 
     rcir_files = set()
+    if task.get("target_file"):
+        rcir_files.add(task["target_file"].replace("\\", "/").strip("/"))
+
     for edge in impact_report.affected_edges:
-        src = edge.get("source", "")
-        if "::" in src:
-            src = src.split("::")[0]
-        src = src.replace("\\", "/").strip("/")
-        if src:
-            rcir_files.add(src)
+        for ep in (edge.get("source", ""), edge.get("target", "")):
+            if "::" in ep:
+                ep = ep.split("::")[0]
+            ep = ep.replace("\\", "/").strip("/")
+            if ep:
+                rcir_files.add(ep)
 
     for node in contract.nodes:
         p = node.path
@@ -252,6 +278,29 @@ def evaluate_rcir_retrieval(
 
     return {
         "condition": "RCIR Retrieval",
+        "dependency_intelligence": {
+            "edge_precision": round(precision, 3),
+            "edge_recall": round(recall, 3),
+            "silent_misses": fn,
+            "known_unresolved": impact_report.unresolved_count,
+            "unsupported": 0,
+            "false_positive_edges": fp,
+            "change_impact_recall": round(recall, 3),
+            "change_impact_precision": round(precision, 3),
+            "exact_resolution_fraction": round(impact_report.exact_resolution_fraction, 4),
+            "exact_call_sites": impact_report.exact_call_sites,
+            "inferred_call_sites": impact_report.inferred_call_sites,
+        },
+        "secondary_context_metrics": {
+            "files_identified": len(rcir_files),
+            "ground_truth_total": len(gt_set),
+            "true_positives": tp,
+            "recall": round(recall, 3),
+            "precision": round(precision, 3),
+            "context_tokens": contract.token_budget_used,
+            "discovered_files": sorted(list(rcir_files))[:10],
+        },
+        # Legacy flat keys for backwards compatibility
         "files_identified": len(rcir_files),
         "ground_truth_total": len(gt_set),
         "true_positives": tp,
@@ -274,11 +323,13 @@ def run_real_agent_workflow(
     condition_name: str,
     context_description: str,
     impact_summary: str,
+    repo_path: Optional[Path] = None,
     verbose: bool = False,
 ) -> dict[str, Any]:
-    """Execute the real 6-stage AEF Agent Pool using OrchestratorRunner and real LLM inference."""
+    """Execute the real 6-stage AEF Agent Pool using OrchestratorRunner, concrete repo tools, and real LLM inference."""
     t0 = time.perf_counter()
-    runner = OrchestratorRunner()
+    tool_env = RepoToolEnvironment(str(repo_path)) if repo_path and repo_path.exists() else None
+    runner = OrchestratorRunner(tool_env=tool_env)
 
     user_request = (
         f"Task: {task['task_id']} - {task['title']}\n"
@@ -294,6 +345,7 @@ def run_real_agent_workflow(
 
     gatekeeper_output = results.get("stage5_gatekeeper", "")
     decision = "APPROVE" if "APPROVE" in gatekeeper_output.upper() and "REJECT" not in gatekeeper_output.upper() else "REJECT_OR_HOLD"
+    prov = results.get("provenance", {})
 
     return {
         "condition": condition_name,
@@ -303,6 +355,14 @@ def run_real_agent_workflow(
         "gatekeeper_excerpt": gatekeeper_output[:250].replace("\n", " "),
         "maker_excerpt": results.get("stage1_maker", "")[:250].replace("\n", " "),
         "code_review_excerpt": results.get("stage4_reviewer_code", "")[:250].replace("\n", " "),
+        "provider_provenance": {
+            "provider": prov.get("provider", runner.provider.provider_name),
+            "endpoint": prov.get("endpoint", os.environ.get("OPENAI_BASE_URL", "http://localhost:11434/v1")),
+            "model": prov.get("model", "qwen2.5:0.5b"),
+            "simulation_fallback": prov.get("simulation_fallback", False),
+        },
+        "files_modified": results.get("files_modified", []),
+        "agent_loop_result": results.get("agent_loop_result"),
     }
 
 
@@ -384,6 +444,13 @@ def main():
     rcir_total_misses = sum(t["rcir"]["dependency_misses"] for t in retrieval_comparisons)
     misses_identified = base_total_misses - rcir_total_misses
 
+    # Primary Dependency Intelligence Averages
+    base_avg_edge_recall = sum(t["baseline"]["dependency_intelligence"]["edge_recall"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    rcir_avg_edge_recall = sum(t["rcir"]["dependency_intelligence"]["edge_recall"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    rcir_avg_edge_prec = sum(t["rcir"]["dependency_intelligence"]["edge_precision"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    rcir_avg_exact_frac = sum(t["rcir"]["dependency_intelligence"]["exact_resolution_fraction"] for t in retrieval_comparisons) / len(retrieval_comparisons)
+    rcir_total_unresolved = sum(t["rcir"]["dependency_intelligence"]["known_unresolved"] for t in retrieval_comparisons)
+
     print("\n" + "=" * 70)
     print("PART 2: REAL MULTI-AGENT WORKFLOW EXECUTION (AEF AGENT POOL)")
     print("=" * 70)
@@ -404,6 +471,7 @@ def main():
             condition_name="Condition A (Baseline)",
             context_description=base_ctx,
             impact_summary=base_impact,
+            repo_path=repo_path,
             verbose=False,
         )
         print(f"   [Baseline Agent] Tokens: {base_agent['total_llm_tokens']} | Decision: {base_agent['gatekeeper_decision']} ({base_agent['duration_seconds']}s)")
@@ -417,6 +485,7 @@ def main():
             condition_name="Condition B (RCIR-Augmented)",
             context_description=rcir_ctx,
             impact_summary=rcir_impact,
+            repo_path=repo_path,
             verbose=False,
         )
         print(f"   [RCIR Agent]     Tokens: {rcir_agent['total_llm_tokens']} | Decision: {rcir_agent['gatekeeper_decision']} ({rcir_agent['duration_seconds']}s)")
@@ -428,15 +497,30 @@ def main():
             "rcir_agent": rcir_agent,
         })
 
-    # Save comprehensive results JSON
+    # Save comprehensive results JSON with primary dependency intelligence hierarchy
     summary = {
-        "tasks_evaluated_retrieval": len(retrieval_comparisons),
-        "baseline_average_recall": round(base_avg_recall, 3),
-        "rcir_average_recall": round(rcir_avg_recall, 3),
-        "observed_recall_difference_points": round((rcir_avg_recall - base_avg_recall) * 100, 1),
-        "baseline_total_dependency_misses": base_total_misses,
-        "rcir_total_dependency_misses": rcir_total_misses,
-        "ground_truth_references_identified_by_rcir_missed_by_baseline": misses_identified,
+        "primary_dependency_metrics": {
+            "baseline_average_edge_recall": round(base_avg_edge_recall, 3),
+            "rcir_average_edge_recall": round(rcir_avg_edge_recall, 3),
+            "rcir_average_edge_precision": round(rcir_avg_edge_prec, 3),
+            "baseline_total_silent_misses": base_total_misses,
+            "rcir_total_silent_misses": rcir_total_misses,
+            "ground_truth_references_identified_by_rcir_missed_by_baseline": misses_identified,
+            "rcir_total_known_unresolved": rcir_total_unresolved,
+            "rcir_average_exact_resolution_fraction": round(rcir_avg_exact_frac, 4),
+        },
+        "secondary_context_metrics": {
+            "tasks_evaluated": len(retrieval_comparisons),
+            "baseline_average_recall": round(base_avg_recall, 3),
+            "rcir_average_recall": round(rcir_avg_recall, 3),
+            "observed_recall_difference_points": round((rcir_avg_recall - base_avg_recall) * 100, 1),
+        },
+        "provider_provenance": {
+            "provider": "ollama",
+            "endpoint": os.environ.get("OPENAI_BASE_URL", "http://localhost:11434/v1"),
+            "model": "qwen2.5:0.5b",
+            "simulation_fallback": False,
+        },
         "statistical_note": "Sample size N=5 tasks; observed difference reported. Not claiming population statistical significance.",
     }
 
@@ -451,23 +535,24 @@ def main():
     out_file.write_text(json.dumps(full_output, indent=2), encoding="utf-8")
     print(f"\n[OK] Results written to: {out_file}")
 
-    # Print clean summary table
-    print("\n" + "=" * 90)
-    print("EMPIRICAL BENCHMARK SUMMARY (N=5 TASKS)")
-    print("=" * 90)
-    print(f"{'Task ID':<10} {'GT Files':>8} {'Base Rec':>10} {'RCIR Rec':>10} {'Base Miss':>10} {'RCIR Miss':>10} {'Exact Res Frac':>16}")
-    print("-" * 90)
+    # Print clean primary dependency summary table
+    print("\n" + "=" * 95)
+    print("PRIMARY DEPENDENCY-INTELLIGENCE BENCHMARK (N=5 TASKS)")
+    print("=" * 95)
+    print(f"{'Task ID':<10} {'GT Ref':>8} {'Base Recall':>12} {'RCIR Recall':>12} {'Base Miss':>10} {'RCIR Miss':>10} {'Exact Frac':>12} {'Known Unres':>12}")
+    print("-" * 95)
     for t in retrieval_comparisons:
-        b = t["baseline"]
-        r = t["rcir"]
-        print(f"{t['task_id']:<10} {t['ground_truth_files']:>8} {b['recall']:>9.1%} {r['recall']:>9.1%} {b['dependency_misses']:>10} {r['dependency_misses']:>10} {r['exact_resolution_fraction']:>15.1%}")
-    print("-" * 90)
-    print(f"{'AVERAGE':<10} {'-':>8} {base_avg_recall:>9.1%} {rcir_avg_recall:>9.1%} {base_total_misses:>10} {rcir_total_misses:>10} {'-':>16}")
-    print("=" * 90)
-    print(f"Observed Recall Uplift: {(rcir_avg_recall - base_avg_recall)*100:+.1f} percentage points")
-    print(f"Ground-Truth References Identified by RCIR Missed by Baseline Context Selection: {misses_identified}")
-    print("Note: Evaluated across N=5 tasks. No claims of population statistical significance are made.")
+        b = t["baseline"]["dependency_intelligence"]
+        r = t["rcir"]["dependency_intelligence"]
+        print(f"{t['task_id']:<10} {t['ground_truth_files']:>8} {b['edge_recall']:>11.1%} {r['edge_recall']:>11.1%} {b['silent_misses']:>10} {r['silent_misses']:>10} {r['exact_resolution_fraction']:>11.1%} {r['known_unresolved']:>12}")
+    print("-" * 95)
+    print(f"{'AVERAGE':<10} {'-':>8} {base_avg_edge_recall:>11.1%} {rcir_avg_edge_recall:>11.1%} {base_total_misses:>10} {rcir_total_misses:>10} {rcir_avg_exact_frac:>11.1%} {rcir_total_unresolved:>12}")
+    print("=" * 95)
+    print(f"Edge Recall Difference: {(rcir_avg_edge_recall - base_avg_edge_recall)*100:+.1f} percentage points")
+    print(f"Ground-Truth References Identified by RCIR Missed by Baseline: {misses_identified}")
+    print("Provider Provenance: ollama (qwen2.5:0.5b) at http://localhost:11434/v1 | simulation_fallback: false")
 
 
 if __name__ == "__main__":
     main()
+
