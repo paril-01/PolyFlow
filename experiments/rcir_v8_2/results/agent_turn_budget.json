@@ -1,0 +1,223 @@
+{
+  "metadata": {
+    "version": "8.2.0",
+    "provider_info": {
+      "has_live_endpoint": false,
+      "provider_name": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "is_simulated": true,
+      "simulation_fallback": true,
+      "provenance_verified": false,
+      "error_reason": "Ollama daemon running, but llama-server terminates on model load (failed to allocate CPU buffer in 32-bit/host RAM)."
+    },
+    "evaluated_budgets": [
+      5,
+      10,
+      20
+    ],
+    "validation_status": "SIMULATED_FAIL_CLOSED"
+  },
+  "trials": {
+    "5": [
+      {
+        "task_id": "TASK-1",
+        "turns_allowed": 5,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 0,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-2",
+        "turns_allowed": 5,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 0,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-3",
+        "turns_allowed": 5,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 0,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-4",
+        "turns_allowed": 5,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 0,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-5",
+        "turns_allowed": 5,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 0,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      }
+    ],
+    "10": [
+      {
+        "task_id": "TASK-1",
+        "turns_allowed": 10,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-2",
+        "turns_allowed": 10,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-3",
+        "turns_allowed": 10,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-4",
+        "turns_allowed": 10,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-5",
+        "turns_allowed": 10,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      }
+    ],
+    "20": [
+      {
+        "task_id": "TASK-1",
+        "turns_allowed": 20,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-2",
+        "turns_allowed": 20,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-3",
+        "turns_allowed": 20,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-4",
+        "turns_allowed": 20,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      },
+      {
+        "task_id": "TASK-5",
+        "turns_allowed": 20,
+        "turns_used": 0,
+        "tool_calls": 0,
+        "diff_length": 0,
+        "success": false,
+        "gatekeeper_verdict": "REJECT",
+        "latency_seconds": 0.05,
+        "context_requests": 1,
+        "is_simulated": true,
+        "failure_reason": "No verified live LLM provider available; dry-run/simulation fail-closed enforcement (Phase 46)."
+      }
+    ]
+  }
+}

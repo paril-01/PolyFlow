@@ -1,0 +1,326 @@
+{
+  "metadata": {
+    "version": "8.2",
+    "evaluator": "experiments/rcir_v8_2/scripts/evaluate_edges.py",
+    "total_ground_truth_edges": 20,
+    "matching_contract": "source_node + target_node + normalized_relationship"
+  },
+  "summary": {
+    "exact_typed_hits": 7,
+    "inferred_typed_hits": 1,
+    "wrong_relation_hits": 4,
+    "no_match_hits": 8,
+    "total_recovered_typed": 8,
+    "typed_edge_recall": 0.4,
+    "edge_precision_exact": "NOT_MEASURED (closed-world prediction universe not defined in benchmark scope; Rule 0 non-fabrication enforcement)",
+    "edge_precision_inferred": "NOT_MEASURED"
+  },
+  "taxonomy_breakdown": {
+    "inherits": {
+      "total": 3,
+      "exact": 2,
+      "inferred": 1,
+      "wrong_relation": 0,
+      "no_match": 0
+    },
+    "implements": {
+      "total": 2,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 2,
+      "no_match": 0
+    },
+    "imports": {
+      "total": 2,
+      "exact": 2,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 0
+    },
+    "calls": {
+      "total": 2,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 2
+    },
+    "injects": {
+      "total": 2,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 2,
+      "no_match": 0
+    },
+    "route_to_controller": {
+      "total": 2,
+      "exact": 2,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 0
+    },
+    "frontend_to_route": {
+      "total": 1,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 1
+    },
+    "event_dispatch": {
+      "total": 1,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 1
+    },
+    "event_listener": {
+      "total": 1,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 1
+    },
+    "config_reads": {
+      "total": 2,
+      "exact": 1,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 1
+    },
+    "source_to_test": {
+      "total": 2,
+      "exact": 0,
+      "inferred": 0,
+      "wrong_relation": 0,
+      "no_match": 2
+    }
+  },
+  "edges": [
+    {
+      "edge_id": "EDGE-GT-001",
+      "taxonomy": "inherits",
+      "source": "OCA\\Files\\Controller\\ApiController",
+      "target": "OCP\\AppFramework\\Controller",
+      "expected_relationship": "inherits",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports",
+        "inherits"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-002",
+      "taxonomy": "inherits",
+      "source": "OC\\ServerContainer",
+      "target": "OC\\AppFramework\\Utility\\SimpleContainer",
+      "expected_relationship": "inherits",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports",
+        "inherits"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-003",
+      "taxonomy": "inherits",
+      "source": "OC\\Files\\Node\\File",
+      "target": "OC\\Files\\Node\\Node",
+      "expected_relationship": "inherits",
+      "status": "INFERRED_TYPED_MATCH",
+      "matched_edges_count": 1,
+      "matched_edge_types": [
+        "inherits"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-004",
+      "taxonomy": "implements",
+      "source": "OC\\Files\\Node\\File",
+      "target": "OCP\\Files\\File",
+      "expected_relationship": "implements",
+      "status": "SOURCE_TARGET_ONLY_WRONG_RELATION",
+      "matched_edges_count": 1,
+      "matched_edge_types": [
+        "inherits"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-005",
+      "taxonomy": "implements",
+      "source": "OC\\Files\\Node\\Folder",
+      "target": "OCP\\Files\\Folder",
+      "expected_relationship": "implements",
+      "status": "SOURCE_TARGET_ONLY_WRONG_RELATION",
+      "matched_edges_count": 3,
+      "matched_edge_types": [
+        "imports",
+        "inherits"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-006",
+      "taxonomy": "imports",
+      "source": "apps/files/lib/Controller/ApiController.php",
+      "target": "OCA\\Files\\Service\\TagService",
+      "expected_relationship": "imports",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-007",
+      "taxonomy": "imports",
+      "source": "lib/private/Preview/Generator.php",
+      "target": "OCP\\IConfig",
+      "expected_relationship": "imports",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-008",
+      "taxonomy": "calls",
+      "source": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "OC\\Preview\\Generator::getPreview",
+      "expected_relationship": "calls",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-009",
+      "taxonomy": "calls",
+      "source": "OC\\Files\\Node\\HookConnector::setupHooks",
+      "target": "OCP\\EventDispatcher\\IEventDispatcher::dispatch",
+      "expected_relationship": "calls",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-010",
+      "taxonomy": "injects",
+      "source": "OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "OCA\\Files\\Service\\TagService",
+      "expected_relationship": "injects",
+      "status": "SOURCE_TARGET_ONLY_WRONG_RELATION",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-011",
+      "taxonomy": "injects",
+      "source": "OC\\Preview\\Generator::__construct",
+      "target": "OCP\\IConfig",
+      "expected_relationship": "injects",
+      "status": "SOURCE_TARGET_ONLY_WRONG_RELATION",
+      "matched_edges_count": 2,
+      "matched_edge_types": [
+        "imports"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-012",
+      "taxonomy": "route_to_controller",
+      "source": "apps/files/appinfo/routes.php",
+      "target": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "expected_relationship": "route_to_controller",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 1,
+      "matched_edge_types": [
+        "route"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-013",
+      "taxonomy": "route_to_controller",
+      "source": "apps/cloud_federation_api/appinfo/routes.php",
+      "target": "OCA\\Cloud_federation_api\\Controller\\TokenController::jwks",
+      "expected_relationship": "route_to_controller",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 1,
+      "matched_edge_types": [
+        "route"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-014",
+      "taxonomy": "frontend_to_route",
+      "source": "apps/files/src/services/Recent.ts",
+      "target": "apps/files/appinfo/routes.php",
+      "expected_relationship": "frontend_to_route",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-015",
+      "taxonomy": "event_dispatch",
+      "source": "lib/private/Files/Node/HookConnector.php",
+      "target": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "expected_relationship": "event_dispatch",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-016",
+      "taxonomy": "event_listener",
+      "source": "apps/files_trashbin/lib/Trashbin.php",
+      "target": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "expected_relationship": "event_listener",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-017",
+      "taxonomy": "config_reads",
+      "source": "lib/private/SystemConfig.php",
+      "target": "config::core",
+      "expected_relationship": "config_reads",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-018",
+      "taxonomy": "config_reads",
+      "source": "public.php",
+      "target": "config::core",
+      "expected_relationship": "config_reads",
+      "status": "EXACT_TYPED_MATCH",
+      "matched_edges_count": 1,
+      "matched_edge_types": [
+        "config"
+      ]
+    },
+    {
+      "edge_id": "EDGE-GT-019",
+      "taxonomy": "source_to_test",
+      "source": "lib/private/Preview/Generator.php",
+      "target": "tests/lib/Preview/GeneratorTest.php",
+      "expected_relationship": "source_to_test",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    },
+    {
+      "edge_id": "EDGE-GT-020",
+      "taxonomy": "source_to_test",
+      "source": "apps/files/lib/Controller/ApiController.php",
+      "target": "apps/files/tests/Controller/ApiControllerTest.php",
+      "expected_relationship": "source_to_test",
+      "status": "NO_MATCH",
+      "matched_edges_count": 0,
+      "matched_edge_types": []
+    }
+  ]
+}

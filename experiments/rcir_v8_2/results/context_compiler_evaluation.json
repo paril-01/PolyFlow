@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "version": "8.2.0",
+    "token_budget": 4000,
+    "tokenizer": "character_approximate_real_counter",
+    "span_deduplication": true,
+    "target_pinning": true,
+    "configuration_fingerprints": {
+      "candidate_generator_config_hash": "0d78073504c5361d",
+      "traversal_policy_hash": "858a2f4c6bfd7aee",
+      "ranker_config_hash": "53d79ae650a1f4e6",
+      "context_compiler_config_hash": "30c34e9042ca8640",
+      "benchmark_contract_hash": "1e86d4aab8d6d23b"
+    }
+  },
+  "macro_averages": {
+    "context_precision": 0.2807,
+    "context_recall": 0.3161,
+    "critical_recall_budget": 0.3388,
+    "token_weighted_precision": 0.1914,
+    "token_weighted_recall": 0.4068
+  },
+  "per_task": [
+    {
+      "task_id": "TASK-1",
+      "compiled_tokens": 3999,
+      "token_budget": 4000,
+      "budget_exceeded": false,
+      "context_precision": 0.4286,
+      "context_recall": 0.5,
+      "critical_recall_budget": 0.375,
+      "token_weighted_precision": 0.2473,
+      "token_weighted_recall": 0.5787
+    },
+    {
+      "task_id": "TASK-2",
+      "compiled_tokens": 3934,
+      "token_budget": 4000,
+      "budget_exceeded": false,
+      "context_precision": 0.2222,
+      "context_recall": 0.058,
+      "critical_recall_budget": 0.0833,
+      "token_weighted_precision": 0.1624,
+      "token_weighted_recall": 0.0757
+    },
+    {
+      "task_id": "TASK-3",
+      "compiled_tokens": 3961,
+      "token_budget": 4000,
+      "budget_exceeded": false,
+      "context_precision": 0.2308,
+      "context_recall": 0.3333,
+      "critical_recall_budget": 0.5455,
+      "token_weighted_precision": 0.1434,
+      "token_weighted_recall": 0.441
+    },
+    {
+      "task_id": "TASK-4",
+      "compiled_tokens": 3941,
+      "token_budget": 4000,
+      "budget_exceeded": false,
+      "context_precision": 0.4615,
+      "context_recall": 0.0223,
+      "critical_recall_budget": 0.0234,
+      "token_weighted_precision": 0.2555,
+      "token_weighted_recall": 0.0309
+    },
+    {
+      "task_id": "TASK-5",
+      "compiled_tokens": 3983,
+      "token_budget": 4000,
+      "budget_exceeded": false,
+      "context_precision": 0.0606,
+      "context_recall": 0.6667,
+      "critical_recall_budget": 0.6667,
+      "token_weighted_precision": 0.1484,
+      "token_weighted_recall": 0.9078
+    }
+  ]
+}

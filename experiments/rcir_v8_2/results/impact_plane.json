@@ -1,0 +1,305 @@
+{
+  "totals": {
+    "tasks": 5,
+    "total_ground_truth": 721,
+    "total_candidates_pool": 5799,
+    "total_silent_misses": 21,
+    "global_pool_recall": 0.9709,
+    "worst_task_pool_recall": 0.6667,
+    "total_known_unresolved": 0,
+    "total_unsupported": 0
+  },
+  "macro_pool_recall": 0.8803,
+  "macro_pool_precision": 0.2228,
+  "degree_records": {
+    "TASK-1": {
+      "seed_entities": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::__construct",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getThumbnail",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::updateFileTags",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::formatNodes",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getShareTypesForNodes",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getRecentFiles",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getChildren",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getParents",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getFolderTree",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getStorageStats",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::setViewConfig",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getViewConfigs",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::setConfig",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getConfigs",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::showHiddenFiles",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::cropImagePreviews",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::showGridView",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getGridView",
+        "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::serviceWorker"
+      ],
+      "raw_degree": 122,
+      "policy_relevant_degree": 122,
+      "fanout_mode": "high_degree"
+    },
+    "TASK-2": {
+      "seed_entities": [
+        "lib/public/Files/Node.php",
+        "lib/public/Files/Node.php::OCP\\Files\\Node",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::move",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::delete",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::copy",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::touch",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getStorage",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getPath",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getInternalPath",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getId",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::stat",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getMTime",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getSize",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getEtag",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getPermissions",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::isReadable",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::isUpdateable",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::isDeletable",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::isShareable",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getParent",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::getName",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::lock",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::changeLock",
+        "lib/public/Files/Node.php::OCP\\Files\\Node::unlock"
+      ],
+      "raw_degree": 3,
+      "policy_relevant_degree": 3,
+      "fanout_mode": "low_degree"
+    },
+    "TASK-3": {
+      "seed_entities": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php::OCP\\Files\\Events\\Node\\NodeDeletedEvent"
+      ],
+      "raw_degree": 1,
+      "policy_relevant_degree": 1,
+      "fanout_mode": "low_degree"
+    },
+    "TASK-4": {
+      "seed_entities": [
+        "lib/public/IConfig.php",
+        "lib/public/IConfig.php::OCP\\IConfig",
+        "lib/public/IConfig.php::OCP\\IConfig::setSystemValues",
+        "lib/public/IConfig.php::OCP\\IConfig::setSystemValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getSystemValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getSystemValueBool",
+        "lib/public/IConfig.php::OCP\\IConfig::getSystemValueInt",
+        "lib/public/IConfig.php::OCP\\IConfig::getSystemValueString",
+        "lib/public/IConfig.php::OCP\\IConfig::getFilteredSystemValue",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteSystemValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getAppKeys",
+        "lib/public/IConfig.php::OCP\\IConfig::setAppValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getAppValue",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteAppValue",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteAppValues",
+        "lib/public/IConfig.php::OCP\\IConfig::setUserValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getUserValue",
+        "lib/public/IConfig.php::OCP\\IConfig::getUserValueForUsers",
+        "lib/public/IConfig.php::OCP\\IConfig::getUserKeys",
+        "lib/public/IConfig.php::OCP\\IConfig::getAllUserValues",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteUserValue",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteAllUserValues",
+        "lib/public/IConfig.php::OCP\\IConfig::deleteAppFromAllUsers",
+        "lib/public/IConfig.php::OCP\\IConfig::getUsersForUserValue"
+      ],
+      "raw_degree": 0,
+      "policy_relevant_degree": 0,
+      "fanout_mode": "low_degree"
+    },
+    "TASK-5": {
+      "seed_entities": [
+        "apps/files/src/services/Recent.ts"
+      ],
+      "raw_degree": 80,
+      "policy_relevant_degree": 80,
+      "fanout_mode": "high_degree"
+    }
+  },
+  "configuration_fingerprints": {
+    "candidate_generator_config_hash": "0d78073504c5361d",
+    "traversal_policy_hash": "858a2f4c6bfd7aee",
+    "ranker_config_hash": "53d79ae650a1f4e6",
+    "context_compiler_config_hash": "30c34e9042ca8640",
+    "benchmark_contract_hash": "1e86d4aab8d6d23b"
+  },
+  "per_task": [
+    {
+      "task_id": "TASK-1",
+      "ground_truth_count": 24,
+      "candidate_pool_size": 188,
+      "candidate_pool_recall": 0.9583,
+      "silent_misses": [
+        "tests/lib/Preview/PreviewPixelsTrait.php"
+      ],
+      "silent_miss_count": 1,
+      "fanout_analysis": {
+        "seed_entities": [
+          "apps/files/lib/Controller/ApiController.php",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::__construct",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getThumbnail",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::updateFileTags",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::formatNodes",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getShareTypesForNodes",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getRecentFiles",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getChildren",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getParents",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getFolderTree",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getStorageStats",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::setViewConfig",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getViewConfigs",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::setConfig",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getConfigs",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::showHiddenFiles",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::cropImagePreviews",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::showGridView",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::getGridView",
+          "apps/files/lib/Controller/ApiController.php::OCA\\Files\\Controller\\ApiController::serviceWorker"
+        ],
+        "raw_degree": 122,
+        "policy_relevant_degree": 122,
+        "fanout_mode": "high_degree"
+      }
+    },
+    {
+      "task_id": "TASK-2",
+      "ground_truth_count": 138,
+      "candidate_pool_size": 3166,
+      "candidate_pool_recall": 0.8913,
+      "silent_misses": [
+        "apps/comments/lib/Activity/Listener.php",
+        "apps/dav/lib/BulkUpload/BulkUploadPlugin.php",
+        "apps/dav/lib/Connector/Sabre/TagsPlugin.php",
+        "apps/dav/lib/DAV/ViewOnlyPlugin.php",
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/tests/Service/TagServiceTest.php",
+        "apps/files_sharing/lib/Listener/RestrictInteractionListener.php",
+        "apps/files_versions/lib/Sabre/VersionCollection.php",
+        "core/BackgroundJobs/GenerateMetadataJob.php",
+        "lib/private/Encryption/Update.php",
+        "lib/private/Files/Template/TemplateManager.php",
+        "lib/private/Preview/Generator.php",
+        "lib/private/Preview/MP3.php",
+        "lib/public/Files/Template/Template.php",
+        "tests/lib/FilesMetadata/FilesMetadataManagerTest.php"
+      ],
+      "silent_miss_count": 15,
+      "fanout_analysis": {
+        "seed_entities": [
+          "lib/public/Files/Node.php",
+          "lib/public/Files/Node.php::OCP\\Files\\Node",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::move",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::delete",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::copy",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::touch",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getStorage",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getPath",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getInternalPath",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getId",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::stat",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getMTime",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getSize",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getEtag",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getPermissions",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::isReadable",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::isUpdateable",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::isDeletable",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::isShareable",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getParent",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::getName",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::lock",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::changeLock",
+          "lib/public/Files/Node.php::OCP\\Files\\Node::unlock"
+        ],
+        "raw_degree": 3,
+        "policy_relevant_degree": 3,
+        "fanout_mode": "low_degree"
+      }
+    },
+    {
+      "task_id": "TASK-3",
+      "ground_truth_count": 18,
+      "candidate_pool_size": 932,
+      "candidate_pool_recall": 0.8889,
+      "silent_misses": [
+        "lib/composer/composer/autoload_classmap.php",
+        "lib/composer/composer/autoload_static.php"
+      ],
+      "silent_miss_count": 2,
+      "fanout_analysis": {
+        "seed_entities": [
+          "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+          "lib/public/Files/Events/Node/NodeDeletedEvent.php::OCP\\Files\\Events\\Node\\NodeDeletedEvent"
+        ],
+        "raw_degree": 1,
+        "policy_relevant_degree": 1,
+        "fanout_mode": "low_degree"
+      }
+    },
+    {
+      "task_id": "TASK-4",
+      "ground_truth_count": 538,
+      "candidate_pool_size": 1338,
+      "candidate_pool_recall": 0.9963,
+      "silent_misses": [
+        "lib/public/ServerVersion.php",
+        "lib/public/Util.php"
+      ],
+      "silent_miss_count": 2,
+      "fanout_analysis": {
+        "seed_entities": [
+          "lib/public/IConfig.php",
+          "lib/public/IConfig.php::OCP\\IConfig",
+          "lib/public/IConfig.php::OCP\\IConfig::setSystemValues",
+          "lib/public/IConfig.php::OCP\\IConfig::setSystemValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getSystemValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getSystemValueBool",
+          "lib/public/IConfig.php::OCP\\IConfig::getSystemValueInt",
+          "lib/public/IConfig.php::OCP\\IConfig::getSystemValueString",
+          "lib/public/IConfig.php::OCP\\IConfig::getFilteredSystemValue",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteSystemValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getAppKeys",
+          "lib/public/IConfig.php::OCP\\IConfig::setAppValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getAppValue",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteAppValue",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteAppValues",
+          "lib/public/IConfig.php::OCP\\IConfig::setUserValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getUserValue",
+          "lib/public/IConfig.php::OCP\\IConfig::getUserValueForUsers",
+          "lib/public/IConfig.php::OCP\\IConfig::getUserKeys",
+          "lib/public/IConfig.php::OCP\\IConfig::getAllUserValues",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteUserValue",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteAllUserValues",
+          "lib/public/IConfig.php::OCP\\IConfig::deleteAppFromAllUsers",
+          "lib/public/IConfig.php::OCP\\IConfig::getUsersForUserValue"
+        ],
+        "raw_degree": 0,
+        "policy_relevant_degree": 0,
+        "fanout_mode": "low_degree"
+      }
+    },
+    {
+      "task_id": "TASK-5",
+      "ground_truth_count": 3,
+      "candidate_pool_size": 175,
+      "candidate_pool_recall": 0.6667,
+      "silent_misses": [
+        "apps/files/src/init.ts"
+      ],
+      "silent_miss_count": 1,
+      "fanout_analysis": {
+        "seed_entities": [
+          "apps/files/src/services/Recent.ts"
+        ],
+        "raw_degree": 80,
+        "policy_relevant_degree": 80,
+        "fanout_mode": "high_degree"
+      }
+    }
+  ]
+}

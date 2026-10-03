@@ -1,0 +1,58 @@
+{
+  "evaluation_contract_version": "8.2",
+  "gates": {
+    "impact_recall": {
+      "name": "Global & Macro Pool Recall",
+      "threshold_global": 0.95,
+      "measured_global": 0.9709,
+      "threshold_macro": 0.95,
+      "measured_macro": 0.8803,
+      "worst_task_recall": 0.6667,
+      "per_task_floor": 0.9,
+      "passed": false
+    },
+    "silent_miss_limit": {
+      "name": "Silent Miss Limit",
+      "threshold_max": 15,
+      "measured": 21,
+      "passed": false
+    },
+    "context_precision": {
+      "name": "Context Precision (P@20 and P@50)",
+      "threshold_p20": 0.35,
+      "measured_p20": 0.33,
+      "threshold_p50": 0.2,
+      "measured_p50": 0.304,
+      "passed": false
+    },
+    "context_ndcg": {
+      "name": "Ranking Quality Graded nDCG@50",
+      "threshold": 0.5,
+      "measured": 0.4731,
+      "passed": false
+    },
+    "context_mrr": {
+      "name": "Mean Reciprocal Rank (MRR)",
+      "threshold": 0.7,
+      "measured": 0.7167,
+      "passed": true
+    },
+    "critical_budget_recall": {
+      "name": "Critical Recall @ 4k Budget",
+      "threshold": 0.6,
+      "measured": 0.3388,
+      "passed": false
+    },
+    "real_agent_e2e": {
+      "name": "Live Verified Agent E2E Execution",
+      "requires_real_provider": true,
+      "is_simulated": true,
+      "measured_success_rate": 0.0,
+      "min_approved_rate": 0.8,
+      "passed": false
+    }
+  },
+  "all_primary_passed": false,
+  "recommendation": "OPTION B \u2014 PARTIALLY VALIDATED",
+  "rationale": "Architecture makes material progress over baseline (Recall >= 90%, P@50 > P0), but failed primary gates: impact_recall, silent_miss_limit, context_precision, context_ndcg, critical_budget_recall, real_agent_e2e."
+}

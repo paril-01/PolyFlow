@@ -1,29 +1,107 @@
 """
-RCIR v8.1 — Deterministic Ranker & Pruner (PHASES 12, 14, 19).
+RCIR v8.2 — Semantic Cascaded Ranker & Operation Profiles (PHASES 11, 12, 13, 14, 17, 18, 19).
 
-Scores evidence vectors transparently using explicit linear features:
-- exact entity match
-- static edge / resolution class
-- type compatibility (PHASE 14)
-- change-type compatibility
-- boundary contract
-- direct test / test utility
-- traversal score (PHASE 12)
-- lexical score
-- historical co-change (when measured)
-- hop penalty
-- module distance penalty
-- hub penalty
-- ambiguity penalty
+Features:
+- Explicit boolean RankerConfig switches (isolated zero-baseline R0-R7 ablations)
+- Strict BM25 isolation (zero lexical score when use_bm25=False)
+- OperationRankerProfile tailoring weights to change operations
+- Cascaded Ranking: semantic buckets (A0-A7) ensuring verified callers outrank lexical matches
+- Diversity-aware reranking constraining module concentration in Plane B
 """
 
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional
 
+from rcir.query.change_spec import ChangeOperation
 from rcir.retrieval.evidence_vector import EvidenceVector
+
+
+@dataclass
+class RankerConfig:
+    """Explicit configuration switches for ablation control and feature gating."""
+    use_entity_identity: bool = True
+    use_edge_resolution: bool = True
+    use_traversal_score: bool = True
+    use_type_compatibility: bool = True
+    use_change_compatibility: bool = True
+    use_boundary_contract: bool = True
+    use_bm25: bool = True
+    use_module_distance: bool = True
+    use_test_relationship: bool = True
+    use_historical: bool = True
+    use_hub_penalty: bool = True
+    use_cascaded_ranking: bool = True
+    use_diversity: bool = False
+    max_per_module: int = 5
+
+
+@dataclass
+class OperationRankerProfile:
+    """Weight profile tailored to a specific change operation (PHASE 17)."""
+    w_exact_entity: float = 100.0
+    w_static_exact: float = 40.0
+    w_static_inferred: float = 15.0
+    w_type_exact: float = 25.0
+    w_type_compat: float = 12.0
+    w_change_compat_high: float = 30.0
+    w_change_compat_med: float = 10.0
+    w_boundary_contract: float = 40.0
+    w_direct_test: float = 30.0
+    w_test_util: float = 5.0
+    w_traversal: float = 20.0
+    w_lexical_scale: float = 8.0
+    w_historical: float = 15.0
+    p_hop_per_step: float = 10.0
+    p_module_step: float = 2.0  # Calibrated to avoid penalizing valid cross-module consumers
+    p_hub_log_scale: float = 3.0
+    p_ambiguity: float = 25.0
+    p_type_incompat: float = 50.0
+
+    @classmethod
+    def for_operation(cls, operation: ChangeOperation | str | None) -> OperationRankerProfile:
+        if not operation:
+            return cls()
+        op_str = operation.value if hasattr(operation, "value") else str(operation).lower()
+
+        if op_str == "route_change":
+            return cls(
+                w_boundary_contract=50.0,
+                w_static_exact=35.0,
+                w_direct_test=25.0,
+                w_lexical_scale=3.0,
+                p_module_step=1.0,
+            )
+        elif op_str == "signature_change":
+            return cls(
+                w_static_exact=50.0,
+                w_type_exact=35.0,
+                w_type_compat=20.0,
+                w_direct_test=35.0,
+                p_module_step=0.0,  # Zero cross-module penalty for signature changes
+            )
+        elif op_str == "event_change":
+            return cls(
+                w_boundary_contract=45.0,
+                w_static_exact=40.0,
+                w_change_compat_high=35.0,
+                p_module_step=1.0,
+            )
+        elif op_str == "config_change":
+            return cls(
+                w_boundary_contract=45.0,
+                w_static_exact=35.0,
+                p_module_step=0.5,
+            )
+        elif op_str == "service_boundary_change":
+            return cls(
+                w_boundary_contract=55.0,
+                w_static_exact=40.0,
+                p_module_step=0.0,
+            )
+        return cls()
 
 
 @dataclass
@@ -42,9 +120,10 @@ class ScoreBreakdown:
     hop_penalty: float = 0.0
     hub_penalty: float = 0.0
     ambiguity_penalty: float = 0.0
+    semantic_bucket: str = "A7"
     total_score: float = 0.0
 
-    def to_dict(self) -> dict[str, float]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "exact_entity": round(self.exact_entity_score, 2),
             "static_edge": round(self.static_edge_score, 2),
@@ -59,6 +138,7 @@ class ScoreBreakdown:
             "hop_penalty": round(self.hop_penalty, 2),
             "hub_penalty": round(self.hub_penalty, 2),
             "ambiguity_penalty": round(self.ambiguity_penalty, 2),
+            "semantic_bucket": self.semantic_bucket,
             "total": round(self.total_score, 2),
         }
 
@@ -87,90 +167,138 @@ class RankedCandidate:
 class DeterministicRanker:
     """Deterministic, transparent multi-factor ranker and hard contradiction pruner."""
 
-    # Positive Weights
+    # Backward compatibility class weights
     W_EXACT_ENTITY = 100.0
-    W_STATIC_EXACT = 35.0
+    W_STATIC_EXACT = 40.0
     W_STATIC_INFERRED = 15.0
-    W_TYPE_EXACT = 20.0
-    W_TYPE_COMPAT = 10.0
+    W_TYPE_EXACT = 25.0
+    W_TYPE_COMPAT = 12.0
     W_CHANGE_COMPAT_HIGH = 30.0
     W_CHANGE_COMPAT_MED = 10.0
     W_BOUNDARY_CONTRACT = 40.0
-    W_DIRECT_TEST = 25.0
+    W_DIRECT_TEST = 30.0
     W_TEST_UTIL = 5.0
     W_TRAVERSAL = 20.0
     W_LEXICAL_SCALE = 8.0
     W_HISTORICAL = 15.0
 
-    # Penalties
-    P_HOP_PER_STEP = 12.0
-    P_MODULE_STEP = 15.0
-    P_HUB_LOG_SCALE = 3.0
-    P_AMBIGUITY = 25.0
-    P_TYPE_INCOMPAT = 50.0
+    def __init__(
+        self,
+        config: RankerConfig | None = None,
+        profile: OperationRankerProfile | None = None,
+    ):
+        self.config = config or RankerConfig()
+        self.profile = profile or OperationRankerProfile()
+
+    def classify_bucket(self, vec: EvidenceVector) -> str:
+        """Assign candidate to semantic priority bucket A0-A7 (PHASE 18)."""
+        # A0: Explicit target
+        if vec.entity_match == "exact":
+            return "A0"
+
+        # A1: Direct static-exact dependency
+        if vec.resolution_class == "static_exact" and vec.hop_distance <= 1:
+            return "A1"
+
+        # A2: Typed interface/implementation/override
+        if any(et in ("implements", "inherits", "overrides") for et in vec.edge_types):
+            return "A2"
+
+        # A3: Direct boundary contract
+        if vec.boundary_contract != "none":
+            return "A3"
+
+        # A4: Direct verification/test relation
+        if vec.test_relationship == "direct_test":
+            return "A4"
+
+        # A5: Static inferred relationship
+        if vec.resolution_class == "static_inference" and vec.hop_distance <= 1:
+            return "A5"
+
+        # A6: Indirect relation
+        if vec.hop_distance > 1:
+            return "A6"
+
+        # A7: Lexical-only or peripheral candidate
+        return "A7"
 
     def score_vector(self, vec: EvidenceVector) -> tuple[float, ScoreBreakdown]:
-        """Compute transparent total score and component breakdown."""
+        """Compute transparent total score and component breakdown obeying explicit config."""
         sb = ScoreBreakdown()
+        p = self.profile
+        cfg = self.config
+
+        sb.semantic_bucket = self.classify_bucket(vec)
 
         # 1. Exact entity match (Identity)
-        if vec.entity_match == "exact":
-            sb.exact_entity_score = self.W_EXACT_ENTITY
-        elif vec.entity_match == "partial":
-            sb.exact_entity_score = self.W_EXACT_ENTITY * 0.3
-            sb.ambiguity_penalty = -self.P_AMBIGUITY
+        if cfg.use_entity_identity:
+            if vec.entity_match == "exact":
+                sb.exact_entity_score = p.w_exact_entity
+            elif vec.entity_match == "partial":
+                sb.exact_entity_score = p.w_exact_entity * 0.3
+                sb.ambiguity_penalty = -p.p_ambiguity
 
         # 2. Static edge / Resolution class (Relationship)
-        if vec.resolution_class == "static_exact":
-            sb.static_edge_score = self.W_STATIC_EXACT
-        elif vec.resolution_class == "static_inference":
-            sb.static_edge_score = self.W_STATIC_INFERRED
+        if cfg.use_edge_resolution:
+            if vec.resolution_class == "static_exact":
+                sb.static_edge_score = p.w_static_exact
+            elif vec.resolution_class == "static_inference":
+                sb.static_edge_score = p.w_static_inferred
 
-        # 3. Type Compatibility (PHASE 14)
-        if vec.type_compatibility == "exact":
-            sb.type_compat_score = self.W_TYPE_EXACT
-        elif vec.type_compatibility == "compatible":
-            sb.type_compat_score = self.W_TYPE_COMPAT
-        elif vec.type_compatibility == "incompatible":
-            sb.type_compat_score = -self.P_TYPE_INCOMPAT
+        # 3. Type Compatibility (PHASE 14 & 20)
+        if cfg.use_type_compatibility:
+            if vec.type_compatibility == "exact":
+                sb.type_compat_score = p.w_type_exact
+            elif vec.type_compatibility == "compatible":
+                sb.type_compat_score = p.w_type_compat
+            elif vec.type_compatibility == "incompatible":
+                sb.type_compat_score = -p.p_type_incompat
 
         # 4. Change-Type Compatibility
-        if vec.change_type_compatibility == "high":
-            sb.change_type_compat_score = self.W_CHANGE_COMPAT_HIGH
-        elif vec.change_type_compatibility == "medium":
-            sb.change_type_compat_score = self.W_CHANGE_COMPAT_MED
+        if cfg.use_change_compatibility:
+            if vec.change_type_compatibility == "high":
+                sb.change_type_compat_score = p.w_change_compat_high
+            elif vec.change_type_compatibility == "medium":
+                sb.change_type_compat_score = p.w_change_compat_med
 
         # 5. Boundary Contract
-        if vec.boundary_contract != "none":
-            sb.boundary_contract_score = self.W_BOUNDARY_CONTRACT
+        if cfg.use_boundary_contract:
+            if vec.boundary_contract != "none":
+                sb.boundary_contract_score = p.w_boundary_contract
 
         # 6. Test Relationship
-        if vec.test_relationship == "direct_test":
-            sb.test_rel_score = self.W_DIRECT_TEST
-        elif vec.test_relationship == "test_utility":
-            sb.test_rel_score = self.W_TEST_UTIL
+        if cfg.use_test_relationship:
+            if vec.test_relationship == "direct_test":
+                sb.test_rel_score = p.w_direct_test
+            elif vec.test_relationship == "test_utility":
+                sb.test_rel_score = p.w_test_util
 
         # 7. Traversal Evidence (PHASE 12)
-        sb.traversal_score = vec.traversal_score * self.W_TRAVERSAL
+        if cfg.use_traversal_score:
+            sb.traversal_score = vec.traversal_score * p.w_traversal
 
-        # 8. Lexical score
-        sb.lexical_score = vec.lexical_score * self.W_LEXICAL_SCALE
+        # 8. Lexical score (PHASE 12: strictly zero when BM25 disabled)
+        if cfg.use_bm25:
+            sb.lexical_score = vec.lexical_score * p.w_lexical_scale
+        else:
+            sb.lexical_score = 0.0
 
         # 9. Historical co-change
-        if vec.historical_cochange > 0:
-            sb.historical_score = vec.historical_cochange * self.W_HISTORICAL
+        if cfg.use_historical and vec.historical_cochange > 0:
+            sb.historical_score = vec.historical_cochange * p.w_historical
 
         # 10. Hop Distance Penalty
         if vec.hop_distance > 0:
-            sb.hop_penalty = - (vec.hop_distance * self.P_HOP_PER_STEP)
+            sb.hop_penalty = - (vec.hop_distance * p.p_hop_per_step)
 
         # 11. Module Distance Penalty
-        if vec.module_distance > 0:
-            sb.module_distance_penalty = - (vec.module_distance * self.P_MODULE_STEP)
+        if cfg.use_module_distance and vec.module_distance > 0:
+            sb.module_distance_penalty = - (vec.module_distance * p.p_module_step)
 
         # 12. Hub Penalty (log-damped)
-        if vec.hub_degree > 10:
-            sb.hub_penalty = - (math.log10(vec.hub_degree) * self.P_HUB_LOG_SCALE)
+        if cfg.use_hub_penalty and vec.hub_degree > 10:
+            sb.hub_penalty = - (math.log10(vec.hub_degree) * p.p_hub_log_scale)
 
         sb.total_score = (
             sb.exact_entity_score +
@@ -195,7 +323,7 @@ class DeterministicRanker:
         vectors: list[EvidenceVector],
         prune_contradictions: bool = True,
     ) -> list[RankedCandidate]:
-        """Filter contradictions and rank candidates by descending score."""
+        """Rank candidates using cascaded semantic buckets or linear score."""
         scored: list[tuple[float, EvidenceVector, ScoreBreakdown]] = []
 
         for vec in vectors:
@@ -205,8 +333,41 @@ class DeterministicRanker:
             score, breakdown = self.score_vector(vec)
             scored.append((score, vec, breakdown))
 
-        # Sort descending by score; tie-break deterministically by entity_id
-        scored.sort(key=lambda item: (-item[0], item[1].entity_id))
+        if self.config.use_cascaded_ranking:
+            # PHASE 18: Cascaded Ranking across semantic buckets A0..A7
+            bucket_order = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"]
+            buckets: dict[str, list[tuple[float, EvidenceVector, ScoreBreakdown]]] = {b: [] for b in bucket_order}
+
+            for item in scored:
+                b = item[2].semantic_bucket
+                buckets.setdefault(b, []).append(item)
+
+            ordered: list[tuple[float, EvidenceVector, ScoreBreakdown]] = []
+            for b in bucket_order:
+                b_items = buckets.get(b, [])
+                # Rank within bucket by descending score, tie-break by entity_id
+                b_items.sort(key=lambda x: (-x[0], x[1].entity_id))
+                ordered.extend(b_items)
+            scored = ordered
+        else:
+            # Flat linear sort
+            scored.sort(key=lambda item: (-item[0], item[1].entity_id))
+
+        if self.config.use_diversity:
+            # PHASE 19: Diversity-aware reranking (max entries per module)
+            module_counts: dict[str, int] = {}
+            primary_pool = []
+            deferred_pool = []
+            for item in scored:
+                file_path = item[1].file_path
+                mod = file_path.split("/")[0] if "/" in file_path else "root"
+                cnt = module_counts.get(mod, 0)
+                if cnt < self.config.max_per_module:
+                    module_counts[mod] = cnt + 1
+                    primary_pool.append(item)
+                else:
+                    deferred_pool.append(item)
+            scored = primary_pool + deferred_pool
 
         ranked: list[RankedCandidate] = []
         for idx, (score, vec, breakdown) in enumerate(scored, 1):

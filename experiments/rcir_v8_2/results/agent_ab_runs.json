@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "version": "8.2.0",
+    "experiment": "Condition A (RCIR v8.2) vs Condition B (No RCIR Baseline)",
+    "is_simulated": true,
+    "simulation_fallback": true,
+    "provenance_verified": false,
+    "validation_status": "SIMULATED_FAIL_CLOSED_INVALID_FOR_GATE_A",
+    "model_provenance": {
+      "provider": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "model": "dry-run-fail-closed",
+      "temperature": 0.0
+    }
+  },
+  "condition_a_with_rcir": {
+    "is_simulated": true,
+    "simulation_fallback": true,
+    "provenance_verified": false,
+    "token_overhead": 3969,
+    "turns_to_edit": 0,
+    "files_inspected_before_edit": 0,
+    "context_request_fallback_count": 0,
+    "success_rate": 0.0,
+    "gatekeeper_verdicts": {
+      "APPROVE": 0,
+      "REJECT": 5
+    },
+    "status": "FAIL_CLOSED_NO_LIVE_PROVIDER"
+  },
+  "condition_b_no_rcir": {
+    "is_simulated": true,
+    "simulation_fallback": true,
+    "provenance_verified": false,
+    "token_overhead": 0,
+    "turns_to_edit": 0,
+    "files_inspected_before_edit": 0,
+    "context_request_fallback_count": 5,
+    "success_rate": 0.0,
+    "gatekeeper_verdicts": {
+      "APPROVE": 0,
+      "REJECT": 5
+    },
+    "status": "FAIL_CLOSED_NO_LIVE_PROVIDER"
+  }
+}

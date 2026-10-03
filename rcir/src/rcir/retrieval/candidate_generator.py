@@ -21,7 +21,7 @@ from typing import Any, Optional
 from rcir.entities.registry import EntityRegistry
 from rcir.entities.resolver import EntityResolver
 from rcir.graph.multi_view import MultiViewGraph
-from rcir.graph.traversal_policy import TraversalPolicy, execute_policy_traversal
+from rcir.graph.traversal_policy import DegreeAnalysisRecord, GraphDegreeAnalyzer, TraversalPolicy, execute_policy_traversal
 from rcir.query.change_spec import ChangeSpecification
 from rcir.retrieval.scorer import TFIDFScorer
 
@@ -89,6 +89,7 @@ class CandidateGenerator:
         self.resolver = EntityResolver(self.registry)
         self.scorer = scorer
         self.config = config or CandidateGeneratorConfig()
+        self.last_degree_analysis: Optional[DegreeAnalysisRecord] = None
 
     def generate(
         self,
@@ -203,8 +204,12 @@ class CandidateGenerator:
 
         # Source 3: Policy-Controlled Traversal
         if cfg.use_traversal and seed_entities:
-            active_policy = policy or TraversalPolicy.for_operation(spec.operation, seed_degree=len(seed_entities))
             unique_seeds = list(dict.fromkeys(seed_entities))
+            self.last_degree_analysis = GraphDegreeAnalyzer.analyze(self.multi_view, unique_seeds, spec.operation)
+            active_policy = policy or TraversalPolicy.for_operation(
+                spec.operation,
+                seed_degree=self.last_degree_analysis.policy_relevant_degree,
+            )
             hits = execute_policy_traversal(self.multi_view, unique_seeds, active_policy)
             for hit in hits:
                 rec = get_or_create(hit.node_id, "policy_traversal")

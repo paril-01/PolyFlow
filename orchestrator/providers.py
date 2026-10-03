@@ -57,6 +57,13 @@ class LLMProvider:
             else:
                 self.provider_name = "dry-run"
 
+    @property
+    def is_simulated(self) -> bool:
+        """Returns True if running under dry-run, simulation, or mock mode (PHASE 46)."""
+        return self.provider_name in ("dry-run", "simulated", "mock", "auto") and not any(
+            os.environ.get(k) for k in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY")
+        )
+
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         """Execute generation and return text response (fail-closed)."""
         resp = self.generate_with_provenance(system_prompt, user_prompt)

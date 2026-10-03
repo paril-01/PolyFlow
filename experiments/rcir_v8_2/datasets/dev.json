@@ -1,0 +1,46 @@
+{
+  "split": "development",
+  "description": "RCIR v8 Development dataset for feature tuning and initial ablation validation",
+  "tasks": [
+    {
+      "task_id": "DEV-01",
+      "title": "Refactor Controller Endpoint",
+      "target_symbol": "getThumbnail",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "category": "controller_route",
+      "operation": "route_change",
+      "query": "ApiController getThumbnail thumbnail generation preview",
+      "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes"
+    },
+    {
+      "task_id": "DEV-02",
+      "title": "Filesystem Node Contract Evolution",
+      "target_symbol": "getId",
+      "target_file": "lib/public/Files/Node.php",
+      "category": "interface_method",
+      "operation": "signature_change",
+      "query": "Node getId filesystem node identifier",
+      "description": "Refactor Node::getId() method contract and identify affected consumers"
+    },
+    {
+      "task_id": "DEV-03",
+      "title": "System Configuration Provider Evolution",
+      "target_symbol": "SystemConfig",
+      "target_file": "lib/private/SystemConfig.php",
+      "category": "configuration",
+      "operation": "config_change",
+      "query": "SystemConfig getValue setValue config app",
+      "description": "Update SystemConfig storage interface and track consumers"
+    },
+    {
+      "task_id": "DEV-04",
+      "title": "Preview Generator Verification Target",
+      "target_symbol": "GeneratorTest",
+      "target_file": "tests/lib/Preview/GeneratorTest.php",
+      "category": "build_test",
+      "operation": "behavior_change",
+      "query": "GeneratorTest testGetThumbnail preview",
+      "description": "Add preview test cases and verify preview generation pipeline"
+    }
+  ]
+}

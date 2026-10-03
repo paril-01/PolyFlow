@@ -1,0 +1,39 @@
+{
+  "contract_version": "8.2",
+  "impact_plane": {
+    "global_pool_recall_min": 0.95,
+    "macro_pool_recall_min": 0.95,
+    "max_silent_misses": 15,
+    "per_task_pool_recall_floor": 0.90
+  },
+  "context_plane": {
+    "precision_at_20_min": 0.35,
+    "precision_at_50_min": 0.20,
+    "ndcg_at_50_min": 0.50,
+    "mrr_min": 0.70,
+    "critical_recall_budget_min": 0.60
+  },
+  "agent": {
+    "requires_real_provider": true,
+    "requires_non_empty_diff": true,
+    "requires_behavioral_test": true,
+    "requires_gatekeeper_approve": true,
+    "min_approved_rate": 0.80
+  },
+  "decision_rules": {
+    "option_a": {
+      "description": "All primary impact, context, and agent execution gates satisfied with zero simulation.",
+      "requires_all_primary_gates": true,
+      "allow_simulation": false
+    },
+    "option_b": {
+      "description": "Substantial architectural progress: recall >= 90%, P@50 materially improves over P0 (>15%), deterministic compiler.",
+      "global_pool_recall_min": 0.90,
+      "precision_at_50_improvement_over_p0": 0.15,
+      "context_compiler_deterministic": true
+    },
+    "option_c": {
+      "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required."
+    }
+  }
+}

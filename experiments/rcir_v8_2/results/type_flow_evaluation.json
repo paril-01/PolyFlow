@@ -1,0 +1,268 @@
+{
+  "metadata": {
+    "version": "8.2",
+    "evaluator": "run_type_flow_benchmark.py",
+    "total_getId_call_sites": 756,
+    "target_method": "getId"
+  },
+  "baseline_heuristic": {
+    "exact_resolved": 366,
+    "ambiguous_candidates": 378,
+    "wrong_receiver_false_positives": 12,
+    "unknown_receiver": 0,
+    "accuracy_ratio": 0.4841
+  },
+  "with_type_flow_index": {
+    "exact_resolved": 43,
+    "ambiguous_candidates": 0,
+    "unknown_receiver": 713,
+    "incompatible_pruned": 0,
+    "accuracy_ratio": 0.0569
+  },
+  "delta": {
+    "exact_resolved_gain": -323,
+    "false_positive_reduction": 12
+  },
+  "sample_evaluations": [
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::read",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::afterRename",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::create",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::copy",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::write",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Actions/Files.php::OCA\\AdminAudit\\Actions\\Files::delete",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Listener/FileEventListener.php::OCA\\AdminAudit\\Listener\\FileEventListener::beforePreviewFetched",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Listener/SharingEventListener.php::OCA\\AdminAudit\\Listener\\SharingEventListener::shareCreated",
+      "target": "inferred::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/admin_audit/lib/Listener/SharingEventListener.php::OCA\\AdminAudit\\Listener\\SharingEventListener::shareDeleted",
+      "target": "inferred::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/appstore/lib/Controller/ApiController.php::OCA\\Appstore\\Controller\\ApiController::fetchApps",
+      "target": "inferred::getIdentifier",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/appstore/lib/Controller/PageController.php::OCA\\Appstore\\Controller\\PageController::getBundles",
+      "target": "inferred::getIdentifier",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/cloud_federation_api/lib/Controller/TokenController.php::OCA\\CloudFederationAPI\\Controller\\TokenController::accessToken",
+      "target": "inferred::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/comments/lib/Controller/NotificationsController.php::OCA\\Comments\\Controller\\NotificationsController::markProcessed",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/comments/lib/Notification/Listener.php::OCA\\Comments\\Notification\\Listener::instantiateNotification",
+      "target": "inferred::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    },
+    {
+      "call_site": "apps/comments/lib/Notification/Notifier.php::OCA\\Comments\\Notification\\Notifier::prepare",
+      "target": "OCP\\Files\\Node::getId",
+      "receiver_expr": "$entity",
+      "resolution": {
+        "receiver_expr": "$entity",
+        "method_name": "getId",
+        "status": "unknown_receiver",
+        "candidate_types": [],
+        "resolved_entity_id": null,
+        "evidence_signals": [
+          "untyped_dynamic_receiver"
+        ],
+        "confidence": 0.0
+      }
+    }
+  ]
+}

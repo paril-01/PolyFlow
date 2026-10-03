@@ -1,0 +1,154 @@
+{
+  "catalog_version": "8.2",
+  "audit_source": "experiments/rcir_v8_1/results/dual_plane_v8_1.json",
+  "total_silent_misses": 20,
+  "taxonomy_summary": {
+    "TYPE_FLOW_MISS": 10,
+    "POLICY_TRAVERSAL_MISS": 4,
+    "BOUNDARY_MISS": 3,
+    "GENERATED_ARTIFACT": 2,
+    "EXTRACTION_MISS": 1
+  },
+  "misses": [
+    {
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/PreviewPixelsTrait.php",
+      "classification": "EXTRACTION_MISS",
+      "root_cause": "PHP trait usage in test hierarchy was not linked via direct class inheritance edges in the static graph.",
+      "remediation": "Enhance PHP extractor to emit USES_TRAIT edges and connect trait methods to consuming class hierarchies."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/comments/lib/Activity/Listener.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Event listener accesses Node::getId() from untyped event payload; receiver type was not propagated interprocedurally.",
+      "remediation": "Deploy TypeFlowIndex to resolve event payload parameter annotations (@param GenericEvent $event)."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/dav/lib/BulkUpload/BulkUploadPlugin.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Node instance stored in Sabre DAV plugin property without explicit property type hint; receiver resolved as ambiguous.",
+      "remediation": "Extract PHPDoc @var annotations on class properties during type inference."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/dav/lib/Connector/Sabre/TagsPlugin.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Untyped node parameter passed through Sabre tree navigation methods.",
+      "remediation": "Trace method arguments from caller call-site types to callee parameters."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/dav/lib/DAV/ViewOnlyPlugin.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Distant property access getId() on untyped receiver.",
+      "remediation": "TypeFlowIndex receiver propagation for Sabre Node hierarchy."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/files/lib/Service/TagService.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "TagService receives NodeInterface; implementation implements NodeInterface but resolution was ambiguous.",
+      "remediation": "Compute implements closure between NodeInterface and Node concrete class in TypeFlowIndex."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/files/tests/Service/TagServiceTest.php",
+      "classification": "POLICY_TRAVERSAL_MISS",
+      "root_cause": "Test file was 2 hops away through TagService, which was pruned when TagService was dropped from pool.",
+      "remediation": "Recovering TagService via TypeFlowIndex will automatically recover TagServiceTest via source_to_test edge."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/files_sharing/lib/Listener/RestrictInteractionListener.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Listener unwraps Node entity from event object without explicit variable type hint.",
+      "remediation": "Event-to-payload entity mapping in NextcloudAdapter."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "apps/files_versions/lib/Sabre/VersionCollection.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Sabre version collection iterates child nodes using untyped foreach loop.",
+      "remediation": "Array/collection element type tracking in TypeFlowIndex."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "core/BackgroundJobs/GenerateMetadataJob.php",
+      "classification": "BOUNDARY_MISS",
+      "root_cause": "Background job receives fileId scalar integer from cron/job queue and loads Node dynamically.",
+      "remediation": "Recognize background job handlers as boundary entry points consuming entity IDs."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "lib/private/Encryption/Update.php",
+      "classification": "POLICY_TRAVERSAL_MISS",
+      "root_cause": "Traversal policy under HIGH fanout mode pruned 2-hop storage updater path.",
+      "remediation": "GraphDegreeAnalyzer will prevent artificial fanout escalation by calculating true seed edge degree."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "lib/private/Files/Template/TemplateManager.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Dynamic template node instantiation via factory method without return type annotation.",
+      "remediation": "Add factory method return type resolution in TypeFlowIndex."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "lib/private/Preview/Generator.php",
+      "classification": "POLICY_TRAVERSAL_MISS",
+      "root_cause": "Generator was 2 hops away via FileView and was pruned due to degree thresholding.",
+      "remediation": "Preserve operation-compatible second hop expansion when seed degree is within bounds."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "lib/private/Preview/MP3.php",
+      "classification": "POLICY_TRAVERSAL_MISS",
+      "root_cause": "MP3 preview provider depended on Generator.php; dropped cascadingly.",
+      "remediation": "Cascading recovery once Generator.php is retained."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "lib/public/Files/Template/Template.php",
+      "classification": "TYPE_FLOW_MISS",
+      "root_cause": "Public template class wraps internal Node instance without typed property hint.",
+      "remediation": "Constructor injection and property assignment type tracking."
+    },
+    {
+      "task_id": "TASK-2",
+      "file": "tests/lib/FilesMetadata/FilesMetadataManagerTest.php",
+      "classification": "POLICY_TRAVERSAL_MISS",
+      "root_cause": "Test class 2 hops away was truncated under HIGH fanout mode.",
+      "remediation": "True seed degree calculation in GraphDegreeAnalyzer."
+    },
+    {
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_classmap.php",
+      "classification": "GENERATED_ARTIFACT",
+      "root_cause": "Composer generated autoload mapping contains class name strings. Build artifact, not hand-edited source.",
+      "remediation": "Preserve in ground truth or declare explicit build artifact exclusion in benchmark contract prior to evaluation."
+    },
+    {
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_static.php",
+      "classification": "GENERATED_ARTIFACT",
+      "root_cause": "Composer static loader table contains class name map. Build artifact.",
+      "remediation": "Account for artifact category explicitly."
+    },
+    {
+      "task_id": "TASK-4",
+      "file": "lib/public/ServerVersion.php",
+      "classification": "BOUNDARY_MISS",
+      "root_cause": "Static facade calls \\OC::$server->getConfig() via global static container accessor.",
+      "remediation": "Recognize \\OC::$server and \\OCP\\Server static container lookups in NextcloudAdapter."
+    },
+    {
+      "task_id": "TASK-4",
+      "file": "lib/public/Util.php",
+      "classification": "BOUNDARY_MISS",
+      "root_cause": "Static facade \\OCP\\Util::getVersion() delegates to static container service.",
+      "remediation": "Recognize static facade container delegation in NextcloudAdapter."
+    }
+  ]
+}

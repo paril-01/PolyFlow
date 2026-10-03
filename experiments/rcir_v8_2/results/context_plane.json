@@ -1,0 +1,314 @@
+{
+  "macro_averages": {
+    "candidate_pool_recall": 0.8803,
+    "candidate_pool_precision": 0.2228,
+    "r_precision": 0.3651,
+    "recall_at": {
+      "5": 0.1186,
+      "10": 0.251,
+      "20": 0.3033,
+      "50": 0.5016
+    },
+    "precision_at": {
+      "5": 0.4,
+      "10": 0.4,
+      "20": 0.33,
+      "50": 0.304
+    },
+    "critical_recall_at": {
+      "5": 0.1351,
+      "10": 0.2647,
+      "20": 0.3263,
+      "50": 0.5219
+    },
+    "mrr": 0.7167,
+    "ndcg_at": {
+      "20": 0.4,
+      "50": 0.4731
+    },
+    "context_precision": 0.2807,
+    "context_recall": 0.3161,
+    "critical_recall_budget": 0.3388,
+    "token_weighted_precision": 0.1914,
+    "token_weighted_recall": 0.4068
+  },
+  "totals": {
+    "tasks": 5,
+    "total_ground_truth": 721,
+    "total_candidates_pool": 5799,
+    "total_silent_misses": 21,
+    "global_pool_recall": 0.9709,
+    "worst_task_pool_recall": 0.6667,
+    "total_known_unresolved": 0,
+    "total_unsupported": 0
+  },
+  "performance": {
+    "mean_latency_ms": 83.02,
+    "mean_peak_memory_mb": 1.04
+  },
+  "per_task": [
+    {
+      "task_id": "TASK-1",
+      "ground_truth_count": 24,
+      "candidate_pool_size": 188,
+      "candidate_pool_recall": 0.9583,
+      "candidate_pool_precision": 0.2875,
+      "r_precision": 0.4583,
+      "recall_at_r": 0.4583,
+      "recall_at": {
+        "5": 0.125,
+        "10": 0.3333,
+        "20": 0.4583,
+        "50": 0.8333
+      },
+      "precision_at": {
+        "5": 0.6,
+        "10": 0.8,
+        "20": 0.55,
+        "50": 0.4
+      },
+      "critical_recall_at": {
+        "5": 0.125,
+        "10": 0.25,
+        "20": 0.3125,
+        "50": 0.8125
+      },
+      "mrr": 0.3333,
+      "ndcg_at": {
+        "20": 0.2793,
+        "50": 0.4685
+      },
+      "context_precision": 0.4286,
+      "context_recall": 0.5,
+      "critical_recall_budget": 0.375,
+      "token_weighted_precision": 0.2473,
+      "token_weighted_recall": 0.5787,
+      "compiled_tokens": 3999,
+      "silent_misses": [
+        "tests/lib/Preview/PreviewPixelsTrait.php"
+      ],
+      "silent_miss_count": 1,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 72.28,
+      "peak_memory_mb": 2.44
+    },
+    {
+      "task_id": "TASK-2",
+      "ground_truth_count": 138,
+      "candidate_pool_size": 3166,
+      "candidate_pool_recall": 0.8913,
+      "candidate_pool_precision": 0.0926,
+      "r_precision": 0.1522,
+      "recall_at_r": 0.1522,
+      "recall_at": {
+        "5": 0.0217,
+        "10": 0.029,
+        "20": 0.0435,
+        "50": 0.0652
+      },
+      "precision_at": {
+        "5": 0.6,
+        "10": 0.4,
+        "20": 0.3,
+        "50": 0.18
+      },
+      "critical_recall_at": {
+        "5": 0.0278,
+        "10": 0.0278,
+        "20": 0.0833,
+        "50": 0.0833
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.2085,
+        "50": 0.1608
+      },
+      "context_precision": 0.2222,
+      "context_recall": 0.058,
+      "critical_recall_budget": 0.0833,
+      "token_weighted_precision": 0.1624,
+      "token_weighted_recall": 0.0757,
+      "compiled_tokens": 3934,
+      "silent_misses": [
+        "apps/comments/lib/Activity/Listener.php",
+        "apps/dav/lib/BulkUpload/BulkUploadPlugin.php",
+        "apps/dav/lib/Connector/Sabre/TagsPlugin.php",
+        "apps/dav/lib/DAV/ViewOnlyPlugin.php",
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/tests/Service/TagServiceTest.php",
+        "apps/files_sharing/lib/Listener/RestrictInteractionListener.php",
+        "apps/files_versions/lib/Sabre/VersionCollection.php",
+        "core/BackgroundJobs/GenerateMetadataJob.php",
+        "lib/private/Encryption/Update.php",
+        "lib/private/Files/Template/TemplateManager.php",
+        "lib/private/Preview/Generator.php",
+        "lib/private/Preview/MP3.php",
+        "lib/public/Files/Template/Template.php",
+        "tests/lib/FilesMetadata/FilesMetadataManagerTest.php"
+      ],
+      "silent_miss_count": 15,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 176.37,
+      "peak_memory_mb": 1.58
+    },
+    {
+      "task_id": "TASK-3",
+      "ground_truth_count": 18,
+      "candidate_pool_size": 932,
+      "candidate_pool_recall": 0.8889,
+      "candidate_pool_precision": 0.0341,
+      "r_precision": 0.3333,
+      "recall_at_r": 0.3333,
+      "recall_at": {
+        "5": 0.1111,
+        "10": 0.2222,
+        "20": 0.3333,
+        "50": 0.8889
+      },
+      "precision_at": {
+        "5": 0.4,
+        "10": 0.4,
+        "20": 0.3,
+        "50": 0.32
+      },
+      "critical_recall_at": {
+        "5": 0.1818,
+        "10": 0.3636,
+        "20": 0.5455,
+        "50": 1.0
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.6147,
+        "50": 0.7852
+      },
+      "context_precision": 0.2308,
+      "context_recall": 0.3333,
+      "critical_recall_budget": 0.5455,
+      "token_weighted_precision": 0.1434,
+      "token_weighted_recall": 0.441,
+      "compiled_tokens": 3961,
+      "silent_misses": [
+        "lib/composer/composer/autoload_classmap.php",
+        "lib/composer/composer/autoload_static.php"
+      ],
+      "silent_miss_count": 2,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 61.33,
+      "peak_memory_mb": 0.44
+    },
+    {
+      "task_id": "TASK-4",
+      "ground_truth_count": 538,
+      "candidate_pool_size": 1338,
+      "candidate_pool_recall": 0.9963,
+      "candidate_pool_precision": 0.6742,
+      "r_precision": 0.5483,
+      "recall_at_r": 0.5483,
+      "recall_at": {
+        "5": 0.0019,
+        "10": 0.0037,
+        "20": 0.0149,
+        "50": 0.0539
+      },
+      "precision_at": {
+        "5": 0.2,
+        "10": 0.2,
+        "20": 0.4,
+        "50": 0.58
+      },
+      "critical_recall_at": {
+        "5": 0.0078,
+        "10": 0.0156,
+        "20": 0.0234,
+        "50": 0.0469
+      },
+      "mrr": 0.25,
+      "ndcg_at": {
+        "20": 0.1624,
+        "50": 0.2158
+      },
+      "context_precision": 0.4615,
+      "context_recall": 0.0223,
+      "critical_recall_budget": 0.0234,
+      "token_weighted_precision": 0.2555,
+      "token_weighted_recall": 0.0309,
+      "compiled_tokens": 3941,
+      "silent_misses": [
+        "lib/public/ServerVersion.php",
+        "lib/public/Util.php"
+      ],
+      "silent_miss_count": 2,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 79.63,
+      "peak_memory_mb": 0.64
+    },
+    {
+      "task_id": "TASK-5",
+      "ground_truth_count": 3,
+      "candidate_pool_size": 175,
+      "candidate_pool_recall": 0.6667,
+      "candidate_pool_precision": 0.0256,
+      "r_precision": 0.3333,
+      "recall_at_r": 0.3333,
+      "recall_at": {
+        "5": 0.3333,
+        "10": 0.6667,
+        "20": 0.6667,
+        "50": 0.6667
+      },
+      "precision_at": {
+        "5": 0.2,
+        "10": 0.2,
+        "20": 0.1,
+        "50": 0.04
+      },
+      "critical_recall_at": {
+        "5": 0.3333,
+        "10": 0.6667,
+        "20": 0.6667,
+        "50": 0.6667
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.735,
+        "50": 0.735
+      },
+      "context_precision": 0.0606,
+      "context_recall": 0.6667,
+      "critical_recall_budget": 0.6667,
+      "token_weighted_precision": 0.1484,
+      "token_weighted_recall": 0.9078,
+      "compiled_tokens": 3983,
+      "silent_misses": [
+        "apps/files/src/init.ts"
+      ],
+      "silent_miss_count": 1,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 25.51,
+      "peak_memory_mb": 0.12
+    }
+  ],
+  "configuration_fingerprints": {
+    "candidate_generator_config_hash": "0d78073504c5361d",
+    "traversal_policy_hash": "858a2f4c6bfd7aee",
+    "ranker_config_hash": "53d79ae650a1f4e6",
+    "context_compiler_config_hash": "30c34e9042ca8640",
+    "benchmark_contract_hash": "1e86d4aab8d6d23b"
+  }
+}

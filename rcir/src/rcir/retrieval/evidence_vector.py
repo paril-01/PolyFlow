@@ -71,8 +71,9 @@ class EvidenceVectorBuilder:
         target_files: set[str],
         hub_scores: dict[str, float] | None = None,
         module_resolver: ModuleResolver | None = None,
+        type_flow_index: Any | None = None,
     ) -> EvidenceVector:
-        resolver = module_resolver or NextcloudModuleResolver()
+        resolver = module_resolver or ModuleResolver()
 
         vec = EvidenceVector(
             entity_id=candidate.entity_id,
@@ -109,19 +110,14 @@ class EvidenceVectorBuilder:
         else:
             vec.resolution_class = "unknown"
 
-        # 3. Type Compatibility (PHASE 14)
-        cand_lower = candidate.entity_id.lower()
-        spec_targets_lower = [t.lower() for t in spec.target_entities]
-        
-        # Exact match or same owner class
+        # 3. Type Compatibility (PHASES 20 & 25)
+        # Derived strictly from type-system signals, NEVER from filename/path substrings.
         if vec.entity_match == "exact":
             vec.type_compatibility = "exact"
-        elif any("inherits" in et or "implements" in et or "overrides" in et for et in candidate.edge_types_seen):
+        elif any(et in ("inherits", "implements", "overrides") for et in candidate.edge_types_seen):
             vec.type_compatibility = "compatible"
-        elif any(target_base in cand_lower for target_base in [t.split("::")[-1].replace(".php", "").replace(".ts", "") for t in spec_targets_lower]):
-            vec.type_compatibility = "compatible"
-        elif "test" in candidate.file_path.lower() and any(t in candidate.file_path.lower() for t in spec_targets_lower):
-            vec.type_compatibility = "compatible"
+        elif type_flow_index:
+            vec.type_compatibility = type_flow_index.check_compatibility(spec.target_entities, candidate.entity_id)
         else:
             vec.type_compatibility = "unknown"
 

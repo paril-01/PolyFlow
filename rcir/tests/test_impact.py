@@ -66,7 +66,7 @@ def test_generate_impact_report_mock_graph():
     assert "CHANGE IMPACT REPORT" in md
     assert "Change: CartService.AddItem" in md
     assert "Affected: 2 static call sites (1 exact, 1 inferred)" in md
-    assert "Unresolved: 1 — manual review required:" in md
+    assert "Unresolved: 1 - manual review required:" in md
     assert "src/cartservice/client.py::dynamic_call" in md
     assert "Zero-Cloud Verified: PASS" in md
 

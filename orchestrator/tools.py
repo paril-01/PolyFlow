@@ -14,13 +14,31 @@ from typing import Optional, Dict, Any, List
 from pathlib import Path
 
 
+class ContextProvider:
+    """Abstract interface for RCIR iterative context providers (PHASE 41)."""
+
+    def retrieve(
+        self,
+        symbol: str,
+        query: Optional[str] = None,
+        already_seen: Optional[set[str]] = None,
+        token_budget: int = 1500,
+    ) -> Dict[str, Any]:
+        """Retrieve new, unseen context for the given symbol/query."""
+        raise NotImplementedError
+
+
 class RepoToolEnvironment:
     """
     Sandboxed repository environment providing concrete tools for coding agents.
     Tracks file modifications and maintains original backups for safe rollback.
     """
 
-    def __init__(self, repo_root: str):
+    def __init__(
+        self,
+        repo_root: str,
+        context_provider: Optional[ContextProvider] = None,
+    ):
         self.repo_root = Path(repo_root).resolve()
         if not self.repo_root.exists():
             raise FileNotFoundError(f"Repository root does not exist: {repo_root}")
@@ -30,6 +48,15 @@ class RepoToolEnvironment:
         self._toolchain_env = self._build_toolchain_env()
         self.context_requests_count: int = 0
         self.context_tokens_added: int = 0
+        self.context_provider = context_provider
+        self.already_seen_entities: set[str] = set()
+        self.context_telemetry: Dict[str, Any] = {
+            "entities_requested": 0,
+            "entities_returned": 0,
+            "duplicate_entities_skipped": 0,
+            "exact_tokens_added": 0,
+            "critical_entities_added": 0,
+        }
 
     def _build_toolchain_env(self) -> Dict[str, str]:
         """Ensure JDK, PHP, Go, Node, Python are in PATH."""
@@ -366,14 +393,36 @@ class RepoToolEnvironment:
 
     def request_context(self, symbol: str, query: Optional[str] = None) -> str:
         """
-        Iteratively request targeted dependency context from RCIR (PHASE 14).
-        Tracks request frequency and tokens added for context efficiency audits.
+        Iteratively request targeted dependency context from RCIR (PHASES 41, 42).
+        Delegates to ContextProvider if available, avoiding silent text search fallback.
         """
         self.context_requests_count += 1
+        self.context_telemetry["entities_requested"] += 1
+
+        if self.context_provider:
+            res = self.context_provider.retrieve(
+                symbol=symbol,
+                query=query,
+                already_seen=self.already_seen_entities,
+                token_budget=1500,
+            )
+            text = res.get("context_markdown", "")
+            tokens_added = res.get("tokens_added", max(1, len(text) // 4))
+            returned_ents = res.get("entities", [])
+            for ent in returned_ents:
+                self.already_seen_entities.add(ent)
+
+            self.context_tokens_added += tokens_added
+            self.context_telemetry["entities_returned"] += len(returned_ents)
+            self.context_telemetry["duplicate_entities_skipped"] += res.get("duplicates_skipped", 0)
+            self.context_telemetry["exact_tokens_added"] += tokens_added
+            return f"RCIR ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{text}"
+
         search_target = query or symbol
         matches = self.search_code(query=search_target, max_matches=8)
         tokens_added = max(1, len(matches) // 4)
         self.context_tokens_added += tokens_added
+        self.context_telemetry["exact_tokens_added"] += tokens_added
         return f"ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{matches}"
 
     def run_command(self, command: str, timeout_sec: int = 60, cwd: Optional[str] = None) -> Dict[str, Any]:

@@ -44,3 +44,7 @@ class ModuleResolver:
         if m1 == m2:
             return 0
         return 1
+
+
+# Alias for explicit adapter separation (PHASE 24)
+GenericModuleResolver = ModuleResolver

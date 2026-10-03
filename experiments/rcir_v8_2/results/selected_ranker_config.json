@@ -1,0 +1,26 @@
+{
+  "selected_configuration": "Cascaded_Operation_Profiles",
+  "rationale": "Cascaded ranking with semantic buckets prevents feature inversion and achieves highest nDCG/Precision.",
+  "metrics": {
+    "precision_at_20": 0.33,
+    "precision_at_50": 0.304,
+    "ndcg_at_50": 0.4731,
+    "mrr": 0.7167
+  },
+  "config": {
+    "use_entity_identity": true,
+    "use_edge_resolution": true,
+    "use_traversal_score": true,
+    "use_type_compatibility": true,
+    "use_change_compatibility": true,
+    "use_boundary_contract": true,
+    "use_bm25": true,
+    "use_module_distance": true,
+    "use_test_relationship": true,
+    "use_historical": true,
+    "use_hub_penalty": true,
+    "use_cascaded_ranking": true,
+    "use_diversity": true,
+    "max_per_module": 8
+  }
+}

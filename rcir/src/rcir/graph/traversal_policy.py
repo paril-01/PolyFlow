@@ -72,6 +72,88 @@ class FanoutPolicy:
 
 
 @dataclass
+class DegreeAnalysisRecord:
+    """Auditable graph branching factor analysis for resolved seed entities."""
+    seed_entities: list[str]
+    raw_degree: int
+    policy_relevant_degree: int
+    fanout_mode: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "seed_entities": self.seed_entities,
+            "raw_degree": self.raw_degree,
+            "policy_relevant_degree": self.policy_relevant_degree,
+            "fanout_mode": self.fanout_mode,
+        }
+
+
+class GraphDegreeAnalyzer:
+    """
+    Calculates actual graph branching factor for seed entities using policy-relevant edge types.
+    Never infers fanout mode from candidate counts or seed count.
+    """
+
+    DEFAULT_RELEVANT_EDGE_TYPES = {
+        "calls", "imports", "inherits", "implements", "overrides",
+        "route_to_controller", "route", "frontend_to_route", "cross_boundary",
+        "event_to_listener", "config_service", "config", "injects",
+        "source_to_test"
+    }
+
+    @classmethod
+    def analyze(
+        cls,
+        multi_view: Any,
+        seed_nodes: list[str],
+        operation: ChangeOperation | str,
+        relevant_edge_types: set[str] | None = None,
+    ) -> DegreeAnalysisRecord:
+        if isinstance(operation, str):
+            try:
+                operation = ChangeOperation(operation)
+            except ValueError:
+                operation = ChangeOperation.BEHAVIOR_CHANGE
+
+        if relevant_edge_types is None:
+            relevant_edge_types = cls.DEFAULT_RELEVANT_EDGE_TYPES
+
+        raw_degree = 0
+        policy_relevant_degree = 0
+
+        for node in seed_nodes:
+            fwd = []
+            bwd = []
+            if hasattr(multi_view, "symbol_fwd"):
+                fwd.extend(multi_view.symbol_fwd.get(node, []))
+                fwd.extend(multi_view.boundary_fwd.get(node, []))
+                fwd.extend(multi_view.config_fwd.get(node, []))
+                fwd.extend(multi_view.verification_fwd.get(node, []))
+            if hasattr(multi_view, "symbol_bwd"):
+                bwd.extend(multi_view.symbol_bwd.get(node, []))
+                bwd.extend(multi_view.boundary_bwd.get(node, []))
+                bwd.extend(multi_view.config_bwd.get(node, []))
+                bwd.extend(multi_view.verification_bwd.get(node, []))
+
+            raw_degree += len(fwd) + len(bwd)
+
+            for e in fwd + bwd:
+                etype = e.get("edge_type", e.get("type", "calls"))
+                if etype in relevant_edge_types:
+                    policy_relevant_degree += 1
+
+        fanout_policy = FanoutPolicy.evaluate(policy_relevant_degree, operation)
+        mode_str = fanout_policy.mode.value
+
+        return DegreeAnalysisRecord(
+            seed_entities=list(seed_nodes),
+            raw_degree=raw_degree,
+            policy_relevant_degree=policy_relevant_degree,
+            fanout_mode=mode_str,
+        )
+
+
+@dataclass
 class TraversalRule:
     """A rule defining how an edge type should be traversed."""
     edge_type: str
@@ -295,7 +377,11 @@ def execute_policy_traversal(
     seed_set = set(seed_nodes)
     current_frontier = list(seed_nodes)
 
-    fanout = policy.fanout_policy or FanoutPolicy.evaluate(len(seed_nodes), policy.operation)
+    if policy.fanout_policy:
+        fanout = policy.fanout_policy
+    else:
+        deg_rec = GraphDegreeAnalyzer.analyze(multi_view, seed_nodes, policy.operation)
+        fanout = FanoutPolicy.evaluate(deg_rec.policy_relevant_degree, policy.operation)
     max_hops = policy.max_hops
     if not fanout.allow_recursive_expansion and max_hops > 1:
         max_hops = 1

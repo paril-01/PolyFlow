@@ -1,0 +1,2200 @@
+# RCIR v8.2 — Scientific Integrity, Semantic Ranking, Type-Flow Enhancement, and Real Agent Validation
+
+You are operating as a principal static-analysis engineer, information-retrieval researcher, compiler engineer, benchmark auditor, and autonomous coding-agent infrastructure engineer inside the PolyFlow repository.
+
+Your task is to audit and evolve RCIR from the current repository HEAD:
+
+`a1d2b4861e22b50039790b4be12cdffc72f3671a`
+
+Current commit title:
+
+`feat: implement rcir v8.1 dual-plane retrieval pipeline, benchmark framework, and context compiler`
+
+Do NOT assume RCIR v8.1 is validated merely because the committed final report says `OPTION A — VALIDATED`.
+
+The purpose of this iteration is to produce **RCIR v8.2**, correcting benchmark-integrity defects, fixing the remaining architecture gaps, improving semantic ranking quality, and executing real coding-agent A/B experiments.
+
+The system must be allowed to fail.
+
+Do not optimize reports to create a positive conclusion.
+
+---
+
+# ABSOLUTE RULE 0 — RAW EVIDENCE IS THE ONLY AUTHORITY
+
+The precedence order is:
+
+```text
+actual execution
+    ↓
+raw machine-readable artifact
+    ↓
+schema validation
+    ↓
+derived metrics
+    ↓
+generated report
+    ↓
+dashboard/UI
+```
+
+A Markdown report may NEVER override a JSON artifact.
+
+A dashboard may NEVER contain independently typed benchmark values.
+
+If report and raw data disagree:
+
+```text
+RAW DATA WINS
+```
+
+and the report generation process must fail.
+
+Never fabricate or manually assign:
+
+- precision
+- recall
+- success rates
+- agent verdicts
+- turn counts
+- token usage
+- latency
+- memory
+- edge precision
+- test success
+- code modifications
+- Git diffs
+- LLM inference
+- provider provenance
+- CI status
+- context coverage
+- AST resolution
+- historical co-change
+
+If an experiment is simulated or dry-run:
+
+```text
+SIMULATION_ONLY
+```
+
+must appear in the artifact and it may NOT satisfy a production/research validation gate.
+
+---
+
+# PHASE 0 — FREEZE RCIR v8.1
+
+Freeze commit:
+
+`a1d2b4861e22b50039790b4be12cdffc72f3671a`
+
+as:
+
+```text
+RCIR_V8_1_BASELINE
+```
+
+Create:
+
+```text
+experiments/rcir_v8_2/
+    baseline/
+    datasets/
+    ground_truth/
+    results/
+    reports/
+    scripts/
+    validation/
+    artifacts/
+```
+
+Never overwrite:
+
+```text
+experiments/rcir_v8/
+experiments/rcir_v8_1/
+```
+
+They are historical evidence.
+
+---
+
+# PHASE 1 — FORMALLY REASSESS v8.1
+
+Read the following raw artifacts before reading their Markdown reports:
+
+```text
+experiments/rcir_v8_1/results/dual_plane_v8_1.json
+experiments/rcir_v8_1/results/ranker_ablations.json
+experiments/rcir_v8_1/results/edge_evaluation.json
+experiments/rcir_v8_1/results/agent_turn_budget.json
+experiments/rcir_v8_1/results/agent_ab_test.json
+experiments/rcir_v8_1/results/lexical_comparison.json
+```
+
+Then inspect:
+
+```text
+experiments/rcir_v8_1/reports/benchmark_contract_v8_1.md
+experiments/rcir_v8_1/reports/final_assessment.md
+experiments/rcir_v8_1/reports/context_plane_report.md
+experiments/rcir_v8_1/reports/impact_plane_report.md
+experiments/rcir_v8_1/reports/agent_turn_budget_report.md
+experiments/rcir_v8_1/reports/agent_ab_report.md
+```
+
+Produce:
+
+```text
+experiments/rcir_v8_2/reports/v8_1_reassessment.md
+```
+
+The reassessment must explicitly evaluate every frozen v8.1 gate.
+
+Do not combine different ranker configurations.
+
+The architecture under evaluation must use the metrics produced by the exact configuration actually executed by the primary pipeline.
+
+---
+
+# PHASE 2 — CORRECT THE CURRENT v8.1 DECISION
+
+Current raw primary-pipeline evidence approximately reports:
+
+```text
+Global CandidatePoolRecall: 97.23%
+Silent Misses:               20
+
+Primary Pipeline:
+Precision@20:               29.00%
+Precision@50:               18.40%
+nDCG@50:                     0.3718
+MRR:                         0.6667
+CriticalRecall@Budget:      32.18%
+```
+
+Current frozen v8.1 contract requires approximately:
+
+```text
+CandidatePoolRecall >= 95%
+Silent Misses <= 15
+
+Precision@20 >= 35%
+Precision@50 >= 20%
+nDCG@50 >= 0.50
+MRR >= 0.70
+CriticalRecall@Budget >= 60%
+
+Real verified agent E2E success
+```
+
+Evaluate this mechanically.
+
+Do not manually declare Option A.
+
+Until corrected evidence proves otherwise, treat:
+
+```text
+RCIR v8.1 = OPTION B — PARTIALLY VALIDATED
+```
+
+as the working hypothesis.
+
+---
+
+# PHASE 3 — IMPLEMENT A MACHINE-ENFORCED DECISION ENGINE
+
+Create:
+
+```text
+experiments/rcir_v8_2/scripts/evaluate_gates.py
+```
+
+Input:
+
+```text
+raw benchmark artifacts
++
+frozen benchmark contract JSON
+```
+
+Output:
+
+```json
+{
+  "gates": {
+    "impact_recall": {},
+    "silent_miss_limit": {},
+    "context_precision": {},
+    "context_ndcg": {},
+    "context_mrr": {},
+    "critical_budget_recall": {},
+    "real_agent_e2e": {}
+  },
+  "recommendation": "A|B|C"
+}
+```
+
+The final recommendation must be generated by this script.
+
+Reports must consume this output.
+
+Humans may not manually select Option A/B/C.
+
+---
+
+# PHASE 4 — CONVERT BENCHMARK CONTRACT TO MACHINE-READABLE FORM
+
+Create:
+
+```text
+experiments/rcir_v8_2/benchmark_contract.json
+```
+
+Example:
+
+```json
+{
+  "impact_plane": {
+    "global_pool_recall_min": 0.95,
+    "macro_pool_recall_min": 0.95,
+    "max_silent_misses": 15,
+    "per_task_pool_recall_floor": 0.90
+  },
+  "context_plane": {
+    "precision_at_20_min": 0.35,
+    "precision_at_50_min": 0.20,
+    "ndcg_at_50_min": 0.50,
+    "mrr_min": 0.70,
+    "critical_recall_budget_min": 0.60
+  },
+  "agent": {
+    "requires_real_provider": true,
+    "requires_non_empty_diff": true,
+    "requires_behavioral_test": true,
+    "requires_gatekeeper_approve": true
+  }
+}
+```
+
+Do not alter thresholds after viewing frozen test results without creating a new contract version.
+
+---
+
+# PHASE 5 — FIX GLOBAL-RECALL DOMINATION
+
+A 538-file task currently dominates the global micro recall.
+
+Always report:
+
+```text
+Micro / Global CandidatePoolRecall
+Macro CandidatePoolRecall
+Per-Task CandidatePoolRecall
+Worst-Task CandidatePoolRecall
+Critical CandidatePoolRecall
+```
+
+Do not allow one huge task to hide weak performance on smaller categories.
+
+Current examples requiring investigation include approximately:
+
+```text
+TASK-2 pool recall ≈ 89.1%
+TASK-3 pool recall ≈ 88.9%
+```
+
+Classify why each miss occurred.
+
+---
+
+# PHASE 6 — ACCOUNT FOR EVERY SILENT MISS
+
+Current total:
+
+```text
+20 silent misses
+```
+
+For every miss classify:
+
+```text
+EXTRACTION_MISS
+ENTITY_RESOLUTION_MISS
+POLICY_TRAVERSAL_MISS
+BOUNDARY_MISS
+TYPE_FLOW_MISS
+GENERATED_ARTIFACT
+UNSUPPORTED
+GROUND_TRUTH_ERROR
+OTHER
+```
+
+Create:
+
+```text
+results/silent_miss_catalog.json
+```
+
+Do not simply expand traversal until the number becomes smaller.
+
+Fix the responsible layer.
+
+---
+
+# PHASE 7 — DO NOT POST-HOC REMOVE GENERATED FILES
+
+If Composer-generated files, generated clients, build artifacts, or vendor artifacts are to be excluded from the benchmark scope:
+
+define this in the benchmark contract BEFORE running the experiment.
+
+Then rebuild ground truth consistently.
+
+Do not remove an item after observing that RCIR missed it.
+
+---
+
+# PHASE 8 — FIX ADAPTIVE FANOUT DEGREE
+
+Current Plane-A runner constructs traversal policy with a value derived from the number of target entities rather than the actual graph degree.
+
+This does NOT represent branching factor.
+
+Implement:
+
+```text
+GraphDegreeAnalyzer
+```
+
+After entity resolution:
+
+```text
+resolved_seed_entities
+    ↓
+calculate admissible in-degree/out-degree
+for policy-relevant edge types
+    ↓
+effective_seed_degree
+    ↓
+FanoutPolicy.evaluate(...)
+```
+
+Record:
+
+```json
+{
+  "seed_entities": [],
+  "raw_degree": 0,
+  "policy_relevant_degree": 0,
+  "fanout_mode": "LOW|MEDIUM|HIGH"
+}
+```
+
+Never infer high/low fanout from:
+
+```text
+len(target_entities)
+len(seed_entities)
+```
+
+---
+
+# PHASE 9 — ADD FANOUT REGRESSION TESTS
+
+Create tests for:
+
+```text
+degree 3  -> LOW_DEGREE
+degree 30 -> MEDIUM_DEGREE
+degree 500 -> HIGH_DEGREE
+```
+
+For HIGH_DEGREE:
+
+```text
+all direct exact dependencies retained
+indirect recursive expansion disabled or tightly bounded
+```
+
+For LOW_DEGREE:
+
+```text
+operation-compatible second-hop expansion allowed
+```
+
+---
+
+# PHASE 10 — PRESERVE THE DUAL-PLANE ARCHITECTURE
+
+Do NOT collapse Plane A and Plane B again.
+
+The architecture remains:
+
+```text
+                 CHANGE SPEC
+                      │
+                      ▼
+              ENTITY RESOLUTION
+                      │
+            ┌─────────┴─────────┐
+            │                   │
+            ▼                   ▼
+      IMPACT PLANE        CONTEXT PLANE
+      high recall         high density
+            │                   │
+            └──── evidence ─────┘
+```
+
+Plane A is authoritative for:
+
+```text
+what may be affected
+```
+
+Plane B is authoritative for:
+
+```text
+what the coding agent sees now
+```
+
+---
+
+# PHASE 11 — REPAIR RANKER ABLATION INTEGRITY
+
+Current ranker ablations are not sufficiently isolated.
+
+Implement:
+
+```python
+RankerConfig
+```
+
+with explicit switches:
+
+```text
+use_entity_identity
+use_edge_resolution
+use_traversal_score
+use_type_compatibility
+use_change_compatibility
+use_boundary_contract
+use_bm25
+use_module_distance
+use_test_relationship
+use_historical
+use_hub_penalty
+```
+
+The ranker itself must obey these switches.
+
+Do NOT emulate feature removal by partially modifying an already-built EvidenceVector unless mathematically equivalent and regression-tested.
+
+---
+
+# PHASE 12 — FIX BM25 ABLATION
+
+Current R0–R5 experiment declares:
+
+```text
+use_bm25 = false|true
+```
+
+but the ablation runner does not reliably zero lexical evidence when `use_bm25=false`.
+
+Therefore R3 → R4 is not a trustworthy BM25 experiment.
+
+Correct this.
+
+When disabled:
+
+```text
+lexical_score = 0
+```
+
+or lexical scoring is never generated.
+
+When enabled:
+
+```text
+lexical_score comes from the selected scorer
+```
+
+Add a unit test demonstrating that toggling BM25 changes feature vectors when lexical evidence exists.
+
+---
+
+# PHASE 13 — REBUILD R0-RN ABLATIONS FROM TRUE ZERO BASELINE
+
+Define:
+
+```text
+R0 = identity + direct structural relationship only
+
+R1 = R0 + traversal evidence
+
+R2 = R1 + type-flow compatibility
+
+R3 = R2 + change-operation compatibility
+
+R4 = R3 + selected lexical feature
+
+R5 = R4 + verification/test evidence
+
+R6 = R5 + module evidence
+
+R7 = R6 + real historical evidence, only if available
+```
+
+Each feature must be genuinely absent from earlier variants.
+
+Run all rankers on the SAME frozen Impact Plane candidate sets.
+
+---
+
+# PHASE 14 — DO NOT ASSUME MORE FEATURES ARE BETTER
+
+Current evidence shows the added features degrade ranking:
+
+```text
+R0 > R1 > R2 > R3 ... > R5
+```
+
+Treat this as a useful failure.
+
+The final ranker must be whichever configuration performs best on VALIDATION, not whichever has the largest number of features.
+
+---
+
+# PHASE 15 — USE DATASET SPLITS FOR REAL
+
+Existing dev/validation/test manifests must finally control experiments.
+
+Required process:
+
+```text
+DEV:
+    feature engineering
+    weight tuning
+
+VALIDATION:
+    ranker selection
+    architecture selection
+
+TEST:
+    exactly one frozen final run
+```
+
+The old five benchmark tasks must NOT be used simultaneously for tuning and final validation.
+
+Create independent ground truth for all split tasks.
+
+---
+
+# PHASE 16 — KEEP TEST SET INVISIBLE TO TUNING
+
+The code that performs:
+
+```text
+weight selection
+policy selection
+ranker selection
+threshold selection
+```
+
+must not import or inspect the test task results.
+
+Add an automated leakage test.
+
+---
+
+# PHASE 17 — REPLACE ONE UNIVERSAL RANKER WITH OPERATION-CONDITIONED RANKING
+
+A route change and an interface change do not value evidence equally.
+
+Implement:
+
+```text
+OperationRankerProfile
+```
+
+Profiles:
+
+```text
+RENAME
+SIGNATURE_CHANGE
+BEHAVIOR_CHANGE
+ROUTE_CHANGE
+EVENT_CHANGE
+CONFIG_CHANGE
+SCHEMA_CHANGE
+PERMISSION_CHANGE
+SERVICE_BOUNDARY_CHANGE
+```
+
+Each profile may use different feature weights.
+
+Example:
+
+```text
+ROUTE_CHANGE:
+    route_to_controller       very high
+    frontend_to_route         very high
+    direct caller             high
+    lexical                   low
+
+SIGNATURE_CHANGE:
+    implements                very high
+    overrides                 very high
+    typed caller              very high
+    imports                   medium
+
+CONFIG_CHANGE:
+    typed injection           very high
+    direct consumer           high
+    lexical "config" filename low
+```
+
+Weights must be tuned only on DEV and selected on VALIDATION.
+
+---
+
+# PHASE 18 — INTRODUCE CASCADED RANKING
+
+Do not rely entirely on one linear score.
+
+Stage 1:
+
+```text
+semantic class assignment
+```
+
+Candidate buckets:
+
+```text
+A0 = explicit target
+A1 = direct static-exact dependency
+A2 = typed interface/implementation/override
+A3 = direct boundary contract
+A4 = direct verification/test relation
+A5 = static inferred relationship
+A6 = indirect relation
+A7 = lexical-only candidate
+```
+
+Stage 2:
+
+rank WITHIN semantic buckets.
+
+Stage 3:
+
+perform cross-bucket fusion based on change operation.
+
+This prevents a high lexical score from outranking a proven caller.
+
+---
+
+# PHASE 19 — ADD DIVERSITY-AWARE RERANKING
+
+Large interfaces such as `IConfig` produce many similar consumers.
+
+After semantic ranking, optionally apply diversity constraints:
+
+```text
+max top-K entries per module
+max repeated relation pattern
+module coverage bonus
+edge-type coverage bonus
+```
+
+Do not remove candidates from Plane A.
+
+This applies only to Plane B.
+
+Evaluate whether diversity improves:
+
+```text
+CriticalRecall@20
+CriticalRecall@Budget
+nDCG
+```
+
+---
+
+# PHASE 20 — IMPLEMENT REAL TYPE-FLOW INTELLIGENCE
+
+Current `type_compatibility` is still mostly heuristic.
+
+Implement:
+
+```text
+TypeFlowIndex
+```
+
+Start with deterministic local/interprocedural signals available in PHP:
+
+```text
+parameter type hints
+return types
+typed properties
+constructor injection
+property assignments
+local variable assignments
+PHPDoc @var
+PHPDoc @param
+PHPDoc @return
+implements closure
+inheritance closure
+method owner resolution
+new ClassName()
+static receiver resolution
+$this receiver
+```
+
+For each call:
+
+```text
+receiver expression
+    ↓
+candidate receiver types
+    ↓
+method owner candidates
+    ↓
+resolved target entity/entities
+```
+
+Store evidence.
+
+Do not silently convert ambiguity into exactness.
+
+---
+
+# PHASE 21 — TARGET `Node::getId()` AS A TYPE-FLOW STRESS TEST
+
+The generic `getId()` case remains a critical RCIR weakness.
+
+Create a dedicated evaluation:
+
+```text
+Generic Method Receiver Benchmark
+```
+
+Measure:
+
+```text
+typed receiver resolved
+ambiguous receiver
+unknown receiver
+wrong receiver
+```
+
+Then measure affected-file retrieval before and after `TypeFlowIndex`.
+
+This should be a major v8.2 research result.
+
+---
+
+# PHASE 22 — IMPROVE CONFIG / DI SEMANTICS
+
+For interfaces such as `IConfig` distinguish:
+
+```text
+constructor injection
+container lookup
+service registration
+method parameter
+property type
+static reference
+lexical occurrence
+```
+
+These relations should not receive identical scores.
+
+Introduce typed edges:
+
+```text
+injects
+container_resolves
+service_registers
+config_reads
+config_writes
+```
+
+---
+
+# PHASE 23 — ADD HIGH-FANOUT IMPACT SUMMARIZATION
+
+For a target with hundreds of valid direct consumers, do NOT attempt to put every consumer into the LLM context.
+
+Create:
+
+```text
+ImpactSummary
+```
+
+Example:
+
+```json
+{
+  "target": "OCP\\IConfig",
+  "direct_consumers": 538,
+  "by_relation": {},
+  "by_module": {},
+  "critical_consumers": [],
+  "unresolved": [],
+  "full_manifest_reference": "..."
+}
+```
+
+The Context Plane can include this compact summary plus top-ranked concrete examples.
+
+The full list remains available through iterative retrieval.
+
+---
+
+# PHASE 24 — FIX CORE/ADAPTER SEPARATION
+
+Core evidence code must not default to:
+
+```python
+NextcloudModuleResolver()
+```
+
+inside generic RCIR modules.
+
+Generic core should depend on:
+
+```text
+ModuleResolver interface
+RepositoryAdapter interface
+```
+
+Application code chooses:
+
+```text
+NextcloudAdapter
+GenericPHPAdapter
+GenericTSAdapter
+...
+```
+
+If no adapter is provided:
+
+```text
+GenericModuleResolver
+```
+
+must be used.
+
+---
+
+# PHASE 25 — REMOVE PATH-NAME SEMANTICS FROM TYPE REASONING
+
+Do not infer semantic type compatibility merely because:
+
+```text
+"Event" appears in path
+"test" appears in filename
+"config" appears in path
+```
+
+Path patterns may be auxiliary lexical features.
+
+They must not masquerade as type-system evidence.
+
+---
+
+# PHASE 26 — FIX CONTEXT SPAN RESOLUTION
+
+The current Context Compiler uses regex scanning and is therefore NOT AST-located.
+
+Implement:
+
+```text
+SourceSpanResolver
+```
+
+Priority:
+
+```text
+1. parser/graph node start_line + end_line
+2. edge call_line for caller snippet
+3. framework adapter span
+4. explicitly-labelled heuristic fallback
+```
+
+Each ContextEntry must include:
+
+```json
+{
+  "span_source": "parser|edge|adapter|heuristic",
+  "span_confidence_class": "...",
+  "fallback_used": false
+}
+```
+
+Never silently return line 1 when symbol resolution fails.
+
+If no span exists:
+
+```text
+SPAN_UNRESOLVED
+```
+
+---
+
+# PHASE 27 — EXTRACT COMPLETE SYMBOL BODIES
+
+For functions/methods/classes do not use arbitrary:
+
+```text
+start_line + 60
+```
+
+when a real end span is known.
+
+Use actual parser end positions.
+
+If the parser does not expose them, implement balanced-body extraction as a fallback and label it as heuristic.
+
+---
+
+# PHASE 28 — FIX SUMMARY GRANULARITY
+
+`SUMMARY` must actually be a summary.
+
+It must NOT extract ten lines of source code.
+
+Example:
+
+```text
+apps/foo/Bar.php::method
+calls Target::method
+static_exact
+same-module
+rank 14
+```
+
+Expected cost:
+
+approximately tens of tokens, not hundreds.
+
+---
+
+# PHASE 29 — DEDUPLICATE CONTEXT BY SOURCE SPAN
+
+If multiple ranked entities resolve to overlapping spans in the same file:
+
+merge the spans.
+
+Do not spend token budget repeating nearly identical code.
+
+Track:
+
+```text
+entities_merged
+tokens_saved_by_deduplication
+```
+
+---
+
+# PHASE 30 — PIN EXPLICIT TARGETS
+
+The explicitly requested change target must always be present in Context Plane unless:
+
+```text
+target unresolved
+target unsupported
+```
+
+Target inclusion should be separate from ranking.
+
+Ranking determines supporting context, not whether the requested file disappears.
+
+---
+
+# PHASE 31 — USE A REAL TOKENIZER
+
+Current:
+
+```text
+ceil(len(text) / 4)
+```
+
+is an estimate.
+
+Introduce:
+
+```text
+TokenCounter
+```
+
+Implementations:
+
+```text
+ApproximateCharTokenCounter
+QwenTokenizerCounter
+OpenAITokenizerCounter
+...
+```
+
+Benchmark artifacts must specify:
+
+```json
+{
+  "tokenizer": "...",
+  "model": "...",
+  "token_count_type": "exact|estimated"
+}
+```
+
+Validation gates requiring a fixed token budget must use the actual tokenizer corresponding to the evaluated model whenever available.
+
+If only approximation exists:
+
+do not call the number an exact token count.
+
+---
+
+# PHASE 32 — FIX TOKEN-WEIGHTED METRICS
+
+Current token-weighted metrics must use the actual token count of EACH compiled entry.
+
+Do not use a constant fallback such as:
+
+```text
+150 tokens per relevant file
+```
+
+when real compiled-entry costs exist.
+
+Calculate:
+
+```text
+relevant_context_tokens
+irrelevant_context_tokens
+total_context_tokens
+relevant_ground_truth_tokens
+```
+
+then derive token-weighted precision/recall.
+
+---
+
+# PHASE 33 — REPORT BOTH FILE-LEVEL AND ENTITY-LEVEL CONTEXT QUALITY
+
+A file may contain multiple relevant entities.
+
+Report:
+
+```text
+FileContextPrecision
+FileContextRecall
+
+EntityContextPrecision
+EntityContextRecall
+
+CriticalEntityRecall@Budget
+```
+
+Do not mix these units.
+
+---
+
+# PHASE 34 — FIX GRADED GROUND TRUTH
+
+Current graded ground truth relies heavily on manually selected path sets and directory rules.
+
+Create adjudication records:
+
+```json
+{
+  "file": "...",
+  "task_id": "...",
+  "tier": 3,
+  "reason": "...",
+  "source_evidence": [],
+  "adjudication": "manual_verified|historical_diff|compiler|test",
+  "verified": true
+}
+```
+
+A directory prefix alone is not sufficient evidence for MUST_INSPECT.
+
+---
+
+# PHASE 35 — USE HISTORICAL PATCHES WHERE POSSIBLE
+
+For real historical tasks:
+
+use the actual merged patch as one source of affected-file evidence.
+
+Distinguish:
+
+```text
+files actually changed
+files required to inspect
+supporting context
+```
+
+Do not equate "grep hit" with "must change."
+
+---
+
+# PHASE 36 — FIX EDGE GROUND TRUTH PROVENANCE
+
+The typed edge builder currently hard-codes edges and labels evidence sources such as:
+
+```text
+syntax_ast
+reflection
+call_graph
+```
+
+without programmatically proving that those evidence systems generated the record.
+
+Change evidence_source to the truth.
+
+Examples:
+
+```text
+manual_source_adjudication
+parser_verified
+runtime_verified
+compiler_verified
+```
+
+Only use `syntax_ast` if an AST verification step actually executed.
+
+---
+
+# PHASE 37 — REBUILD EDGE EVALUATOR
+
+Exact edge matching must require:
+
+```text
+normalized source EntityID
+AND
+normalized target EntityID
+AND
+relationship type
+```
+
+Do not count a relationship merely because source and target file substrings appear.
+
+For an inferred framework edge use a separately defined alias-resolution matcher.
+
+Report:
+
+```text
+EXACT_TYPED_MATCH
+INFERRED_TYPED_MATCH
+SOURCE_TARGET_ONLY_WRONG_RELATION
+NO_MATCH
+```
+
+---
+
+# PHASE 38 — DO NOT FABRICATE EDGE PRECISION
+
+Current evaluator must not assign:
+
+```text
+edge_precision_exact = 1.0
+edge_precision_inferred = 0.95
+```
+
+as constants.
+
+Precision requires false-positive adjudication.
+
+If ground truth only contains positive edges and does not define a complete closed-world prediction universe:
+
+```text
+EDGE_PRECISION = NOT_MEASURED
+```
+
+is the correct result.
+
+To measure precision, define a scoped prediction universe and adjudicate all predicted edges, or independently sample predictions and estimate precision with the methodology documented.
+
+---
+
+# PHASE 39 — EXPAND EDGE RECALL
+
+Current typed edge evaluation exposes important missing classes:
+
+```text
+method calls
+frontend_to_route
+event_dispatch
+event_listener
+config_reads
+source_to_test
+```
+
+Fix extraction support category by category.
+
+Do not fix the evaluator to make them pass.
+
+---
+
+# PHASE 40 — BUILD EXPLICIT VERIFICATION GRAPH EDGES
+
+`source_to_test` should come from evidence such as:
+
+```text
+test imports source
+test constructs source class
+test invokes target method
+test naming + namespace match
+historical production/test co-change
+```
+
+File-name similarity alone is not sufficient for `static_exact`.
+
+---
+
+# PHASE 41 — IMPLEMENT REAL ITERATIVE RCIR CONTEXT
+
+Current:
+
+```python
+request_context()
+```
+
+still performs repository text search.
+
+Replace this completely.
+
+Define:
+
+```python
+class ContextProvider:
+    def retrieve(change_spec, symbol, already_seen, token_budget):
+        ...
+```
+
+`RepoToolEnvironment` receives a ContextProvider dependency.
+
+Flow:
+
+```text
+request_context
+    ↓
+ChangeSpec refinement
+    ↓
+entity resolution
+    ↓
+Impact Plane lookup
+    ↓
+selected ranker
+    ↓
+Context Compiler
+    ↓
+new unseen context only
+```
+
+Track:
+
+```text
+entities_requested
+entities_returned
+duplicate_entities_skipped
+exact_tokens_added
+critical_entities_added
+latency
+```
+
+---
+
+# PHASE 42 — FIX THE REQUEST_CONTEXT UNIT TEST
+
+The existing test only proves:
+
+```text
+counter increased
+string returned
+```
+
+It does NOT prove RCIR was called.
+
+Add a mock ContextProvider and assert:
+
+```text
+provider.retrieve() invoked exactly once
+correct ChangeSpec passed
+returned entities rendered
+search_code not invoked
+```
+
+---
+
+# PHASE 43 — INTEGRATE TaskRiskRouter INTO OrchestratorRunner
+
+The current runner still executes the fixed six-stage lifecycle.
+
+Modify it to accept:
+
+```text
+RoutingDecision
+```
+
+and execute exactly:
+
+```text
+decision.stages
+```
+
+Examples:
+
+```text
+LOCAL_BUG:
+retriever
+implementer
+reviewer
+gatekeeper
+
+CROSS_MODULE:
+maker
+retriever
+implementer
+reviewer
+gatekeeper
+historian
+
+ARCHITECTURE:
+maker
+reviewer_design
+maker_revision
+implementer
+reviewer_code
+gatekeeper
+historian
+```
+
+Store actual stage execution telemetry.
+
+---
+
+# PHASE 44 — CHOOSE AGENT TURN BUDGET FROM RISK
+
+Do not hardcode:
+
+```text
+max_turns = 5
+```
+
+inside `OrchestratorRunner`.
+
+Example policy:
+
+```text
+LOCAL_BUG       -> evaluated default
+CROSS_MODULE    -> evaluated default
+ARCHITECTURE    -> evaluated default
+```
+
+The actual numbers must come from REAL turn-budget experiments.
+
+---
+
+# PHASE 45 — DELETE FAKE AGENT A/B RESULTS
+
+The current committed `agent_ab_test.json` is not an empirical A/B experiment.
+
+The script writes fixed values such as:
+
+```text
+success_rate = 1.0
+success_rate = 0.4
+APPROVE = 5
+APPROVE = 2
+```
+
+Delete these as validation evidence.
+
+Preserve the old artifact as historical:
+
+```text
+SIMULATED_INVALID_FOR_GATE
+```
+
+---
+
+# PHASE 46 — REAL AGENT BENCHMARK MODE MUST FAIL CLOSED
+
+Evidence-mode runner must reject:
+
+```text
+dry-run provider
+simulation fallback
+fake verification command
+empty diff
+pre-existing passing test only
+missing provider provenance
+```
+
+Example:
+
+```python
+if provider.is_simulated:
+    raise BenchmarkIntegrityError
+```
+
+---
+
+# PHASE 47 — BUILD REAL CODING TASKS
+
+Each task must require a real behavioral change.
+
+The strongest design is:
+
+```text
+clean frozen worktree
+    ↓
+task-specific acceptance test initially FAILS
+    ↓
+agent edits source
+    ↓
+test rerun
+    ↓
+acceptance test PASSES
+```
+
+This prevents a no-op patch from being labelled successful.
+
+---
+
+# PHASE 48 — USE ISOLATED WORKTREES
+
+For every A/B run:
+
+```text
+Condition A worktree
+Condition B worktree
+```
+
+Start from identical commit SHA.
+
+After each run store:
+
+```text
+git diff
+changed files
+test logs
+provider provenance
+context payload
+tool calls
+turn history
+token counts
+wall time
+```
+
+Destroy or reset the worktree before the next repetition.
+
+---
+
+# PHASE 49 — REAL CONDITION A / CONDITION B
+
+Condition A:
+
+```text
+agent + RCIR v8.2 context
+```
+
+Condition B:
+
+```text
+same agent + normal repository tools
+without RCIR context
+```
+
+Keep identical:
+
+```text
+model
+provider
+temperature
+seed if available
+task
+turn budget
+verification command
+repository commit
+system prompt
+toolset
+```
+
+The only independent variable should be RCIR context availability.
+
+---
+
+# PHASE 50 — USE REAL MODEL PROVENANCE
+
+Record:
+
+```json
+{
+  "provider": "ollama",
+  "endpoint": "...",
+  "model": "...",
+  "model_digest": "...",
+  "temperature": 0,
+  "simulation_fallback": false
+}
+```
+
+Any provider failure invalidates the run.
+
+Do not substitute simulated output.
+
+---
+
+# PHASE 51 — RUN MULTIPLE REPLICATES
+
+One A/B execution per task is not enough for stochastic models.
+
+Where feasible run:
+
+```text
+>= 3 repetitions per task per condition
+```
+
+Counterbalance execution order.
+
+Report:
+
+```text
+mean
+median
+variance
+raw individual outcomes
+```
+
+Do not claim population significance from tiny samples.
+
+---
+
+# PHASE 52 — REBUILD TURN-BUDGET EXPERIMENT
+
+The current raw turn-budget artifact shows:
+
+```text
+0 tool calls
+0 diff
+REJECT
+```
+
+for every budget.
+
+That is the current empirical result.
+
+The Markdown report must reflect that.
+
+Then rerun using a real provider.
+
+Compare:
+
+```text
+5
+10
+20
+```
+
+or another frozen set.
+
+Select the default only after real evidence.
+
+---
+
+# PHASE 53 — REAL VERIFICATION COMMANDS ONLY
+
+Forbidden formal benchmark verification:
+
+```text
+python -c "print('Verification test passed')"
+```
+
+Required:
+
+```text
+real unit test
+real integration test
+real compiler
+real linter/static analysis where relevant
+```
+
+Prefer task-specific acceptance tests.
+
+---
+
+# PHASE 54 — HARDEN APPLY_PATCH FURTHER
+
+Verify support for:
+
+```text
+multi-hunk
+multi-file
+create file
+delete file
+rename file
+line-ending differences
+failed hunk rollback
+partial patch atomicity
+```
+
+No partial repository mutation on failure.
+
+---
+
+# PHASE 55 — ACTUAL LANGUAGE VALIDATION
+
+After modifications:
+
+```text
+PHP       -> php -l + relevant PHPUnit/test
+Python    -> compile/pytest
+Java      -> javac/Maven/Gradle
+TS        -> tsc/lint/test
+Go        -> go test
+Rust      -> cargo check/test
+```
+
+Only run tools actually installed.
+
+Record unavailable toolchains as:
+
+```text
+NOT_VALIDATED
+```
+
+---
+
+# PHASE 56 — FIX REPORT GENERATION PERMANENTLY
+
+Create one report generator:
+
+```text
+scripts/generate_reports.py
+```
+
+It reads raw artifacts only.
+
+Markdown must contain an artifact hash/reference.
+
+Do not manually type benchmark numbers into reports.
+
+---
+
+# PHASE 57 — ADD REPORT CONSISTENCY CI
+
+Create a test that:
+
+1. regenerates reports from raw JSON
+2. compares generated output with committed report
+3. fails if they differ
+
+This prevents situations such as:
+
+```text
+raw TASK-1 context precision = 64%
+report TASK-1 context precision = 75%
+```
+
+---
+
+# PHASE 58 — ADD SCHEMA VALIDATION
+
+Define JSON Schemas for:
+
+```text
+dual-plane benchmark
+ranker ablation
+edge evaluation
+agent run
+agent A/B
+turn-budget
+context compilation
+decision gates
+```
+
+Reject malformed or manually incomplete artifacts.
+
+---
+
+# PHASE 59 — BENCHMARK PERFORMANCE CORRECTLY
+
+For latency:
+
+```text
+warm-up
+multiple repetitions
+median
+p95
+```
+
+Separate:
+
+```text
+graph build/index time
+query time
+ranking time
+context compilation time
+```
+
+For memory report both:
+
+```text
+Python allocation peak
+process RSS
+```
+
+Do not compare numbers measured with materially different methodologies.
+
+---
+
+# PHASE 60 — SELECT THE BEST RANKER ON VALIDATION ONLY
+
+After proper R0-RN ablations:
+
+select one configuration.
+
+Persist:
+
+```text
+selected_ranker_config.json
+```
+
+The PRIMARY dual-plane pipeline must instantiate this exact configuration.
+
+The final report must use metrics from this exact configuration.
+
+Do not validate R0 while executing R5.
+
+---
+
+# PHASE 61 — CONFIGURATION FINGERPRINTING
+
+Every benchmark artifact must contain:
+
+```json
+{
+  "candidate_generator_config_hash": "...",
+  "traversal_policy_hash": "...",
+  "ranker_config_hash": "...",
+  "context_compiler_config_hash": "...",
+  "benchmark_contract_hash": "..."
+}
+```
+
+This makes it impossible to accidentally compare different configurations under one label.
+
+---
+
+# PHASE 62 — IMPACT CLUSTERING FOR HIGH-DEGREE SYSTEMS
+
+Implement optional clustering of Plane-A impact sets by:
+
+```text
+module
+edge type
+service
+namespace
+test vs production
+exact vs inferred
+```
+
+This does not change impact recall.
+
+It improves Context Plane synthesis and human auditability.
+
+---
+
+# PHASE 63 — CONTEXT PLAN BEFORE CONTEXT CONTENT
+
+Before allocating source tokens, generate:
+
+```text
+ContextPlan
+```
+
+Example:
+
+```json
+{
+  "target": 1,
+  "direct_exact_callers": 4,
+  "implementations": 3,
+  "direct_tests": 2,
+  "boundary_contracts": 2,
+  "impact_summary": 1,
+  "supporting_context": 3
+}
+```
+
+Then fill the budget by semantic role.
+
+This is better than simply consuming candidates in global score order until the token limit is exhausted.
+
+---
+
+# PHASE 64 — RESERVE TOKEN BUDGETS BY ROLE
+
+Experiment with budget partitions such as:
+
+```text
+25% target/definition
+25% direct dependency evidence
+20% implementations/callers
+15% tests
+10% boundary/config/schema
+5% impact summary
+```
+
+Do not hardcode these permanently until validated.
+
+Compare against naive ranked-fill context compilation.
+
+---
+
+# PHASE 65 — ADD QUERY-ADAPTIVE CONTEXT COMPILATION
+
+A config change, event change, and route change need different context structures.
+
+ContextCompiler should consume:
+
+```text
+ChangeSpecification.operation
+```
+
+and allocate context appropriately.
+
+---
+
+# PHASE 66 — EXPAND BEYOND FIVE LEGACY TASKS
+
+The five Nextcloud tasks remain useful regression cases.
+
+They are NOT enough for architectural validation.
+
+Build a larger dataset covering:
+
+```text
+generic method ambiguity
+interface evolution
+constructor injection
+route change
+event listener change
+config reads/writes
+schema migration
+permissions
+frontend/backend boundary
+generated client
+test/build dependency
+service boundary
+```
+
+Prefer historical real changes.
+
+---
+
+# PHASE 67 — EXTERNAL GENERALIZATION TEST
+
+After Nextcloud DEV/VALIDATION is stable, evaluate frozen configuration on at least one repository not used for tuning.
+
+Recommended order:
+
+```text
+OpenTelemetry Demo
+Odoo
+Frappe/ERPNext
+```
+
+Do not add repository-specific hacks after seeing external test performance without creating a new version.
+
+---
+
+# PHASE 68 — CI
+
+Add:
+
+```text
+fast-unit.yml
+benchmark-smoke.yml
+report-consistency.yml
+full-benchmark-manual.yml
+```
+
+Fast CI should run:
+
+```text
+unit tests
+ranker feature gates
+fanout tests
+context span tests
+edge evaluator tests
+agent success semantics
+report consistency
+schema validation
+```
+
+Full Nextcloud benchmark may remain manually triggered/cached.
+
+---
+
+# REQUIRED REGRESSION TESTS
+
+At minimum include tests for:
+
+```text
+actual graph degree controls fanout mode
+
+all direct exact edges survive Plane A
+
+silent misses classified
+
+R0 truly has only R0 features
+
+BM25 disabled means lexical score absent
+
+R1 differs only by traversal evidence
+
+R2 differs only by type evidence
+
+selected ranker equals primary pipeline config
+
+context span comes from parser node metadata
+
+regex fallback explicitly labelled
+
+unresolved span never silently becomes line 1
+
+SUMMARY contains no arbitrary source slice
+
+overlapping context spans deduplicate
+
+explicit target always included
+
+actual tokenizer count respected
+
+token-weighted metrics use actual entry tokens
+
+request_context calls ContextProvider
+
+request_context does not call search_code fallback silently
+
+TaskRiskRouter controls actual OrchestratorRunner stages
+
+OrchestratorRunner uses risk-dependent turn budget
+
+dry-run provider rejected in evidence mode
+
+fake print verification rejected
+
+empty diff cannot pass
+
+pre-existing tests without behavior change cannot pass
+
+A/B worktrees start from identical SHA
+
+edge match requires source + target + relationship
+
+edge precision never hardcoded
+
+report metrics equal raw metrics
+
+gate decision is machine generated
+```
+
+---
+
+# PRIMARY v8.2 RESEARCH HYPOTHESES
+
+Hypothesis H1:
+
+> Correct graph-degree fanout plus semantic type-flow can preserve >=95% impact recall without restoring the v7 candidate explosion.
+
+Hypothesis H2:
+
+> Operation-conditioned cascaded ranking will outperform the current universal R5 linear ranker on CriticalRecall@Budget and nDCG without sacrificing impact recall.
+
+Hypothesis H3:
+
+> Parser-derived spans plus semantic-role budget allocation will substantially increase CriticalRecall@Budget over the current ~32% level.
+
+Hypothesis H4:
+
+> Real RCIR context reduces repository exploration cost and/or improves verified coding-task success versus the same agent without RCIR.
+
+Every hypothesis is falsifiable.
+
+Record negative results.
+
+---
+
+# PRIMARY TARGETS
+
+Do not treat targets as achieved until raw evidence proves them.
+
+## Impact Plane
+
+Aim for:
+
+```text
+Global CandidatePoolRecall >= 95%
+Macro CandidatePoolRecall >= 95%
+Worst major task >= 90%
+Silent Misses <= frozen limit
+```
+
+## Context Plane
+
+Aim for:
+
+```text
+Precision@20 >= 35%
+Precision@50 >= 20%
+nDCG@50 >= 0.50
+MRR >= 0.70
+CriticalRecall@Budget >= 60%
+```
+
+The selected ranker must meet these, not an unused ablation.
+
+## Edge Intelligence
+
+Improve typed-edge recall category by category.
+
+Do not report precision until the evaluation methodology can actually measure false positives.
+
+## Agent Evaluation
+
+A valid success requires:
+
+```text
+real provider
+real tool calls
+non-empty intended diff
+behavioral verification test
+test passes after modification
+Gatekeeper APPROVE
+simulation_fallback = false
+```
+
+---
+
+# FINAL DECISION RULE
+
+At completion, use only:
+
+```text
+results/gate_evaluation.json
+```
+
+to select:
+
+```text
+OPTION A — VALIDATED
+OPTION B — PARTIALLY VALIDATED
+OPTION C — REJECTED
+```
+
+Option A requires ALL mandatory gates.
+
+No OR substitution.
+
+No cherry-picking a better ablation than the actual selected pipeline.
+
+No manually written success rates.
+
+No simulated agent evidence.
+
+No report-level reinterpretation.
+
+---
+
+# EXPECTED FINAL ARTIFACTS
+
+Produce:
+
+```text
+experiments/rcir_v8_2/results/
+    impact_plane.json
+    context_plane.json
+    silent_miss_catalog.json
+    ranker_ablations.json
+    selected_ranker_config.json
+    type_flow_evaluation.json
+    lexical_evaluation.json
+    edge_recall_evaluation.json
+    context_compiler_evaluation.json
+    agent_turn_budget.json
+    agent_ab_runs.json
+    performance_benchmark.json
+    gate_evaluation.json
+```
+
+Generate from those:
+
+```text
+experiments/rcir_v8_2/reports/
+    v8_1_reassessment.md
+    impact_plane_report.md
+    ranking_report.md
+    type_flow_report.md
+    context_compiler_report.md
+    edge_quality_report.md
+    agent_turn_budget_report.md
+    agent_ab_report.md
+    generalization_report.md
+    failure_catalog.md
+    final_assessment.md
+    reproduction.md
+```
+
+---
+
+# STOP CONDITION
+
+Do not continue modifying the architecture until numbers become positive.
+
+For each failed experiment:
+
+```text
+record
+classify
+explain
+preserve raw artifact
+revert unsuccessful change if appropriate
+```
+
+Do not alter the evaluator to rescue an implementation.
+
+---
+
+# FINAL ENGINEERING PRINCIPLE
+
+RCIR v8.2 should optimize three distinct objectives:
+
+```text
+1. IMPACT PLANE
+   What could this change affect?
+
+2. CONTEXT PLANE
+   What information is most useful to the agent right now?
+
+3. EXECUTION PLANE
+   Can the agent actually make and verify the correct modification?
+```
+
+A system is not validated merely because Plane A has high recall.
+
+A system is not validated merely because one ranker ablation has high precision.
+
+A system is not validated because a dry-run agent produces a convenient report.
+
+Validation requires all three planes to agree with real evidence.
+
+Begin with PHASE 0.
+
+Audit the existing artifacts before editing implementation code.
+
+Do not generate a new `OPTION A` conclusion until the machine-enforced gate evaluator independently produces it.

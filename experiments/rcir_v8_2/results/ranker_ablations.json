@@ -1,0 +1,62 @@
+{
+  "R0": {
+    "precision_at_20": 0.46,
+    "precision_at_50": 0.364,
+    "ndcg_at_50": 0.5487,
+    "mrr": 0.5133
+  },
+  "R1": {
+    "precision_at_20": 0.45,
+    "precision_at_50": 0.36,
+    "ndcg_at_50": 0.5303,
+    "mrr": 0.5133
+  },
+  "R2": {
+    "precision_at_20": 0.43,
+    "precision_at_50": 0.356,
+    "ndcg_at_50": 0.5161,
+    "mrr": 0.5067
+  },
+  "R3": {
+    "precision_at_20": 0.39,
+    "precision_at_50": 0.264,
+    "ndcg_at_50": 0.3971,
+    "mrr": 0.5067
+  },
+  "R4_BM25": {
+    "precision_at_20": 0.41,
+    "precision_at_50": 0.264,
+    "ndcg_at_50": 0.4432,
+    "mrr": 0.6667
+  },
+  "R5": {
+    "precision_at_20": 0.33,
+    "precision_at_50": 0.244,
+    "ndcg_at_50": 0.3993,
+    "mrr": 0.6667
+  },
+  "R6": {
+    "precision_at_20": 0.3,
+    "precision_at_50": 0.24,
+    "ndcg_at_50": 0.3847,
+    "mrr": 0.6667
+  },
+  "R7_Full_Linear": {
+    "precision_at_20": 0.3,
+    "precision_at_50": 0.24,
+    "ndcg_at_50": 0.3847,
+    "mrr": 0.6667
+  },
+  "Cascaded_Semantic": {
+    "precision_at_20": 0.34,
+    "precision_at_50": 0.3,
+    "ndcg_at_50": 0.478,
+    "mrr": 0.6667
+  },
+  "Cascaded_Operation_Profiles": {
+    "precision_at_20": 0.33,
+    "precision_at_50": 0.304,
+    "ndcg_at_50": 0.4731,
+    "mrr": 0.7167
+  }
+}
