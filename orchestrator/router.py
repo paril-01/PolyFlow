@@ -80,7 +80,7 @@ class TaskRiskRouter:
                 token_cost_estimate="~12,000 tokens (4 stages, saving ~45% vs fixed 6-stage)",
             )
 
-        if any(w in desc_lower for w in ["small bug", "typo", "single file", "rename local"]):
+        if any(w in desc_lower for w in ["small bug", "typo", "single file", "rename local", "internal helper", "helper method", "rename internal"]):
             return RoutingDecision(
                 risk_level=TaskRiskLevel.LOCAL_BUG,
                 stages=["retriever", "implementer", "reviewer", "gatekeeper"],

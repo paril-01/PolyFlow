@@ -1,0 +1,38 @@
+{
+  "R0": {
+    "precision_at_20": 0.46,
+    "precision_at_50": 0.34,
+    "ndcg_at_50": 0.4972,
+    "mrr": 0.6733
+  },
+  "R1": {
+    "precision_at_20": 0.45,
+    "precision_at_50": 0.34,
+    "ndcg_at_50": 0.496,
+    "mrr": 0.6733
+  },
+  "R2": {
+    "precision_at_20": 0.43,
+    "precision_at_50": 0.336,
+    "ndcg_at_50": 0.4819,
+    "mrr": 0.6667
+  },
+  "R3": {
+    "precision_at_20": 0.4,
+    "precision_at_50": 0.248,
+    "ndcg_at_50": 0.4014,
+    "mrr": 0.6667
+  },
+  "R4": {
+    "precision_at_20": 0.4,
+    "precision_at_50": 0.248,
+    "ndcg_at_50": 0.4014,
+    "mrr": 0.6667
+  },
+  "R5": {
+    "precision_at_20": 0.29,
+    "precision_at_50": 0.184,
+    "ndcg_at_50": 0.3718,
+    "mrr": 0.6667
+  }
+}

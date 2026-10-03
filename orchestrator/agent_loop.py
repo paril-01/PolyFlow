@@ -261,7 +261,7 @@ class ReActAgentRunner:
                 e = args.get("end_line")
                 observation = self.env.inspect_file(path, start_line=s, end_line=e)
                 if not self.env.get_modified_files():
-                    observation += "\n[ACTION GUIDE]: Target inspected. Next step: call 'edit_file' with exact old_str and new_str to implement the required change."
+                    observation += "\n[ACTION GUIDE]: Target inspected. Next step: call 'apply_patch' (preferred) or 'edit_file' to implement the required change."
 
             elif tool_name == "search_code":
                 query = args.get("query", "")
@@ -278,7 +278,7 @@ class ReActAgentRunner:
                 target_p = args.get("path") or args.get("target_path")
                 observation = self.env.apply_patch(patch_str, target_path=target_p)
                 if "SUCCESS" in observation:
-                    observation += "\n[ACTION GUIDE]: Patch applied successfully. Next step: call 'run_command' with the test command to verify."
+                    observation += "\n[ACTION GUIDE]: Patch applied successfully. Next step: call 'run_command' with the verification command to test."
 
             elif tool_name == "edit_file":
                 path = args.get("path", "")
@@ -286,7 +286,7 @@ class ReActAgentRunner:
                 new_str = args.get("new_str", "")
                 observation = self.env.edit_file(path, old_str, new_str)
                 if "SUCCESS" in observation:
-                    observation += "\n[ACTION GUIDE]: Edit applied successfully. Next step: call 'run_command' with the test command to compile and verify."
+                    observation += "\n[ACTION GUIDE]: Edit applied successfully. Next step: call 'run_command' with the verification command to test."
 
             elif tool_name == "run_command":
                 cmd = args.get("command", "")
@@ -297,7 +297,7 @@ class ReActAgentRunner:
                 if cmd_res["exit_code"] == 0:
                     observation += "\n[ACTION GUIDE]: Verification tests PASSED (exit code 0). Next step: call 'finish' with summary."
                 else:
-                    observation += "\n[ACTION GUIDE]: Verification FAILED. Next step: call 'edit_file' to repair the error."
+                    observation += "\n[ACTION GUIDE]: Verification FAILED. Next step: call 'apply_patch' to repair the error and rerun tests."
 
             elif tool_name == "request_context":
                 sym = args.get("symbol", "")
@@ -313,22 +313,33 @@ class ReActAgentRunner:
 
             conversation_history.append({"role": "user", "content": f"TOOL RESULT ({tool_name}):\n{observation}"})
 
-        # Run final verification if test_command provided and not yet run or needs final verification
+        # Run final verification if test_command provided (PHASE 31 & 32)
+        diff = self.env.get_git_diff()
+        verification_executed = False
+        verification_passed = False
+
         if test_command:
             final_verification = self.env.run_command(test_command, timeout_sec=60)
             final_test_res = final_verification
-            passed = (final_verification["exit_code"] == 0)
+            verification_executed = True
+            verification_passed = (final_verification["exit_code"] == 0)
+            gatekeeper_verdict = "APPROVE" if (verification_passed and bool(diff)) else "REJECT"
         else:
-            passed = bool(self.env.get_modified_files())
+            # PHASE 32: If no verification command exists, Gatekeeper = CONDITIONAL
+            gatekeeper_verdict = "CONDITIONAL"
 
-        # Gatekeeper evaluation
-        diff = self.env.get_git_diff()
-        gatekeeper_verdict = "APPROVE" if passed and (len(diff) > 0 or not test_command) else "REJECT"
+        # PHASE 31: Strict agent success condition
+        success = (
+            bool(diff)
+            and verification_executed
+            and verification_passed
+            and gatekeeper_verdict == "APPROVE"
+        )
 
         return AgentLoopResult(
             task_id=task_id,
             condition=condition,
-            success=passed,
+            success=success,
             turns=turn,
             tool_calls_executed=tool_calls_count,
             files_modified=self.env.get_modified_files(),

@@ -1,0 +1,304 @@
+{
+  "macro_averages": {
+    "candidate_pool_recall": 0.947,
+    "candidate_pool_precision": 0.2224,
+    "r_precision": 0.3845,
+    "recall_at": {
+      "5": 0.1251,
+      "10": 0.1675,
+      "20": 0.2465,
+      "50": 0.2821
+    },
+    "precision_at": {
+      "5": 0.32,
+      "10": 0.3,
+      "20": 0.29,
+      "50": 0.184
+    },
+    "critical_recall_at": {
+      "5": 0.1576,
+      "10": 0.1966,
+      "20": 0.2968,
+      "50": 0.339
+    },
+    "mrr": 0.6667,
+    "ndcg_at": {
+      "20": 0.3471,
+      "50": 0.3718
+    },
+    "context_precision": 0.242,
+    "context_recall": 0.2697,
+    "critical_recall_budget": 0.3218,
+    "token_weighted_precision": 0.2577,
+    "token_weighted_recall": 0.2697
+  },
+  "totals": {
+    "tasks": 5,
+    "total_ground_truth": 721,
+    "total_candidates_pool": 2799,
+    "total_silent_misses": 20,
+    "global_pool_recall": 0.9723,
+    "total_known_unresolved": 0,
+    "total_unsupported": 0
+  },
+  "performance": {
+    "mean_latency_ms": 481.22,
+    "mean_peak_memory_mb": 3.71
+  },
+  "per_task": [
+    {
+      "task_id": "TASK-1",
+      "ground_truth_count": 24,
+      "candidate_pool_size": 80,
+      "candidate_pool_recall": 0.9583,
+      "candidate_pool_precision": 0.2875,
+      "r_precision": 0.6667,
+      "recall_at_r": 0.6667,
+      "recall_at": {
+        "5": 0.0,
+        "10": 0.2083,
+        "20": 0.5833,
+        "50": 0.7083
+      },
+      "precision_at": {
+        "5": 0.0,
+        "10": 0.5,
+        "20": 0.7,
+        "50": 0.34
+      },
+      "critical_recall_at": {
+        "5": 0.0,
+        "10": 0.1875,
+        "20": 0.625,
+        "50": 0.8125
+      },
+      "mrr": 0.1667,
+      "ndcg_at": {
+        "20": 0.3378,
+        "50": 0.4422
+      },
+      "context_precision": 0.64,
+      "context_recall": 0.6667,
+      "critical_recall_budget": 0.75,
+      "token_weighted_precision": 0.6093,
+      "token_weighted_recall": 0.6667,
+      "compiled_tokens": 3939,
+      "silent_misses": [
+        "tests/lib/Preview/PreviewPixelsTrait.php"
+      ],
+      "silent_miss_count": 1,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 236.0,
+      "peak_memory_mb": 1.27
+    },
+    {
+      "task_id": "TASK-2",
+      "ground_truth_count": 138,
+      "candidate_pool_size": 1329,
+      "candidate_pool_recall": 0.8913,
+      "candidate_pool_precision": 0.0926,
+      "r_precision": 0.0797,
+      "recall_at_r": 0.0797,
+      "recall_at": {
+        "5": 0.0145,
+        "10": 0.0145,
+        "20": 0.029,
+        "50": 0.0652
+      },
+      "precision_at": {
+        "5": 0.4,
+        "10": 0.2,
+        "20": 0.2,
+        "50": 0.18
+      },
+      "critical_recall_at": {
+        "5": 0.0,
+        "10": 0.0,
+        "20": 0.0556,
+        "50": 0.0556
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.1062,
+        "50": 0.0988
+      },
+      "context_precision": 0.1915,
+      "context_recall": 0.0652,
+      "critical_recall_budget": 0.0556,
+      "token_weighted_precision": 0.3399,
+      "token_weighted_recall": 0.0652,
+      "compiled_tokens": 3972,
+      "silent_misses": [
+        "apps/comments/lib/Activity/Listener.php",
+        "apps/dav/lib/BulkUpload/BulkUploadPlugin.php",
+        "apps/dav/lib/Connector/Sabre/TagsPlugin.php",
+        "apps/dav/lib/DAV/ViewOnlyPlugin.php",
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/tests/Service/TagServiceTest.php",
+        "apps/files_sharing/lib/Listener/RestrictInteractionListener.php",
+        "apps/files_versions/lib/Sabre/VersionCollection.php",
+        "core/BackgroundJobs/GenerateMetadataJob.php",
+        "lib/private/Encryption/Update.php",
+        "lib/private/Files/Template/TemplateManager.php",
+        "lib/private/Preview/Generator.php",
+        "lib/private/Preview/MP3.php",
+        "lib/public/Files/Template/Template.php",
+        "tests/lib/FilesMetadata/FilesMetadataManagerTest.php"
+      ],
+      "silent_miss_count": 15,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 902.03,
+      "peak_memory_mb": 7.7
+    },
+    {
+      "task_id": "TASK-3",
+      "ground_truth_count": 18,
+      "candidate_pool_size": 469,
+      "candidate_pool_recall": 0.8889,
+      "candidate_pool_precision": 0.0341,
+      "r_precision": 0.2778,
+      "recall_at_r": 0.2778,
+      "recall_at": {
+        "5": 0.2778,
+        "10": 0.2778,
+        "20": 0.2778,
+        "50": 0.2778
+      },
+      "precision_at": {
+        "5": 1.0,
+        "10": 0.5,
+        "20": 0.25,
+        "50": 0.1
+      },
+      "critical_recall_at": {
+        "5": 0.4545,
+        "10": 0.4545,
+        "20": 0.4545,
+        "50": 0.4545
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.6456,
+        "50": 0.6456
+      },
+      "context_precision": 0.1163,
+      "context_recall": 0.2778,
+      "critical_recall_budget": 0.4545,
+      "token_weighted_precision": 0.1885,
+      "token_weighted_recall": 0.2778,
+      "compiled_tokens": 3979,
+      "silent_misses": [
+        "lib/composer/composer/autoload_classmap.php",
+        "lib/composer/composer/autoload_static.php"
+      ],
+      "silent_miss_count": 2,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 360.46,
+      "peak_memory_mb": 2.14
+    },
+    {
+      "task_id": "TASK-4",
+      "ground_truth_count": 538,
+      "candidate_pool_size": 795,
+      "candidate_pool_recall": 0.9963,
+      "candidate_pool_precision": 0.6742,
+      "r_precision": 0.5651,
+      "recall_at_r": 0.5651,
+      "recall_at": {
+        "5": 0.0,
+        "10": 0.0037,
+        "20": 0.0093,
+        "50": 0.026
+      },
+      "precision_at": {
+        "5": 0.0,
+        "10": 0.2,
+        "20": 0.25,
+        "50": 0.28
+      },
+      "critical_recall_at": {
+        "5": 0.0,
+        "10": 0.0078,
+        "20": 0.0156,
+        "50": 0.0391
+      },
+      "mrr": 0.1667,
+      "ndcg_at": {
+        "20": 0.1038,
+        "50": 0.1303
+      },
+      "context_precision": 0.2308,
+      "context_recall": 0.0056,
+      "critical_recall_budget": 0.0156,
+      "token_weighted_precision": 0.1134,
+      "token_weighted_recall": 0.0056,
+      "compiled_tokens": 3970,
+      "silent_misses": [
+        "lib/public/ServerVersion.php",
+        "lib/public/Util.php"
+      ],
+      "silent_miss_count": 2,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 510.07,
+      "peak_memory_mb": 3.56
+    },
+    {
+      "task_id": "TASK-5",
+      "ground_truth_count": 3,
+      "candidate_pool_size": 126,
+      "candidate_pool_recall": 1.0,
+      "candidate_pool_precision": 0.0238,
+      "r_precision": 0.3333,
+      "recall_at_r": 0.3333,
+      "recall_at": {
+        "5": 0.3333,
+        "10": 0.3333,
+        "20": 0.3333,
+        "50": 0.3333
+      },
+      "precision_at": {
+        "5": 0.2,
+        "10": 0.1,
+        "20": 0.05,
+        "50": 0.02
+      },
+      "critical_recall_at": {
+        "5": 0.3333,
+        "10": 0.3333,
+        "20": 0.3333,
+        "50": 0.3333
+      },
+      "mrr": 1.0,
+      "ndcg_at": {
+        "20": 0.5419,
+        "50": 0.5419
+      },
+      "context_precision": 0.0312,
+      "context_recall": 0.3333,
+      "critical_recall_budget": 0.3333,
+      "token_weighted_precision": 0.0376,
+      "token_weighted_recall": 0.3333,
+      "compiled_tokens": 3986,
+      "silent_misses": [],
+      "silent_miss_count": 0,
+      "known_unresolved": [],
+      "known_unresolved_count": 0,
+      "unsupported": [],
+      "unsupported_count": 0,
+      "latency_ms": 397.54,
+      "peak_memory_mb": 3.89
+    }
+  ]
+}

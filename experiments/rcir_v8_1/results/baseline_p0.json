@@ -1,0 +1,210 @@
+{
+  "policy": "P0",
+  "description": "Current RCIR v7 \u2014 2-hop undirected BFS + TF-IDF + symbol match",
+  "baseline_commit": "226cfc6b3b8663f98dd97f0327529f765ac36284",
+  "evaluation": {
+    "task_count": 5,
+    "macro_averages": {
+      "recall_at": {
+        "5": 0.0903,
+        "10": 0.1014,
+        "20": 0.1183,
+        "50": 0.1227
+      },
+      "precision_at": {
+        "5": 0.16,
+        "10": 0.1,
+        "20": 0.1,
+        "50": 0.052
+      },
+      "mrr": 0.5059,
+      "ndcg": 0.1924
+    },
+    "micro_aggregates": {
+      "recall_at": {
+        "5": 0.0055,
+        "10": 0.0069,
+        "20": 0.0139,
+        "50": 0.018
+      },
+      "precision_at": {
+        "5": 0.16,
+        "10": 0.1,
+        "20": 0.1,
+        "50": 0.052
+      }
+    },
+    "totals": {
+      "candidates": 7988,
+      "ground_truth": 721,
+      "silent_misses": 10,
+      "known_unresolved": 0,
+      "unsupported": 0
+    },
+    "performance": {
+      "mean_latency_ms": 11924.73,
+      "mean_peak_memory_mb": 94.6
+    },
+    "per_task": [
+      {
+        "task_id": "TASK-1",
+        "candidate_count": 1611,
+        "ground_truth_count": 24,
+        "recall_at": {
+          "5": 0.0,
+          "10": 0.0,
+          "20": 0.0,
+          "50": 0.0
+        },
+        "precision_at": {
+          "5": 0.0,
+          "10": 0.0,
+          "20": 0.0,
+          "50": 0.0
+        },
+        "mrr": 0.0154,
+        "ndcg": 0.0,
+        "token_budgeted_coverage": 0.5,
+        "silent_misses": [],
+        "silent_miss_count": 0,
+        "known_unresolved": [],
+        "known_unresolved_count": 0,
+        "unsupported": [],
+        "unsupported_count": 0,
+        "latency_ms": 12352.12,
+        "peak_memory_mb": 94.63
+      },
+      {
+        "task_id": "TASK-2",
+        "candidate_count": 2212,
+        "ground_truth_count": 138,
+        "recall_at": {
+          "5": 0.0072,
+          "10": 0.0072,
+          "20": 0.0362,
+          "50": 0.058
+        },
+        "precision_at": {
+          "5": 0.2,
+          "10": 0.1,
+          "20": 0.25,
+          "50": 0.16
+        },
+        "mrr": 0.5,
+        "ndcg": 0.172,
+        "token_budgeted_coverage": 0.0942,
+        "silent_misses": [
+          "apps/comments/lib/Activity/Listener.php",
+          "apps/files/tests/Sharing/Source/NodeShareSourceTypeTest.php",
+          "apps/files_trashbin/lib/Sabre/AbstractTrash.php",
+          "apps/files_trashbin/lib/Trash/TrashItem.php",
+          "apps/files_versions/lib/Sabre/VersionCollection.php",
+          "lib/public/Files/Lock/LockContext.php",
+          "lib/public/Files/Template/Template.php"
+        ],
+        "silent_miss_count": 7,
+        "known_unresolved": [],
+        "known_unresolved_count": 0,
+        "unsupported": [],
+        "unsupported_count": 0,
+        "latency_ms": 11550.75,
+        "peak_memory_mb": 94.59
+      },
+      {
+        "task_id": "TASK-3",
+        "candidate_count": 476,
+        "ground_truth_count": 18,
+        "recall_at": {
+          "5": 0.1111,
+          "10": 0.1667,
+          "20": 0.2222,
+          "50": 0.2222
+        },
+        "precision_at": {
+          "5": 0.4,
+          "10": 0.3,
+          "20": 0.2,
+          "50": 0.08
+        },
+        "mrr": 1.0,
+        "ndcg": 0.3209,
+        "token_budgeted_coverage": 0.3333,
+        "silent_misses": [
+          "lib/composer/composer/autoload_classmap.php",
+          "lib/composer/composer/autoload_static.php"
+        ],
+        "silent_miss_count": 2,
+        "known_unresolved": [],
+        "known_unresolved_count": 0,
+        "unsupported": [],
+        "unsupported_count": 0,
+        "latency_ms": 11824.13,
+        "peak_memory_mb": 94.4
+      },
+      {
+        "task_id": "TASK-4",
+        "candidate_count": 3475,
+        "ground_truth_count": 538,
+        "recall_at": {
+          "5": 0.0,
+          "10": 0.0,
+          "20": 0.0,
+          "50": 0.0
+        },
+        "precision_at": {
+          "5": 0.0,
+          "10": 0.0,
+          "20": 0.0,
+          "50": 0.0
+        },
+        "mrr": 0.0139,
+        "ndcg": 0.0,
+        "token_budgeted_coverage": 0.0297,
+        "silent_misses": [
+          "lib/public/Util.php"
+        ],
+        "silent_miss_count": 1,
+        "known_unresolved": [],
+        "known_unresolved_count": 0,
+        "unsupported": [],
+        "unsupported_count": 0,
+        "latency_ms": 11768.26,
+        "peak_memory_mb": 94.68
+      },
+      {
+        "task_id": "TASK-5",
+        "candidate_count": 214,
+        "ground_truth_count": 3,
+        "recall_at": {
+          "5": 0.3333,
+          "10": 0.3333,
+          "20": 0.3333,
+          "50": 0.3333
+        },
+        "precision_at": {
+          "5": 0.2,
+          "10": 0.1,
+          "20": 0.05,
+          "50": 0.02
+        },
+        "mrr": 1.0,
+        "ndcg": 0.4693,
+        "token_budgeted_coverage": 0.0,
+        "silent_misses": [],
+        "silent_miss_count": 0,
+        "known_unresolved": [],
+        "known_unresolved_count": 0,
+        "unsupported": [],
+        "unsupported_count": 0,
+        "latency_ms": 12128.37,
+        "peak_memory_mb": 94.68
+      }
+    ]
+  },
+  "aggregate_from_committed_artifacts": null,
+  "data_limitations": {
+    "ranked_metrics_available": true,
+    "aggregate_recall_precision_available": false,
+    "note": "Ranked metrics (Recall@K, Precision@K, MRR, nDCG) computed against real ground truth files. Candidate set reflects full RCIR v7 candidate expansion."
+  }
+}

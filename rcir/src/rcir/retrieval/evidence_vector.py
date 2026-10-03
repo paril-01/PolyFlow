@@ -1,16 +1,21 @@
 """
-RCIR v8 — Evidence Vector Model (PHASE 9).
+RCIR v8.1 — Evidence Vector Model (PHASES 8, 12, 13, 14, 15, 16).
 
-Builds multi-source evidence vectors for each retrieved candidate,
-replacing single opaque scalar scores with auditable feature sets.
+Builds multi-source evidence vectors for each retrieved candidate:
+- Separates entity identity resolution from dependency relationship resolution (PHASE 13)
+- Implements real type compatibility (PHASE 14)
+- Uses pluggable ModuleResolver eliminating repository-specific hardcoding (PHASE 15 & 16)
+- Preserves traversal scores and edge provenance for ranker consumption (PHASE 8 & 12)
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from pathlib import Path
+from typing import Any, Optional
 
-from rcir.entities.entity import EntityIdentity
+from rcir.entities.module import ModuleResolver
+from rcir.adapters.nextcloud import NextcloudModuleResolver
 from rcir.query.change_spec import ChangeOperation, ChangeSpecification
 from rcir.retrieval.candidate_generator import CandidateRecord
 
@@ -20,14 +25,15 @@ class EvidenceVector:
     """Rich evidence vector representing all signals for a candidate."""
     entity_id: str
     file_path: str
-    entity_match: str = "none"           # exact | owner_match | partial | none
-    resolution_class: str = "unknown"    # static_exact | static_inference | dynamic_unresolved | unsupported
+    entity_match: str = "none"           # exact | partial | none
+    resolution_class: str = "unknown"    # static_exact | static_inference | dynamic_unresolved | unsupported | unknown
     edge_types: list[str] = field(default_factory=list)
     type_compatibility: str = "unknown"  # exact | compatible | incompatible | unknown
     change_type_compatibility: str = "medium"  # high | medium | low | contradiction
     boundary_contract: str = "none"      # route_matched | event_registered | cross_stack | none
     lexical_score: float = 0.0
-    module_distance: int = 0             # 0: same file/dir, 1: same app/module, 2: cross-app/core
+    traversal_score: float = 0.0
+    module_distance: int = 0             # 0: same module, 1: sibling, 2: cross-module/distant
     hop_distance: int = 0
     historical_cochange: float = 0.0
     test_relationship: str = "none"      # direct_test | test_utility | none
@@ -44,6 +50,7 @@ class EvidenceVector:
             "change_type_compatibility": self.change_type_compatibility,
             "boundary_contract": self.boundary_contract,
             "lexical_score": round(self.lexical_score, 4),
+            "traversal_score": round(self.traversal_score, 4),
             "module_distance": self.module_distance,
             "hop_distance": self.hop_distance,
             "historical_cochange": round(self.historical_cochange, 4),
@@ -63,47 +70,70 @@ class EvidenceVectorBuilder:
         spec: ChangeSpecification,
         target_files: set[str],
         hub_scores: dict[str, float] | None = None,
+        module_resolver: ModuleResolver | None = None,
     ) -> EvidenceVector:
+        resolver = module_resolver or NextcloudModuleResolver()
+
         vec = EvidenceVector(
             entity_id=candidate.entity_id,
             file_path=candidate.file_path,
-            hop_distance=candidate.hop_distance,
+            hop_distance=candidate.best_hop_distance,
             edge_types=list(candidate.edge_types_seen),
             lexical_score=candidate.raw_lexical_score,
+            traversal_score=candidate.best_traversal_score,
         )
 
-        # 1. Entity Match
+        # 1. Entity Match (Identity only)
         if "exact_entity_lookup" in candidate.candidate_sources or "exact_file_lookup" in candidate.candidate_sources:
             vec.entity_match = "exact"
         elif "ambiguous_entity_lookup" in candidate.candidate_sources:
             vec.entity_match = "partial"
 
-        # Check if candidate file is among explicit targets
         for tf in target_files:
             tf_norm = tf.replace("\\", "/").strip("/")
             if tf_norm == candidate.file_path or tf_norm in candidate.entity_id:
                 vec.entity_match = "exact"
                 break
 
-        # 2. Resolution Class
-        if "route" in candidate.edge_types_seen or "exact" in vec.entity_match:
+        # 2. Resolution Class (PHASE 13: derived strictly from dependency edge evidence)
+        if "static_exact" in candidate.resolution_classes:
             vec.resolution_class = "static_exact"
-        elif "policy_traversal" in candidate.candidate_sources:
+        elif "static_inference" in candidate.resolution_classes:
+            vec.resolution_class = "static_inference"
+        elif "dynamic_unresolved" in candidate.resolution_classes:
+            vec.resolution_class = "dynamic_unresolved"
+        elif "unsupported" in candidate.resolution_classes:
+            vec.resolution_class = "unsupported"
+        elif "boundary_graph" in candidate.candidate_sources:
             vec.resolution_class = "static_inference"
         else:
-            vec.resolution_class = "static_inference"
+            vec.resolution_class = "unknown"
 
-        # 3. Boundary Contract
+        # 3. Type Compatibility (PHASE 14)
+        cand_lower = candidate.entity_id.lower()
+        spec_targets_lower = [t.lower() for t in spec.target_entities]
+        
+        # Exact match or same owner class
+        if vec.entity_match == "exact":
+            vec.type_compatibility = "exact"
+        elif any("inherits" in et or "implements" in et or "overrides" in et for et in candidate.edge_types_seen):
+            vec.type_compatibility = "compatible"
+        elif any(target_base in cand_lower for target_base in [t.split("::")[-1].replace(".php", "").replace(".ts", "") for t in spec_targets_lower]):
+            vec.type_compatibility = "compatible"
+        elif "test" in candidate.file_path.lower() and any(t in candidate.file_path.lower() for t in spec_targets_lower):
+            vec.type_compatibility = "compatible"
+        else:
+            vec.type_compatibility = "unknown"
+
+        # 4. Boundary Contract
         if "boundary_graph" in candidate.candidate_sources or "route" in candidate.edge_types_seen:
             vec.boundary_contract = "route_matched"
-        elif "Recent.ts" in candidate.entity_id or "Recent.ts" in spec.target_entities:
-            if "recent" in candidate.file_path.lower():
-                vec.boundary_contract = "cross_stack"
+        elif "cross_boundary" in candidate.edge_types_seen:
+            vec.boundary_contract = "cross_stack"
 
-        # 4. Test Relationship
+        # 5. Test Relationship
         file_lower = candidate.file_path.lower()
         if "test" in file_lower or "tests/" in file_lower:
-            # Check if this test mentions target entities
             for target in spec.target_entities:
                 target_base = target.split("::")[-1].replace(".php", "").replace(".ts", "")
                 if target_base.lower() in file_lower:
@@ -112,38 +142,20 @@ class EvidenceVectorBuilder:
             if vec.test_relationship == "none":
                 vec.test_relationship = "test_utility"
 
-        # 5. Module Distance
-        target_modules = set()
-        for tf in target_files:
-            if "apps/" in tf:
-                parts = tf.split("apps/")[1].split("/")
-                if parts:
-                    target_modules.add(f"apps/{parts[0]}")
-            elif "lib/" in tf:
-                target_modules.add("core")
-
-        cand_mod = "core"
-        if "apps/" in candidate.file_path:
-            parts = candidate.file_path.split("apps/")[1].split("/")
-            if parts:
-                cand_mod = f"apps/{parts[0]}"
-
-        if not target_modules or cand_mod in target_modules:
-            vec.module_distance = 0
-        elif "apps/" in cand_mod and any("apps/" in tm for tm in target_modules):
-            vec.module_distance = 1
+        # 6. Module Distance (PHASE 16: generic resolver)
+        if target_files:
+            distances = [resolver.compute_module_distance(tf, candidate.file_path) for tf in target_files]
+            vec.module_distance = min(distances) if distances else 0
         else:
-            vec.module_distance = 2
+            vec.module_distance = 0
 
-        # 6. Change-Type Compatibility
+        # 7. Change-Type Compatibility
         op = spec.operation
         if op == ChangeOperation.ROUTE_CHANGE:
-            if "routes.php" in candidate.file_path or vec.boundary_contract != "none" or vec.entity_match == "exact":
+            if "route" in candidate.file_path.lower() or vec.boundary_contract != "none" or vec.entity_match == "exact":
                 vec.change_type_compatibility = "high"
             elif vec.test_relationship == "direct_test":
                 vec.change_type_compatibility = "high"
-            elif "Preview" in candidate.file_path and "ApiController" not in candidate.file_path:
-                vec.change_type_compatibility = "low"
             else:
                 vec.change_type_compatibility = "medium"
 
@@ -160,17 +172,16 @@ class EvidenceVectorBuilder:
                 vec.change_type_compatibility = "medium"
 
         elif op == ChangeOperation.SERVICE_BOUNDARY_CHANGE:
-            if "services/" in candidate.file_path or "routes.php" in candidate.file_path or "api" in file_lower:
+            if vec.boundary_contract != "none" or "service" in file_lower or "api" in file_lower:
                 vec.change_type_compatibility = "high"
             else:
                 vec.change_type_compatibility = "low"
 
-        # 7. Hub Degree
+        # 8. Hub Degree
         if hub_scores and candidate.entity_id in hub_scores:
             vec.hub_degree = int(hub_scores[candidate.entity_id])
 
-        # 8. Contradiction Detection
-        # Drop candidates from 3rdparty, vendor, or non-related app boundaries if requested_scope is local
+        # 9. Contradiction Detection
         if "vendor/" in candidate.file_path or "3rdparty/" in candidate.file_path:
             vec.contradictions.append("vendor_external_code")
 

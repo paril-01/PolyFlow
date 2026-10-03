@@ -1,0 +1,45 @@
+{
+  "experiment": "RCIR v8.1 — Corrective Architecture, Benchmark Repair, and Dual-Plane Retrieval",
+  "frozen_baseline_identifier": "RCIR_V8_INITIAL",
+  "frozen_at_commit": "8489ece793f4d4285258b0dcb2dbd6fb6ffdc45a",
+  "frozen_date": "2026-10-04T01:30:00+05:30",
+  "target_repository": {
+    "name": "Nextcloud Server",
+    "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+    "branch": "master"
+  },
+  "immutable_v8_reference_results": {
+    "policy_p0": "experiments/rcir_v8/results/policy_p0.json",
+    "policy_p1": "experiments/rcir_v8/results/policy_p1.json",
+    "policy_p2": "experiments/rcir_v8/results/policy_p2.json",
+    "policy_p3": "experiments/rcir_v8/results/policy_p3.json",
+    "policy_p4": "experiments/rcir_v8/results/policy_p4.json",
+    "policy_p5": "experiments/rcir_v8/results/policy_p5.json",
+    "policy_p6": "experiments/rcir_v8/results/policy_p6.json",
+    "ablation_report": "experiments/rcir_v8/reports/ablation_report.md"
+  },
+  "audit_summary_of_v8_initial": {
+    "p0_candidate_pool": {
+      "candidates": 7988,
+      "ground_truth": 721,
+      "silent_misses": 10,
+      "pool_recall": 0.9861,
+      "macro_recall_at_50": 0.1227,
+      "micro_recall_at_50": 0.0180,
+      "precision_at_50": 0.0520,
+      "mrr": 0.5059,
+      "ndcg_at_50": 0.1924
+    },
+    "p5_candidate_pool": {
+      "candidates": 1018,
+      "ground_truth": 721,
+      "silent_misses": 443,
+      "pool_recall": 0.3856,
+      "macro_recall_at_50": 0.4703,
+      "micro_recall_at_50": 0.0777,
+      "precision_at_50": 0.2240,
+      "mrr": 0.7286,
+      "ndcg_at_50": 0.5425
+    }
+  }
+}

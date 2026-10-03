@@ -198,6 +198,8 @@ class RepoToolEnvironment:
         if full_path not in self._modified_files:
             self._modified_files.append(full_path)
 
+        return f"SUCCESS: Successfully replaced target string in {path}."
+
     def apply_patch(self, patch: str, target_path: Optional[str] = None) -> str:
         """
         Safely apply a unified diff or hunk patch to repository files (PHASE 15).

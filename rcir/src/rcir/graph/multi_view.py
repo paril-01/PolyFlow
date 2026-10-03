@@ -65,6 +65,9 @@ class MultiViewGraph:
         self.historical_fwd: dict[str, list[dict]] = defaultdict(list)
         self.historical_bwd: dict[str, list[dict]] = defaultdict(list)
 
+        self.unsupported_fwd: dict[str, list[dict]] = defaultdict(list)
+        self.unsupported_bwd: dict[str, list[dict]] = defaultdict(list)
+
         # Node index
         self.node_by_path: dict[str, dict] = {n.get("path", ""): n for n in self.nodes}
 
@@ -74,31 +77,16 @@ class MultiViewGraph:
         for edge in self.edges:
             src = edge.get("source", "")
             tgt = edge.get("target", "")
-            etype = edge.get("edge_type", "calls")
+            etype = edge.get("edge_type", edge.get("type", "calls"))
 
-            # Route detection heuristic
-            if "route" in etype or "routes.php" in src or "routes.php" in tgt:
-                self.boundary_fwd[src].append(edge)
-                self.boundary_bwd[tgt].append(edge)
-
-            # Event detection heuristic
-            if "Event" in src or "Event" in tgt:
-                self.boundary_fwd[src].append(edge)
-                self.boundary_bwd[tgt].append(edge)
-
-            # Test detection
-            if "test" in src.lower() or "test" in tgt.lower():
-                self.verification_fwd[src].append(edge)
-                self.verification_bwd[tgt].append(edge)
-
-            # Primary classification
+            # Primary classification based on normalized taxonomy
             if etype in SYMBOL_EDGE_TYPES:
                 self.symbol_fwd[src].append(edge)
                 self.symbol_bwd[tgt].append(edge)
-            elif etype in BOUNDARY_EDGE_TYPES:
+            elif etype in BOUNDARY_EDGE_TYPES or etype in {"cross_boundary", "route"}:
                 self.boundary_fwd[src].append(edge)
                 self.boundary_bwd[tgt].append(edge)
-            elif etype in CONFIG_EDGE_TYPES:
+            elif etype in CONFIG_EDGE_TYPES or etype == "config":
                 self.config_fwd[src].append(edge)
                 self.config_bwd[tgt].append(edge)
             elif etype in VERIFICATION_EDGE_TYPES:
@@ -108,8 +96,8 @@ class MultiViewGraph:
                 self.historical_fwd[src].append(edge)
                 self.historical_bwd[tgt].append(edge)
             else:
-                self.symbol_fwd[src].append(edge)
-                self.symbol_bwd[tgt].append(edge)
+                self.unsupported_fwd[src].append(edge)
+                self.unsupported_bwd[tgt].append(edge)
 
     def get_callers(self, target_entity: str) -> list[dict]:
         """Find nodes that call this entity (incoming calls edges)."""
@@ -125,7 +113,7 @@ class MultiViewGraph:
         for edge in self.symbol_fwd.get(source_entity, []):
             if edge.get("edge_type") == "calls":
                 callees.append(edge)
-        return callers if not callees else callees
+        return callees
 
     def get_importers(self, target_entity: str) -> list[dict]:
         """Find nodes that import this entity."""

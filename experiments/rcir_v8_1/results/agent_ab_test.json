@@ -1,0 +1,24 @@
+{
+  "condition_a_with_rcir": {
+    "token_overhead": 3969,
+    "turns_to_edit": 2,
+    "files_inspected_before_edit": 1.2,
+    "context_request_fallback_count": 0,
+    "success_rate": 1.0,
+    "gatekeeper_verdicts": {
+      "APPROVE": 5,
+      "REJECT": 0
+    }
+  },
+  "condition_b_no_rcir": {
+    "token_overhead": 0,
+    "turns_to_edit": 5,
+    "files_inspected_before_edit": 7.4,
+    "context_request_fallback_count": 4,
+    "success_rate": 0.4,
+    "gatekeeper_verdicts": {
+      "APPROVE": 2,
+      "REJECT": 3
+    }
+  }
+}

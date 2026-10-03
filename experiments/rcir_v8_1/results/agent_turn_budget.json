@@ -1,0 +1,74 @@
+{
+  "5": [
+    {
+      "task_id": "AGENT-01",
+      "turns_allowed": 5,
+      "turns_used": 5,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.177,
+      "context_requests": 0
+    },
+    {
+      "task_id": "AGENT-02",
+      "turns_allowed": 5,
+      "turns_used": 5,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.147,
+      "context_requests": 0
+    }
+  ],
+  "10": [
+    {
+      "task_id": "AGENT-01",
+      "turns_allowed": 10,
+      "turns_used": 10,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.15,
+      "context_requests": 0
+    },
+    {
+      "task_id": "AGENT-02",
+      "turns_allowed": 10,
+      "turns_used": 10,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.159,
+      "context_requests": 0
+    }
+  ],
+  "20": [
+    {
+      "task_id": "AGENT-01",
+      "turns_allowed": 20,
+      "turns_used": 20,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.157,
+      "context_requests": 0
+    },
+    {
+      "task_id": "AGENT-02",
+      "turns_allowed": 20,
+      "turns_used": 20,
+      "tool_calls": 0,
+      "success": false,
+      "gatekeeper_verdict": "REJECT",
+      "diff_length": 0,
+      "latency_seconds": 0.24,
+      "context_requests": 0
+    }
+  ]
+}
