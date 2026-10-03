@@ -1,0 +1,132 @@
+{
+  "experiment": "RCIR v8 — Evidence-Guided Repository Intelligence Redesign",
+  "frozen_at": "2026-10-04T00:42:00+05:30",
+  "do_not_modify": true,
+
+  "polyflow": {
+    "commit": "226cfc6b3b8663f98dd97f0327529f765ac36284",
+    "commit_date": "2026-10-04T00:19:33+05:30",
+    "commit_message": "fix(benchmark): eliminate UI data contradictions, synchronize OpenTelemetry & E2E artifacts, and report 96.7% candidate recall with 5.6% precision trade-off",
+    "branch": "main"
+  },
+
+  "target_repository": {
+    "name": "Nextcloud Server",
+    "url": "https://github.com/nextcloud/server",
+    "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+    "commit_date": "2026-09-30T22:02:17+02:00",
+    "commit_message": "Merge pull request #64289 from nextcloud/server/fix/encryption-user-keys",
+    "branch": "master",
+    "clone_depth": 1
+  },
+
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.26200.0",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-1360P",
+    "ram_gb": 15.69,
+    "python_version": "3.12.3",
+    "pip_version": "25.3",
+    "node_version": "v25.8.0",
+    "java_version": "OpenJDK 21.0.12+8-LTS (Temurin)",
+    "git_version": "2.53.0.windows.2",
+    "php_version": "NOT INSTALLED",
+    "go_version": "NOT INSTALLED"
+  },
+
+  "baseline_metrics": {
+    "graph_extraction": {
+      "total_nodes": 49720,
+      "total_edges": 109089,
+      "extraction_time_s": 312.55,
+      "peak_memory_mb": 107.29,
+      "edges_by_type": {
+        "calls": 53834,
+        "imports": 50310,
+        "inherits": 4945
+      },
+      "edges_by_resolution": {
+        "static_exact": 66161,
+        "static_inference": 42928,
+        "dynamic_unresolved": 0,
+        "unsupported": 0
+      }
+    },
+    "candidate_expansion_2hop": {
+      "candidate_file_recall": 0.967,
+      "macro_candidate_precision": 0.056,
+      "total_candidates": 7988,
+      "false_positive_candidates": 7276,
+      "remaining_misses": 10,
+      "note": "Values from committed benchmark_report.md, recomputed from raw agent_harness.py outputs"
+    },
+    "direct_1hop_mode": {
+      "note": "Materially more precise, substantially lower coverage. Exact figures in per-task results."
+    },
+    "ground_truth_edges": {
+      "total_cases": 10,
+      "true_positives": 7,
+      "partial_matches": 3,
+      "silent_misses": 0,
+      "edge_recall": 0.70,
+      "silent_miss_rate": 0.0
+    },
+    "controlled_mutations": {
+      "total_mutations": 7,
+      "total_ground_truth_references": 1333,
+      "rcir_identified": 1451,
+      "true_positives": 829,
+      "false_positives": 622,
+      "false_negatives": 504,
+      "macro_precision": 0.598,
+      "macro_recall": 0.739,
+      "micro_precision": 0.571,
+      "micro_recall": 0.622
+    },
+    "agent_benchmark": {
+      "tasks_evaluated": 5,
+      "baseline_average_recall": 0.323,
+      "rcir_average_recall": 0.754,
+      "recall_improvement_pct": 43.1,
+      "baseline_tokens_avg": 20473,
+      "rcir_tokens_avg": 3995,
+      "token_savings_pct": 80.5
+    },
+    "e2e_coding": {
+      "gatekeeper_verdict": "REJECT",
+      "reason": "Local model (qwen2.5:0.5b) failed to produce valid edits. Gatekeeper fail-closed correctly.",
+      "modifications": 0
+    }
+  },
+
+  "benchmark_task_definitions": [
+    {"task_id": "TASK-1", "title": "Refactor Controller Endpoint", "target_symbol": "getThumbnail", "category": "controller_route"},
+    {"task_id": "TASK-2", "title": "Filesystem Node Contract Evolution", "target_symbol": "getId", "category": "interface_method"},
+    {"task_id": "TASK-3", "title": "Event Contract Evolution", "target_symbol": "NodeDeletedEvent", "category": "event_contract"},
+    {"task_id": "TASK-4", "title": "Dependency Injection Service Resolution", "target_symbol": "IConfig", "category": "dependency_injection"},
+    {"task_id": "TASK-5", "title": "Cross-Stack API Contract Boundary", "target_symbol": "Recent.ts", "category": "cross_stack"}
+  ],
+
+  "exact_commands": {
+    "graph_extraction": "python -m rcir.graph.extractor <nextcloud_repo_path> --output graph.json",
+    "hierarchy_build": "python -m rcir.hierarchy.builder graph.json --output hierarchy.json",
+    "hybrid_retrieve": "python -m rcir.retrieval.hybrid hierarchy.json --query <query> --budget 8000",
+    "impact_report": "python -m rcir.impact <nextcloud_repo_path> --symbol <symbol>",
+    "agent_harness": "python experiments/nextcloud_validation/scripts/agent_harness.py"
+  },
+
+  "random_seeds": {
+    "note": "Current system is deterministic (TF-IDF + BFS). No random seeds used."
+  },
+
+  "raw_artifact_locations": {
+    "benchmark_results": "experiments/nextcloud_validation/reports/benchmark_results.json",
+    "edge_metrics": "experiments/nextcloud_validation/reports/edge_metrics.json",
+    "ground_truth_edges": "experiments/nextcloud_validation/ground_truth/ground_truth_edges.json",
+    "ground_truth_evaluation": "experiments/nextcloud_validation/reports/ground_truth_evaluation.json",
+    "agent_benchmark_results": "experiments/nextcloud_validation/reports/agent_benchmark_results.json",
+    "e2e_coding_results": "experiments/nextcloud_validation/reports/e2e_coding_benchmark_results.json",
+    "failure_catalog": "experiments/nextcloud_validation/reports/failure_catalog.md",
+    "benchmark_report": "experiments/nextcloud_validation/reports/benchmark_report.md",
+    "final_validation_report": "experiments/nextcloud_validation/reports/final_validation_report.md"
+  }
+}

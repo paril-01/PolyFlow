@@ -1,0 +1,46 @@
+{
+  "split": "validation",
+  "description": "RCIR v8 Validation dataset for policy selection and hyperparameter checks",
+  "tasks": [
+    {
+      "task_id": "VAL-01",
+      "title": "Event Contract Evolution",
+      "target_symbol": "NodeDeletedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "category": "event_contract",
+      "operation": "event_change",
+      "query": "NodeDeletedEvent delete node event dispatcher listener",
+      "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated"
+    },
+    {
+      "task_id": "VAL-02",
+      "title": "Dependency Injection Service Resolution",
+      "target_symbol": "IConfig",
+      "target_file": "lib/public/IConfig.php",
+      "category": "dependency_injection",
+      "operation": "config_change",
+      "query": "IConfig get config service container",
+      "description": "Refactor IConfig interface and update all container lookups and consumers"
+    },
+    {
+      "task_id": "VAL-03",
+      "title": "FileCache Schema Migration",
+      "target_symbol": "FileCache",
+      "target_file": "lib/private/Files/Cache/Cache.php",
+      "category": "schema_database",
+      "operation": "schema_change",
+      "query": "FileCache oc_filecache storage size mtime migration",
+      "description": "Add metadata column to filecache table and track ORM consumers"
+    },
+    {
+      "task_id": "VAL-04",
+      "title": "Remote DAV Generated Contract",
+      "target_symbol": "RemoteDAVClient",
+      "target_file": "apps/files_sharing/lib/External/Storage.php",
+      "category": "cross_service_contracts",
+      "operation": "service_boundary_change",
+      "query": "RemoteDAVClient propfind webdav client contract",
+      "description": "Update WebDAV client contract and ensure compatibility across federated shares"
+    }
+  ]
+}

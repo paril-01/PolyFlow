@@ -1,0 +1,46 @@
+{
+  "split": "test",
+  "description": "RCIR v8 Frozen Test dataset for unbiased evaluation without tuning",
+  "tasks": [
+    {
+      "task_id": "TEST-01",
+      "title": "Cross-Stack API Contract Boundary",
+      "target_symbol": "Recent.ts",
+      "target_file": "apps/files/src/services/Recent.ts",
+      "category": "cross_stack",
+      "operation": "service_boundary_change",
+      "query": "Recent getRecentSearch getContents dav endpoint",
+      "description": "Trace recent files frontend client call across language boundary to backend DAV / files endpoint"
+    },
+    {
+      "task_id": "TEST-02",
+      "title": "OpenTelemetry Trace Exporter Boundary",
+      "target_symbol": "TraceExporter",
+      "target_file": "lib/private/Diagnostics/TraceExporter.php",
+      "category": "cross_service_contracts",
+      "operation": "service_boundary_change",
+      "query": "TraceExporter otel grpc telemetry export span",
+      "description": "Evaluate OpenTelemetry tracing boundary and collector integration"
+    },
+    {
+      "task_id": "TEST-03",
+      "title": "Share Provider Permission Policy Evolution",
+      "target_symbol": "IShareProvider",
+      "target_file": "lib/public/Share/IShareProvider.php",
+      "category": "permission_change",
+      "operation": "permission_change",
+      "query": "IShareProvider getPermissions createShare verifyPermission",
+      "description": "Evolve share permission verification contract across all share providers"
+    },
+    {
+      "task_id": "TEST-04",
+      "title": "Background Job Queue Producer-Consumer",
+      "target_symbol": "IJob",
+      "target_file": "lib/public/BackgroundJob/IJob.php",
+      "category": "events_queue",
+      "operation": "event_change",
+      "query": "IJob execute backgroundjob queue worker",
+      "description": "Update background job contract and identify queue dispatchers and handlers"
+    }
+  ]
+}

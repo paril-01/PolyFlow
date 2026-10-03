@@ -28,6 +28,8 @@ class RepoToolEnvironment:
         self._original_files: Dict[Path, str] = {}
         self._modified_files: List[Path] = []
         self._toolchain_env = self._build_toolchain_env()
+        self.context_requests_count: int = 0
+        self.context_tokens_added: int = 0
 
     def _build_toolchain_env(self) -> Dict[str, str]:
         """Ensure JDK, PHP, Go, Node, Python are in PATH."""
@@ -196,8 +198,181 @@ class RepoToolEnvironment:
         if full_path not in self._modified_files:
             self._modified_files.append(full_path)
 
-        rel = full_path.relative_to(self.repo_root).as_posix()
-        return f"SUCCESS: Modified {rel} (replaced 1 instance)."
+    def apply_patch(self, patch: str, target_path: Optional[str] = None) -> str:
+        """
+        Safely apply a unified diff or hunk patch to repository files (PHASE 15).
+        Validates target paths, backs up originals, validates syntax,
+        and rolls back atomically on error.
+        """
+        import ast
+
+        # 1. Determine target file path
+        rel_path = target_path
+        if not rel_path:
+            for line in patch.splitlines():
+                if line.startswith("+++ "):
+                    p = line[4:].strip()
+                    if p.startswith("b/"):
+                        p = p[2:]
+                    rel_path = p
+                    break
+                elif line.startswith("--- ") and not rel_path:
+                    p = line[4:].strip()
+                    if p.startswith("a/"):
+                        p = p[2:]
+                    rel_path = p
+
+        if not rel_path:
+            return "ERROR: Could not detect target file from patch header (e.g. '+++ b/path/to/file'). Please specify target_path."
+
+        try:
+            full_path = self._resolve_safe_path(rel_path)
+        except PermissionError as pe:
+            return f"ERROR: Security violation: {str(pe)}"
+
+        if not full_path.exists():
+            return f"ERROR: Target file does not exist: {rel_path}"
+        if full_path.is_dir():
+            return f"ERROR: Target path is a directory: {rel_path}"
+
+        try:
+            with open(full_path, "r", encoding="utf-8", errors="replace") as f:
+                original_content = f.read()
+        except Exception as e:
+            return f"ERROR reading target file {rel_path}: {e}"
+
+        # Backup before applying
+        if full_path not in self._original_files:
+            self._original_files[full_path] = original_content
+
+        # 2. Parse and apply patch hunks
+        file_lines = original_content.splitlines(keepends=True)
+        patch_lines = patch.splitlines(keepends=True)
+
+        # Strategy A: Check for standard unified diff hunks (@@)
+        has_hunk_headers = any(l.startswith("@@") for l in patch_lines)
+        new_content = None
+
+        if has_hunk_headers:
+            # Apply unified diff hunks
+            hunks = []
+            curr_hunk = []
+            for line in patch_lines:
+                if line.startswith("@@"):
+                    if curr_hunk:
+                        hunks.append(curr_hunk)
+                    curr_hunk = [line]
+                elif curr_hunk:
+                    curr_hunk.append(line)
+            if curr_hunk:
+                hunks.append(curr_hunk)
+
+            applied_lines = list(file_lines)
+            success = True
+            for hunk in hunks:
+                # Parse @@ -orig_start,orig_len +new_start,new_len @@
+                header = hunk[0]
+                m = re.search(r"@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@", header)
+                start_line = int(m.group(1)) - 1 if m else 0
+
+                old_block = []
+                new_block = []
+                for hl in hunk[1:]:
+                    if hl.startswith("-"):
+                        old_block.append(hl[1:])
+                    elif hl.startswith("+"):
+                        new_block.append(hl[1:])
+                    elif hl.startswith(" ") or hl == "\n":
+                        old_block.append(hl[1:] if hl.startswith(" ") else hl)
+                        new_block.append(hl[1:] if hl.startswith(" ") else hl)
+
+                old_text = "".join(old_block)
+                new_text = "".join(new_block)
+
+                curr_text = "".join(applied_lines)
+                if old_text in curr_text:
+                    curr_text = curr_text.replace(old_text, new_text, 1)
+                    applied_lines = curr_text.splitlines(keepends=True)
+                else:
+                    success = False
+                    break
+
+            if success:
+                new_content = "".join(applied_lines)
+
+        # Strategy B: Fallback to extracting '-' and '+' lines directly
+        if new_content is None:
+            del_lines = []
+            add_lines = []
+            for l in patch_lines:
+                if l.startswith("---") or l.startswith("+++") or l.startswith("@@"):
+                    continue
+                if l.startswith("-"):
+                    del_lines.append(l[1:])
+                elif l.startswith("+"):
+                    add_lines.append(l[1:])
+                elif l.startswith(" "):
+                    del_lines.append(l[1:])
+                    add_lines.append(l[1:])
+
+            old_str = "".join(del_lines)
+            new_str = "".join(add_lines)
+            if old_str and old_str in original_content:
+                new_content = original_content.replace(old_str, new_str, 1)
+
+        if new_content is None:
+            return (
+                f"ERROR: Could not apply patch to {rel_path}. Context lines did not match file contents. "
+                "Ensure sufficient surrounding context is provided."
+            )
+
+        # 3. Syntax Validation
+        if rel_path.endswith(".py"):
+            try:
+                ast.parse(new_content)
+            except SyntaxError as se:
+                # Atomic Rollback on syntax error
+                return f"ERROR: Patch produced Python SyntaxError at line {se.lineno}: {se.msg}. File changes rolled back."
+
+        elif rel_path.endswith(".json"):
+            try:
+                import json as _json
+                _json.loads(new_content)
+            except Exception as je:
+                return f"ERROR: Patch produced invalid JSON: {je}. File changes rolled back."
+
+        # 4. Write verified content
+        try:
+            with open(full_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+        except Exception as e:
+            return f"ERROR writing to {rel_path}: {e}"
+
+        if full_path not in self._modified_files:
+            self._modified_files.append(full_path)
+
+        # Generate preview
+        diff = list(difflib.unified_diff(
+            original_content.splitlines(),
+            new_content.splitlines(),
+            fromfile=f"a/{rel_path}",
+            tofile=f"b/{rel_path}",
+            n=2,
+        ))
+        preview = "\n".join(diff[:25])
+        return f"SUCCESS: Applied patch to {rel_path}.\nDiff Preview:\n{preview}"
+
+    def request_context(self, symbol: str, query: Optional[str] = None) -> str:
+        """
+        Iteratively request targeted dependency context from RCIR (PHASE 14).
+        Tracks request frequency and tokens added for context efficiency audits.
+        """
+        self.context_requests_count += 1
+        search_target = query or symbol
+        matches = self.search_code(query=search_target, max_matches=8)
+        tokens_added = max(1, len(matches) // 4)
+        self.context_tokens_added += tokens_added
+        return f"ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{matches}"
 
     def run_command(self, command: str, timeout_sec: int = 60, cwd: Optional[str] = None) -> Dict[str, Any]:
         """

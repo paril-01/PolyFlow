@@ -58,18 +58,24 @@ You have access to the following tools to inspect, modify, and verify the codeba
 3. list_dir: List directory contents.
    Usage: {"tool": "list_dir", "args": {"path": "optional/dir"}}
 
-4. edit_file: Safely replace an exact string in a file with new code.
+4. apply_patch: Safely apply a unified diff or hunk patch with syntax validation and atomic rollback.
+   Usage: {"tool": "apply_patch", "args": {"patch": "--- a/file.py\n+++ b/file.py\n@@ -1,3 +1,3 @@\n-old code\n+new code"}}
+
+5. edit_file: Safely replace an exact string in a file with new code (fallback).
    Usage: {"tool": "edit_file", "args": {"path": "path/to/file", "old_str": "exact old code", "new_str": "exact new code"}}
 
-5. run_command: Run shell commands, compilers, or test suites.
+6. run_command: Run shell commands, compilers, or test suites.
    Usage: {"tool": "run_command", "args": {"command": "python path/to/test.py"}}
 
-6. finish: Signal that the task is complete.
+7. request_context: Request additional dependency context for an unfamiliar symbol or class (PHASE 14).
+   Usage: {"tool": "request_context", "args": {"symbol": "SymbolName"}}
+
+8. finish: Signal that the task is complete.
    Usage: {"tool": "finish", "args": {"summary": "Description of changes and verification results"}}
 
 CRITICAL INSTRUCTIONS & WORKFLOW:
 1. Turn 1 (Inspect): Use {"tool": "inspect_file", "args": {"path": "...", "start_line": 1, "end_line": 50}} to view target code lines.
-2. Turn 2 (Edit): Use {"tool": "edit_file", "args": {"path": "...", "old_str": "...", "new_str": "..."}} to apply the exact minimal code change.
+2. Turn 2 (Edit/Patch): Use {"tool": "apply_patch", "args": {"patch": "..."}} (preferred) or {"tool": "edit_file", ...} to apply the exact change.
 3. Turn 3 (Verify): Use {"tool": "run_command", "args": {"command": "..."}} to compile and test the code.
 4. Turn 4 (Complete): If tests pass (exit 0), call {"tool": "finish", "args": {"summary": "..."}}.
 
@@ -267,6 +273,13 @@ class ReActAgentRunner:
                 path = args.get("path")
                 observation = self.env.list_dir(path)
 
+            elif tool_name == "apply_patch":
+                patch_str = args.get("patch", "")
+                target_p = args.get("path") or args.get("target_path")
+                observation = self.env.apply_patch(patch_str, target_path=target_p)
+                if "SUCCESS" in observation:
+                    observation += "\n[ACTION GUIDE]: Patch applied successfully. Next step: call 'run_command' with the test command to verify."
+
             elif tool_name == "edit_file":
                 path = args.get("path", "")
                 old_str = args.get("old_str", "")
@@ -285,6 +298,11 @@ class ReActAgentRunner:
                     observation += "\n[ACTION GUIDE]: Verification tests PASSED (exit code 0). Next step: call 'finish' with summary."
                 else:
                     observation += "\n[ACTION GUIDE]: Verification FAILED. Next step: call 'edit_file' to repair the error."
+
+            elif tool_name == "request_context":
+                sym = args.get("symbol", "")
+                q = args.get("query")
+                observation = self.env.request_context(sym, query=q)
 
             else:
                 observation = f"ERROR: Unknown tool '{tool_name}'."

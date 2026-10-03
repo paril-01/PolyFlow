@@ -1,0 +1,182 @@
+[
+  {
+    "edge_id": "EDGE-GT-001",
+    "category": "inheritance",
+    "source": {
+      "entity_id": "OCA\\Files\\Controller\\ApiController",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 56
+    },
+    "relationship": "inherits",
+    "target": {
+      "entity_id": "OCP\\AppFramework\\Controller",
+      "file": "lib/public/AppFramework/Controller.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "class ApiController extends Controller at line 56",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-002",
+    "category": "imports",
+    "source": {
+      "entity_id": "apps/files/lib/Controller/ApiController.php",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 14
+    },
+    "relationship": "imports",
+    "target": {
+      "entity_id": "OCA\\Files\\Service\\TagService",
+      "file": "apps/files/lib/Service/TagService.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "use OCA\\Files\\Service\\TagService; at line 14",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-003",
+    "category": "dependency_injection",
+    "source": {
+      "entity_id": "OCA\\Files\\Controller\\ApiController::__construct",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 63
+    },
+    "relationship": "imports",
+    "target": {
+      "entity_id": "OCA\\Files\\Service\\TagService",
+      "file": "apps/files/lib/Service/TagService.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "Constructor parameter: private TagService $tagService at line 63",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-004",
+    "category": "inheritance",
+    "source": {
+      "entity_id": "OC\\ServerContainer",
+      "file": "lib/private/ServerContainer.php",
+      "line": 24
+    },
+    "relationship": "inherits",
+    "target": {
+      "entity_id": "OC\\AppFramework\\Utility\\SimpleContainer",
+      "file": "lib/private/AppFramework/Utility/SimpleContainer.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "class ServerContainer extends SimpleContainer at line 24",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-005",
+    "category": "interface_implementation",
+    "source": {
+      "entity_id": "OC\\Files\\Node\\File",
+      "file": "lib/private/Files/Node/File.php",
+      "line": 16
+    },
+    "relationship": "implements",
+    "target": {
+      "entity_id": "OCP\\Files\\File",
+      "file": "lib/public/Files/File.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "class File extends Node implements \\OCP\\Files\\File at line 16",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-006",
+    "category": "route_to_controller",
+    "source": {
+      "entity_id": "apps/files/appinfo/routes.php::Api#getThumbnail",
+      "file": "apps/files/appinfo/routes.php",
+      "line": 27
+    },
+    "relationship": "calls",
+    "target": {
+      "entity_id": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "'name' => 'Api#getThumbnail', 'url' => '/api/v1/thumbnail/{x}/{y}/{file}'",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-007",
+    "category": "method_call",
+    "source": {
+      "entity_id": "OC\\ServerContainer::registerAppContainer",
+      "file": "lib/private/ServerContainer.php",
+      "line": 57
+    },
+    "relationship": "calls",
+    "target": {
+      "entity_id": "OC\\AppFramework\\App::buildAppNamespace",
+      "file": "lib/private/AppFramework/App.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "App::buildAppNamespace($appName) at line 57",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-008",
+    "category": "event_to_dispatcher",
+    "source": {
+      "entity_id": "OC\\Files\\Node\\HookConnector::nodeDeleted",
+      "file": "lib/private/Files/Node/HookConnector.php",
+      "line": 126
+    },
+    "relationship": "calls",
+    "target": {
+      "entity_id": "OCP\\Files\\Events\\Node\\NodeDeletedEvent::__construct",
+      "file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "$event = new NodeDeletedEvent($node) dispatched at line 126",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-009",
+    "category": "cross_stack_route",
+    "source": {
+      "entity_id": "apps/files/src/services/Recent.ts::getRecentFiles",
+      "file": "apps/files/src/services/Recent.ts",
+      "line": 46
+    },
+    "relationship": "calls",
+    "target": {
+      "entity_id": "apps/files/appinfo/routes.php::Api#getRecentFiles",
+      "file": "apps/files/appinfo/routes.php",
+      "line": 39
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "Frontend calls getRecentSearch hitting backend endpoint /api/v1/recent/",
+    "verified": true
+  },
+  {
+    "edge_id": "EDGE-GT-010",
+    "category": "inheritance",
+    "source": {
+      "entity_id": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "line": 28
+    },
+    "relationship": "inherits",
+    "target": {
+      "entity_id": "OCP\\Files\\Events\\Node\\NodeEvent",
+      "file": "lib/public/Files/Events/Node/NodeEvent.php",
+      "line": 1
+    },
+    "evidence_source": "manual",
+    "evidence_detail": "class NodeDeletedEvent extends NodeEvent at line 28",
+    "verified": true
+  }
+]
