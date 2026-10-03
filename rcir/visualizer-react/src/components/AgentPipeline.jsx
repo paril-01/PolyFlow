@@ -75,7 +75,7 @@ export function AgentPipeline({
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <div className="provenance-pill" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.3)', padding: '6px 14px', borderRadius: 20, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: '#38bdf8' }}>
             <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Local Inference: Ollama (qwen2.5-coder:1.5b) | simulation_fallback: false</span>
+            <span>Local Ollama (Evaluated: qwen2.5:0.5b · Engine: qwen2.5-coder:1.5b) | simulation_fallback: false</span>
           </div>
 
           <button
@@ -425,41 +425,51 @@ export function AgentPipeline({
             {activeStage.stage === 5 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div style={{ 
-                  background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.3))', 
-                  border: '2px solid #10b981', 
+                  background: 'linear-gradient(145deg, rgba(244, 63, 94, 0.12), rgba(15, 23, 42, 0.6))', 
+                  border: '1px solid rgba(244, 63, 94, 0.4)', 
                   borderRadius: 10, 
                   padding: 16,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: 12
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#10b981', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Award className="w-6 h-6" />
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#f43f5e', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <ShieldCheck className="w-6 h-6" />
                     </div>
                     <div>
                       <div style={{ fontSize: 15, fontWeight: 800, color: '#f8fafc' }}>
-                        RELEASE APPROVED (FAIL-CLOSED GATE)
+                        ADVERSARIAL RELEASE AUTHORITY (FAIL-CLOSED GATE)
                       </div>
-                      <div style={{ fontSize: 12, color: '#6ee7b7' }}>
-                        All 4 host verification gates validated with exit code 0.
+                      <div style={{ fontSize: 12, color: '#cbd5e1' }}>
+                        Refuses release approval if diff is empty, tests fail, or compiler errors occur.
                       </div>
                     </div>
                   </div>
-                  <span className="hero-pill text-emerald-300" style={{ border: '1px solid #10b981', background: 'rgba(16,185,129,0.2)' }}>
-                    PASSED
+                  <span className="hero-pill text-rose-300" style={{ border: '1px solid #f43f5e', background: 'rgba(244,63,94,0.2)' }}>
+                    FAIL-CLOSED VERIFIED
                   </span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
                   <div style={{ background: '#0a101d', border: '1px solid var(--border-subtle)', borderRadius: 6, padding: 10 }}>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>Compiler Exit Code</span>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: '#10b981', fontFamily: 'var(--font-mono)' }}>0 (PASS)</div>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>Compiler Exit Gate</span>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#10b981', fontFamily: 'var(--font-mono)' }}>EXIT 0 REQUIRED</div>
                   </div>
                   <div style={{ background: '#0a101d', border: '1px solid var(--border-subtle)', borderRadius: 6, padding: 10 }}>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>Unit Test Assertions</span>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: '#10b981', fontFamily: 'var(--font-mono)' }}>100% PASS</div>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>Unified Diff Requirement</span>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#fb7185', fontFamily: 'var(--font-mono)' }}>REJECT IF DIFF EMPTY</div>
                   </div>
+                  <div style={{ background: '#0a101d', border: '1px solid var(--border-subtle)', borderRadius: 6, padding: 10 }}>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>Rubber-Stamp Prevention</span>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>ZERO FAKE APPROVALS</div>
+                  </div>
+                </div>
+
+                <div style={{ fontSize: 11.5, color: '#94a3b8', lineHeight: 1.4 }}>
+                  <strong>Empirical finding from real E2E benchmark:</strong> When local model runs exhausted turn limits without a non-empty unified patch, the Gatekeeper strictly recorded <code>gatekeeper_verdict: REJECT</code>, demonstrating true fail-closed release safety rather than simulating success.
                 </div>
               </div>
             )}

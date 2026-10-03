@@ -24,12 +24,23 @@ export const NEXTCLOUD_BENCHMARK = {
     impactQueryLatencyMs: 38.2
   },
   primaryMetrics: {
-    baselineEdgeRecall: "32.8%",
-    rcirEdgeRecall: "96.7%",
-    observedUplift: "+64.0 percentage points",
+    // 2-Hop Candidate Expansion Benchmark (File Candidate Level)
+    candidateFileRecallBaseline: "32.8%",
+    candidateFileRecallRcir: "96.7%",
+    observedRecallUplift: "+64.0 percentage points",
+    candidatePrecisionBaseline: "38.9%",
+    candidatePrecisionRcir: "5.6%",
+    candidateNoiseRcir: "94.4% false-positive candidate rate",
+    totalCandidatesBaseline: 145,
+    totalCandidatesRcir: 7988,
+    falsePositiveCandidatesBaseline: 118,
+    falsePositiveCandidatesRcir: 7276,
     silentMissesBaseline: 695,
     silentMissesRcir: 10,
     referencesRescued: 685,
+    // Direct 1-Hop AST Extraction Mode (Edge Level)
+    directAstEdgeRecall: "55.3%",
+    directAstEdgePrecision: "22.4%",
     exactResolutionFraction: "64.1%",
     tokenReduction: "80.5%",
     zeroCloudNetworkCalls: 0
@@ -41,15 +52,22 @@ export const NEXTCLOUD_BENCHMARK = {
       targetSymbol: "ApiController::getThumbnail",
       category: "Controller Route",
       gtFiles: 25,
+      // Candidate Recall & Precision under 2-Hop Expansion
       baseRecall: 20.0,
       rcirRecall: 100.0,
+      basePrecision: 38.5,
+      rcirPrecision: 1.6,
+      baseCandidates: 13,
+      rcirCandidates: 1611,
       baseMisses: 20,
       rcirMisses: 0,
+      baseFps: 8,
+      rcirFps: 1586,
       exactResFrac: "65.5%",
       tokensBase: 18731,
       tokensRcir: 3998,
-      agentDecision: "APPROVE (Gatekeeper Release Verified)",
-      notes: "Captures all 25 affected call sites and routes across apps/files within a 3,998 token contract with zero misses."
+      agentDecision: "APPROVE (Scoped Receiver Verified)",
+      notes: "100% candidate recall (25/25 GT files found), but 2-hop expansion produces 1,586 false-positive candidates (1.6% precision). Demonstrates high recall at the cost of substantial over-retrieval."
     },
     {
       id: "TASK-2",
@@ -59,13 +77,19 @@ export const NEXTCLOUD_BENCHMARK = {
       gtFiles: 138,
       baseRecall: 3.6,
       rcirRecall: 94.9,
+      basePrecision: 12.2,
+      rcirPrecision: 5.9,
+      baseCandidates: 41,
+      rcirCandidates: 2212,
       baseMisses: 133,
       rcirMisses: 7,
+      baseFps: 36,
+      rcirFps: 2081,
       exactResFrac: "25.3%",
       tokensBase: 16983,
       tokensRcir: 3992,
       agentDecision: "APPROVE (Scoped Receiver Verified)",
-      notes: "Scoped receiver flow tracking resolved 131/138 references across filesystem entities, rescuing 126 files from silent misses."
+      notes: "Rescues 126 files from silent misses (131/138 GT recovered, 94.9% recall), but pulls 2,081 false-positive candidates due to untyped $node receivers (5.9% precision)."
     },
     {
       id: "TASK-3",
@@ -75,13 +99,19 @@ export const NEXTCLOUD_BENCHMARK = {
       gtFiles: 18,
       baseRecall: 38.9,
       rcirRecall: 88.9,
+      basePrecision: 33.3,
+      rcirPrecision: 3.4,
+      baseCandidates: 21,
+      rcirCandidates: 476,
       baseMisses: 11,
       rcirMisses: 2,
+      baseFps: 14,
+      rcirFps: 460,
       exactResFrac: "88.7%",
       tokensBase: 10382,
       tokensRcir: 4000,
       agentDecision: "APPROVE",
-      notes: "Captures both event dispatch invocation sites and listener subscriptions across 18 subsystem listeners."
+      notes: "Captures 16/18 event subscribers and dispatch sites across 18 subsystem listeners with 88.7% exact AST bindings; 460 candidate false positives."
     },
     {
       id: "TASK-4",
@@ -91,13 +121,19 @@ export const NEXTCLOUD_BENCHMARK = {
       gtFiles: 538,
       baseRecall: 1.3,
       rcirRecall: 99.8,
+      basePrecision: 10.4,
+      rcirPrecision: 15.5,
+      baseCandidates: 67,
+      rcirCandidates: 3475,
       baseMisses: 531,
       rcirMisses: 1,
+      baseFps: 60,
+      rcirFps: 2938,
       exactResFrac: "91.2%",
       tokensBase: 54324,
       tokensRcir: 3994,
       agentDecision: "APPROVE",
-      notes: "Catches 537 DI container bindings missed by lexical search, avoiding 54,000 tokens of context blowup."
+      notes: "Rescues 530 DI container bindings missed by lexical search (99.8% recall) while strictly capping context to 3,994 tokens (saving 50k tokens vs unbounded grep)."
     },
     {
       id: "TASK-5",
@@ -107,17 +143,24 @@ export const NEXTCLOUD_BENCHMARK = {
       gtFiles: 3,
       baseRecall: 100.0,
       rcirRecall: 100.0,
+      basePrecision: 100.0,
+      rcirPrecision: 1.4,
+      baseCandidates: 3,
+      rcirCandidates: 214,
       baseMisses: 0,
       rcirMisses: 0,
+      baseFps: 0,
+      rcirFps: 211,
       exactResFrac: "50.0%",
       tokensBase: 1848,
       tokensRcir: 3992,
       agentDecision: "APPROVE",
-      notes: "2-hop blast radius and TypeScript ES module import extraction traced init.ts -> views/recent.ts -> services/Recent.ts with 100% recall."
+      notes: "Transitive ES module import chain traces init.ts -> views/recent.ts -> services/Recent.ts with 100% recall (3/3 GT). Baseline grep achieves 100% recall with 0 noise on this compact chain."
     }
   ]
 };
 
+// OpenTelemetry Demo Empirical Benchmark (from committed rcir/artifacts/opentelemetry_demo_eval.md)
 export const OPENTELEMETRY_BENCHMARK = {
   id: "opentelemetry",
   name: "OpenTelemetry Microservices Demo",
@@ -125,93 +168,135 @@ export const OPENTELEMETRY_BENCHMARK = {
   repository: "open-telemetry/opentelemetry-demo",
   commit: "b49a1d82f7c03e8179e88b22a0f8c2b512e09a31",
   scale: {
-    totalFiles: 1420,
-    totalLoc: 148200,
+    totalFiles: 160,
+    totalLoc: 48200,
     languages: [
-      { name: "Go", files: 412, loc: 52100, percent: "35.1%", role: "Checkout & Accounting Services" },
-      { name: "Java", files: 310, loc: 39400, percent: "26.6%", role: "Ad & Fraud Detection Services" },
-      { name: "Python", files: 280, loc: 28900, percent: "19.5%", role: "Recommendation & Email Services" },
-      { name: "TypeScript", files: 240, loc: 21600, percent: "14.6%", role: "Frontend & Payment Gateway" },
-      { name: "Rust / C#", files: 178, loc: 6200, percent: "4.2%", role: "Quotes & Shipping Services" }
+      { name: "Go", files: 45, loc: 14200, percent: "29.5%", role: "Checkout & Accounting Services" },
+      { name: "Java", files: 32, loc: 11800, percent: "24.5%", role: "Ad & Fraud Detection Services" },
+      { name: "Python", files: 30, loc: 9400, percent: "19.5%", role: "Recommendation & Email Services" },
+      { name: "TypeScript", files: 28, loc: 7600, percent: "15.8%", role: "Frontend & Payment Gateway" },
+      { name: "Protobuf", files: 25, loc: 5200, percent: "10.7%", role: "gRPC Service Contracts (demo.proto)" }
     ],
-    graphNodes: 18920,
-    graphEdges: 42180,
-    extractDurationSec: 42.4,
-    peakRamMb: 46.2,
-    impactQueryLatencyMs: 14.8
+    graphNodes: 611,
+    graphEdges: 1176,
+    crossServiceLinks: 31,
+    extractDurationSec: 11.78,
+    peakRamMb: 8.4,
+    impactQueryLatencyMs: 3.2
   },
   primaryMetrics: {
-    baselineEdgeRecall: "28.4%",
-    rcirEdgeRecall: "94.2%",
-    observedUplift: "+65.8 percentage points",
-    silentMissesBaseline: 246,
-    silentMissesRcir: 8,
-    referencesRescued: 238,
-    exactResolutionFraction: "72.4%",
-    tokenReduction: "84.2%",
+    mutationRecall: "75.0%",
+    mutationPrecision: "100.0%",
+    expectedCallSites: 12,
+    detectedCallSites: 9,
+    silentMisses: 3,
+    taskSuccessRate: "60.0%",
+    tasksPassed: 3,
+    tasksFailed: 2,
+    contextContractCoverage: "83.3%",
     zeroCloudNetworkCalls: 0
   },
   tasks: [
     {
       id: "OTEL-1",
-      title: "Trace Context Propagation Contract",
-      targetSymbol: "TraceContext::Inject",
-      category: "Cross-Service Header",
-      gtFiles: 14,
-      baseRecall: 21.4,
-      rcirRecall: 100.0,
-      baseMisses: 11,
-      rcirMisses: 0,
-      exactResFrac: "85.7%",
-      tokensBase: 14200,
-      tokensRcir: 3850,
-      agentDecision: "APPROVE",
-      notes: "Maps W3C traceparent headers across Go, Java, and Python microservice boundaries."
+      title: "RPC Contract Mutation: GetCart",
+      targetSymbol: "GetCart (pb/demo.proto)",
+      category: "Protobuf gRPC Stub",
+      gtFiles: 3,
+      expectedSites: 3,
+      detectedSites: 2,
+      recall: 66.7,
+      precision: 100.0,
+      misses: 1,
+      dynamicTask: "dyn_task_cartservice_additem (CartService.AddItem)",
+      taskOutcome: "FAIL",
+      contractComplete: false,
+      syntaxValid: true,
+      notes: "Captured 2/3 cross-service gRPC stubs with 100% precision. Dynamic task failed due to missing contract boundary in cartservice."
     },
     {
       id: "OTEL-2",
-      title: "Currency Service gRPC Evolution",
-      targetSymbol: "GetSupportedCurrencies",
-      category: "gRPC Contract",
-      gtFiles: 28,
-      baseRecall: 14.3,
-      rcirRecall: 92.8,
-      baseMisses: 24,
-      rcirMisses: 2,
-      exactResFrac: "78.5%",
-      tokensBase: 22400,
-      tokensRcir: 3920,
-      agentDecision: "APPROVE",
-      notes: "Tracks Protobuf gRPC stubs across Frontend (TS) and CurrencyService (C++)."
+      title: "RPC Contract Mutation: AddItem",
+      targetSymbol: "AddItem (pb/demo.proto)",
+      category: "Protobuf gRPC Stub",
+      gtFiles: 2,
+      expectedSites: 2,
+      detectedSites: 1,
+      recall: 50.0,
+      precision: 100.0,
+      misses: 1,
+      dynamicTask: "dyn_task_productcatalogservice_listproducts",
+      taskOutcome: "PASS",
+      contractComplete: true,
+      syntaxValid: true,
+      notes: "Captured 1/2 call sites with 100% precision. Dynamic contract verification passed with clean syntax."
     },
     {
       id: "OTEL-3",
-      title: "Cart Cache Redis Key Invalidation",
-      targetSymbol: "CartStore::InvalidateKey",
-      category: "Cache Invariant",
-      gtFiles: 19,
-      baseRecall: 36.8,
-      rcirRecall: 94.7,
-      baseMisses: 12,
-      rcirMisses: 1,
-      exactResFrac: "68.4%",
-      tokensBase: 11900,
-      tokensRcir: 3880,
-      agentDecision: "APPROVE",
-      notes: "Captures asynchronous Redis pub/sub consumers across checkout and fraud engines."
+      title: "RPC Contract Mutation: EmptyCart",
+      targetSymbol: "EmptyCart (pb/demo.proto)",
+      category: "Protobuf gRPC Stub",
+      gtFiles: 3,
+      expectedSites: 3,
+      detectedSites: 2,
+      recall: 66.7,
+      precision: 100.0,
+      misses: 1,
+      dynamicTask: "dyn_task_recommendationservice_listrecommendations",
+      taskOutcome: "PASS",
+      contractComplete: true,
+      syntaxValid: true,
+      notes: "Captured 2/3 cross-service gRPC links with 100% precision. Dynamic task verified successfully."
+    },
+    {
+      id: "OTEL-4",
+      title: "RPC Contract Mutation: ListProducts",
+      targetSymbol: "ListProducts (pb/demo.proto)",
+      category: "Protobuf gRPC Stub",
+      gtFiles: 2,
+      expectedSites: 2,
+      detectedSites: 2,
+      recall: 100.0,
+      precision: 100.0,
+      misses: 0,
+      dynamicTask: "dyn_task_paymentservice_charge (PaymentService.Charge)",
+      taskOutcome: "FAIL",
+      contractComplete: false,
+      syntaxValid: true,
+      notes: "100% mutation recall and 100% precision on gRPC stub analysis. Payment task failed dynamic contract validation."
+    },
+    {
+      id: "OTEL-5",
+      title: "RPC Contract Mutation: GetProduct",
+      targetSymbol: "GetProduct (pb/demo.proto)",
+      category: "Protobuf gRPC Stub",
+      gtFiles: 2,
+      expectedSites: 2,
+      detectedSites: 2,
+      recall: 100.0,
+      precision: 100.0,
+      misses: 0,
+      dynamicTask: "dyn_task_checkoutservice_placeorder",
+      taskOutcome: "PASS",
+      contractComplete: true,
+      syntaxValid: true,
+      notes: "100% mutation recall and 100% precision. CheckoutService dynamic task passed with complete contract verification."
     }
   ]
 };
 
+// E2E Autonomous Coding Agent Benchmark (from committed e2e_coding_benchmark_results.json)
 export const E2E_CODING_BENCHMARK = {
   environment: "PolyFlow Cloud Drive Polyglot Application",
   toolchains: ["Java 21 (javac / Adoptium HotSpot)", "Node.js v25", "Python 3.12", "SQLite3"],
   providerProvenance: {
-    provider: "ollama (local)",
+    benchmarkEvaluatedModel: "qwen2.5:0.5b (local Ollama)",
+    currentRunnerEngine: "qwen2.5-coder:1.5b (local Ollama)",
     endpoint: "http://localhost:11434/v1",
-    model: "qwen2.5-coder:1.5b",
-    simulationFallback: false
+    simulationFallback: false,
+    zeroCloudNetworkCalls: 0
   },
+  finding: "Empirical Finding: The repository tool loop operates correctly with live compilers and test suites. However, the local model exhausted the 5-turn budget without generating a valid unified patch (0 files modified). The Gatekeeper acted as an adversarial release authority and correctly REFUSED release approval (fail-closed release safety).",
   tasks: [
     {
       id: "POLY-E2E-1",
@@ -220,10 +305,15 @@ export const E2E_CODING_BENCHMARK = {
       testFile: "backend-java/src/main/java/polyflow/storage/TestStorageSuite.java",
       requirement: "Support AUDITOR role with READ access, rejecting WRITE/ADMIN. Recompile with javac and run JVM test suite.",
       turns: 5,
+      toolCalls: 5,
+      filesModified: 0,
+      gitDiffLength: 0,
       javaTestPassed: true,
       e2eIntegrationPassed: true,
-      gatekeeperVerdict: "APPROVE",
-      gitDiffSummary: "+ if ('auditor'.equalsIgnoreCase(userRole)) return 'READ'.equalsIgnoreCase(requiredAction);"
+      testContext: "Pre-existing tests pass on unchanged baseline code",
+      gatekeeperVerdict: "REJECT",
+      gatekeeperReason: "Fail-closed release refusal: No unified patch generated (0 files modified within 5 turns)",
+      gitDiffSummary: "No unified diff generated (0 files modified within 5-turn local model limit; Gatekeeper refused release)"
     },
     {
       id: "POLY-E2E-2",
@@ -232,10 +322,15 @@ export const E2E_CODING_BENCHMARK = {
       testFile: "backend-java/src/main/java/polyflow/storage/TestStorageSuite.java",
       requirement: "Increase maximum upload size from 500MB to 1000MB (1GB). Verify with JVM unit tests and multi-language vertical slice.",
       turns: 5,
+      toolCalls: 5,
+      filesModified: 0,
+      gitDiffLength: 0,
       javaTestPassed: true,
       e2eIntegrationPassed: true,
-      gatekeeperVerdict: "APPROVE",
-      gitDiffSummary: "- if (sizeBytes <= 0 || sizeBytes > 500L * 1024 * 1024) return false;\n+ if (sizeBytes <= 0 || sizeBytes > 1000L * 1024 * 1024) return false;"
+      testContext: "Pre-existing tests pass on unchanged baseline code",
+      gatekeeperVerdict: "REJECT",
+      gatekeeperReason: "Fail-closed release refusal: No unified patch generated (0 files modified within 5 turns)",
+      gitDiffSummary: "No unified diff generated (0 files modified within 5-turn local model limit; Gatekeeper refused release)"
     }
   ]
 };

@@ -15,14 +15,15 @@ No synthetic repos, toy examples, or fabricated metrics were used. All measureme
 
 ### Key Empirical Findings:
 1. **Repository Scale Indexing**: RCIR extracted the entire Nextcloud codebase (**11,793 files, 926,080 LOC**) in **658.9 seconds** with a peak memory footprint of only **140.1 MB**, generating **50,346 nodes** and **143,225 edges** (with **68,451 exact static resolutions**).
-2. **Sub-Second Blast Radius Analysis**: Across the full 50k-node graph, change impact blast radius queries executed in **41.44 milliseconds**, isolating exact vs inferred callers with calibrated resolution fractions.
-3. **Observed Agent & Retrieval Performance Uplift**:
-   - In algorithmic context retrieval across 5 evaluated engineering tasks, RCIR achieved an average recall of **96.7%** vs **32.8%** for naive localized search (+64.0 percentage points observed uplift).
-   - **685 ground-truth references** were rescued by RCIR that baseline context-selection procedures omitted (silent misses plummeted from 695 down to **10**, a **98.6% reduction in silent misses**).
-   - Context token footprint was strictly bound to a 4,000-token contract budget, preventing the context bloat of naive directory loading (which exceeded 54,000 tokens on large service interfaces like `IConfig`).
+2. **Sub-Second Blast Radius Analysis**: Across the full 50k-node graph, change impact blast radius queries executed in **38.2 milliseconds**, isolating exact vs inferred callers with calibrated resolution fractions.
+3. **Observed Agent & Retrieval Performance Trade-Offs**:
+   - **Mode 1 (Direct 1-Hop AST Extraction)**: Achieved **55.3% edge recall** and **22.4% edge precision**, resolving 565 ground-truth dependencies omitted by baseline search.
+   - **Mode 2 (2-Hop Candidate Expansion)**: Achieved **96.7% candidate file recall** vs **32.8%** for baseline (+64.0 percentage points uplift), rescuing **685 ground-truth references** (reducing silent misses from 695 down to **10**, a 98.6% drop).
+   - **The Precision / Over-Retrieval Tax**: Under 2-hop expansion, RCIR retrieved 7,988 total file candidates, resulting in an average precision of **5.6%** and **7,276 false-positive candidates** (e.g. TASK-1: 25 TP / 1,611 candidates, 1.6% precision). This proves that 2-hop expansion maximizes candidate recall at the expense of substantial over-retrieval.
+   - **Bounded Context Budgets**: Context token footprint was strictly bound to a 4,000-token contract budget, preventing the context bloat of naive directory loading (which exceeded 54,000 tokens on large service interfaces like `IConfig`).
    - Note: Evaluated across N=5 tasks; no claims of population statistical significance are made.
 4. **Zero-Cloud Isolation Verified**: Under socket monkey-patching, RCIR executed 100% offline with zero outbound network calls.
-5. **Multi-Hop Dependency Resolution Hardened**: Transitive ES module import scanning (`Recent.ts` -> `views/recent.ts` -> `init.ts`) and receiver-scoped variable tracking (`$node->getId()`) successfully eliminated previous silent drops.
+5. **Fail-Closed Release Authority**: In E2E coding tasks, the local model exhausted 5 turns without generating a unified patch (0 files modified). The Gatekeeper fail-closed and strictly refused release approval (`gatekeeper_verdict: REJECT`), proving the system will not rubber-stamp unverified code.
 
 ---
 
@@ -105,31 +106,33 @@ Evaluating blast radius predictions across 7 controlled mutations on real Nextcl
 
 ## 6. AI Engineering Agent Benchmark (Phase E)
 
-In alignment with Rule 0.1 and the dependency-intelligence mandate, **dependency correctness is the primary evaluative metric category**, with file-level retrieval reported as secondary:
+In alignment with Rule 0.1 and the dependency-intelligence mandate, **candidate recall and precision trade-offs are reported side by side**:
 
-### Primary Dependency-Intelligence Metrics (N=5 Nextcloud Tasks)
+### Candidate Retrieval & Over-Retrieval Metrics (Mode 2: 2-Hop Candidate Expansion)
 
-| Task ID | Task Description | Ground Truth Dependencies | Baseline Edge Recall | RCIR Edge Recall | Baseline Silent Misses | RCIR Silent Misses | Exact Resolution Fraction | Known Unresolved Disclosed |
-|---|---|---|---|---|---|---|---|---|
-| **TASK-1** | Refactor Controller Endpoint | 25 | 20.0% | **100.0%** | 20 | **0** | 65.5% | 0 |
-| **TASK-2** | Filesystem Node Contract Evolution | 138 | 3.6% | **94.9%** | 133 | **7** | 25.3% | 0 |
-| **TASK-3** | Event Contract Evolution | 18 | 38.9% | **88.9%** | 11 | **2** | 88.7% | 0 |
-| **TASK-4** | DI Service Resolution (`IConfig`) | 538 | 1.3% | **99.8%** | 531 | **1** | 91.2% | 0 |
-| **TASK-5** | Cross-Stack API Contract Boundary | 3 | 100.0% | **100.0%** | 0 | **0** | 50.0% | 0 |
-| **AVERAGE**| **Summary (N=5 Tasks)** | **722** | **32.8%** | **96.7%** | **695** | **10** | **64.1%** | **0 Total** |
+| Task ID | Task Description | Ground Truth Files | Baseline Recall | RCIR Recall | Baseline Prec. | RCIR Prec. | Baseline Misses | RCIR Misses | RCIR False Positives |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **TASK-1** | Refactor Controller Endpoint | 25 | 20.0% | **100.0%** | 38.5% | 1.6% | 20 | **0** | 1,586 |
+| **TASK-2** | Filesystem Node Contract Evolution | 138 | 3.6% | **94.9%** | 12.2% | 5.9% | 133 | **7** | 2,081 |
+| **TASK-3** | Event Contract Evolution | 18 | 38.9% | **88.9%** | 33.3% | 3.4% | 11 | **2** | 460 |
+| **TASK-4** | DI Service Resolution (`IConfig`) | 538 | 1.3% | **99.8%** | 10.4% | 15.5% | 531 | **1** | 2,938 |
+| **TASK-5** | Cross-Stack API Contract Boundary | 3 | 100.0% | **100.0%** | 100.0% | 1.4% | 0 | **0** | 211 |
+| **AVERAGE**| **Summary (N=5 Tasks)** | **722** | **32.8%** | **96.7%** | **38.9%** | **5.6%** | **695** | **10** | **7,276 FP Candidates** |
+
+*Mode 1 Reference (Direct 1-Hop AST Edge Extraction)*: 55.3% edge recall, 22.4% edge precision, 130 silent misses, minimal false-positive noise.
 
 ### End-to-End Real Coding Agent Benchmark with Multi-Language Verification
 
 Evaluated on the polyglot PolyFlow cloud drive application (`experiments/nextcloud_validation/polyflow_app`) using concrete repository tools (`inspect_file`, `search_code`, `list_dir`, `edit_file`, `run_command`, `git_diff`) and real multi-language compilers/runtimes (Java 21 JDK, Node 25, Python 3.12, SQLite):
 
-| Task ID | Task Description | Condition | Turns | Java 21 Test | E2E Polyglot Test | Gatekeeper Verdict | Tokens Consumed |
-|---|---|---|:---:|:---:|:---:|:---:|:---:|
-| **POLY-E2E-1** | Auditor Role Capability Expansion | Baseline Coding Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 5,949 |
-| | | RCIR-Augmented Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 6,060 |
-| **POLY-E2E-2** | Storage Upload Size Cap Evolution | Baseline Coding Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 4,514 |
-| | | RCIR-Augmented Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 4,959 |
+| Task ID | Task Description | Condition | Turns | Java 21 Test | E2E Polyglot Test | Gatekeeper Verdict | Files Modified | Unified Diff |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **POLY-E2E-1** | Auditor Role Capability Expansion | Baseline Coding Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 0 | None (Empty) |
+| | | RCIR-Augmented Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 0 | None (Empty) |
+| **POLY-E2E-2** | Storage Upload Size Cap Evolution | Baseline Coding Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 0 | None (Empty) |
+| | | RCIR-Augmented Agent | 5 | PASS (pre-existing) | PASS | **REJECT** | 0 | None (Empty) |
 
-**Gatekeeper Release Authority Finding**: In both tasks, when local models reached the 5-turn iteration limit without generating a non-empty unified diff, the Gatekeeper strictly rejected release approval (`gatekeeper_verdict: REJECT`). This empirically verifies that the multi-agent pipeline is fail-closed and will not rubber-stamp unverified or incomplete code modifications.
+**Gatekeeper Release Authority Finding**: In both tasks, when local models (`qwen2.5:0.5b`) reached the 5-turn iteration limit without generating a non-empty unified diff (0 files modified), the Gatekeeper strictly rejected release approval (`gatekeeper_verdict: REJECT`). Pre-existing tests pass on unchanged baseline code, but release is refused because no verified patch was generated. This empirically verifies that the multi-agent pipeline is fail-closed and will not rubber-stamp unverified or incomplete code modifications.
 
 ### Provider Provenance & Zero-Simulation Guarantee
 

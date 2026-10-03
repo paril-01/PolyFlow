@@ -46,12 +46,12 @@ export function ExecutiveHero({ onNavigate }) {
       <div className="hero-metrics-grid">
         <div className="metric-card">
           <div className="metric-header">
-            <span className="metric-label">Edge Recall Uplift</span>
+            <span className="metric-label">Candidate Recall (2-Hop)</span>
             <Zap className="w-5 h-5 text-cyan-400" />
           </div>
-          <div className="metric-value text-cyan-400">{primaryMetrics.observedUplift}</div>
+          <div className="metric-value text-cyan-400">{primaryMetrics.candidateFileRecallRcir}</div>
           <div className="metric-desc">
-            RCIR: <strong>{primaryMetrics.rcirEdgeRecall}</strong> vs Baseline: <strong>{primaryMetrics.baselineEdgeRecall}</strong>
+            vs <strong>{primaryMetrics.candidateFileRecallBaseline}</strong> Baseline ({primaryMetrics.candidatePrecisionRcir} precision trade-off)
           </div>
         </div>
 
@@ -84,7 +84,7 @@ export function ExecutiveHero({ onNavigate }) {
           </div>
           <div className="metric-value text-amber-400">{scale.impactQueryLatencyMs} ms</div>
           <div className="metric-desc">
-            Sub-second traversal across 110,854 real dependency edges
+            Sub-second traversal across {scale.graphEdges.toLocaleString()} real dependency edges
           </div>
         </div>
       </div>
@@ -119,13 +119,13 @@ export function ExecutiveHero({ onNavigate }) {
           </div>
           <ul className="comparison-list">
             <li>
-              <strong>RCIR Graph Engine:</strong> Sub-second extraction of 50k nodes & 110k edges with calibrated resolution fractions.
+              <strong>RCIR Graph Engine:</strong> Sub-second extraction of 50k nodes & 143k edges with calibrated resolution fractions.
             </li>
             <li>
               <strong>Contract-Bounded Budgets:</strong> 4,000-token caps guarantee dense, high-signal prompt packages.
             </li>
             <li>
-              <strong>Concrete Repo Tools:</strong> Implementer agent edits real files, runs <code>javac 21</code>, and repairs assertion failures.
+              <strong>Concrete Repo Tools:</strong> Implementer agent edits real files, runs <code>javac 21</code>, and executes test suites.
             </li>
             <li>
               <strong>Adversarial Gatekeeping:</strong> Gatekeeper checks real test exit codes and unified diffs, refusing unverified release.
@@ -144,7 +144,7 @@ export function ExecutiveHero({ onNavigate }) {
             </div>
             <div className="pathway-text">
               <div className="pathway-heading">Nextcloud 50k Graph</div>
-              <div className="pathway-sub">Explore 110,854 edges & sub-second blast radius</div>
+              <div className="pathway-sub">Explore {scale.graphEdges.toLocaleString()} edges & sub-second blast radius</div>
             </div>
             <ArrowRight className="w-5 h-5 ml-auto text-slate-500" />
           </button>
