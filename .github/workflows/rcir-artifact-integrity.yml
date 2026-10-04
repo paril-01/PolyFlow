@@ -1,0 +1,36 @@
+name: RCIR Artifact Integrity & Report Consistency
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-integrity:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Audit Ground Truth Leakage Barrier
+      run: |
+        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+
+    - name: Validate Report Byte/Hash Invariance
+      run: |
+        python experiments/rcir_v8_3/scripts/validate_report_consistency.py
+
+    - name: Verify Gate Evaluator Consistency
+      run: |
+        python experiments/rcir_v8_3/scripts/evaluate_gates.py

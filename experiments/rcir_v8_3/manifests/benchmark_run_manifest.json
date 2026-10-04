@@ -1,0 +1,24 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "polyflow_commit": "07bf269d2eaae6c220978e302c1504434e0dd06e",
+  "target_repository": "nextcloud-server",
+  "target_repository_commit": "LOCAL_SNAPSHOT",
+  "benchmark_contract_hash": "7000f32798b5f222b497ad8aac8dcafc120104fec2def6e66ddf8a7ae61670e7",
+  "dataset_hash": "2848fcff5c68ff2c863c7884cab465a84e2e7009055cf7e1f2dae1ba6db75d74",
+  "ground_truth_hash": "a0097adda9cefff17e6bc51a6ae5f41f38a3e1ad5bbbea97c8905c954cfad85b",
+  "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
+  "candidate_config_hash": "95bd1269404d0911f10abb250fdff83073281e2b1753e6b39fe1ea1bfbf05d4c",
+  "ranker_config_hash": "551627242689d299bba655dcdf5a8a3a1c37ac6276ae590e14e0ae1b7d4fdc4e",
+  "compiler_config_hash": "743d128ac847adb5c7a36a16ece86b17e919c87db9eff8e18629fd0b58ce8227",
+  "provider": null,
+  "model": null,
+  "tokenizer": "cl100k_base_compatible",
+  "environment": {
+    "python_version": "3.12.3",
+    "os": "Windows",
+    "os_release": "11",
+    "cpu_arch": "AMD64",
+    "pid": 40700
+  },
+  "generated_at": "2026-10-04T19:39:34.824815+00:00"
+}

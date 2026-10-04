@@ -1,0 +1,36 @@
+name: RCIR Unit Tests & Static Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+
+    - name: Run Rule 0 Ground Truth Leakage Audit
+      run: |
+        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+
+    - name: Run RCIR v8.3 Unit and Regression Tests
+      run: |
+        PYTHONPATH=rcir/src pytest tests/test_rcir_v8_3.py -v

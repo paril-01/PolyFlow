@@ -1,0 +1,158 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "macro_averages": {
+    "precision_at_20": 0.3853,
+    "precision_at_50": 0.3973,
+    "ndcg_at_50": 0.4687,
+    "mrr": 0.7,
+    "critical_recall_budget": 0.2534
+  },
+  "per_task": {
+    "TASK-1": {
+      "task_id": "TASK-1",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "precision_at_20": 0.05,
+      "precision_at_50": 0.02,
+      "ndcg_at_50": 0.1383,
+      "mrr": 0.5,
+      "critical_recall_budget_4k": 0.0625,
+      "budget_curves": {
+        "2k": {
+          "budget_tokens": 2000,
+          "consumed_tokens": 1955,
+          "entries_included": 7,
+          "critical_recall": 0.0625
+        },
+        "4k": {
+          "budget_tokens": 4000,
+          "consumed_tokens": 3996,
+          "entries_included": 16,
+          "critical_recall": 0.0625
+        },
+        "8k": {
+          "budget_tokens": 8000,
+          "consumed_tokens": 7996,
+          "entries_included": 19,
+          "critical_recall": 0.0625
+        }
+      }
+    },
+    "TASK-3": {
+      "task_id": "TASK-3",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent::NodeDeletedEvent",
+      "precision_at_20": 0.5263,
+      "precision_at_50": 0.5263,
+      "ndcg_at_50": 0.6248,
+      "mrr": 1.0,
+      "critical_recall_budget_4k": 0.4545,
+      "budget_curves": {
+        "2k": {
+          "budget_tokens": 2000,
+          "consumed_tokens": 1387,
+          "entries_included": 5,
+          "critical_recall": 0.2727
+        },
+        "4k": {
+          "budget_tokens": 4000,
+          "consumed_tokens": 3191,
+          "entries_included": 11,
+          "critical_recall": 0.4545
+        },
+        "8k": {
+          "budget_tokens": 8000,
+          "consumed_tokens": 4178,
+          "entries_included": 15,
+          "critical_recall": 0.6364
+        }
+      }
+    },
+    "TASK-2": {
+      "task_id": "TASK-2",
+      "target": "php://OCP\\Files\\Node::getId",
+      "precision_at_20": 0.5,
+      "precision_at_50": 0.56,
+      "ndcg_at_50": 0.2569,
+      "mrr": 0.5,
+      "critical_recall_budget_4k": 0.0833,
+      "budget_curves": {
+        "2k": {
+          "budget_tokens": 2000,
+          "consumed_tokens": 1961,
+          "entries_included": 9,
+          "critical_recall": 0.0278
+        },
+        "4k": {
+          "budget_tokens": 4000,
+          "consumed_tokens": 3779,
+          "entries_included": 18,
+          "critical_recall": 0.0833
+        },
+        "8k": {
+          "budget_tokens": 8000,
+          "consumed_tokens": 7964,
+          "entries_included": 30,
+          "critical_recall": 0.0833
+        }
+      }
+    },
+    "TASK-5": {
+      "task_id": "TASK-5",
+      "target": "ts://apps/files/src/services/Recent.ts::Recent::getRecentSearch",
+      "precision_at_20": 0.1,
+      "precision_at_50": 0.06,
+      "ndcg_at_50": 0.9308,
+      "mrr": 1.0,
+      "critical_recall_budget_4k": 0.6667,
+      "budget_curves": {
+        "2k": {
+          "budget_tokens": 2000,
+          "consumed_tokens": 1533,
+          "entries_included": 6,
+          "critical_recall": 0.6667
+        },
+        "4k": {
+          "budget_tokens": 4000,
+          "consumed_tokens": 2013,
+          "entries_included": 9,
+          "critical_recall": 0.6667
+        },
+        "8k": {
+          "budget_tokens": 8000,
+          "consumed_tokens": 2266,
+          "entries_included": 12,
+          "critical_recall": 0.6667
+        }
+      }
+    },
+    "TASK-4": {
+      "task_id": "TASK-4",
+      "target": "php://OCP\\IConfig::IConfig",
+      "precision_at_20": 0.75,
+      "precision_at_50": 0.82,
+      "ndcg_at_50": 0.3925,
+      "mrr": 0.5,
+      "critical_recall_budget_4k": 0.0,
+      "budget_curves": {
+        "2k": {
+          "budget_tokens": 2000,
+          "consumed_tokens": 2564,
+          "entries_included": 1,
+          "critical_recall": 0.0
+        },
+        "4k": {
+          "budget_tokens": 4000,
+          "consumed_tokens": 3976,
+          "entries_included": 8,
+          "critical_recall": 0.0
+        },
+        "8k": {
+          "budget_tokens": 8000,
+          "consumed_tokens": 7939,
+          "entries_included": 31,
+          "critical_recall": 0.0234
+        }
+      }
+    }
+  }
+}

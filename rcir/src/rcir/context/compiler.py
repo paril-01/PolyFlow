@@ -204,47 +204,59 @@ class ContextCompiler:
         token_budget: int = 4000,
         pinned_targets: set[str] | None = None,
         impact_summary: ImpactSummary | None = None,
+        plan: Any | None = None,
     ) -> CompiledContext:
         """
         Compile ranked candidates into budgeted context bundle:
-        - Pins explicit change targets (PHASE 30)
+        - Incorporates ContextPlan role allocations when supplied (PHASE 49)
+        - Pins explicit change targets (PHASE 30 & 59)
         - Injects high-fanout summary (PHASE 23)
         - Deduplicates overlapping source spans in the same file (PHASE 29)
+        - Measures exact serialized tokens with tokenizer (PHASE 61 & 62)
         - Preserves strict token budget (PHASE 26)
         """
         compiled = CompiledContext(
             token_budget=token_budget,
             candidates_evaluated=len(ranked_candidates),
-            impact_summary=impact_summary,
+            impact_summary=impact_summary or (getattr(plan, "impact_summary", None) if plan else None),
             tokenizer_provenance=self.tokenizer.get_provenance(),
         )
 
         current_tokens = 0
-        if impact_summary:
-            summary_md = impact_summary.render_markdown()
+        if compiled.impact_summary:
+            summary_md = compiled.impact_summary.render_markdown()
             current_tokens += self._estimate_tokens(summary_md)
 
         # Track file spans for deduplication: file_path -> list of (start, end, entry_idx)
         file_spans: dict[str, list[tuple[int, int, int]]] = {}
-        pinned = pinned_targets or set()
+        pinned = set(pinned_targets or set())
 
-        for cand in ranked_candidates:
+        # If a plan is provided, use planned items
+        candidates_to_process: list[tuple[RankedCandidate, str | None]] = []
+        if plan and hasattr(plan, "planned_items"):
+            for item in plan.planned_items:
+                candidates_to_process.append((item.candidate, item.role.value if hasattr(item.role, "value") else str(item.role)))
+        else:
+            for cand in ranked_candidates:
+                candidates_to_process.append((cand, None))
+
+        for cand, role in candidates_to_process:
             ev = cand.evidence
             is_pinned = (cand.rank == 1) or (cand.entity_id in pinned and cand.rank <= 2)
 
             # Determine granularity
-            if is_pinned:
+            if is_pinned or role == "target":
                 granularity = ContextGranularity.FULL_IMPLEMENTATION
                 reason = "Primary change target entity (PINNED)"
-            elif "route" in ev.edge_types or ev.boundary_contract == "route_matched":
+            elif role == "boundary" or "route" in ev.edge_types or ev.boundary_contract == "route_matched":
                 granularity = ContextGranularity.ROUTE_DECLARATION
                 reason = "Boundary route declaration / client contract"
-            elif "direct_test" in ev.test_relationship:
+            elif role == "test" or "direct_test" in ev.test_relationship:
                 granularity = ContextGranularity.TEST_FRAGMENT
                 reason = "Direct regression verification test suite"
-            elif cand.rank <= 6:
+            elif role in ("implementation", "direct_caller") or cand.rank <= 6:
                 granularity = ContextGranularity.SIGNATURE
-                reason = "Direct 1-hop caller or contract interface"
+                reason = f"Direct contract / {role or 'caller'}"
             else:
                 granularity = ContextGranularity.SUMMARY
                 reason = "Transitive dependency in blast radius"
@@ -272,18 +284,31 @@ class ContextCompiler:
             if merged:
                 continue
 
-            entry_tokens = snippet_tokens + 50  # 50 tokens for header metadata
+            # Exact serialized prompt measurement (PHASE 61)
+            raw_entry_text = (
+                f"## [{cand.rank}] {cand.entity_id} ({granularity.value})\n"
+                f"- File: `{cand.file_path}` (lines {lines_range[0]}-{lines_range[1]})\n"
+                f"- Reason: {reason}\n"
+                f"```\n{snippet.strip()}\n```"
+            )
+            entry_tokens = self.tokenizer.count(raw_entry_text)
 
             # Strict token budget enforcement
             if current_tokens + entry_tokens > token_budget:
-                if not is_pinned:
+                if not is_pinned and role != "target":
                     # If cannot fit full snippet, try compact summary
                     if granularity != ContextGranularity.SUMMARY:
                         granularity = ContextGranularity.SUMMARY
                         snippet, lines_range, snippet_tokens, span_obj = self._extract_snippet(
                             cand.file_path, cand.entity_id, granularity
                         )
-                        entry_tokens = snippet_tokens + 25
+                        raw_summary_text = (
+                            f"## [{cand.rank}] {cand.entity_id} ({granularity.value})\n"
+                            f"- File: `{cand.file_path}` (lines {lines_range[0]}-{lines_range[1]})\n"
+                            f"- Reason: {reason}\n"
+                            f"```\n{snippet.strip()}\n```"
+                        )
+                        entry_tokens = self.tokenizer.count(raw_summary_text)
 
                     if current_tokens + entry_tokens > token_budget:
                         continue

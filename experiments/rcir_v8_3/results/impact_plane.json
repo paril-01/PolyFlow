@@ -1,0 +1,122 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "totals": {
+    "tasks": 5,
+    "total_ground_truth": 721,
+    "total_candidates_pool": 1774,
+    "global_pool_recall": 0.932,
+    "macro_pool_recall": 0.7056,
+    "worst_task_pool_recall": 0.0833,
+    "total_silent_misses": 98
+  },
+  "per_task": {
+    "TASK-1": {
+      "task_id": "TASK-1",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "ground_truth_count": 24,
+      "candidates_count": 153,
+      "hits_count": 2,
+      "pool_recall": 0.0833,
+      "pool_precision": 0.0131,
+      "has_high_fanout_summary": true
+    },
+    "TASK-3": {
+      "task_id": "TASK-3",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent::NodeDeletedEvent",
+      "ground_truth_count": 18,
+      "candidates_count": 19,
+      "hits_count": 10,
+      "pool_recall": 0.5556,
+      "pool_precision": 0.5263,
+      "has_high_fanout_summary": false
+    },
+    "TASK-2": {
+      "task_id": "TASK-2",
+      "target": "php://OCP\\Files\\Node::getId",
+      "ground_truth_count": 138,
+      "candidates_count": 359,
+      "hits_count": 124,
+      "pool_recall": 0.8986,
+      "pool_precision": 0.3454,
+      "has_high_fanout_summary": true
+    },
+    "TASK-5": {
+      "task_id": "TASK-5",
+      "target": "ts://apps/files/src/services/Recent.ts::Recent::getRecentSearch",
+      "ground_truth_count": 3,
+      "candidates_count": 71,
+      "hits_count": 3,
+      "pool_recall": 1.0,
+      "pool_precision": 0.0423,
+      "has_high_fanout_summary": true
+    },
+    "TASK-4": {
+      "task_id": "TASK-4",
+      "target": "php://OCP\\IConfig::IConfig",
+      "ground_truth_count": 538,
+      "candidates_count": 1172,
+      "hits_count": 533,
+      "pool_recall": 0.9907,
+      "pool_precision": 0.4548,
+      "has_high_fanout_summary": true
+    }
+  },
+  "degree_records": {
+    "TASK-1": {
+      "target_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "incoming_exact": 2,
+      "incoming_inferred": 4,
+      "outgoing_exact": 39,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 2,
+      "fanout_mode": "low_degree"
+    },
+    "TASK-3": {
+      "target_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent::NodeDeletedEvent",
+      "incoming_exact": 10,
+      "incoming_inferred": 0,
+      "outgoing_exact": 0,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 10,
+      "fanout_mode": "medium_degree"
+    },
+    "TASK-2": {
+      "target_id": "php://OCP\\Files\\Node::getId",
+      "incoming_exact": 251,
+      "incoming_inferred": 348,
+      "outgoing_exact": 2,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 599,
+      "fanout_mode": "high_degree"
+    },
+    "TASK-5": {
+      "target_id": "ts://apps/files/src/services/Recent.ts::Recent::getRecentSearch",
+      "incoming_exact": 1,
+      "incoming_inferred": 0,
+      "outgoing_exact": 4,
+      "outgoing_inferred": 75,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 1,
+      "fanout_mode": "low_degree"
+    },
+    "TASK-4": {
+      "target_id": "php://OCP\\IConfig::IConfig",
+      "incoming_exact": 1181,
+      "incoming_inferred": 289,
+      "outgoing_exact": 0,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 1470,
+      "fanout_mode": "high_degree"
+    }
+  }
+}

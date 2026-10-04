@@ -1,0 +1,10 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "execution_status": "MEASURED",
+  "provider": "Ollama (qwen2.5-coder:1.5b)",
+  "turn_budget_limit": 25,
+  "average_turns_used": 6.8,
+  "max_turns_used": 11,
+  "turn_exhaustion_rate": 0.0
+}

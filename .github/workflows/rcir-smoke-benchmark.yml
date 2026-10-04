@@ -1,0 +1,37 @@
+name: RCIR Benchmark Smoke Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Run Leakage Guard Audit
+      run: |
+        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+
+    - name: Run Fast Capability Probing
+      run: |
+        python experiments/rcir_v8_3/scripts/run_agent_validation.py
+
+    - name: Run External Generalization Evaluator
+      run: |
+        python experiments/rcir_v8_3/scripts/run_external_generalization.py

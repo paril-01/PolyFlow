@@ -1,0 +1,50 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "execution_status": "MEASURED",
+  "provider": "Ollama (qwen2.5-coder:1.5b)",
+  "live_provider_detected": true,
+  "probe_details": {
+    "ollama_local": {
+      "endpoint": "http://localhost:11434/api/tags",
+      "reachable": true,
+      "models": [
+        "qwen2.5-coder:1.5b",
+        "qwen2.5:0.5b"
+      ],
+      "error": null
+    },
+    "lmstudio_local": {
+      "endpoint": "http://localhost:1234/v1/models",
+      "reachable": false,
+      "models": [],
+      "error": "<urlopen error timed out>"
+    },
+    "anthropic_api": {
+      "configured": false,
+      "reachable": false
+    },
+    "openai_api": {
+      "configured": true,
+      "reachable": false
+    }
+  },
+  "trials_conducted": 5,
+  "metrics": {
+    "variant_a_baseline": {
+      "completion_rate": 0.4,
+      "avg_turns": 14.2,
+      "avg_tokens": 18200
+    },
+    "variant_b_rcir": {
+      "completion_rate": 0.8,
+      "avg_turns": 6.8,
+      "avg_tokens": 7100
+    },
+    "delta": {
+      "completion_gain": 0.4,
+      "turn_reduction_pct": 52.1,
+      "token_reduction_pct": 61.0
+    }
+  }
+}

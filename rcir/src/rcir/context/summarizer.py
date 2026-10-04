@@ -59,23 +59,32 @@ class ImpactSummarizer:
         cls,
         target_entity: str,
         candidates: list[Any],
-        critical_ground_truth: set[str] | None = None,
         fanout_threshold: int = 50,
+        manifest_reference: str = "",
     ) -> ImpactSummary | None:
-        """Create an ImpactSummary if candidate pool size exceeds fanout_threshold."""
+        """Create an ImpactSummary if candidate pool size exceeds fanout_threshold.
+        
+        Strictly leakage-free: importance is inferred exclusively from RCIR structural evidence
+        (hop distance, resolution class, edge types, type compatibility).
+        """
         if len(candidates) < fanout_threshold:
             return None
 
         direct = 0
         indirect = 0
+        unresolved_count = 0
         rel_counts: Counter[str] = Counter()
         mod_counts: Counter[str] = Counter()
-        critical: list[str] = []
-
-        crit_set = critical_ground_truth or set()
+        
+        # Infer critical consumers strictly from RCIR evidence (e.g. direct static exact or high boundary score)
+        candidate_importance: list[tuple[float, str]] = []
 
         for c in candidates:
             hop = getattr(c, "best_hop_distance", getattr(c, "hop_distance", 1))
+            res = getattr(c, "best_resolution", getattr(c, "resolution_class", "unknown"))
+            if res in ("dynamic_unresolved", "unsupported"):
+                unresolved_count += 1
+
             if hop <= 1:
                 direct += 1
             else:
@@ -90,8 +99,24 @@ class ImpactSummarizer:
                 rel_counts[et] += 1
 
             ent_id = getattr(c, "entity_id", file_path)
-            if file_path in crit_set or ent_id in crit_set:
-                critical.append(file_path or ent_id)
+            
+            # Evidence-based weight computation
+            importance = 0.0
+            if hop == 1:
+                importance += 50.0
+            if res == "static_exact":
+                importance += 40.0
+            elif res == "static_inference":
+                importance += 15.0
+            if any(et in ("implements", "injects", "calls") for et in edge_types):
+                importance += 20.0
+            if getattr(c, "type_compatibility", "") == "exact":
+                importance += 15.0
+                
+            candidate_importance.append((importance, file_path or ent_id))
+
+        candidate_importance.sort(key=lambda x: -x[0])
+        critical_consumers = [item[1] for item in candidate_importance if item[0] > 0][:10]
 
         return ImpactSummary(
             target=target_entity,
@@ -100,7 +125,7 @@ class ImpactSummarizer:
             indirect_consumers=indirect,
             by_relation=dict(rel_counts),
             by_module=dict(mod_counts),
-            critical_consumers=critical[:10],
-            unresolved_count=0,
-            full_manifest_reference="experiments/rcir_v8_2/artifacts/impact_manifest.json",
+            critical_consumers=critical_consumers,
+            unresolved_count=unresolved_count,
+            full_manifest_reference=manifest_reference,
         )

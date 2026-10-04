@@ -1,0 +1,84 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "entities_count": 12621,
+  "kinds_breakdown": {
+    "file": 2761,
+    "route": 144,
+    "method": 4224,
+    "class": 4542,
+    "interface": 590,
+    "trait": 42,
+    "config": 318
+  },
+  "languages_breakdown": {
+    "ts": 656,
+    "js": 1918,
+    "php": 10047
+  },
+  "target_canonical_degrees": {
+    "php://OCP\\IConfig": {
+      "target_id": "php://OCP\\IConfig",
+      "incoming_exact": 1181,
+      "incoming_inferred": 289,
+      "outgoing_exact": 0,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 1470,
+      "fanout_mode": "high_degree"
+    },
+    "php://OCP\\Files\\Node::getId": {
+      "target_id": "php://OCP\\Files\\Node::getId",
+      "incoming_exact": 251,
+      "incoming_inferred": 348,
+      "outgoing_exact": 2,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 599,
+      "fanout_mode": "high_degree"
+    },
+    "php://OCA\\Files\\Controller\\ApiController::getThumbnail": {
+      "target_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "incoming_exact": 2,
+      "incoming_inferred": 4,
+      "outgoing_exact": 39,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 6,
+      "fanout_mode": "low_degree"
+    },
+    "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent::NodeDeletedEvent": {
+      "target_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent::NodeDeletedEvent",
+      "incoming_exact": 10,
+      "incoming_inferred": 0,
+      "outgoing_exact": 0,
+      "outgoing_inferred": 0,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 10,
+      "fanout_mode": "medium_degree"
+    },
+    "ts://apps/files/src/services/Recent.ts::Recent::getRecentSearch": {
+      "target_id": "ts://apps/files/src/services/Recent.ts::Recent::getRecentSearch",
+      "incoming_exact": 1,
+      "incoming_inferred": 0,
+      "outgoing_exact": 4,
+      "outgoing_inferred": 75,
+      "boundary_degree": 0,
+      "verification_degree": 0,
+      "policy_relevant_degree": 1,
+      "fanout_mode": "low_degree"
+    }
+  },
+  "resolution_ledger": {
+    "summary": {
+      "static_exact": 68451,
+      "static_inference": 74774
+    },
+    "total_evaluated": 143225,
+    "unresolved_items": []
+  }
+}

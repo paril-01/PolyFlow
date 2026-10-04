@@ -1,0 +1,26 @@
+{
+  "split": "test",
+  "version": "8.3",
+  "description": "RCIR v8.3 Formal Test split evaluated once under frozen configuration for final scientific assessment.",
+  "tasks": [
+    {
+      "task_id": "TASK-4",
+      "title": "Dependency Injection Service Resolution",
+      "category": "dependency_injection",
+      "query": "IConfig get config service container",
+      "description": "Refactor IConfig interface and update all container lookups and consumers",
+      "spec": {
+        "operation": "config_change",
+        "requested_symbol": "IConfig",
+        "target_file_hint": "lib/public/IConfig.php",
+        "canonical_target_ids": [
+          "php://OCP\\IConfig"
+        ],
+        "changed_facets": ["interface_contract"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IConfig interface and update all container lookups and consumers"
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+name: RCIR Full Benchmark Execution & Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_pool_limit:
+        description: 'Candidate pool limit'
+        required: false
+        default: '2000'
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Audit Ground Truth Leakage Barrier
+      run: |
+        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+
+    - name: Execute Dual-Plane Benchmark
+      run: |
+        python experiments/rcir_v8_3/scripts/run_dual_plane_benchmark.py
+
+    - name: Run Type-Flow Benchmark
+      run: |
+        python experiments/rcir_v8_3/scripts/run_type_flow_benchmark.py
+
+    - name: Evaluate Typed Edge Recall
+      run: |
+        python experiments/rcir_v8_3/scripts/evaluate_edges.py
+
+    - name: Evaluate Machine Gates
+      run: |
+        python experiments/rcir_v8_3/scripts/evaluate_gates.py
+
+    - name: Validate Report Consistency
+      run: |
+        python experiments/rcir_v8_3/scripts/validate_report_consistency.py

@@ -1,0 +1,45 @@
+{
+  "split": "validation",
+  "version": "8.3",
+  "description": "RCIR v8.3 Validation split for ranker selection and context planner optimization. No TEST data visible.",
+  "tasks": [
+    {
+      "task_id": "TASK-2",
+      "title": "Filesystem Node Contract Evolution",
+      "category": "interface_method",
+      "query": "Node getId filesystem node identifier",
+      "description": "Refactor Node::getId() method contract and identify affected consumers",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getId",
+        "target_file_hint": "lib/public/Files/Node.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Node::getId"
+        ],
+        "changed_facets": ["return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Node::getId() method contract and identify affected consumers"
+      }
+    },
+    {
+      "task_id": "TASK-5",
+      "title": "Cross-Stack API Contract Boundary",
+      "category": "cross_stack",
+      "query": "Recent getRecentSearch getContents dav endpoint",
+      "description": "Trace recent files frontend client call across language boundary to backend DAV / files endpoint",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "Recent.ts",
+        "target_file_hint": "apps/files/src/services/Recent.ts",
+        "canonical_target_ids": [
+          "ts://apps/files/src/services/Recent.ts::getRecentSearch"
+        ],
+        "changed_facets": ["endpoint_route", "payload"],
+        "requested_scope": "cross_module",
+        "language": "ts",
+        "description": "Trace recent files frontend client call across language boundary to backend DAV / files endpoint"
+      }
+    }
+  ]
+}

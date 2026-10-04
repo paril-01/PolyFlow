@@ -1,0 +1,49 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "contract_hash": "7000f32798b5f222b497ad8aac8dcafc120104fec2def6e66ddf8a7ae61670e7",
+  "p0_baseline": {
+    "artifact_path": "experiments/rcir_v8/results/policy_p0.json",
+    "artifact_hash": "a45372fa3971809c5cdd0d6df324790401450a13806b1bd1286ee83cf7cc0f21",
+    "precision_at_20": 0.084,
+    "precision_at_50": 0.052
+  },
+  "achieved_metrics": {
+    "global_pool_recall": 0.932,
+    "macro_pool_recall": 0.7056,
+    "silent_misses": 98,
+    "precision_at_20": 0.3853,
+    "precision_at_50": 0.3973,
+    "ndcg_at_50": 0.4687,
+    "mrr": 0.7,
+    "critical_recall_budget_4k": 0.2534,
+    "precision_at_50_gain_over_p0": 0.3453
+  },
+  "gate_evaluations": {
+    "option_a": {
+      "passed": false,
+      "checks": {
+        "global_pool_recall": false,
+        "macro_pool_recall": false,
+        "silent_misses_floor": false,
+        "precision_at_20": true,
+        "precision_at_50": true,
+        "ndcg_at_50": false,
+        "mrr": true,
+        "critical_recall_budget": false,
+        "agent_live_execution": true
+      }
+    },
+    "option_b": {
+      "passed": true,
+      "checks": {
+        "global_pool_recall": true,
+        "precision_at_50_improvement_over_p0": true,
+        "context_compiler_deterministic": true
+      }
+    }
+  },
+  "final_decision": "OPTION B \u2014 PARTIALLY VALIDATED",
+  "decision_code": "OPTION_B",
+  "evaluated_at": "2026-10-04T19:42:37Z"
+}

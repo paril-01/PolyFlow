@@ -40,7 +40,8 @@ class RankerConfig:
 
 @dataclass
 class OperationRankerProfile:
-    """Weight profile tailored to a specific change operation (PHASE 17)."""
+    """Weight profile tailored to a specific change operation (PHASE 17 & 44)."""
+    operation: str = ""
     w_exact_entity: float = 100.0
     w_static_exact: float = 40.0
     w_static_inferred: float = 15.0
@@ -63,11 +64,12 @@ class OperationRankerProfile:
     @classmethod
     def for_operation(cls, operation: ChangeOperation | str | None) -> OperationRankerProfile:
         if not operation:
-            return cls()
+            return cls(operation="default")
         op_str = operation.value if hasattr(operation, "value") else str(operation).lower()
 
         if op_str == "route_change":
             return cls(
+                operation=op_str,
                 w_boundary_contract=50.0,
                 w_static_exact=35.0,
                 w_direct_test=25.0,
@@ -76,6 +78,7 @@ class OperationRankerProfile:
             )
         elif op_str == "signature_change":
             return cls(
+                operation=op_str,
                 w_static_exact=50.0,
                 w_type_exact=35.0,
                 w_type_compat=20.0,
@@ -84,6 +87,7 @@ class OperationRankerProfile:
             )
         elif op_str == "event_change":
             return cls(
+                operation=op_str,
                 w_boundary_contract=45.0,
                 w_static_exact=40.0,
                 w_change_compat_high=35.0,
@@ -91,17 +95,19 @@ class OperationRankerProfile:
             )
         elif op_str == "config_change":
             return cls(
+                operation=op_str,
                 w_boundary_contract=45.0,
                 w_static_exact=35.0,
                 p_module_step=0.5,
             )
         elif op_str == "service_boundary_change":
             return cls(
+                operation=op_str,
                 w_boundary_contract=55.0,
                 w_static_exact=40.0,
                 p_module_step=0.0,
             )
-        return cls()
+        return cls(operation=op_str)
 
 
 @dataclass
@@ -334,8 +340,19 @@ class DeterministicRanker:
             scored.append((score, vec, breakdown))
 
         if self.config.use_cascaded_ranking:
-            # PHASE 18: Cascaded Ranking across semantic buckets A0..A7
-            bucket_order = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"]
+            # PHASE 44: Operation-specific Cascaded Ranking across semantic buckets
+            op = getattr(self.profile, "operation", "")
+            if op == "signature_change":
+                bucket_order = ["A0", "A2", "A1", "A4", "A5", "A6", "A3", "A7"]
+            elif op == "route_change":
+                bucket_order = ["A0", "A3", "A1", "A4", "A5", "A2", "A6", "A7"]
+            elif op in ("event_change", "service_boundary_change"):
+                bucket_order = ["A0", "A3", "A1", "A4", "A2", "A5", "A6", "A7"]
+            elif op == "config_change":
+                bucket_order = ["A0", "A3", "A1", "A4", "A5", "A6", "A2", "A7"]
+            else:
+                bucket_order = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"]
+
             buckets: dict[str, list[tuple[float, EvidenceVector, ScoreBreakdown]]] = {b: [] for b in bucket_order}
 
             for item in scored:
@@ -381,3 +398,64 @@ class DeterministicRanker:
             ))
 
         return ranked
+
+
+class MultiObjectiveRanker:
+    """
+    Multi-objective deterministic ranker combining:
+    - Anchor Quality: First-hit precision & MRR via cascaded operation profile
+    - Coverage Quality: Broad structural coverage & nDCG via linear ranker
+    Fuses objectives using deterministic Reciprocal Rank Fusion (RRF) (PHASE 43).
+    """
+
+    def __init__(self, operation: ChangeOperation | str | None = None):
+        self.anchor_ranker = DeterministicRanker(
+            RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+            profile=OperationRankerProfile.for_operation(operation),
+        )
+        self.coverage_ranker = DeterministicRanker(
+            RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=6),
+            profile=OperationRankerProfile.for_operation(operation),
+        )
+
+    def rank(
+        self,
+        vectors: list[EvidenceVector],
+        prune_contradictions: bool = True,
+    ) -> list[RankedCandidate]:
+        if not vectors:
+            return []
+
+        anchor_ranked = self.anchor_ranker.rank(vectors, prune_contradictions=prune_contradictions)
+        coverage_ranked = self.coverage_ranker.rank(vectors, prune_contradictions=prune_contradictions)
+
+        anchor_ranks = {cand.entity_id: cand.rank for cand in anchor_ranked}
+        coverage_ranks = {cand.entity_id: cand.rank for cand in coverage_ranked}
+
+        vec_map = {v.entity_id: v for v in vectors}
+        breakdown_map = {cand.entity_id: cand.breakdown for cand in anchor_ranked}
+
+        # Compute RRF score
+        rrf_scores: list[tuple[float, str]] = []
+        k = 60.0
+        for eid in anchor_ranks:
+            r_a = anchor_ranks[eid]
+            r_c = coverage_ranks.get(eid, len(vectors) + 1)
+            score = (1.0 / (k + r_a)) + (1.0 / (k + r_c))
+            rrf_scores.append((score, eid))
+
+        rrf_scores.sort(key=lambda item: (-item[0], item[1]))
+
+        fused: list[RankedCandidate] = []
+        for idx, (fused_score, eid) in enumerate(rrf_scores, 1):
+            vec = vec_map[eid]
+            fused.append(RankedCandidate(
+                rank=idx,
+                entity_id=eid,
+                file_path=vec.file_path,
+                total_score=round(fused_score, 5),
+                evidence=vec,
+                breakdown=breakdown_map.get(eid, ScoreBreakdown()),
+            ))
+
+        return fused

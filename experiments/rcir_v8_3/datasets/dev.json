@@ -1,0 +1,45 @@
+{
+  "split": "dev",
+  "version": "8.3",
+  "description": "RCIR v8.3 Development split for ranker tuning, type-flow development, and context planner calibration.",
+  "tasks": [
+    {
+      "task_id": "TASK-1",
+      "title": "Refactor Controller Endpoint",
+      "category": "controller_route",
+      "query": "ApiController getThumbnail thumbnail generation preview",
+      "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "getThumbnail",
+        "target_file_hint": "apps/files/lib/Controller/ApiController.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Controller\\ApiController::getThumbnail"
+        ],
+        "changed_facets": ["return_type", "parameters"],
+        "requested_scope": "cross_module",
+        "language": "php",
+        "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes"
+      }
+    },
+    {
+      "task_id": "TASK-3",
+      "title": "Event Contract Evolution",
+      "category": "event_contract",
+      "query": "NodeDeletedEvent delete node event dispatcher listener",
+      "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated",
+      "spec": {
+        "operation": "event_change",
+        "requested_symbol": "NodeDeletedEvent",
+        "target_file_hint": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent"
+        ],
+        "changed_facets": ["event_payload"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated"
+      }
+    }
+  ]
+}

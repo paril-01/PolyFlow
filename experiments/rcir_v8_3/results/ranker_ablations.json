@@ -1,0 +1,234 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "selected_configuration": "Coverage_Only",
+  "ablation_comparison": {
+    "R0_Baseline": {
+      "precision_at_20": 0.3953,
+      "precision_at_50": 0.4013,
+      "ndcg_at_50": 0.5058,
+      "mrr": 0.7
+    },
+    "Cascaded_Fixed": {
+      "precision_at_20": 0.3953,
+      "precision_at_50": 0.4013,
+      "ndcg_at_50": 0.5048,
+      "mrr": 0.7
+    },
+    "Cascaded_Operation_Profiles": {
+      "precision_at_20": 0.3453,
+      "precision_at_50": 0.3453,
+      "ndcg_at_50": 0.4786,
+      "mrr": 0.7
+    },
+    "Anchor_Only": {
+      "precision_at_20": 0.3453,
+      "precision_at_50": 0.3453,
+      "ndcg_at_50": 0.4786,
+      "mrr": 0.7
+    },
+    "Coverage_Only": {
+      "precision_at_20": 0.3853,
+      "precision_at_50": 0.3973,
+      "ndcg_at_50": 0.4687,
+      "mrr": 0.7
+    },
+    "MultiObjective_Anchor_Coverage_RRF": {
+      "precision_at_20": 0.3953,
+      "precision_at_50": 0.4053,
+      "ndcg_at_50": 0.4923,
+      "mrr": 0.7
+    }
+  },
+  "per_task": {
+    "TASK-1": {
+      "R0_Baseline": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.02,
+        "ndcg_at_50": 0.1383,
+        "mrr": 0.5
+      },
+      "Cascaded_Fixed": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.02,
+        "ndcg_at_50": 0.1383,
+        "mrr": 0.5
+      },
+      "Cascaded_Operation_Profiles": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.04,
+        "ndcg_at_50": 0.1555,
+        "mrr": 0.5
+      },
+      "Anchor_Only": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.04,
+        "ndcg_at_50": 0.1555,
+        "mrr": 0.5
+      },
+      "Coverage_Only": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.02,
+        "ndcg_at_50": 0.1383,
+        "mrr": 0.5
+      },
+      "MultiObjective_Anchor_Coverage_RRF": {
+        "precision_at_20": 0.05,
+        "precision_at_50": 0.02,
+        "ndcg_at_50": 0.1383,
+        "mrr": 0.5
+      }
+    },
+    "TASK-3": {
+      "R0_Baseline": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      },
+      "Cascaded_Fixed": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      },
+      "Cascaded_Operation_Profiles": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      },
+      "Anchor_Only": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      },
+      "Coverage_Only": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      },
+      "MultiObjective_Anchor_Coverage_RRF": {
+        "precision_at_20": 0.5263,
+        "precision_at_50": 0.5263,
+        "ndcg_at_50": 0.6248,
+        "mrr": 1.0
+      }
+    },
+    "TASK-2": {
+      "R0_Baseline": {
+        "precision_at_20": 0.45,
+        "precision_at_50": 0.46,
+        "ndcg_at_50": 0.2283,
+        "mrr": 0.5
+      },
+      "Cascaded_Fixed": {
+        "precision_at_20": 0.45,
+        "precision_at_50": 0.46,
+        "ndcg_at_50": 0.2283,
+        "mrr": 0.5
+      },
+      "Cascaded_Operation_Profiles": {
+        "precision_at_20": 0.2,
+        "precision_at_50": 0.16,
+        "ndcg_at_50": 0.0798,
+        "mrr": 0.5
+      },
+      "Anchor_Only": {
+        "precision_at_20": 0.2,
+        "precision_at_50": 0.16,
+        "ndcg_at_50": 0.0798,
+        "mrr": 0.5
+      },
+      "Coverage_Only": {
+        "precision_at_20": 0.5,
+        "precision_at_50": 0.56,
+        "ndcg_at_50": 0.2569,
+        "mrr": 0.5
+      },
+      "MultiObjective_Anchor_Coverage_RRF": {
+        "precision_at_20": 0.45,
+        "precision_at_50": 0.48,
+        "ndcg_at_50": 0.2278,
+        "mrr": 0.5
+      }
+    },
+    "TASK-5": {
+      "R0_Baseline": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9339,
+        "mrr": 1.0
+      },
+      "Cascaded_Fixed": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9288,
+        "mrr": 1.0
+      },
+      "Cascaded_Operation_Profiles": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9288,
+        "mrr": 1.0
+      },
+      "Anchor_Only": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9288,
+        "mrr": 1.0
+      },
+      "Coverage_Only": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9308,
+        "mrr": 1.0
+      },
+      "MultiObjective_Anchor_Coverage_RRF": {
+        "precision_at_20": 0.1,
+        "precision_at_50": 0.06,
+        "ndcg_at_50": 0.9278,
+        "mrr": 1.0
+      }
+    },
+    "TASK-4": {
+      "R0_Baseline": {
+        "precision_at_20": 0.85,
+        "precision_at_50": 0.94,
+        "ndcg_at_50": 0.6039,
+        "mrr": 0.5
+      },
+      "Cascaded_Fixed": {
+        "precision_at_20": 0.85,
+        "precision_at_50": 0.94,
+        "ndcg_at_50": 0.6039,
+        "mrr": 0.5
+      },
+      "Cascaded_Operation_Profiles": {
+        "precision_at_20": 0.85,
+        "precision_at_50": 0.94,
+        "ndcg_at_50": 0.6039,
+        "mrr": 0.5
+      },
+      "Anchor_Only": {
+        "precision_at_20": 0.85,
+        "precision_at_50": 0.94,
+        "ndcg_at_50": 0.6039,
+        "mrr": 0.5
+      },
+      "Coverage_Only": {
+        "precision_at_20": 0.75,
+        "precision_at_50": 0.82,
+        "ndcg_at_50": 0.3925,
+        "mrr": 0.5
+      },
+      "MultiObjective_Anchor_Coverage_RRF": {
+        "precision_at_20": 0.85,
+        "precision_at_50": 0.94,
+        "ndcg_at_50": 0.5427,
+        "mrr": 0.5
+      }
+    }
+  }
+}

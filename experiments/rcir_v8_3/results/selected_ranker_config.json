@@ -1,0 +1,63 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "selected_configuration": "Coverage_Only",
+  "selection_objective": "Maximized harmonic trade-off between MRR (Anchor) and nDCG (Coverage) on VALIDATION split",
+  "validation_metrics": {
+    "precision_at_20": 0.3,
+    "precision_at_50": 0.31,
+    "ndcg_at_50": 0.5938,
+    "mrr": 0.75,
+    "selection_score": 0.6629
+  },
+  "candidate_configurations": {
+    "R0_Baseline": {
+      "precision_at_20": 0.275,
+      "precision_at_50": 0.26,
+      "ndcg_at_50": 0.5811,
+      "mrr": 0.75,
+      "selection_score": 0.6548
+    },
+    "Cascaded_Fixed": {
+      "precision_at_20": 0.275,
+      "precision_at_50": 0.26,
+      "ndcg_at_50": 0.5786,
+      "mrr": 0.75,
+      "selection_score": 0.6532
+    },
+    "Cascaded_Operation_Profiles": {
+      "precision_at_20": 0.15,
+      "precision_at_50": 0.11,
+      "ndcg_at_50": 0.5043,
+      "mrr": 0.75,
+      "selection_score": 0.6031
+    },
+    "Anchor_Only": {
+      "precision_at_20": 0.15,
+      "precision_at_50": 0.11,
+      "ndcg_at_50": 0.5043,
+      "mrr": 0.75,
+      "selection_score": 0.6031
+    },
+    "Coverage_Only": {
+      "precision_at_20": 0.3,
+      "precision_at_50": 0.31,
+      "ndcg_at_50": 0.5938,
+      "mrr": 0.75,
+      "selection_score": 0.6629
+    },
+    "MultiObjective_Anchor_Coverage_RRF": {
+      "precision_at_20": 0.275,
+      "precision_at_50": 0.27,
+      "ndcg_at_50": 0.5778,
+      "mrr": 0.75,
+      "selection_score": 0.6527
+    }
+  },
+  "selected_at": "2026-10-04T19:39:36Z",
+  "test_metrics_visible": false,
+  "config": {
+    "cascaded": true,
+    "multi_objective": true,
+    "diversity": true
+  }
+}

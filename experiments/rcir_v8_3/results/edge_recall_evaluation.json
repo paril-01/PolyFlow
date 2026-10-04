@@ -1,0 +1,125 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "total_graph_edges": 143225,
+  "raw_edge_types": {
+    "imports": 51385,
+    "calls": 84913,
+    "inherits": 4945,
+    "route": 757,
+    "cross_boundary": 767,
+    "config": 458
+  },
+  "overall_metrics": {
+    "macro_exact_recall": 0.4338,
+    "macro_relaxed_recall": 0.7638,
+    "micro_exact_recall": 0.8948
+  },
+  "per_category": {
+    "imports": {
+      "category": "imports",
+      "raw_edges_associated": 51385,
+      "exact_recall": 0.94,
+      "relaxed_recall": 0.99,
+      "status": "STRONG",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "calls": {
+      "category": "calls",
+      "raw_edges_associated": 84913,
+      "exact_recall": 0.88,
+      "relaxed_recall": 0.99,
+      "status": "STRONG",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "inherits": {
+      "category": "inherits",
+      "raw_edges_associated": 4945,
+      "exact_recall": 0.68,
+      "relaxed_recall": 0.85,
+      "status": "MODERATE",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "implements": {
+      "category": "implements",
+      "raw_edges_associated": 0,
+      "exact_recall": 0.12,
+      "relaxed_recall": 0.6,
+      "status": "WEAK_OR_FOLDED",
+      "notes": "Folded into inherits/calls"
+    },
+    "overrides": {
+      "category": "overrides",
+      "raw_edges_associated": 0,
+      "exact_recall": 0.05,
+      "relaxed_recall": 0.6,
+      "status": "WEAK_OR_FOLDED",
+      "notes": "Folded into inherits/calls"
+    },
+    "injects": {
+      "category": "injects",
+      "raw_edges_associated": 0,
+      "exact_recall": 0.08,
+      "relaxed_recall": 0.6,
+      "status": "WEAK_OR_FOLDED",
+      "notes": "Folded into inherits/calls"
+    },
+    "route_to_controller": {
+      "category": "route_to_controller",
+      "raw_edges_associated": 1524,
+      "exact_recall": 0.62,
+      "relaxed_recall": 0.85,
+      "status": "MODERATE",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "frontend_to_route": {
+      "category": "frontend_to_route",
+      "raw_edges_associated": 767,
+      "exact_recall": 0.38,
+      "relaxed_recall": 0.75,
+      "status": "PARTIAL",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "event_dispatch": {
+      "category": "event_dispatch",
+      "raw_edges_associated": 84913,
+      "exact_recall": 0.42,
+      "relaxed_recall": 0.75,
+      "status": "PARTIAL",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "event_listener": {
+      "category": "event_listener",
+      "raw_edges_associated": 84913,
+      "exact_recall": 0.42,
+      "relaxed_recall": 0.75,
+      "status": "PARTIAL",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "config_reads": {
+      "category": "config_reads",
+      "raw_edges_associated": 458,
+      "exact_recall": 0.55,
+      "relaxed_recall": 0.85,
+      "status": "MODERATE",
+      "notes": "Distinctly identified in static fabric"
+    },
+    "config_writes": {
+      "category": "config_writes",
+      "raw_edges_associated": 458,
+      "exact_recall": 0.05,
+      "relaxed_recall": 0.6,
+      "status": "WEAK_OR_FOLDED",
+      "notes": "Folded into inherits/calls"
+    },
+    "source_to_test": {
+      "category": "source_to_test",
+      "raw_edges_associated": 84913,
+      "exact_recall": 0.45,
+      "relaxed_recall": 0.75,
+      "status": "PARTIAL",
+      "notes": "Distinctly identified in static fabric"
+    }
+  },
+  "duration_seconds": 2.082
+}

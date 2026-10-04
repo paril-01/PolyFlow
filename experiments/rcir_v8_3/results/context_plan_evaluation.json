@@ -1,0 +1,606 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "macro_averages": {
+    "critical_recall_at_4k": 0.2534,
+    "average_tokens_consumed_4k": 3391.0,
+    "average_candidates_included_4k": 12.4
+  },
+  "per_task": {
+    "TASK-1": {
+      "2k": {
+        "token_budget": 2000,
+        "consumed_tokens": 1955,
+        "token_utilization": 0.9775,
+        "candidates_included": 7,
+        "span_count": 6,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 300,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "direct_caller": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "test": {
+            "allocated": 500,
+            "candidates": 3
+          },
+          "boundary": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 100,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.0625
+      },
+      "4k": {
+        "token_budget": 4000,
+        "consumed_tokens": 3996,
+        "token_utilization": 0.999,
+        "candidates_included": 16,
+        "span_count": 15,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 600,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 600,
+            "candidates": 4
+          },
+          "direct_caller": {
+            "allocated": 600,
+            "candidates": 4
+          },
+          "test": {
+            "allocated": 1000,
+            "candidates": 6
+          },
+          "boundary": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 200,
+            "candidates": 1
+          }
+        },
+        "critical_recall": 0.0625
+      },
+      "8k": {
+        "token_budget": 8000,
+        "consumed_tokens": 7996,
+        "token_utilization": 0.9995,
+        "candidates_included": 19,
+        "span_count": 18,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 1200,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 1200,
+            "candidates": 8
+          },
+          "direct_caller": {
+            "allocated": 1200,
+            "candidates": 8
+          },
+          "test": {
+            "allocated": 2000,
+            "candidates": 13
+          },
+          "boundary": {
+            "allocated": 1600,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 1600,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 400,
+            "candidates": 2
+          }
+        },
+        "critical_recall": 0.0625
+      }
+    },
+    "TASK-3": {
+      "2k": {
+        "token_budget": 2000,
+        "consumed_tokens": 1387,
+        "token_utilization": 0.6935,
+        "candidates_included": 5,
+        "span_count": 4,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 300,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "test": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.2727
+      },
+      "4k": {
+        "token_budget": 4000,
+        "consumed_tokens": 3191,
+        "token_utilization": 0.7977,
+        "candidates_included": 11,
+        "span_count": 10,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 600,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 600,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 800,
+            "candidates": 5
+          },
+          "test": {
+            "allocated": 800,
+            "candidates": 5
+          },
+          "boundary": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.4545
+      },
+      "8k": {
+        "token_budget": 8000,
+        "consumed_tokens": 4178,
+        "token_utilization": 0.5222,
+        "candidates_included": 15,
+        "span_count": 14,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 1200,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 1200,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 1600,
+            "candidates": 8
+          },
+          "test": {
+            "allocated": 1600,
+            "candidates": 8
+          },
+          "boundary": {
+            "allocated": 1600,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 1600,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.6364
+      }
+    },
+    "TASK-2": {
+      "2k": {
+        "token_budget": 2000,
+        "consumed_tokens": 1961,
+        "token_utilization": 0.9805,
+        "candidates_included": 9,
+        "span_count": 8,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 400,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 500,
+            "candidates": 3
+          },
+          "direct_caller": {
+            "allocated": 500,
+            "candidates": 3
+          },
+          "test": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 100,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 100,
+            "candidates": 0
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.0278
+      },
+      "4k": {
+        "token_budget": 4000,
+        "consumed_tokens": 3779,
+        "token_utilization": 0.9447,
+        "candidates_included": 18,
+        "span_count": 17,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 800,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 1000,
+            "candidates": 6
+          },
+          "direct_caller": {
+            "allocated": 1000,
+            "candidates": 6
+          },
+          "test": {
+            "allocated": 600,
+            "candidates": 4
+          },
+          "boundary": {
+            "allocated": 200,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 200,
+            "candidates": 1
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.0833
+      },
+      "8k": {
+        "token_budget": 8000,
+        "consumed_tokens": 7964,
+        "token_utilization": 0.9955,
+        "candidates_included": 30,
+        "span_count": 29,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 1600,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 2000,
+            "candidates": 13
+          },
+          "direct_caller": {
+            "allocated": 2000,
+            "candidates": 13
+          },
+          "test": {
+            "allocated": 1200,
+            "candidates": 8
+          },
+          "boundary": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "indirect_support": {
+            "allocated": 0,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.0833
+      }
+    },
+    "TASK-5": {
+      "2k": {
+        "token_budget": 2000,
+        "consumed_tokens": 1533,
+        "token_utilization": 0.7665,
+        "candidates_included": 6,
+        "span_count": 5,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 300,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 300,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "test": {
+            "allocated": 500,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 400,
+            "candidates": 1
+          },
+          "indirect_support": {
+            "allocated": 100,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.6667
+      },
+      "4k": {
+        "token_budget": 4000,
+        "consumed_tokens": 2013,
+        "token_utilization": 0.5032,
+        "candidates_included": 9,
+        "span_count": 8,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 600,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 600,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 600,
+            "candidates": 4
+          },
+          "test": {
+            "allocated": 1000,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 800,
+            "candidates": 1
+          },
+          "indirect_support": {
+            "allocated": 200,
+            "candidates": 1
+          }
+        },
+        "critical_recall": 0.6667
+      },
+      "8k": {
+        "token_budget": 8000,
+        "consumed_tokens": 2266,
+        "token_utilization": 0.2833,
+        "candidates_included": 12,
+        "span_count": 11,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 1200,
+            "candidates": 1
+          },
+          "implementation": {
+            "allocated": 1200,
+            "candidates": 0
+          },
+          "direct_caller": {
+            "allocated": 1200,
+            "candidates": 8
+          },
+          "test": {
+            "allocated": 2000,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 1600,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 1600,
+            "candidates": 1
+          },
+          "indirect_support": {
+            "allocated": 400,
+            "candidates": 2
+          }
+        },
+        "critical_recall": 0.6667
+      }
+    },
+    "TASK-4": {
+      "2k": {
+        "token_budget": 2000,
+        "consumed_tokens": 2564,
+        "token_utilization": 1.282,
+        "candidates_included": 1,
+        "span_count": 0,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "direct_caller": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "test": {
+            "allocated": 300,
+            "candidates": 2
+          },
+          "boundary": {
+            "allocated": 200,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 200,
+            "candidates": 1
+          },
+          "indirect_support": {
+            "allocated": 100,
+            "candidates": 0
+          }
+        },
+        "critical_recall": 0.0
+      },
+      "4k": {
+        "token_budget": 4000,
+        "consumed_tokens": 3976,
+        "token_utilization": 0.994,
+        "candidates_included": 8,
+        "span_count": 7,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 800,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 800,
+            "candidates": 5
+          },
+          "direct_caller": {
+            "allocated": 800,
+            "candidates": 5
+          },
+          "test": {
+            "allocated": 600,
+            "candidates": 4
+          },
+          "boundary": {
+            "allocated": 400,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 400,
+            "candidates": 2
+          },
+          "indirect_support": {
+            "allocated": 200,
+            "candidates": 1
+          }
+        },
+        "critical_recall": 0.0
+      },
+      "8k": {
+        "token_budget": 8000,
+        "consumed_tokens": 7939,
+        "token_utilization": 0.9924,
+        "candidates_included": 31,
+        "span_count": 30,
+        "full_file_count": 1,
+        "role_breakdown": {
+          "target": {
+            "allocated": 1600,
+            "candidates": 2
+          },
+          "implementation": {
+            "allocated": 1600,
+            "candidates": 10
+          },
+          "direct_caller": {
+            "allocated": 1600,
+            "candidates": 10
+          },
+          "test": {
+            "allocated": 1200,
+            "candidates": 8
+          },
+          "boundary": {
+            "allocated": 800,
+            "candidates": 0
+          },
+          "config_schema": {
+            "allocated": 800,
+            "candidates": 5
+          },
+          "indirect_support": {
+            "allocated": 400,
+            "candidates": 2
+          }
+        },
+        "critical_recall": 0.0234
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "features": {
+    "entity_identity": {
+      "known_fraction": 1.0,
+      "status": "MEASURED"
+    },
+    "static_edge_resolution": {
+      "known_fraction": 1.0,
+      "status": "MEASURED"
+    },
+    "traversal_score": {
+      "known_fraction": 1.0,
+      "status": "MEASURED"
+    },
+    "type_compatibility": {
+      "known_fraction": 0.85,
+      "status": "MEASURED"
+    },
+    "boundary_contract": {
+      "known_fraction": 0.7,
+      "status": "MEASURED"
+    },
+    "test_relationship": {
+      "known_fraction": 0.9,
+      "status": "MEASURED"
+    },
+    "historical_cochange": {
+      "known_fraction": 0.0,
+      "status": "NOT_MEASURED"
+    },
+    "hub_degree": {
+      "known_fraction": 1.0,
+      "status": "MEASURED"
+    }
+  }
+}

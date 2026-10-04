@@ -1,0 +1,324 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "version": "8.3",
+  "evaluator": "PHPTypeFlowAnalyzer",
+  "files_evaluated": 10,
+  "total_call_sites_evaluated": 635,
+  "metrics": {
+    "coverage": 0.1984,
+    "precision_among_resolved": 0.7857,
+    "wrong_exact_rate": 0.0,
+    "ambiguity_rate": 0.7827,
+    "unknown_rate": 0.0189
+  },
+  "resolution_breakdown": {
+    "proven_exact": 99,
+    "interface_bound": 0,
+    "heuristic_inferred": 27,
+    "ambiguous": 497,
+    "unknown": 12
+  },
+  "sample_calls": [
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 173,
+      "raw_statement": "$shareTypesForNodes = $this->getShareTypesForNodes($nodes);",
+      "receiver_expr": "$this",
+      "method_name": "getShareTypesForNodes",
+      "inferred_type": null,
+      "confidence": "ambiguous",
+      "evidence": [
+        "untyped_dynamic_receiver"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 175,
+      "raw_statement": "$shareTypes = $shareTypesForNodes[$node->getId()] ?? [];",
+      "receiver_expr": "$node",
+      "method_name": "getId",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 176,
+      "raw_statement": "$file = Helper::formatFileInfo($node->getFileInfo());",
+      "receiver_expr": "$node",
+      "method_name": "getFileInfo",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 177,
+      "raw_statement": "$file['hasPreview'] = $this->previewManager->isAvailable($node);",
+      "receiver_expr": "$this->previewManager",
+      "method_name": "isAvailable",
+      "inferred_type": "IPreview",
+      "confidence": "proven_exact",
+      "evidence": [
+        "typed_this_property"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 178,
+      "raw_statement": "$parts = explode('/', dirname($node->getPath()), 4);",
+      "receiver_expr": "$node",
+      "method_name": "getPath",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 198,
+      "raw_statement": "$userId = $this->userSession->getUser()->getUID();",
+      "receiver_expr": "$this->userSession",
+      "method_name": "getUser",
+      "inferred_type": "IUserSession",
+      "confidence": "proven_exact",
+      "evidence": [
+        "typed_this_property"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 211,
+      "raw_statement": "return $node->getId();",
+      "receiver_expr": "$node",
+      "method_name": "getId",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 220,
+      "raw_statement": "$shares = $this->shareManager->getSharesBy($userId, $shareType, null, false, 100, $offset);",
+      "receiver_expr": "$this->shareManager",
+      "method_name": "getSharesBy",
+      "inferred_type": "IManager",
+      "confidence": "proven_exact",
+      "evidence": [
+        "typed_this_property"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 222,
+      "raw_statement": "$fileId = $share->getNodeId();",
+      "receiver_expr": "$share",
+      "method_name": "getNodeId",
+      "inferred_type": "IManager",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "local_flow:collection_element_unpack"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 271,
+      "raw_statement": "$basename = basename($node->getPath());",
+      "receiver_expr": "$node",
+      "method_name": "getPath",
+      "inferred_type": "array",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "local_flow:collection_element_unpack"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 273,
+      "raw_statement": "'id' => $node->getId(),",
+      "receiver_expr": "$node",
+      "method_name": "getId",
+      "inferred_type": "array",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "local_flow:collection_element_unpack"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 275,
+      "raw_statement": "'children' => $this->getChildren($node->getDirectoryListing($mimeTypeFilter), $depth, $currentDepth + 1),",
+      "receiver_expr": "$this",
+      "method_name": "getChildren",
+      "inferred_type": null,
+      "confidence": "ambiguous",
+      "evidence": [
+        "untyped_dynamic_receiver"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 275,
+      "raw_statement": "'children' => $this->getChildren($node->getDirectoryListing($mimeTypeFilter), $depth, $currentDepth + 1),",
+      "receiver_expr": "$node",
+      "method_name": "getDirectoryListing",
+      "inferred_type": "array",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "local_flow:collection_element_unpack"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 277,
+      "raw_statement": "$displayName = $node->getName();",
+      "receiver_expr": "$node",
+      "method_name": "getName",
+      "inferred_type": "array",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "local_flow:collection_element_unpack"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 295,
+      "raw_statement": "$parentFolder = $currentFolder->getParent();",
+      "receiver_expr": "$currentFolder",
+      "method_name": "getParent",
+      "inferred_type": "Folder",
+      "confidence": "proven_exact",
+      "evidence": [
+        "local_flow:parameter_typehint"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 296,
+      "raw_statement": "$parentContent = $parentFolder->getDirectoryListing('httpd/unix-directory');",
+      "receiver_expr": "$parentFolder",
+      "method_name": "getDirectoryListing",
+      "inferred_type": null,
+      "confidence": "ambiguous",
+      "evidence": [
+        "untyped_dynamic_receiver"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 298,
+      "raw_statement": "'id' => $node->getId(),",
+      "receiver_expr": "$node",
+      "method_name": "getId",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 299,
+      "raw_statement": "'basename' => basename($node->getPath()),",
+      "receiver_expr": "$node",
+      "method_name": "getPath",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 300,
+      "raw_statement": "'displayName' => $node->getName(),",
+      "receiver_expr": "$node",
+      "method_name": "getName",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 301,
+      "raw_statement": "'children' => $node->getId() === $currentFolder->getId()",
+      "receiver_expr": "$node",
+      "method_name": "getId",
+      "inferred_type": "Node",
+      "confidence": "heuristic_inferred",
+      "evidence": [
+        "name_hint_node"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 301,
+      "raw_statement": "'children' => $node->getId() === $currentFolder->getId()",
+      "receiver_expr": "$currentFolder",
+      "method_name": "getId",
+      "inferred_type": "Folder",
+      "confidence": "proven_exact",
+      "evidence": [
+        "local_flow:parameter_typehint"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 306,
+      "raw_statement": "if ($parentFolder->getPath() === $root) {",
+      "receiver_expr": "$parentFolder",
+      "method_name": "getPath",
+      "inferred_type": null,
+      "confidence": "ambiguous",
+      "evidence": [
+        "untyped_dynamic_receiver"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 310,
+      "raw_statement": "return $this->getParents($parentFolder, $root, array_values($parentData));",
+      "receiver_expr": "$this",
+      "method_name": "getParents",
+      "inferred_type": null,
+      "confidence": "ambiguous",
+      "evidence": [
+        "untyped_dynamic_receiver"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 331,
+      "raw_statement": "$user = $this->userSession->getUser();",
+      "receiver_expr": "$this->userSession",
+      "method_name": "getUser",
+      "inferred_type": "IUserSession",
+      "confidence": "proven_exact",
+      "evidence": [
+        "typed_this_property"
+      ]
+    },
+    {
+      "file_path": "apps/files/lib/Controller/ApiController.php",
+      "line_number": 334,
+      "raw_statement": "'message' => $this->l10n->t('Failed to authorize'),",
+      "receiver_expr": "$this->l10n",
+      "method_name": "t",
+      "inferred_type": "IL10N",
+      "confidence": "proven_exact",
+      "evidence": [
+        "typed_this_property"
+      ]
+    }
+  ],
+  "duration_seconds": 8.415
+}

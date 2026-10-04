@@ -1,0 +1,790 @@
+{
+  "run_id": "rcir-v8.3-5537bf1bbca8",
+  "total_misses": 98,
+  "misses": [
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Bitmap.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/CDR.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Generator.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/GeneratorHelper.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Heif.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Image.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Imaginary.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Krita.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/MP3.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/MarkDown.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Movie.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Office.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/OpenDocument.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/ProviderV2.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/SVG.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/TXT.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/public/Preview/IProviderV2.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/GeneratorTest.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/MovieTestRemoteFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/PreviewPixelsTrait.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/Provider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/SVGTest.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/admin_audit/lib/Actions/Files.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/admin_audit/lib/AppInfo/Application.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files/lib/Listener/SyncLivePhotosListener.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files_trashbin/lib/AppInfo/Application.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files_trashbin/lib/Trashbin.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_classmap.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_static.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/public/Files/Events/Node/BeforeNodeDeletedEvent.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/dav/lib/Upload/UploadFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files/lib/Service/TagService.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_sharing/lib/Controller/ShareController.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_sharing/lib/External/ExternalShare.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_trashbin/lib/Sabre/AbstractTrash.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_trashbin/lib/UserMigration/TrashbinMigrator.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_versions/lib/Sabre/VersionCollection.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/Controller/LockingController.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/TaskProcessing/FakeOcrProvider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/TaskProcessing/FakeTranscribeProvider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Files/SimpleFS/SimpleFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Files/Storage/Common.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Template/JSConfigHelper.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/public/Files/Template/Template.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/dav/lib/CalDAV/Federation/CalendarFederationConfig.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/federatedfilesharing/lib/Settings/Admin.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/federatedfilesharing/tests/Settings/AdminTest.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "lib/public/ServerVersion.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "lib/public/Util.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Bitmap.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/CDR.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Generator.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/GeneratorHelper.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Heif.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Image.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Imaginary.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Krita.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/MP3.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/MarkDown.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Movie.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/Office.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/OpenDocument.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/ProviderV2.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/SVG.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/private/Preview/TXT.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "lib/public/Preview/IProviderV2.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/GeneratorTest.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/MovieTestRemoteFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/PreviewPixelsTrait.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/Provider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-1",
+      "file": "tests/lib/Preview/SVGTest.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/admin_audit/lib/Actions/Files.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/admin_audit/lib/AppInfo/Application.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files/lib/Listener/SyncLivePhotosListener.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files_trashbin/lib/AppInfo/Application.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "apps/files_trashbin/lib/Trashbin.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_classmap.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/composer/composer/autoload_static.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-3",
+      "file": "lib/public/Files/Events/Node/BeforeNodeDeletedEvent.php",
+      "tier": 3,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/dav/lib/Upload/UploadFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files/lib/Service/TagService.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_sharing/lib/Controller/ShareController.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_sharing/lib/External/ExternalShare.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_trashbin/lib/Sabre/AbstractTrash.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_trashbin/lib/UserMigration/TrashbinMigrator.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/files_versions/lib/Sabre/VersionCollection.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/Controller/LockingController.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/TaskProcessing/FakeOcrProvider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "apps/testing/lib/TaskProcessing/FakeTranscribeProvider.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Files/SimpleFS/SimpleFile.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Files/Storage/Common.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/private/Template/JSConfigHelper.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-2",
+      "file": "lib/public/Files/Template/Template.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/dav/lib/CalDAV/Federation/CalendarFederationConfig.php",
+      "tier": 2,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/federatedfilesharing/lib/Settings/Admin.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "apps/federatedfilesharing/tests/Settings/AdminTest.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "lib/public/ServerVersion.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    },
+    {
+      "run_id": "rcir-v8.3-5537bf1bbca8",
+      "task_id": "TASK-4",
+      "file": "lib/public/Util.php",
+      "tier": 1,
+      "reason": "Missing edge in static graph / beyond 2-hop traversal horizon",
+      "root_cause": "GRAPH_HORIZON_OR_UNRESOLVED_DISPATCH"
+    }
+  ]
+}
