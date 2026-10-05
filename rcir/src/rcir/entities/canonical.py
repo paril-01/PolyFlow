@@ -21,6 +21,7 @@ class EntityKind(str, Enum):
     CLASS = "class"
     INTERFACE = "interface"
     TRAIT = "trait"
+    ENUM = "enum"
     METHOD = "method"
     FUNCTION = "function"
     PROPERTY = "property"
@@ -30,6 +31,8 @@ class EntityKind(str, Enum):
     CONFIG = "config"
     MODULE = "module"
     FILE = "file"
+    EXTERNAL = "external"
+    UNRESOLVED = "unresolved"
 
 
 class AliasResolution(str, Enum):
@@ -71,26 +74,149 @@ class CanonicalEntityID:
 
     @property
     def uri(self) -> str:
-        """Standardized canonical URI string representation."""
-        # e.g. php://OCP\Files\Node::getId or ts://apps/files/Recent::getRecentSearch
+        if self.kind == EntityKind.UNRESOLVED or self.language == "unresolved":
+            return f"unresolved://{self.symbol}"
+        if self.kind == EntityKind.EXTERNAL or self.language == "external":
+            return f"external://{self.symbol}"
+
         ns_prefix = f"{self.namespace}\\" if self.namespace and not self.namespace.endswith("\\") else self.namespace
         if self.language == "php":
-            if self.owner_type and self.symbol:
-                return f"php://{ns_prefix}{self.owner_type}::{self.symbol}"
-            elif self.owner_type:
-                return f"php://{ns_prefix}{self.owner_type}"
+            if self.kind in (EntityKind.CLASS, EntityKind.INTERFACE, EntityKind.TRAIT, EntityKind.ENUM):
+                type_name = self.owner_type or self.symbol
+                return f"php://{ns_prefix}{type_name}"
+            elif self.kind == EntityKind.METHOD:
+                owner = self.owner_type or (self.file.split("/")[-1].split(".")[0] if self.file else "Unknown")
+                return f"php://{ns_prefix}{owner}::{self.symbol}"
+            elif self.kind == EntityKind.PROPERTY:
+                owner = self.owner_type or (self.file.split("/")[-1].split(".")[0] if self.file else "Unknown")
+                prop = self.symbol if self.symbol.startswith("$") else f"${self.symbol}"
+                return f"php://{ns_prefix}{owner}::{prop}"
+            elif self.kind == EntityKind.FUNCTION:
+                return f"php://{ns_prefix}{self.symbol}()"
+            elif self.kind == EntityKind.FILE:
+                return f"php://{self.file}"
             else:
-                return f"php://{ns_prefix}{self.symbol}"
+                if self.owner_type and self.symbol and self.owner_type != self.symbol:
+                    return f"php://{ns_prefix}{self.owner_type}::{self.symbol}"
+                else:
+                    return f"php://{ns_prefix}{self.owner_type or self.symbol}"
         elif self.language in ("ts", "js"):
-            owner = f"{self.owner_type}::" if self.owner_type else ""
+            if self.kind == EntityKind.FILE:
+                return f"{self.language}://{self.file}"
+            owner = f"{self.owner_type}::" if self.owner_type and self.owner_type != self.symbol else ""
             return f"{self.language}://{self.file}::{owner}{self.symbol}"
         elif self.language == "python":
+            if self.kind == EntityKind.FILE:
+                return f"python://{self.file}"
             mod = self.file.replace("/", ".").replace(".py", "")
+            if self.kind in (EntityKind.CLASS, EntityKind.MODULE):
+                return f"python://{mod}:{self.owner_type or self.symbol}"
             owner = f":{self.owner_type}." if self.owner_type else ":"
             return f"python://{mod}{owner}{self.symbol}"
         else:
             owner = f"::{self.owner_type}" if self.owner_type else ""
             return f"{self.language}://{self.file}{owner}::{self.symbol}"
+
+    @classmethod
+    def from_uri(cls, uri: str, repository: str = "nextcloud-server", file_hint: str = "") -> CanonicalEntityID:
+        """Parse a canonical URI back into a structured CanonicalEntityID (PHASE 20)."""
+        if "://" not in uri:
+            raise ValueError(f"Invalid canonical URI format: {uri}")
+
+        lang, rest = uri.split("://", 1)
+        if lang in ("unresolved", "external"):
+            kind = EntityKind.UNRESOLVED if lang == "unresolved" else EntityKind.EXTERNAL
+            return cls(
+                repository=repository,
+                language=lang,
+                file=file_hint,
+                namespace="",
+                owner_type="",
+                symbol=rest,
+                kind=kind,
+            )
+
+        if lang == "php":
+            if "::" in rest:
+                owner_part, sym_part = rest.split("::", 1)
+                ns = owner_part.rsplit("\\", 1)[0] if "\\" in owner_part else ""
+                owner = owner_part.rsplit("\\", 1)[-1]
+                if sym_part.startswith("$"):
+                    kind = EntityKind.PROPERTY
+                elif sym_part.endswith("()"):
+                    kind = EntityKind.METHOD
+                    sym_part = sym_part[:-2]
+                else:
+                    kind = EntityKind.METHOD
+                return cls(
+                    repository=repository,
+                    language=lang,
+                    file=file_hint,
+                    namespace=ns,
+                    owner_type=owner,
+                    symbol=sym_part,
+                    kind=kind,
+                )
+            elif rest.endswith("()"):
+                sym = rest[:-2]
+                ns = sym.rsplit("\\", 1)[0] if "\\" in sym else ""
+                sym_name = sym.rsplit("\\", 1)[-1]
+                return cls(
+                    repository=repository,
+                    language=lang,
+                    file=file_hint,
+                    namespace=ns,
+                    owner_type="",
+                    symbol=sym_name,
+                    kind=EntityKind.FUNCTION,
+                )
+            elif "/" in rest or rest.endswith(".php"):
+                return cls(
+                    repository=repository,
+                    language=lang,
+                    file=rest,
+                    namespace="",
+                    owner_type="",
+                    symbol=rest.split("/")[-1].replace(".php", ""),
+                    kind=EntityKind.FILE,
+                )
+            else:
+                # Class / Interface
+                ns = rest.rsplit("\\", 1)[0] if "\\" in rest else ""
+                type_name = rest.rsplit("\\", 1)[-1]
+                kind = EntityKind.INTERFACE if type_name.startswith("I") and len(type_name) > 2 and type_name[1].isupper() else EntityKind.CLASS
+                return cls(
+                    repository=repository,
+                    language=lang,
+                    file=file_hint,
+                    namespace=ns,
+                    owner_type=type_name,
+                    symbol=type_name,
+                    kind=kind,
+                )
+        elif lang in ("ts", "js"):
+            parts = rest.split("::")
+            file_p = parts[0]
+            if len(parts) == 1:
+                return cls(
+                    repository=repository, language=lang, file=file_p,
+                    namespace="", owner_type="", symbol=file_p.split("/")[-1], kind=EntityKind.FILE
+                )
+            elif len(parts) == 2:
+                return cls(
+                    repository=repository, language=lang, file=file_p,
+                    namespace="", owner_type="", symbol=parts[1], kind=EntityKind.METHOD
+                )
+            else:
+                return cls(
+                    repository=repository, language=lang, file=file_p,
+                    namespace="", owner_type=parts[1], symbol=parts[2], kind=EntityKind.METHOD
+                )
+        else:
+            return cls(
+                repository=repository, language=lang, file=file_hint or rest,
+                namespace="", owner_type="", symbol=rest.split("::")[-1], kind=EntityKind.FILE
+            )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -146,55 +272,72 @@ class CanonicalEntityRegistry:
         self._cache.clear()
 
         norm_file = entity.file.replace("\\", "/").strip("/")
-        self.file_to_uris.setdefault(norm_file, set()).add(uri)
+        if norm_file:
+            self.file_to_uris.setdefault(norm_file, set()).add(uri)
 
         # Generate standard aliases
         aliases = set(entity.aliases)
         aliases.add(uri)
-        if entity.symbol:
-            aliases.add(entity.symbol)
-            self.tail_to_uris.setdefault(entity.symbol, set()).add(uri)
-            self.tail_to_uris.setdefault(f"::{entity.symbol}", set()).add(uri)
-            self.tail_to_uris.setdefault(f"\\{entity.symbol}", set()).add(uri)
-            if entity.namespace:
-                aliases.add(f"{entity.namespace}\\{entity.symbol}")
-        if entity.owner_type and entity.symbol:
-            aliases.add(f"{entity.owner_type}::{entity.symbol}")
-            if entity.namespace:
-                aliases.add(f"{entity.namespace}\\{entity.owner_type}::{entity.symbol}")
-        if entity.owner_type:
-            aliases.add(entity.owner_type)
-            if entity.namespace:
-                aliases.add(f"{entity.namespace}\\{entity.owner_type}")
 
-        # File-qualified aliases
-        if norm_file:
-            aliases.add(norm_file)
+        is_type = entity.kind in (EntityKind.CLASS, EntityKind.INTERFACE, EntityKind.TRAIT, EntityKind.ENUM)
+        is_member = entity.kind in (EntityKind.METHOD, EntityKind.PROPERTY)
+
+        if is_type:
+            type_name = entity.owner_type or entity.symbol
+            if type_name:
+                aliases.add(type_name)
+                if entity.namespace:
+                    aliases.add(f"{entity.namespace}\\{type_name}")
+            if norm_file and type_name:
+                aliases.add(f"{norm_file}::{type_name}")
+        elif is_member:
             if entity.symbol:
-                aliases.add(f"{norm_file}::{entity.symbol}")
+                aliases.add(entity.symbol)
+                self.tail_to_uris.setdefault(entity.symbol, set()).add(uri)
             if entity.owner_type and entity.symbol:
-                aliases.add(f"{norm_file}::{entity.owner_type}::{entity.symbol}")
-            elif entity.owner_type:
-                aliases.add(f"{norm_file}::{entity.owner_type}")
+                aliases.add(f"{entity.owner_type}::{entity.symbol}")
+                if entity.namespace:
+                    aliases.add(f"{entity.namespace}\\{entity.owner_type}::{entity.symbol}")
+                if norm_file:
+                    aliases.add(f"{norm_file}::{entity.owner_type}::{entity.symbol}")
+            if norm_file and entity.symbol:
+                aliases.add(f"{norm_file}::{entity.symbol}")
+        elif entity.kind == EntityKind.FILE:
+            if norm_file:
+                aliases.add(norm_file)
+        else:
+            if entity.symbol:
+                aliases.add(entity.symbol)
+                self.tail_to_uris.setdefault(entity.symbol, set()).add(uri)
+                if entity.namespace:
+                    aliases.add(f"{entity.namespace}\\{entity.symbol}")
 
-        alias_set = self.uri_to_aliases.setdefault(uri, set())
         for alias in aliases:
+            if not alias:
+                continue
             self.alias_to_uris.setdefault(alias, set()).add(uri)
-            self.alias_to_uris.setdefault(alias.lower(), set()).add(uri)
-            alias_set.add(alias)
-            alias_set.add(alias.lower())
-            # Also normalize forward/backward slashes
-            alt_slash = alias.replace("/", "\\") if "/" in alias else alias.replace("\\", "/")
-            self.alias_to_uris.setdefault(alt_slash, set()).add(uri)
-            self.alias_to_uris.setdefault(alt_slash.lower(), set()).add(uri)
-            alias_set.add(alt_slash)
-            alias_set.add(alt_slash.lower())
+            alias_lower = alias.lower()
+            if alias_lower != alias:
+                self.alias_to_uris.setdefault(alias_lower, set()).add(uri)
 
         return uri
 
     def get_aliases_for_uri(self, uri: str) -> set[str]:
         """Return all recorded aliases for a given canonical URI."""
-        return self.uri_to_aliases.get(uri, set())
+        ent = self.entities.get(uri)
+        if not ent:
+            return set()
+        res = {uri}
+        if ent.symbol:
+            res.add(ent.symbol)
+        if ent.owner_type and ent.symbol:
+            res.add(f"{ent.owner_type}::{ent.symbol}")
+            if ent.namespace:
+                res.add(f"{ent.namespace}\\{ent.owner_type}::{ent.symbol}")
+        if ent.file:
+            res.add(ent.file)
+        res.update(ent.aliases)
+        return res
 
     def resolve(
         self,
@@ -241,8 +384,14 @@ class CanonicalEntityRegistry:
             self._cache[cache_key] = res
             return res
 
-        # If file hint provided, disambiguate candidates
-        if target_file_hint and len(matches) > 1:
+        # Disambiguation passes
+        if len(matches) > 1:
+            # 1. Prefer internal entities over external://
+            internals = {u for u in matches if not u.startswith("external://")}
+            if internals:
+                matches = internals
+
+        if len(matches) > 1 and target_file_hint:
             norm_hint = target_file_hint.replace("\\", "/").strip("/")
             file_filtered = {
                 uri for uri in matches
@@ -250,6 +399,21 @@ class CanonicalEntityRegistry:
             }
             if file_filtered:
                 matches = file_filtered
+
+        if len(matches) > 1:
+            # 2. Prefer FILE kind if querying a file path
+            if symbol_or_alias.endswith((".php", ".ts", ".js", ".py")):
+                f_matches = {u for u in matches if self.entities[u].kind == EntityKind.FILE}
+                if f_matches:
+                    matches = f_matches
+            # 3. Prefer CLASS/INTERFACE/TRAIT kind if querying a type name
+            elif "::" not in symbol_or_alias and not symbol_or_alias.endswith("()"):
+                t_matches = {
+                    u for u in matches
+                    if self.entities[u].kind in (EntityKind.CLASS, EntityKind.INTERFACE, EntityKind.TRAIT, EntityKind.ENUM)
+                }
+                if t_matches:
+                    matches = t_matches
 
         if len(matches) == 1:
             chosen = next(iter(matches))

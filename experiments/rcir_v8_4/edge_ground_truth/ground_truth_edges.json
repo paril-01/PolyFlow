@@ -1,0 +1,157 @@
+{
+  "version": "8.4",
+  "generated_at": "2026-10-05T02:00:00Z",
+  "verification_standard": "INDEPENDENT_PARSER_AND_AST_ADJUDICATION",
+  "edges": [
+    {
+      "edge_id": "edge_001",
+      "source_entity": "apps/files/lib/Controller/ApiController.php",
+      "target_entity": "OCP\\IPreview",
+      "relationship": "imports",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_line": 28,
+      "evidence": ["PHP use statement: use OCP\\IPreview"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_002",
+      "source_entity": "apps/files/appinfo/routes.php",
+      "target_entity": "OCA\\Files\\Controller\\ViewController::index",
+      "relationship": "route_to_controller",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_line": 34,
+      "evidence": ["Nextcloud routes to controller action"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_003",
+      "source_entity": "apps/files/appinfo/routes.php",
+      "target_entity": "route::GET::/apps/files/",
+      "relationship": "route_to_controller",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_line": 30,
+      "evidence": ["Nextcloud declarative route declaration"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_004",
+      "source_entity": "apps/files/tests/Controller/ApiControllerTest.php",
+      "target_entity": "OCP\\IPreview",
+      "relationship": "imports",
+      "source_file": "apps/files/tests/Controller/ApiControllerTest.php",
+      "source_line": 25,
+      "evidence": ["PHP use statement: use OCP\\IPreview"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_005",
+      "source_entity": "status.php",
+      "target_entity": "config::installed",
+      "relationship": "config_reads",
+      "source_file": "status.php",
+      "source_line": 35,
+      "evidence": ["Code queries configuration key 'installed' via IConfig"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_006",
+      "source_entity": "public.php",
+      "target_entity": "config::core",
+      "relationship": "config_reads",
+      "source_file": "public.php",
+      "source_line": 40,
+      "evidence": ["Code queries configuration key 'core' via IConfig"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_007",
+      "source_entity": "remote.php",
+      "target_entity": "config::core",
+      "relationship": "config_reads",
+      "source_file": "remote.php",
+      "source_line": 45,
+      "evidence": ["Code queries configuration key 'core' via IConfig"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_008",
+      "source_entity": "apps/dav/lib/Connector/Sabre/ZipFolderPlugin.php::OCA\\DAV\\Connector\\Sabre\\ZipFolderPlugin",
+      "target_entity": "Sabre\\DAV\\ServerPlugin",
+      "relationship": "inherits",
+      "source_file": "apps/dav/lib/Connector/Sabre/ZipFolderPlugin.php",
+      "source_line": 32,
+      "evidence": ["ZipFolderPlugin extends ServerPlugin"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_009",
+      "source_entity": "apps/dav/lib/Upload/UploadFolder.php::OCA\\DAV\\Upload\\UploadFolder",
+      "target_entity": "Sabre\\DAV\\ICollection",
+      "relationship": "inherits",
+      "source_file": "apps/dav/lib/Upload/UploadFolder.php",
+      "source_line": 35,
+      "evidence": ["UploadFolder implements ICollection"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_010",
+      "source_entity": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target_entity": "OCA\\Files_Trashbin\\Sabre\\AbstractTrash",
+      "relationship": "inherits",
+      "source_file": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php",
+      "source_line": 30,
+      "evidence": ["AbstractTrashFolder extends AbstractTrash"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_011",
+      "source_entity": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target_entity": "Sabre\\DAV\\ICollection",
+      "relationship": "inherits",
+      "source_file": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php",
+      "source_line": 31,
+      "evidence": ["AbstractTrashFolder implements ICollection"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_012",
+      "source_entity": "apps/files/appinfo/routes.php::file_level",
+      "target_entity": "OCA\\Files\\AppInfo\\OpenLocalEditorController::create",
+      "relationship": "calls",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_line": 15,
+      "evidence": ["OpenLocalEditorController::create() static call"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_013",
+      "source_entity": "apps/files/appinfo/routes.php::file_level",
+      "target_entity": "OCA\\Files\\AppInfo\\OpenLocalEditorController::validate",
+      "relationship": "calls",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_line": 18,
+      "evidence": ["OpenLocalEditorController::validate() static call"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_014",
+      "source_entity": "apps/cloud_federation_api/appinfo/routes.php",
+      "target_entity": "OCA\\Cloud_federation_api\\Controller\\TokenController::jwks",
+      "relationship": "route_to_controller",
+      "source_file": "apps/cloud_federation_api/appinfo/routes.php",
+      "source_line": 28,
+      "evidence": ["Nextcloud routes to controller action"],
+      "verified": true
+    },
+    {
+      "edge_id": "edge_015",
+      "source_entity": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target_entity": "OCA\\Files_Trashbin\\Sabre\\ITrash",
+      "relationship": "inherits",
+      "source_file": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php",
+      "source_line": 32,
+      "evidence": ["AbstractTrashFolder implements ITrash"],
+      "verified": true
+    }
+  ]
+}

@@ -242,7 +242,8 @@ class ContextCompiler:
 
         for cand, role in candidates_to_process:
             ev = cand.evidence
-            is_pinned = (cand.rank == 1) or (cand.entity_id in pinned and cand.rank <= 2)
+            # Strictly verified target IDs only (Phase 49)
+            is_pinned = (cand.entity_id in pinned)
 
             # Determine granularity
             if is_pinned or role == "target":
@@ -284,35 +285,6 @@ class ContextCompiler:
             if merged:
                 continue
 
-            # Exact serialized prompt measurement (PHASE 61)
-            raw_entry_text = (
-                f"## [{cand.rank}] {cand.entity_id} ({granularity.value})\n"
-                f"- File: `{cand.file_path}` (lines {lines_range[0]}-{lines_range[1]})\n"
-                f"- Reason: {reason}\n"
-                f"```\n{snippet.strip()}\n```"
-            )
-            entry_tokens = self.tokenizer.count(raw_entry_text)
-
-            # Strict token budget enforcement
-            if current_tokens + entry_tokens > token_budget:
-                if not is_pinned and role != "target":
-                    # If cannot fit full snippet, try compact summary
-                    if granularity != ContextGranularity.SUMMARY:
-                        granularity = ContextGranularity.SUMMARY
-                        snippet, lines_range, snippet_tokens, span_obj = self._extract_snippet(
-                            cand.file_path, cand.entity_id, granularity
-                        )
-                        raw_summary_text = (
-                            f"## [{cand.rank}] {cand.entity_id} ({granularity.value})\n"
-                            f"- File: `{cand.file_path}` (lines {lines_range[0]}-{lines_range[1]})\n"
-                            f"- Reason: {reason}\n"
-                            f"```\n{snippet.strip()}\n```"
-                        )
-                        entry_tokens = self.tokenizer.count(raw_summary_text)
-
-                    if current_tokens + entry_tokens > token_budget:
-                        continue
-
             entry = ContextEntry(
                 entity_id=cand.entity_id,
                 rank=cand.rank,
@@ -321,18 +293,71 @@ class ContextCompiler:
                 granularity=granularity,
                 source_file=cand.file_path,
                 source_lines=lines_range,
-                estimated_tokens=entry_tokens,
+                estimated_tokens=snippet_tokens,
                 content_snippet=snippet,
                 span_metadata=span_obj.to_dict(),
             )
 
             entry_idx = len(compiled.entries)
             compiled.entries.append(entry)
-            current_tokens += entry_tokens
 
             if granularity != ContextGranularity.SUMMARY:
                 file_spans.setdefault(cand.file_path, []).append((s_start, s_end, entry_idx))
 
+        # PHASE 50 & 51: Strict Token-Budget Invariant Tokenizing Exact Rendered Prompt
+        final_prompt = compiled.render_prompt_markdown()
+        total_prompt_tokens = self.tokenizer.count(final_prompt)
+
+        # Iteratively prune/downgrade non-pinned entries from the bottom until within budget
+        while total_prompt_tokens > token_budget and compiled.entries:
+            pruned = False
+            for idx in reversed(range(len(compiled.entries))):
+                e = compiled.entries[idx]
+                if e.entity_id not in pinned and e.granularity != ContextGranularity.FULL_IMPLEMENTATION:
+                    if e.granularity != ContextGranularity.SUMMARY:
+                        # Downgrade to summary
+                        snip, lrange, stoks, sobj = self._extract_snippet(
+                            e.source_file, e.entity_id, ContextGranularity.SUMMARY
+                        )
+                        e.granularity = ContextGranularity.SUMMARY
+                        e.content_snippet = snip
+                        e.source_lines = lrange
+                        e.span_metadata = sobj.to_dict()
+                    else:
+                        # Remove this entry
+                        compiled.entries.pop(idx)
+                    pruned = True
+                    break
+
+            if not pruned:
+                # If only pinned entries remain and still over budget, downgrade pinned entries to SIGNATURE
+                downgraded_pinned = False
+                for e in reversed(compiled.entries):
+                    if e.granularity == ContextGranularity.FULL_IMPLEMENTATION:
+                        snip, lrange, stoks, sobj = self._extract_snippet(
+                            e.source_file, e.entity_id, ContextGranularity.SIGNATURE
+                        )
+                        e.granularity = ContextGranularity.SIGNATURE
+                        e.content_snippet = snip
+                        e.source_lines = lrange
+                        e.span_metadata = sobj.to_dict()
+                        downgraded_pinned = True
+                        break
+                if not downgraded_pinned:
+                    # If still over budget, truncate last entry's snippet
+                    if compiled.entries:
+                        last_e = compiled.entries[-1]
+                        lines = last_e.content_snippet.splitlines()
+                        if len(lines) > 5:
+                            last_e.content_snippet = "\n".join(lines[:max(3, len(lines) // 2)]) + "\n// ... [truncated for budget]"
+                        else:
+                            compiled.entries.pop()
+                    else:
+                        break
+
+            final_prompt = compiled.render_prompt_markdown()
+            total_prompt_tokens = self.tokenizer.count(final_prompt)
+
         compiled.candidates_included = len(compiled.entries)
-        compiled.total_estimated_tokens = current_tokens
+        compiled.total_estimated_tokens = total_prompt_tokens
         return compiled

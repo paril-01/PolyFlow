@@ -1,0 +1,481 @@
+{
+  "version": "8.4",
+  "generated_at": "2026-10-05T02:00:00Z",
+  "adjudication_method": "INDEPENDENT_UPSTREAM_COMMIT_RECONSTRUCTION",
+  "inheritance_status": "ZERO_INHERITANCE_FROM_V8_2_OR_V8_3",
+  "tasks": {
+    "TASK-DEV-01": {
+      "task_id": "TASK-DEV-01",
+      "upstream_commit": "e812d4a1b029c781037f419c89481a5330e7041f",
+      "target_entity": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "expected_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/lib/Service/PreviewService.php",
+        "apps/files/tests/Controller/ApiControllerTest.php",
+        "apps/files/lib/Helper.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/lib/Service/PreviewService.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "e812d4a1b029c781037f419c89481a5330e7041f",
+        "reason": "Direct route mapping, preview service call, and controller test suite",
+        "verified": true
+      }
+    },
+    "TASK-DEV-02": {
+      "task_id": "TASK-DEV-02",
+      "upstream_commit": "7a309cb84f9812908fbb23091849102c89281a02",
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "expected_files": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "lib/private/Files/Node/Root.php",
+        "lib/private/Files/Node/Folder.php",
+        "apps/files_trashbin/lib/Storage.php",
+        "apps/files_versions/lib/Storage.php",
+        "tests/lib/Files/Node/EventTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "lib/private/Files/Node/Root.php",
+        "apps/files_trashbin/lib/Storage.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "7a309cb84f9812908fbb23091849102c89281a02",
+        "reason": "Event dispatcher invocations in Root/Folder and event listeners in trashbin/versions",
+        "verified": true
+      }
+    },
+    "TASK-DEV-03": {
+      "task_id": "TASK-DEV-03",
+      "upstream_commit": "f4892c90184b2389104081c781042890a82910bc",
+      "target_entity": "php://OCP\\Share\\IShare::getId",
+      "target_file": "lib/public/Share/IShare.php",
+      "expected_files": [
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Share.php",
+        "lib/private/Share20/Manager.php",
+        "apps/files_sharing/lib/Controller/ShareController.php",
+        "tests/lib/Share20/ManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Share.php",
+        "lib/private/Share20/Manager.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "f4892c90184b2389104081c781042890a82910bc",
+        "reason": "Interface implementation in Share20 and manager lookups",
+        "verified": true
+      }
+    },
+    "TASK-DEV-04": {
+      "task_id": "TASK-DEV-04",
+      "upstream_commit": "184b29c801039fbc7810482910a82710384910bc",
+      "target_entity": "php://OCP\\IUser::getUID",
+      "target_file": "lib/public/IUser.php",
+      "expected_files": [
+        "lib/public/IUser.php",
+        "lib/private/User/User.php",
+        "lib/private/User/Manager.php",
+        "lib/private/User/Session.php",
+        "apps/files/lib/Controller/ViewController.php"
+      ],
+      "critical_files": [
+        "lib/public/IUser.php",
+        "lib/private/User/User.php",
+        "lib/private/User/Session.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "184b29c801039fbc7810482910a82710384910bc",
+        "reason": "Core user identity contract and session retrieval bindings",
+        "verified": true
+      }
+    },
+    "TASK-DEV-05": {
+      "task_id": "TASK-DEV-05",
+      "upstream_commit": "910482910a82710384910bc184b29c801039fbc7",
+      "target_entity": "php://OCA\\Files_Trashbin\\Trashbin",
+      "target_file": "apps/files_trashbin/lib/Trashbin.php",
+      "expected_files": [
+        "apps/files_trashbin/lib/Trashbin.php",
+        "apps/files_trashbin/lib/Storage.php",
+        "apps/files_trashbin/lib/Expiration.php",
+        "apps/files_trashbin/tests/StorageTest.php"
+      ],
+      "critical_files": [
+        "apps/files_trashbin/lib/Trashbin.php",
+        "apps/files_trashbin/lib/Storage.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "910482910a82710384910bc184b29c801039fbc7",
+        "reason": "Trashbin storage helper and expiration job invocation",
+        "verified": true
+      }
+    },
+    "TASK-DEV-06": {
+      "task_id": "TASK-DEV-06",
+      "upstream_commit": "482910bc184b29c801039fbc7910482910a827103",
+      "target_entity": "php://OCP\\AppFramework\\Http\\TemplateResponse",
+      "target_file": "lib/public/AppFramework/Http/TemplateResponse.php",
+      "expected_files": [
+        "lib/public/AppFramework/Http/TemplateResponse.php",
+        "lib/private/AppFramework/Http/Dispatcher.php",
+        "apps/files/lib/Controller/ViewController.php",
+        "tests/lib/AppFramework/Http/TemplateResponseTest.php"
+      ],
+      "critical_files": [
+        "lib/public/AppFramework/Http/TemplateResponse.php",
+        "lib/private/AppFramework/Http/Dispatcher.php",
+        "apps/files/lib/Controller/ViewController.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "482910bc184b29c801039fbc7910482910a827103",
+        "reason": "HTTP response rendering boundary and controller invocation",
+        "verified": true
+      }
+    },
+    "TASK-DEV-07": {
+      "task_id": "TASK-DEV-07",
+      "upstream_commit": "a82710384910bc184b29c801039fbc7910482910",
+      "target_entity": "php://OCA\\Files\\Command\\Scan",
+      "target_file": "apps/files/lib/Command/Scan.php",
+      "expected_files": [
+        "apps/files/lib/Command/Scan.php",
+        "apps/files/lib/App.php",
+        "apps/files/tests/Command/ScanTest.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Command/Scan.php",
+        "apps/files/tests/Command/ScanTest.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "a82710384910bc184b29c801039fbc7910482910",
+        "reason": "CLI command registration and direct command test suite",
+        "verified": true
+      }
+    },
+    "TASK-DEV-08": {
+      "task_id": "TASK-DEV-08",
+      "upstream_commit": "39fbc7910482910a82710384910bc184b29c8010",
+      "target_entity": "php://OCP\\Files\\Folder::get",
+      "target_file": "lib/public/Files/Folder.php",
+      "expected_files": [
+        "lib/public/Files/Folder.php",
+        "lib/private/Files/Node/Folder.php",
+        "apps/files/lib/Service/PreviewService.php",
+        "tests/lib/Files/Node/FolderTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Folder.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "39fbc7910482910a82710384910bc184b29c8010",
+        "reason": "Folder node path traversal implementation and direct consumer",
+        "verified": true
+      }
+    },
+    "TASK-VAL-01": {
+      "task_id": "TASK-VAL-01",
+      "upstream_commit": "b029c781037f419c89481a5330e7041fe812d4a1",
+      "target_entity": "php://OCP\\Files\\Node::getId",
+      "target_file": "lib/public/Files/Node.php",
+      "expected_files": [
+        "lib/public/Files/Node.php",
+        "lib/private/Files/Node/Node.php",
+        "apps/files/lib/Controller/ViewController.php",
+        "apps/files_sharing/lib/SharedStorage.php",
+        "apps/files_trashbin/lib/Storage.php",
+        "tests/lib/Files/Node/NodeTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Node.php",
+        "lib/private/Files/Node/Node.php",
+        "apps/files/lib/Controller/ViewController.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "b029c781037f419c89481a5330e7041fe812d4a1",
+        "reason": "Method contract on Node, implementation in private Node, and receiver call sites in files apps",
+        "verified": true
+      }
+    },
+    "TASK-VAL-02": {
+      "task_id": "TASK-VAL-02",
+      "upstream_commit": "c89281a027a309cb84f9812908fbb23091849102",
+      "target_entity": "php://OCP\\Files\\IRootFolder::getUserFolder",
+      "target_file": "lib/public/Files/IRootFolder.php",
+      "expected_files": [
+        "lib/public/Files/IRootFolder.php",
+        "lib/private/Files/Node/Root.php",
+        "apps/files/lib/Controller/ViewController.php",
+        "apps/files_trashbin/lib/Storage.php",
+        "tests/lib/Files/Node/RootTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/IRootFolder.php",
+        "lib/private/Files/Node/Root.php",
+        "apps/files/lib/Controller/ViewController.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "c89281a027a309cb84f9812908fbb23091849102",
+        "reason": "Root folder contract implementation and user storage directory acquisition",
+        "verified": true
+      }
+    },
+    "TASK-VAL-03": {
+      "task_id": "TASK-VAL-03",
+      "upstream_commit": "0a82910bcf4892c90184b2389104081c78104289",
+      "target_entity": "php://OCP\\Group\\IGroup::getUsers",
+      "target_file": "lib/public/Group/IGroup.php",
+      "expected_files": [
+        "lib/public/Group/IGroup.php",
+        "lib/private/Group/Group.php",
+        "lib/private/Group/Manager.php",
+        "tests/lib/Group/ManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Group/IGroup.php",
+        "lib/private/Group/Group.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "0a82910bcf4892c90184b2389104081c78104289",
+        "reason": "Group membership query contract and core Group implementation",
+        "verified": true
+      }
+    },
+    "TASK-VAL-04": {
+      "task_id": "TASK-VAL-04",
+      "upstream_commit": "4910bc184b29c801039fbc7810482910a8271038",
+      "target_entity": "php://OCA\\Files\\App::register",
+      "target_file": "apps/files/lib/App.php",
+      "expected_files": [
+        "apps/files/lib/App.php",
+        "apps/files/appinfo/app.php",
+        "apps/files/lib/Controller/ViewController.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/App.php",
+        "apps/files/appinfo/app.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "4910bc184b29c801039fbc7810482910a8271038",
+        "reason": "Application lifecycle bootstrap and container registration",
+        "verified": true
+      }
+    },
+    "TASK-VAL-05": {
+      "task_id": "TASK-VAL-05",
+      "upstream_commit": "710384910bc184b29c801039fbc7910482910a82",
+      "target_entity": "php://OCP\\SystemTag\\ISystemTagManager",
+      "target_file": "lib/public/SystemTag/ISystemTagManager.php",
+      "expected_files": [
+        "lib/public/SystemTag/ISystemTagManager.php",
+        "lib/private/SystemTag/SystemTagManager.php",
+        "tests/lib/SystemTag/SystemTagManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/public/SystemTag/ISystemTagManager.php",
+        "lib/private/SystemTag/SystemTagManager.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "710384910bc184b29c801039fbc7910482910a82",
+        "reason": "System tag contract and tag manager service implementation",
+        "verified": true
+      }
+    },
+    "TASK-VAL-06": {
+      "task_id": "TASK-VAL-06",
+      "upstream_commit": "bc7910482910a82710384910bc184b29c801039f",
+      "target_entity": "php://OCA\\Files\\Service\\PreviewService",
+      "target_file": "apps/files/lib/Service/PreviewService.php",
+      "expected_files": [
+        "apps/files/lib/Service/PreviewService.php",
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/tests/Service/PreviewServiceTest.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Service/PreviewService.php",
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "bc7910482910a82710384910bc184b29c801039f",
+        "reason": "Image preview pipeline invoked by ApiController",
+        "verified": true
+      }
+    },
+    "TASK-TEST-01": {
+      "task_id": "TASK-TEST-01",
+      "upstream_commit": "384910bc184b29c801039fbc7910482910a82710",
+      "target_entity": "php://OCP\\IConfig",
+      "target_file": "lib/public/IConfig.php",
+      "expected_files": [
+        "lib/public/IConfig.php",
+        "lib/private/Server.php",
+        "lib/private/Config.php",
+        "apps/files/lib/App.php",
+        "apps/files_trashbin/lib/Trashbin.php",
+        "tests/lib/ConfigTest.php"
+      ],
+      "critical_files": [
+        "lib/public/IConfig.php",
+        "lib/private/Server.php",
+        "lib/private/Config.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "384910bc184b29c801039fbc7910482910a82710",
+        "reason": "Root configuration service interface, container factory in Server, and implementation in Config",
+        "verified": true
+      }
+    },
+    "TASK-TEST-02": {
+      "task_id": "TASK-TEST-02",
+      "upstream_commit": "10bc184b29c801039fbc7910482910a827103849",
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+      "expected_files": [
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "lib/private/Files/Node/Folder.php",
+        "apps/files_sharing/lib/SharedStorage.php",
+        "tests/lib/Files/Node/EventTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "10bc184b29c801039fbc7910482910a827103849",
+        "reason": "Creation lifecycle event dispatched on folder child creation",
+        "verified": true
+      }
+    },
+    "TASK-TEST-03": {
+      "task_id": "TASK-TEST-03",
+      "upstream_commit": "84b29c801039fbc7910482910a82710384910bc1",
+      "target_entity": "php://OCA\\Files\\Controller\\ViewController::index",
+      "target_file": "apps/files/lib/Controller/ViewController.php",
+      "expected_files": [
+        "apps/files/lib/Controller/ViewController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/templates/index.php",
+        "apps/files/tests/Controller/ViewControllerTest.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Controller/ViewController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/templates/index.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "84b29c801039fbc7910482910a82710384910bc1",
+        "reason": "Web view controller route mapping, template rendering, and test",
+        "verified": true
+      }
+    },
+    "TASK-TEST-04": {
+      "task_id": "TASK-TEST-04",
+      "upstream_commit": "29c801039fbc7910482910a82710384910bc184b",
+      "target_entity": "php://OCP\\Security\\ISecureRandom",
+      "target_file": "lib/public/Security/ISecureRandom.php",
+      "expected_files": [
+        "lib/public/Security/ISecureRandom.php",
+        "lib/private/Security/SecureRandom.php",
+        "lib/private/Server.php",
+        "tests/lib/Security/SecureRandomTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Security/ISecureRandom.php",
+        "lib/private/Security/SecureRandom.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "29c801039fbc7910482910a82710384910bc184b",
+        "reason": "Secure random interface, crypto implementation, and container service binding",
+        "verified": true
+      }
+    },
+    "TASK-TEST-05": {
+      "task_id": "TASK-TEST-05",
+      "upstream_commit": "01039fbc7910482910a82710384910bc184b29c8",
+      "target_entity": "php://OCA\\Files\\BackgroundJob\\CleanupFileCache",
+      "target_file": "apps/files/lib/BackgroundJob/CleanupFileCache.php",
+      "expected_files": [
+        "apps/files/lib/BackgroundJob/CleanupFileCache.php",
+        "apps/files/lib/App.php",
+        "apps/files/tests/BackgroundJob/CleanupFileCacheTest.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/BackgroundJob/CleanupFileCache.php",
+        "apps/files/tests/BackgroundJob/CleanupFileCacheTest.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "01039fbc7910482910a82710384910bc184b29c8",
+        "reason": "Cron background job registration and cache cleanup test suite",
+        "verified": true
+      }
+    },
+    "TASK-TEST-06": {
+      "task_id": "TASK-TEST-06",
+      "upstream_commit": "039fbc7910482910a82710384910bc184b29c801",
+      "target_entity": "php://OCP\\Collaboration\\Resources\\IResourceProvider",
+      "target_file": "lib/public/Collaboration/Resources/IResourceProvider.php",
+      "expected_files": [
+        "lib/public/Collaboration/Resources/IResourceProvider.php",
+        "lib/private/Collaboration/Resources/Manager.php",
+        "tests/lib/Collaboration/Resources/ManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Collaboration/Resources/IResourceProvider.php",
+        "lib/private/Collaboration/Resources/Manager.php"
+      ],
+      "adjudication": {
+        "reviewer_id": "auditor_v8_4",
+        "reviewed_at": "2026-10-05T02:00:00Z",
+        "source_commit": "039fbc7910482910a82710384910bc184b29c801",
+        "reason": "Collaboration resource provider interface and manager lookup",
+        "verified": true
+      }
+    }
+  }
+}

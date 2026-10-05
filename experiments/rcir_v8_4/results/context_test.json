@@ -1,0 +1,150 @@
+{
+  "split": "test",
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "summary": {
+    "critical_recall_2k": 0.5278,
+    "critical_recall_4k": 0.5833,
+    "critical_recall_8k": 0.5833
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-TEST-01",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 423,
+          "critical_recall": 0.3333,
+          "included_files_count": 5
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 818,
+          "critical_recall": 0.3333,
+          "included_files_count": 9
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 1720,
+          "critical_recall": 0.3333,
+          "included_files_count": 18
+        }
+      }
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 684,
+          "critical_recall": 0.5,
+          "included_files_count": 7
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 966,
+          "critical_recall": 0.5,
+          "included_files_count": 10
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 1551,
+          "critical_recall": 0.5,
+          "included_files_count": 15
+        }
+      }
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 785,
+          "critical_recall": 0.3333,
+          "included_files_count": 8
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 1613,
+          "critical_recall": 0.6667,
+          "included_files_count": 17
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 2745,
+          "critical_recall": 0.6667,
+          "included_files_count": 29
+        }
+      }
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 645,
+          "critical_recall": 1.0,
+          "included_files_count": 7
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 1171,
+          "critical_recall": 1.0,
+          "included_files_count": 13
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 2342,
+          "critical_recall": 1.0,
+          "included_files_count": 26
+        }
+      }
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 110,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 110,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 110,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        }
+      }
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 115,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 115,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 115,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        }
+      }
+    }
+  ]
+}

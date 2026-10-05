@@ -130,8 +130,8 @@ class ContextPlanner:
         ev = candidate.evidence
         fp = candidate.file_path.lower()
 
-        # 1. Pinned target
-        if cid in pinned_targets or candidate.rank == 1 or ev.entity_match == "exact":
+        # 1. Pinned target: strictly verified target IDs (Phase 48)
+        if cid in pinned_targets:
             return ContextRole.TARGET
 
         # 2. Test
@@ -142,8 +142,8 @@ class ContextPlanner:
         if any(et in ("implements", "inherits", "overrides") for et in ev.edge_types):
             return ContextRole.IMPLEMENTATION
 
-        # 4. Direct Callers
-        if "calls" in ev.edge_types or ev.resolution_class in ("static_exact", "static_inference"):
+        # 4. Direct Callers / Importers
+        if any(et in ("calls", "imports") for et in ev.edge_types) or ev.resolution_class in ("static_exact", "static_inference"):
             if ev.hop_distance <= 1:
                 return ContextRole.DIRECT_CALLER
 
@@ -168,21 +168,23 @@ class ContextPlanner:
         op = spec.operation if spec else ChangeOperation.BEHAVIOR_CHANGE
         quota = RoleQuota.for_operation(op)
 
-        # Identify pinned targets
+        # Identify pinned targets strictly from ChangeSpecification (Phase 48)
         pinned: set[str] = set()
         if spec:
             pinned.update(spec.canonical_target_ids)
             if spec.requested_symbol:
                 pinned.add(spec.requested_symbol)
 
-        # Distribute budget across roles
-        target_budget = int(token_budget * quota.target_fraction)
-        impl_budget = int(token_budget * quota.implementation_fraction)
-        caller_budget = int(token_budget * quota.caller_fraction)
-        test_budget = int(token_budget * quota.test_fraction)
-        boundary_budget = int(token_budget * quota.boundary_fraction)
-        indirect_budget = int(token_budget * quota.indirect_fraction)
+        # Distribute budget across roles ensuring sum(role budgets) <= token_budget (Phase 53)
         summary_budget = int(token_budget * quota.summary_fraction)
+        avail_budget = max(0, token_budget - summary_budget)
+
+        target_budget = int(avail_budget * quota.target_fraction)
+        impl_budget = int(avail_budget * quota.implementation_fraction)
+        caller_budget = int(avail_budget * quota.caller_fraction)
+        test_budget = int(avail_budget * quota.test_fraction)
+        boundary_budget = int(avail_budget * quota.boundary_fraction)
+        indirect_budget = max(0, avail_budget - (target_budget + impl_budget + caller_budget + test_budget + boundary_budget))
 
         role_budgets = {
             ContextRole.TARGET: target_budget,
@@ -190,7 +192,7 @@ class ContextPlanner:
             ContextRole.DIRECT_CALLER: caller_budget,
             ContextRole.TEST: test_budget,
             ContextRole.BOUNDARY: boundary_budget,
-            ContextRole.CONFIG_SCHEMA: boundary_budget,
+            ContextRole.CONFIG_SCHEMA: max(1, boundary_budget // 2),
             ContextRole.INDIRECT_SUPPORT: indirect_budget,
         }
 
@@ -215,7 +217,7 @@ class ContextPlanner:
             if tokens_spent_by_role[ContextRole.TARGET] >= target_budget:
                 break
 
-        # 2. Second Pass: Allocate role budgets to respective candidates
+        # 2. Second Pass: Allocate remaining budget to respective candidates by role priority
         role_priority = [
             ContextRole.IMPLEMENTATION,
             ContextRole.DIRECT_CALLER,
@@ -226,17 +228,18 @@ class ContextPlanner:
         ]
 
         for role in role_priority:
-            budget = role_budgets[role]
+            # If target is already satisfied / not in queue, allow dependencies to utilize full budget
+            budget = role_budgets[role] if role_queues[ContextRole.TARGET] else avail_budget
             cands = role_queues[role]
             for cand in cands:
-                # Estimate ~150 tokens per supporting entry
-                if tokens_spent_by_role[role] + 150 <= budget:
+                cost = 150
+                if tokens_spent_by_role[role] + cost <= budget:
                     planned_items.append(PlannedItem(
                         candidate=cand,
                         role=role,
                         inclusion_reason=f"Role allocation: {role.value}",
                     ))
-                    tokens_spent_by_role[role] += 150
+                    tokens_spent_by_role[role] += cost
 
         # Sort planned items: Target first, then by candidate rank
         planned_items.sort(key=lambda p: (0 if p.role == ContextRole.TARGET else 1, p.candidate.rank))

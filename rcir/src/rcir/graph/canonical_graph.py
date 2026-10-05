@@ -14,13 +14,14 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Optional
 
-from rcir.entities.canonical import CanonicalEntityRegistry, CanonicalEntityID, SourceSpan
+from rcir.entities.canonical import CanonicalEntityRegistry, CanonicalEntityID, SourceSpan, EntityKind
 from rcir.query.change_spec import ChangeOperation
 
 
 class CanonicalEdgeType(str, Enum):
     IMPORTS = "imports"
     CALLS = "calls"
+    CONSTRUCTS = "constructs"
     INHERITS = "inherits"
     IMPLEMENTS = "implements"
     OVERRIDES = "overrides"
@@ -34,7 +35,11 @@ class CanonicalEdgeType(str, Enum):
     CONFIG_WRITES = "config_writes"
     SOURCE_TO_TEST = "source_to_test"
     SERVICE_REGISTRATION = "service_registration"
+    QUEUE_PRODUCER = "queue_producer"
+    QUEUE_CONSUMER = "queue_consumer"
     SCHEMA_RELATION = "schema_relation"
+    UNSUPPORTED_EDGE_TYPE = "unsupported_edge_type"
+    NOT_ANALYZED = "not_analyzed"
 
 
 class ResolutionClass(str, Enum):
@@ -110,7 +115,7 @@ class ResolutionLedger:
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "summary": dict(self.counts),
+            "summary": {c.value: self.counts.get(c.value, 0) for c in ResolutionClass},
             "total_evaluated": sum(self.counts.values()),
             "unresolved_items": self.items[:50],
         }
@@ -122,9 +127,9 @@ class CanonicalGraph:
     def __init__(self, registry: CanonicalEntityRegistry | None = None):
         self.registry = registry or CanonicalEntityRegistry()
         self.nodes: dict[str, CanonicalEntityID] = {}
-        # source_id -> list of CanonicalEdge
+        # canonical_source_id -> list of CanonicalEdge
         self.outgoing_edges: dict[str, list[CanonicalEdge]] = defaultdict(list)
-        # target_id -> list of CanonicalEdge
+        # canonical_target_id -> list of CanonicalEdge
         self.incoming_edges: dict[str, list[CanonicalEdge]] = defaultdict(list)
         self.ledger = ResolutionLedger()
 
@@ -134,17 +139,65 @@ class CanonicalGraph:
         return uri
 
     def add_edge(self, edge: CanonicalEdge) -> None:
-        self.outgoing_edges[edge.source_id].append(edge)
-        self.incoming_edges[edge.target_id].append(edge)
-        self.ledger.record(edge.source_id, edge.target_id, edge.resolution_class)
+        """Add an edge ensuring endpoints are strictly canonicalized (Phase 15)."""
+        # Resolve source endpoint
+        src_res = self.registry.resolve(edge.source_id)
+        if src_res.canonical_id:
+            canonical_src = src_res.canonical_id
+        elif "://" in edge.source_id:
+            canonical_src = edge.source_id
+        else:
+            canonical_src = self.registry.register(
+                CanonicalEntityID(
+                    repository=self.registry.repository_name,
+                    language="external",
+                    file="",
+                    namespace="",
+                    owner_type="",
+                    symbol=edge.source_id,
+                    kind=EntityKind.EXTERNAL,
+                )
+            )
+
+        # Resolve target endpoint
+        tgt_res = self.registry.resolve(edge.target_id)
+        if tgt_res.canonical_id:
+            canonical_tgt = tgt_res.canonical_id
+        elif "://" in edge.target_id:
+            canonical_tgt = edge.target_id
+        else:
+            canonical_tgt = self.registry.register(
+                CanonicalEntityID(
+                    repository=self.registry.repository_name,
+                    language="external",
+                    file="",
+                    namespace="",
+                    owner_type="",
+                    symbol=edge.target_id,
+                    kind=EntityKind.EXTERNAL,
+                )
+            )
+
+        # Preserve original raw strings in evidence for auditability
+        if "raw_source" not in edge.evidence:
+            edge.evidence["raw_source"] = edge.source_id
+        if "raw_target" not in edge.evidence:
+            edge.evidence["raw_target"] = edge.target_id
+
+        # Update edge endpoints to canonical IDs
+        edge.source_id = canonical_src
+        edge.target_id = canonical_tgt
+
+        self.outgoing_edges[canonical_src].append(edge)
+        self.incoming_edges[canonical_tgt].append(edge)
+        self.ledger.record(canonical_src, canonical_tgt, edge.resolution_class)
 
     def get_incoming_edges(self, target_id: str) -> list[CanonicalEdge]:
-        """Fetch incoming edges for target_id, checking canonical URI and aliases."""
+        """Fetch incoming edges for target_id, checking canonical URI."""
         target_keys = {target_id}
         res = self.registry.resolve(target_id)
         if res.canonical_id:
             target_keys.add(res.canonical_id)
-            target_keys.update(self.registry.get_aliases_for_uri(res.canonical_id))
 
         edges = []
         for k in target_keys:
@@ -162,12 +215,11 @@ class CanonicalGraph:
         return deduped
 
     def get_outgoing_edges(self, source_id: str) -> list[CanonicalEdge]:
-        """Fetch outgoing edges for source_id, checking canonical URI and aliases."""
+        """Fetch outgoing edges for source_id, checking canonical URI."""
         source_keys = {source_id}
         res = self.registry.resolve(source_id)
         if res.canonical_id:
             source_keys.add(res.canonical_id)
-            source_keys.update(self.registry.get_aliases_for_uri(res.canonical_id))
 
         edges = []
         for k in source_keys:
@@ -243,48 +295,123 @@ class CanonicalGraph:
         nodes_data = raw_graph.get("nodes", {})
         edges_data = raw_graph.get("edges", [])
 
-        # Ingest nodes
-        for k, v in nodes_data.items():
-            # Derive components
-            lang = v.get("language", "php" if ".php" in k else "ts" if ".ts" in k else "python")
-            file_p = v.get("file", k.split("::")[0] if "::" in k else k)
-            owner = v.get("owner", "")
-            sym = v.get("symbol", k.split("::")[-1] if "::" in k else "")
-            ns = v.get("namespace", "")
+        # Ingest nodes (supporting list format from extractor and dict format from fixtures)
+        if isinstance(nodes_data, list):
+            for n in nodes_data:
+                path = n.get("path", "")
+                kind_str = n.get("kind", "file").lower()
+                lang = n.get("language", "php" if ".php" in path else "ts" if ".ts" in path else "unknown")
+                if "::" in path:
+                    parts = path.split("::")
+                    file_p = parts[0]
+                    if len(parts) >= 3:
+                        owner_fqn = parts[1]
+                        sym = parts[2]
+                        ns = owner_fqn.rsplit("\\", 1)[0] if "\\" in owner_fqn else ""
+                        owner = owner_fqn.rsplit("\\", 1)[-1]
+                        ekind = EntityKind.METHOD
+                    elif len(parts) == 2:
+                        owner_fqn = parts[1]
+                        ns = owner_fqn.rsplit("\\", 1)[0] if "\\" in owner_fqn else ""
+                        owner = owner_fqn.rsplit("\\", 1)[-1]
+                        sym = owner
+                        ekind = EntityKind.INTERFACE if owner.startswith("I") and len(owner) > 2 and owner[1].isupper() else EntityKind.CLASS
+                    else:
+                        owner = ""
+                        sym = path.split("/")[-1].split(".")[0]
+                        ns = ""
+                        ekind = EntityKind.FILE
+                else:
+                    file_p = path
+                    owner = ""
+                    sym = path.split("/")[-1].split(".")[0]
+                    ns = ""
+                    ekind = EntityKind.FILE
 
-            kind_str = v.get("type", "class")
-            try:
-                ekind = EntityKind(kind_str.lower())
-            except ValueError:
-                ekind = EntityKind.CLASS
+                cg.add_node(CanonicalEntityID(
+                    repository=cg.registry.repository_name,
+                    language=lang,
+                    file=file_p,
+                    namespace=ns,
+                    owner_type=owner,
+                    symbol=sym,
+                    kind=ekind,
+                ))
+        elif isinstance(nodes_data, dict):
+            for k, v in nodes_data.items():
+                lang = v.get("language", "php" if ".php" in k else "ts" if ".ts" in k else "python")
+                file_p = v.get("file", k.split("::")[0] if "::" in k else k)
+                owner = v.get("owner", "")
+                sym = v.get("symbol", k.split("::")[-1] if "::" in k else "")
+                ns = v.get("namespace", "")
 
-            ent = CanonicalEntityID(
-                repository="nextcloud-server",
-                language=lang,
-                file=file_p,
-                namespace=ns,
-                owner_type=owner,
-                symbol=sym,
-                kind=ekind,
-                signature=v.get("signature", ""),
-            )
-            cg.add_node(ent)
+                kind_str = v.get("type", "class")
+                try:
+                    ekind = EntityKind(kind_str.lower())
+                except ValueError:
+                    ekind = EntityKind.CLASS
 
-        # Ingest edges
+                ent = CanonicalEntityID(
+                    repository="nextcloud-server",
+                    language=lang,
+                    file=file_p,
+                    namespace=ns,
+                    owner_type=owner,
+                    symbol=sym,
+                    kind=ekind,
+                    signature=v.get("signature", ""),
+                )
+                cg.add_node(ent)
+
+        # Ingest edges (Phase 80: Explicit translation table)
+        raw_to_canonical_et = {
+            "calls": CanonicalEdgeType.CALLS,
+            "imports": CanonicalEdgeType.IMPORTS,
+            "inherits": CanonicalEdgeType.INHERITS,
+            "implements": CanonicalEdgeType.IMPLEMENTS,
+            "overrides": CanonicalEdgeType.OVERRIDES,
+            "injects": CanonicalEdgeType.INJECTS,
+            "route": CanonicalEdgeType.ROUTE_TO_CONTROLLER,
+            "route_to_controller": CanonicalEdgeType.ROUTE_TO_CONTROLLER,
+            "frontend_to_route": CanonicalEdgeType.FRONTEND_TO_ROUTE,
+            "event_dispatch": CanonicalEdgeType.EVENT_DISPATCH,
+            "event_listener": CanonicalEdgeType.EVENT_LISTENER,
+            "event_payload": CanonicalEdgeType.EVENT_PAYLOAD,
+            "config": CanonicalEdgeType.CONFIG_READS,
+            "config_reads": CanonicalEdgeType.CONFIG_READS,
+            "config_writes": CanonicalEdgeType.CONFIG_WRITES,
+            "source_to_test": CanonicalEdgeType.SOURCE_TO_TEST,
+            "service_registration": CanonicalEdgeType.SERVICE_REGISTRATION,
+            "queue_producer": CanonicalEdgeType.QUEUE_PRODUCER,
+            "queue_consumer": CanonicalEdgeType.QUEUE_CONSUMER,
+            "constructs": CanonicalEdgeType.CONSTRUCTS,
+            "schema_relation": CanonicalEdgeType.SCHEMA_RELATION,
+        }
+
         for e in edges_data:
             src = e.get("source", "")
             tgt = e.get("target", "")
-            etype_str = e.get("edge_type", "calls")
-            try:
-                etype = CanonicalEdgeType(etype_str.lower())
-            except ValueError:
-                etype = CanonicalEdgeType.CALLS
+            etype_str = e.get("edge_type", "").lower()
+            if etype_str in raw_to_canonical_et:
+                etype = raw_to_canonical_et[etype_str]
+            else:
+                try:
+                    etype = CanonicalEdgeType(etype_str)
+                except ValueError:
+                    etype = CanonicalEdgeType.UNSUPPORTED_EDGE_TYPE if etype_str else CanonicalEdgeType.NOT_ANALYZED
 
-            res_str = e.get("resolution", "static_exact")
+            res_str = e.get("resolution", "")
             try:
-                res = ResolutionClass(res_str.lower())
+                res = ResolutionClass(res_str.lower()) if res_str else ResolutionClass.NOT_ANALYZED
             except ValueError:
-                res = ResolutionClass.STATIC_EXACT
+                # Phase 17: Never default unknown resolution to STATIC_EXACT!
+                res = ResolutionClass.NOT_ANALYZED
+
+            evidence = dict(e.get("evidence", {}))
+            evidence["raw_source"] = src
+            evidence["raw_target"] = tgt
+            evidence["raw_edge_type"] = etype_str
+            evidence["raw_resolution"] = res_str
 
             edge = CanonicalEdge(
                 source_id=src,
@@ -293,7 +420,7 @@ class CanonicalGraph:
                 resolution_class=res,
                 call_line=e.get("call_line", e.get("line", 0)),
                 receiver_expression=e.get("receiver_expression", ""),
-                evidence=e.get("evidence", {}),
+                evidence=evidence,
             )
             cg.add_edge(edge)
 

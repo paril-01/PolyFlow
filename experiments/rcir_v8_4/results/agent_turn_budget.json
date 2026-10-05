@@ -1,0 +1,19 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:30:51Z",
+  "validation_status": "NOT_MEASURED",
+  "turn_budgets": {
+    "5": {
+      "completion_rate": "NOT_MEASURED"
+    },
+    "10": {
+      "completion_rate": "NOT_MEASURED"
+    },
+    "15": {
+      "completion_rate": "NOT_MEASURED"
+    },
+    "20": {
+      "completion_rate": "NOT_MEASURED"
+    }
+  }
+}

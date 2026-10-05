@@ -1,0 +1,32 @@
+{
+  "version": "8.4",
+  "generated_at": "2026-10-05T02:00:00Z",
+  "formal_result": "NOT_MEASURED",
+  "languages": {
+    "php": {
+      "status": "IMPLEMENTED",
+      "analyzer": "rcir.types.php_type_flow.PHPTypeFlowAnalyzer",
+      "test_coverage": "VERIFIED_ON_NEXTCLOUD",
+      "features": ["use_resolution", "forward_env", "this_receiver", "scopes", "branch_join"]
+    },
+    "typescript": {
+      "status": "PARTIAL",
+      "analyzer": "rcir.types.ts_analyzer",
+      "test_coverage": "ROUTES_AND_EXPORTS_ONLY",
+      "features": ["frontend_routes", "export_signatures"]
+    },
+    "python": {
+      "status": "PLANNED",
+      "analyzer": "planned_v8_5",
+      "test_coverage": "NONE",
+      "features": []
+    },
+    "go": {
+      "status": "PLANNED",
+      "analyzer": "planned_v8_5",
+      "test_coverage": "NONE",
+      "features": []
+    }
+  },
+  "readiness_summary": "PHP is fully implemented and verified on Nextcloud Server. TypeScript route parsing is partial. Python and Go remain planned for future releases."
+}

@@ -1,0 +1,150 @@
+{
+  "split": "validation",
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "summary": {
+    "critical_recall_2k": 0.6389,
+    "critical_recall_4k": 0.6389,
+    "critical_recall_8k": 0.6389
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-VAL-01",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 730,
+          "critical_recall": 0.6667,
+          "included_files_count": 8
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 982,
+          "critical_recall": 0.6667,
+          "included_files_count": 9
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 1677,
+          "critical_recall": 0.6667,
+          "included_files_count": 15
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-02",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 636,
+          "critical_recall": 0.6667,
+          "included_files_count": 7
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 1100,
+          "critical_recall": 0.6667,
+          "included_files_count": 12
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 1969,
+          "critical_recall": 0.6667,
+          "included_files_count": 22
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-03",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 85,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 85,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 85,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-04",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 83,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 83,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 83,
+          "critical_recall": 0.5,
+          "included_files_count": 1
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-05",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 556,
+          "critical_recall": 1.0,
+          "included_files_count": 6
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 1214,
+          "critical_recall": 1.0,
+          "included_files_count": 13
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 2482,
+          "critical_recall": 1.0,
+          "included_files_count": 27
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-06",
+      "budgets": {
+        "2000": {
+          "budget": 2000,
+          "tokens_consumed": 1906,
+          "critical_recall": 0.5,
+          "included_files_count": 20
+        },
+        "4000": {
+          "budget": 4000,
+          "tokens_consumed": 3369,
+          "critical_recall": 0.5,
+          "included_files_count": 36
+        },
+        "8000": {
+          "budget": 8000,
+          "tokens_consumed": 4939,
+          "critical_recall": 0.5,
+          "included_files_count": 51
+        }
+      }
+    }
+  ]
+}

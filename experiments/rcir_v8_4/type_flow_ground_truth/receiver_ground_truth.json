@@ -1,0 +1,139 @@
+{
+  "version": "8.4",
+  "generated_at": "2026-10-05T02:00:00Z",
+  "verification_standard": "MANUAL_AND_PARSER_VERIFIED_RECEIVER_CALLS",
+  "call_sites": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ViewController.php",
+      "line": 145,
+      "method": "index",
+      "receiver_expression": "$node",
+      "called_method": "getId",
+      "expected_receiver_type": "OCP\\Files\\Node",
+      "acceptable_interface_types": [
+        "OCP\\Files\\File",
+        "OCP\\Files\\Folder"
+      ],
+      "evidence": ["parameter_typehint", "forward_flow"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files_sharing/lib/SharedStorage.php",
+      "line": 88,
+      "method": "init",
+      "receiver_expression": "$node",
+      "called_method": "getId",
+      "expected_receiver_type": "OCP\\Files\\Node",
+      "acceptable_interface_types": [
+        "OCP\\Files\\File",
+        "OCP\\Files\\Folder"
+      ],
+      "evidence": ["constructor_injection", "property_read"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 112,
+      "method": "getThumbnail",
+      "receiver_expression": "$user",
+      "called_method": "getUID",
+      "expected_receiver_type": "OCP\\IUser",
+      "acceptable_interface_types": [
+        "OCP\\User\\IUser"
+      ],
+      "evidence": ["session_getUser_call", "return_type_propagation"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files_sharing/lib/Controller/ShareController.php",
+      "line": 76,
+      "method": "showShare",
+      "receiver_expression": "$share",
+      "called_method": "getId",
+      "expected_receiver_type": "OCP\\Share\\IShare",
+      "acceptable_interface_types": [],
+      "evidence": ["share_manager_get_return"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/App.php",
+      "line": 54,
+      "method": "register",
+      "receiver_expression": "$config",
+      "called_method": "getAppValue",
+      "expected_receiver_type": "OCP\\IConfig",
+      "acceptable_interface_types": [],
+      "evidence": ["container_get_IConfig"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_006",
+      "file": "lib/private/Files/Node/Root.php",
+      "line": 215,
+      "method": "delete",
+      "receiver_expression": "$event",
+      "called_method": "getNode",
+      "expected_receiver_type": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "acceptable_interface_types": [
+        "OCP\\Files\\Events\\Node\\NodeEvent"
+      ],
+      "evidence": ["event_payload_construction"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Service/PreviewService.php",
+      "line": 94,
+      "method": "getImage",
+      "receiver_expression": "$this",
+      "called_method": "getThumbnail",
+      "expected_receiver_type": "OCA\\Files\\Service\\PreviewService",
+      "acceptable_interface_types": [],
+      "evidence": ["this_receiver_enclosing_class"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_008",
+      "file": "lib/private/Group/Manager.php",
+      "line": 132,
+      "method": "search",
+      "receiver_expression": "$group",
+      "called_method": "getUsers",
+      "expected_receiver_type": "OCP\\Group\\IGroup",
+      "acceptable_interface_types": [],
+      "evidence": ["foreach_loop_element_unpack"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ViewController.php",
+      "line": 160,
+      "method": "index",
+      "receiver_expression": "$folder",
+      "called_method": "get",
+      "expected_receiver_type": "OCP\\Files\\Folder",
+      "acceptable_interface_types": [
+        "OCP\\Files\\IRootFolder"
+      ],
+      "evidence": ["rootFolder_getUserFolder_call"],
+      "verified": true
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Helper.php",
+      "line": 42,
+      "method": "formatFile",
+      "receiver_expression": "$dynObj",
+      "called_method": "getId",
+      "expected_receiver_type": "unknown",
+      "acceptable_interface_types": [],
+      "evidence": ["dynamic_untyped_variable"],
+      "verified": true
+    }
+  ]
+}

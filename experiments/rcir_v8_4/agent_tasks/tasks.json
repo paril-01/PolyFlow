@@ -1,0 +1,42 @@
+{
+  "version": "8.4",
+  "generated_at": "2026-10-05T02:00:00Z",
+  "tasks": [
+    {
+      "task_id": "AGENT-TASK-01",
+      "title": "Refactor Preview Thumbnail Mime Signature",
+      "category": "route_and_service",
+      "target_symbol": "getThumbnail",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "prompt": "Update ApiController getThumbnail to accept an optional $crop parameter with default true, and ensure PreviewService propagates it.",
+      "acceptance_test": "python -m pytest tests/test_agent_preview_crop.py -v",
+      "regression_suite": "python -m pytest tests/test_rcir_v8_3.py -v",
+      "max_turns": 15,
+      "timeout_seconds": 300
+    },
+    {
+      "task_id": "AGENT-TASK-02",
+      "title": "Add NodeDeletedEvent Target Path Attribute",
+      "category": "event_contract",
+      "target_symbol": "NodeDeletedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "prompt": "Add a getTargetPath(): string getter to NodeDeletedEvent and populate it in Root::delete.",
+      "acceptance_test": "python -m pytest tests/test_agent_node_deleted_target_path.py -v",
+      "regression_suite": "python -m pytest tests/test_rcir_v8_3.py -v",
+      "max_turns": 15,
+      "timeout_seconds": 300
+    },
+    {
+      "task_id": "AGENT-TASK-03",
+      "title": "Deprecate IConfig Raw Set App Value Option",
+      "category": "config_contract",
+      "target_symbol": "IConfig",
+      "target_file": "lib/public/IConfig.php",
+      "prompt": "Add strict typehint to setAppValue($app, $key, string $value) in IConfig and Config implementation.",
+      "acceptance_test": "python -m pytest tests/test_agent_iconfig_strict_type.py -v",
+      "regression_suite": "python -m pytest tests/test_rcir_v8_3.py -v",
+      "max_turns": 15,
+      "timeout_seconds": 300
+    }
+  ]
+}

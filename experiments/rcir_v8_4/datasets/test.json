@@ -1,0 +1,121 @@
+{
+  "split": "test",
+  "version": "8.4",
+  "description": "RCIR v8.4 Formal Sealed Test split evaluated once under frozen configuration for final scientific assessment.",
+  "tasks": [
+    {
+      "task_id": "TASK-TEST-01",
+      "title": "Configuration Contract Evolution & High-Fanout Scope",
+      "category": "high_fanout_service",
+      "query": "IConfig get set app value system config storage",
+      "description": "Refactor IConfig interface and update core service container lookups and critical consumers",
+      "spec": {
+        "operation": "config_change",
+        "requested_symbol": "IConfig",
+        "target_file_hint": "lib/public/IConfig.php",
+        "canonical_target_ids": [
+          "php://OCP\\IConfig"
+        ],
+        "changed_facets": ["interface_contract"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IConfig interface and update core service container lookups and critical consumers"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "title": "Node Created Lifecycle Event Contract",
+      "category": "event_change",
+      "query": "NodeCreatedEvent file created hook event listener dispatch",
+      "description": "Evolve NodeCreatedEvent payload structure and update all event listeners and auditing hooks",
+      "spec": {
+        "operation": "event_change",
+        "requested_symbol": "NodeCreatedEvent",
+        "target_file_hint": "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent"
+        ],
+        "changed_facets": ["event_payload"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve NodeCreatedEvent payload structure and update all event listeners and auditing hooks"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "title": "Files View Controller Frontend Route Boundary",
+      "category": "route_change",
+      "query": "ViewController index frontend web route render files",
+      "description": "Refactor ViewController index action and verify frontend router and template boundaries",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "index",
+        "target_file_hint": "apps/files/lib/Controller/ViewController.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Controller\\ViewController::index"
+        ],
+        "changed_facets": ["parameters", "route_mapping"],
+        "requested_scope": "cross_module",
+        "language": "php",
+        "description": "Refactor ViewController index action and verify frontend router and template boundaries"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "title": "Cryptographic Random Generator Service",
+      "category": "low_fanout_symbol",
+      "query": "ISecureRandom generateRandomBytes entropy token security",
+      "description": "Refactor ISecureRandom interface and update security consumers and session token generators",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "ISecureRandom",
+        "target_file_hint": "lib/public/Security/ISecureRandom.php",
+        "canonical_target_ids": [
+          "php://OCP\\Security\\ISecureRandom"
+        ],
+        "changed_facets": ["interface_contract"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor ISecureRandom interface and update security consumers and session token generators"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "title": "File Cache Cleanup Background Job Execution",
+      "category": "test_relationship",
+      "query": "CleanupFileCache run background job queue cron cache",
+      "description": "Refactor CleanupFileCache job execution and update cron job scheduler and job test suites",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "CleanupFileCache",
+        "target_file_hint": "apps/files/lib/BackgroundJob/CleanupFileCache.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\BackgroundJob\\CleanupFileCache"
+        ],
+        "changed_facets": ["job_execution"],
+        "requested_scope": "local_module",
+        "language": "php",
+        "description": "Refactor CleanupFileCache job execution and update cron job scheduler and job test suites"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "title": "Collaboration Resource Provider Dynamic Interface Binding",
+      "category": "dynamic_receiver_case",
+      "query": "IResourceProvider getResource collaboration share resource type",
+      "description": "Evolve IResourceProvider dynamic resource resolution contract and bound implementations",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "IResourceProvider",
+        "target_file_hint": "lib/public/Collaboration/Resources/IResourceProvider.php",
+        "canonical_target_ids": [
+          "php://OCP\\Collaboration\\Resources\\IResourceProvider"
+        ],
+        "changed_facets": ["parameters", "return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve IResourceProvider dynamic resource resolution contract and bound implementations"
+      }
+    }
+  ]
+}

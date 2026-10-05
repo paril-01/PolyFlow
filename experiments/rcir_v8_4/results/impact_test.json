@@ -1,0 +1,174 @@
+{
+  "split": "test",
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "summary": {
+    "tasks_count": 6,
+    "macro_candidate_recall": 0.4861,
+    "micro_candidate_recall": 0.5,
+    "critical_micro_recall": 0.6429,
+    "worst_task_recall": 0.25,
+    "worst_task_id": "TASK-TEST-02",
+    "silent_misses_count": 12
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-TEST-01",
+      "target_entity": "php://OCP\\IConfig",
+      "expected_files_count": 6,
+      "recalled_files_count": 3,
+      "candidate_recall": 0.5,
+      "critical_recall": 0.6667,
+      "missed_files": [
+        "apps/files/lib/App.php",
+        "lib/private/Config.php",
+        "tests/lib/ConfigTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent",
+      "expected_files_count": 4,
+      "recalled_files_count": 1,
+      "candidate_recall": 0.25,
+      "critical_recall": 0.5,
+      "missed_files": [
+        "apps/files_sharing/lib/SharedStorage.php",
+        "lib/private/Files/Node/Folder.php",
+        "tests/lib/Files/Node/EventTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "target_entity": "php://OCA\\Files\\Controller\\ViewController::index",
+      "expected_files_count": 4,
+      "recalled_files_count": 3,
+      "candidate_recall": 0.75,
+      "critical_recall": 0.6667,
+      "missed_files": [
+        "apps/files/templates/index.php"
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "target_entity": "php://OCP\\Security\\ISecureRandom",
+      "expected_files_count": 4,
+      "recalled_files_count": 3,
+      "candidate_recall": 0.75,
+      "critical_recall": 1.0,
+      "missed_files": [
+        "tests/lib/Security/SecureRandomTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "target_entity": "php://OCA\\Files\\BackgroundJob\\CleanupFileCache",
+      "expected_files_count": 3,
+      "recalled_files_count": 1,
+      "candidate_recall": 0.3333,
+      "critical_recall": 0.5,
+      "missed_files": [
+        "apps/files/lib/App.php",
+        "apps/files/tests/BackgroundJob/CleanupFileCacheTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "target_entity": "php://OCP\\Collaboration\\Resources\\IResourceProvider",
+      "expected_files_count": 3,
+      "recalled_files_count": 1,
+      "candidate_recall": 0.3333,
+      "critical_recall": 0.5,
+      "missed_files": [
+        "lib/private/Collaboration/Resources/Manager.php",
+        "tests/lib/Collaboration/Resources/ManagerTest.php"
+      ]
+    }
+  ],
+  "silent_miss_catalog": [
+    {
+      "task_id": "TASK-TEST-01",
+      "missed_file": "lib/private/Config.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency lib/private/Config.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-01",
+      "missed_file": "tests/lib/ConfigTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/ConfigTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-01",
+      "missed_file": "apps/files/lib/App.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/App.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "missed_file": "apps/files_sharing/lib/SharedStorage.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files_sharing/lib/SharedStorage.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "missed_file": "lib/private/Files/Node/Folder.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency lib/private/Files/Node/Folder.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "missed_file": "tests/lib/Files/Node/EventTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/Files/Node/EventTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "missed_file": "apps/files/templates/index.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/templates/index.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "missed_file": "tests/lib/Security/SecureRandomTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/Security/SecureRandomTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "missed_file": "apps/files/tests/BackgroundJob/CleanupFileCacheTest.php",
+      "is_critical": true,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency apps/files/tests/BackgroundJob/CleanupFileCacheTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "missed_file": "apps/files/lib/App.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/App.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "missed_file": "lib/private/Collaboration/Resources/Manager.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency lib/private/Collaboration/Resources/Manager.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "missed_file": "tests/lib/Collaboration/Resources/ManagerTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/Collaboration/Resources/ManagerTest.php not in candidate pool"
+    }
+  ]
+}

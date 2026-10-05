@@ -1,0 +1,159 @@
+{
+  "split": "dev",
+  "version": "8.4",
+  "description": "RCIR v8.4 Development split for ranker tuning, type-flow development, and context planner calibration.",
+  "tasks": [
+    {
+      "task_id": "TASK-DEV-01",
+      "title": "Refactor Controller Endpoint",
+      "category": "route_change",
+      "query": "ApiController getThumbnail thumbnail generation preview",
+      "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "getThumbnail",
+        "target_file_hint": "apps/files/lib/Controller/ApiController.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Controller\\ApiController::getThumbnail"
+        ],
+        "changed_facets": ["return_type", "parameters"],
+        "requested_scope": "cross_module",
+        "language": "php",
+        "description": "Refactor ApiController thumbnail endpoint and update all affected callers and routes"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "title": "Event Contract Evolution",
+      "category": "event_change",
+      "query": "NodeDeletedEvent delete node event dispatcher listener",
+      "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated",
+      "spec": {
+        "operation": "event_change",
+        "requested_symbol": "NodeDeletedEvent",
+        "target_file_hint": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent"
+        ],
+        "changed_facets": ["event_payload"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve NodeDeletedEvent contract and ensure all dispatchers and listeners are updated"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-03",
+      "title": "Share Interface Signature Evolution",
+      "category": "signature_change",
+      "query": "IShare getId share entity identification",
+      "description": "Refactor IShare getId method signature and update share implementations and consumers",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getId",
+        "target_file_hint": "lib/public/Share/IShare.php",
+        "canonical_target_ids": [
+          "php://OCP\\Share\\IShare::getId"
+        ],
+        "changed_facets": ["return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IShare getId method signature and update share implementations and consumers"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "title": "High Fanout User Session Resolution",
+      "category": "high_fanout_service",
+      "query": "IUser getUID user identity session",
+      "description": "Refactor IUser getUID and update user management consumers and security checks",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getUID",
+        "target_file_hint": "lib/public/IUser.php",
+        "canonical_target_ids": [
+          "php://OCP\\IUser::getUID"
+        ],
+        "changed_facets": ["return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IUser getUID and update user management consumers and security checks"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-05",
+      "title": "Trashbin Service Local Call Refactor",
+      "category": "local_call_change",
+      "query": "Trashbin trash files expiration delete",
+      "description": "Update Trashbin service internal helper invocations and error logging",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "Trashbin",
+        "target_file_hint": "apps/files_trashbin/lib/Trashbin.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files_Trashbin\\Trashbin"
+        ],
+        "changed_facets": ["implementation_details"],
+        "requested_scope": "local_module",
+        "language": "php",
+        "description": "Update Trashbin service internal helper invocations and error logging"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "title": "Frontend Response Boundary Evolution",
+      "category": "frontend_boundary",
+      "query": "TemplateResponse render template http view",
+      "description": "Evolve TemplateResponse headers and rendering contract across controllers",
+      "spec": {
+        "operation": "service_boundary_change",
+        "requested_symbol": "TemplateResponse",
+        "target_file_hint": "lib/public/AppFramework/Http/TemplateResponse.php",
+        "canonical_target_ids": [
+          "php://OCP\\AppFramework\\Http\\TemplateResponse"
+        ],
+        "changed_facets": ["headers", "parameters"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve TemplateResponse headers and rendering contract across controllers"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-07",
+      "title": "File Scan CLI Command & Verification Suite",
+      "category": "test_relationship",
+      "query": "Scan files scan storage command test",
+      "description": "Refactor Scan console command and update CLI regression test suite",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "Scan",
+        "target_file_hint": "apps/files/lib/Command/Scan.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Command\\Scan"
+        ],
+        "changed_facets": ["arguments", "options"],
+        "requested_scope": "local_module",
+        "language": "php",
+        "description": "Refactor Scan console command and update CLI regression test suite"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-08",
+      "title": "Folder Node Traversal Low-Fanout Symbol",
+      "category": "low_fanout_symbol",
+      "query": "Folder get path child node resolution",
+      "description": "Refactor Folder get method path normalization and node return",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "get",
+        "target_file_hint": "lib/public/Files/Folder.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Folder::get"
+        ],
+        "changed_facets": ["parameters", "return_type"],
+        "requested_scope": "cross_module",
+        "language": "php",
+        "description": "Refactor Folder get method path normalization and node return"
+      }
+    }
+  ]
+}

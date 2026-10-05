@@ -1,0 +1,139 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:30:40Z",
+  "validation_status": "MEASURED_FROM_INDEPENDENT_GROUND_TRUTH",
+  "summary": {
+    "total_ground_truth_edges": 15,
+    "exact_matches": 13,
+    "relaxed_matches": 0,
+    "wrong_relation_matches": 0,
+    "missing_edges": 2,
+    "exact_typed_recall": 0.8667,
+    "relaxed_endpoint_recall": 0.8667,
+    "wrong_relation_rate": 0.0,
+    "unresolved_rate": 0.0,
+    "edge_precision": 1.0
+  },
+  "edge_details": [
+    {
+      "edge_id": "edge_001",
+      "source": "apps/files/lib/Controller/ApiController.php",
+      "target": "OCP\\IPreview",
+      "expected_rel": "imports",
+      "status": "MISSING",
+      "predicted_rel": null
+    },
+    {
+      "edge_id": "edge_002",
+      "source": "apps/files/appinfo/routes.php",
+      "target": "OCA\\Files\\Controller\\ViewController::index",
+      "expected_rel": "route_to_controller",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "route_to_controller"
+    },
+    {
+      "edge_id": "edge_003",
+      "source": "apps/files/appinfo/routes.php",
+      "target": "route::GET::/apps/files/",
+      "expected_rel": "route_to_controller",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "route_to_controller"
+    },
+    {
+      "edge_id": "edge_004",
+      "source": "apps/files/tests/Controller/ApiControllerTest.php",
+      "target": "OCP\\IPreview",
+      "expected_rel": "imports",
+      "status": "MISSING",
+      "predicted_rel": null
+    },
+    {
+      "edge_id": "edge_005",
+      "source": "status.php",
+      "target": "config::installed",
+      "expected_rel": "config_reads",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "config_reads"
+    },
+    {
+      "edge_id": "edge_006",
+      "source": "public.php",
+      "target": "config::core",
+      "expected_rel": "config_reads",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "config_reads"
+    },
+    {
+      "edge_id": "edge_007",
+      "source": "remote.php",
+      "target": "config::core",
+      "expected_rel": "config_reads",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "config_reads"
+    },
+    {
+      "edge_id": "edge_008",
+      "source": "apps/dav/lib/Connector/Sabre/ZipFolderPlugin.php::OCA\\DAV\\Connector\\Sabre\\ZipFolderPlugin",
+      "target": "Sabre\\DAV\\ServerPlugin",
+      "expected_rel": "inherits",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "inherits"
+    },
+    {
+      "edge_id": "edge_009",
+      "source": "apps/dav/lib/Upload/UploadFolder.php::OCA\\DAV\\Upload\\UploadFolder",
+      "target": "Sabre\\DAV\\ICollection",
+      "expected_rel": "inherits",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "inherits"
+    },
+    {
+      "edge_id": "edge_010",
+      "source": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target": "OCA\\Files_Trashbin\\Sabre\\AbstractTrash",
+      "expected_rel": "inherits",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "inherits"
+    },
+    {
+      "edge_id": "edge_011",
+      "source": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target": "Sabre\\DAV\\ICollection",
+      "expected_rel": "inherits",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "inherits"
+    },
+    {
+      "edge_id": "edge_012",
+      "source": "apps/files/appinfo/routes.php::file_level",
+      "target": "OCA\\Files\\AppInfo\\OpenLocalEditorController::create",
+      "expected_rel": "calls",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "calls"
+    },
+    {
+      "edge_id": "edge_013",
+      "source": "apps/files/appinfo/routes.php::file_level",
+      "target": "OCA\\Files\\AppInfo\\OpenLocalEditorController::validate",
+      "expected_rel": "calls",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "calls"
+    },
+    {
+      "edge_id": "edge_014",
+      "source": "apps/cloud_federation_api/appinfo/routes.php",
+      "target": "OCA\\Cloud_federation_api\\Controller\\TokenController::jwks",
+      "expected_rel": "route_to_controller",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "route_to_controller"
+    },
+    {
+      "edge_id": "edge_015",
+      "source": "apps/files_trashbin/lib/Sabre/AbstractTrashFolder.php::OCA\\Files_Trashbin\\Sabre\\AbstractTrashFolder",
+      "target": "OCA\\Files_Trashbin\\Sabre\\ITrash",
+      "expected_rel": "inherits",
+      "status": "EXACT_MATCH",
+      "predicted_rel": "inherits"
+    }
+  ]
+}

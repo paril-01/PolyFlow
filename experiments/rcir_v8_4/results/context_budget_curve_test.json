@@ -1,0 +1,15 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "budgets": {
+    "2000": {
+      "critical_recall": 0.5278
+    },
+    "4000": {
+      "critical_recall": 0.5833
+    },
+    "8000": {
+      "critical_recall": 0.5833
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:30:46Z",
+  "validation_status": "MEASURED_FROM_INDEPENDENT_RECEIVER_GROUND_TRUTH",
+  "confusion_matrix": {
+    "total_call_sites": 10,
+    "correct_exact": 1,
+    "correct_compatible_interface": 0,
+    "wrong_exact": 0,
+    "ambiguous": 0,
+    "unknown": 9
+  },
+  "metrics": {
+    "coverage": 0.1,
+    "precision_among_exact": 1.0,
+    "precision_among_all_resolved": 1.0,
+    "wrong_exact_rate": 0.0,
+    "ambiguity_rate": 0.0,
+    "unknown_rate": 0.9
+  },
+  "details": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ViewController.php",
+      "line": 145,
+      "receiver": "$node",
+      "called_method": "getId",
+      "expected_type": "OCP\\Files\\Node",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files_sharing/lib/SharedStorage.php",
+      "line": 88,
+      "receiver": "$node",
+      "called_method": "getId",
+      "expected_type": "OCP\\Files\\Node",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 112,
+      "receiver": "$user",
+      "called_method": "getUID",
+      "expected_type": "OCP\\IUser",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files_sharing/lib/Controller/ShareController.php",
+      "line": 76,
+      "receiver": "$share",
+      "called_method": "getId",
+      "expected_type": "OCP\\Share\\IShare",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/App.php",
+      "line": 54,
+      "receiver": "$config",
+      "called_method": "getAppValue",
+      "expected_type": "OCP\\IConfig",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_006",
+      "file": "lib/private/Files/Node/Root.php",
+      "line": 215,
+      "receiver": "$event",
+      "called_method": "getNode",
+      "expected_type": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Service/PreviewService.php",
+      "line": 94,
+      "receiver": "$this",
+      "called_method": "getThumbnail",
+      "expected_type": "OCA\\Files\\Service\\PreviewService",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_008",
+      "file": "lib/private/Group/Manager.php",
+      "line": 132,
+      "receiver": "$group",
+      "called_method": "getUsers",
+      "expected_type": "OCP\\Group\\IGroup",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ViewController.php",
+      "line": 160,
+      "receiver": "$folder",
+      "called_method": "get",
+      "expected_type": "OCP\\Files\\Folder",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "UNKNOWN"
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Helper.php",
+      "line": 42,
+      "receiver": "$dynObj",
+      "called_method": "getId",
+      "expected_type": "unknown",
+      "inferred_type": null,
+      "confidence": "unknown",
+      "outcome": "CORRECT_UNKNOWN"
+    }
+  ]
+}

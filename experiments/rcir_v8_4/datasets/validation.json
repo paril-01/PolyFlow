@@ -1,0 +1,121 @@
+{
+  "split": "validation",
+  "version": "8.4",
+  "description": "RCIR v8.4 Validation split for automated ranker objective selection and hyperparameter verification.",
+  "tasks": [
+    {
+      "task_id": "TASK-VAL-01",
+      "title": "Node Interface Method Receiver Resolution",
+      "category": "dynamic_receiver_case",
+      "query": "Node getId file node receiver type flow",
+      "description": "Refactor Node getId interface method and resolve receiver calls across file operations",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getId",
+        "target_file_hint": "lib/public/Files/Node.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Node::getId"
+        ],
+        "changed_facets": ["return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Node getId interface method and resolve receiver calls across file operations"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-02",
+      "title": "Root Folder Service User Scope Resolution",
+      "category": "service_boundary",
+      "query": "IRootFolder getUserFolder user storage node",
+      "description": "Evolve IRootFolder getUserFolder contract and bound cross-boundary filesystem consumers",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getUserFolder",
+        "target_file_hint": "lib/public/Files/IRootFolder.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\IRootFolder::getUserFolder"
+        ],
+        "changed_facets": ["parameters", "return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve IRootFolder getUserFolder contract and bound cross-boundary filesystem consumers"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-03",
+      "title": "Group Management Provider Contract",
+      "category": "signature_change",
+      "query": "IGroup getUsers group membership user provider",
+      "description": "Refactor IGroup getUsers signature to support paging and update group backends",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getUsers",
+        "target_file_hint": "lib/public/Group/IGroup.php",
+        "canonical_target_ids": [
+          "php://OCP\\Group\\IGroup::getUsers"
+        ],
+        "changed_facets": ["parameters", "return_type"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IGroup getUsers signature to support paging and update group backends"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-04",
+      "title": "Application Bootstrap Registration & Container Binding",
+      "category": "service_registration",
+      "query": "App register service container dependency injection bootstrap",
+      "description": "Update Files App registration lifecycle and container binding definitions",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "register",
+        "target_file_hint": "apps/files/lib/App.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\App::register"
+        ],
+        "changed_facets": ["container_bindings"],
+        "requested_scope": "local_module",
+        "language": "php",
+        "description": "Update Files App registration lifecycle and container binding definitions"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-05",
+      "title": "System Tag Manager Storage Contract",
+      "category": "config_change",
+      "query": "ISystemTagManager tag assign entity metadata",
+      "description": "Evolve System Tag Manager contract and synchronize database schema relations",
+      "spec": {
+        "operation": "config_change",
+        "requested_symbol": "ISystemTagManager",
+        "target_file_hint": "lib/public/SystemTag/ISystemTagManager.php",
+        "canonical_target_ids": [
+          "php://OCP\\SystemTag\\ISystemTagManager"
+        ],
+        "changed_facets": ["interface_contract"],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve System Tag Manager contract and synchronize database schema relations"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-06",
+      "title": "Image Preview Service Dynamic Pipeline",
+      "category": "dynamic_receiver_case",
+      "query": "PreviewService getImage preview generation mime",
+      "description": "Refactor PreviewService dynamic thumbnail resolution and mime-type dispatching",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "PreviewService",
+        "target_file_hint": "apps/files/lib/Service/PreviewService.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Service\\PreviewService"
+        ],
+        "changed_facets": ["dispatch_pipeline"],
+        "requested_scope": "local_module",
+        "language": "php",
+        "description": "Refactor PreviewService dynamic thumbnail resolution and mime-type dispatching"
+      }
+    }
+  ]
+}

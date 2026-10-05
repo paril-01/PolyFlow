@@ -1,0 +1,43 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:42:01Z",
+  "run_validity": "VALID",
+  "architecture_decision": "OPTION_B",
+  "gates": {
+    "gate_1_test_macro_recall": {
+      "metric": "TEST Macro Candidate Recall",
+      "measured": 0.4861,
+      "threshold": 0.9,
+      "passed": false
+    },
+    "gate_2_test_worst_task": {
+      "metric": "TEST Worst Task Recall",
+      "measured": 0.25,
+      "threshold": 0.8,
+      "passed": false
+    },
+    "gate_3_test_critical_recall_4k": {
+      "metric": "TEST CriticalRecall@4k",
+      "measured": 0.5833,
+      "threshold": 0.5,
+      "passed": true
+    },
+    "gate_4_determinism": {
+      "metric": "100% Identical Prompt Hashes",
+      "measured": "100%_IDENTICAL",
+      "passed": true
+    },
+    "gate_5_type_flow_integrity": {
+      "metric": "Independent Receiver Precision",
+      "measured": 1.0,
+      "status": "MEASURED_FROM_INDEPENDENT_RECEIVER_GROUND_TRUTH",
+      "passed": true
+    },
+    "gate_6_agent_validation": {
+      "metric": "Autonomous Coding Agent A/B",
+      "status": "NOT_MEASURED",
+      "completion_rate": "NOT_MEASURED",
+      "rule_0_compliant": true
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:27:07Z",
+  "validation_status": "MEASURED_FROM_INDEPENDENT_ALIAS_BENCHMARK",
+  "summary": {
+    "total_cases": 9,
+    "exact_matches": 1,
+    "unique_alias_matches": 6,
+    "correct_ambiguous": 1,
+    "correct_unresolved": 1,
+    "wrong_resolutions": 0,
+    "overall_accuracy": 1.0,
+    "wrong_resolution_rate": 0.0
+  },
+  "cases": [
+    {
+      "alias": "OCP\\IConfig",
+      "expected": "php://OCP\\IConfig",
+      "resolved_canonical_id": "php://OCP\\IConfig",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "IConfig",
+      "expected": "php://OCP\\IConfig",
+      "resolved_canonical_id": "php://OCP\\IConfig",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "lib/public/IConfig.php",
+      "expected": "php://OCP\\IConfig",
+      "resolved_canonical_id": "php://OCP\\IConfig",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "OCP\\Files\\Node::getId",
+      "expected": "php://OCP\\Files\\Node::getId",
+      "resolved_canonical_id": "php://OCP\\Files\\Node::getId",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "Node::getId",
+      "expected": "php://OCP\\Files\\Node::getId",
+      "resolved_canonical_id": "php://OCP\\Files\\Node::getId",
+      "resolution_class": "exact",
+      "status": "EXACT_MATCH"
+    },
+    {
+      "alias": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "expected": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "resolved_canonical_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "expected": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "resolved_canonical_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "resolution_class": "unique_alias",
+      "status": "UNIQUE_ALIAS_MATCH"
+    },
+    {
+      "alias": "NonExistentClass\\UnknownSymbol",
+      "expected": null,
+      "resolved_canonical_id": null,
+      "resolution_class": "unresolved",
+      "status": "CORRECT_UNRESOLVED"
+    },
+    {
+      "alias": "getId",
+      "expected": null,
+      "resolved_canonical_id": null,
+      "resolution_class": "ambiguous",
+      "status": "CORRECT_AMBIGUOUS"
+    }
+  ]
+}

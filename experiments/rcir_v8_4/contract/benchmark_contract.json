@@ -1,0 +1,43 @@
+{
+  "contract_version": "8.4",
+  "target_repository": "nextcloud-server",
+  "baseline_p0_artifact": "experiments/nextcloud_validation/reports/benchmark_results.json",
+  "impact_plane": {
+    "global_pool_recall_min": 0.90,
+    "macro_pool_recall_min": 0.90,
+    "worst_task_pool_recall_floor": 0.80,
+    "max_silent_misses": 20
+  },
+  "context_plane": {
+    "precision_at_20_min": 0.35,
+    "precision_at_50_min": 0.20,
+    "ndcg_at_50_min": 0.50,
+    "mrr_min": 0.70,
+    "critical_recall_budget_4k_min": 0.50,
+    "critical_recall_budget_8k_min": 0.70,
+    "strict_token_budget_invariant": true
+  },
+  "agent": {
+    "requires_real_provider": true,
+    "requires_non_empty_diff": true,
+    "requires_acceptance_transition": true,
+    "min_approved_rate": 0.80,
+    "allow_simulation": false
+  },
+  "decision_rules": {
+    "option_a": {
+      "description": "All primary impact, context, and live agent execution gates satisfied on TEST split with zero simulation.",
+      "requires_all_primary_gates": true,
+      "allow_simulation": false
+    },
+    "option_b": {
+      "description": "Substantial architectural progress on TEST split: recall >= 90%, P@50 gain over P0 >= 15%, deterministic compiler.",
+      "global_pool_recall_min": 0.90,
+      "precision_at_50_improvement_over_p0": 0.15,
+      "context_compiler_deterministic": true
+    },
+    "option_c": {
+      "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required."
+    }
+  }
+}

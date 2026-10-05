@@ -1,0 +1,55 @@
+{
+  "split": "test",
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "summary": {
+    "p_at_20": 0.3472,
+    "p_at_50": 0.4306,
+    "ndcg_at_50": 0.4864,
+    "mrr": 1.0
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-TEST-01",
+      "p_at_20": 0.1667,
+      "p_at_50": 0.1667,
+      "ndcg_at_50": 0.3026,
+      "mrr": 1.0
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "p_at_20": 0.25,
+      "p_at_50": 0.25,
+      "ndcg_at_50": 0.3904,
+      "mrr": 1.0
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "p_at_20": 0.75,
+      "p_at_50": 0.75,
+      "ndcg_at_50": 0.7537,
+      "mrr": 1.0
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "p_at_20": 0.25,
+      "p_at_50": 0.75,
+      "ndcg_at_50": 0.5334,
+      "mrr": 1.0
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "p_at_20": 0.3333,
+      "p_at_50": 0.3333,
+      "ndcg_at_50": 0.4693,
+      "mrr": 1.0
+    },
+    {
+      "task_id": "TASK-TEST-06",
+      "p_at_20": 0.3333,
+      "p_at_50": 0.3333,
+      "ndcg_at_50": 0.4693,
+      "mrr": 1.0
+    }
+  ]
+}

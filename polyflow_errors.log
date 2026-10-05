@@ -290,3 +290,13 @@ Simulated database crash
 [RAW ERROR]      : 
 Simulated database crash
 ========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-05 03:15:44
+[MODULE/TAG]     : service (PYTHON)
+[SIMPLE SUMMARY] : Execution exception in @python[service] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : In-Memory Native Execution Exception
+[RAW ERROR]      : 
+Simulated database crash
+========================================================================

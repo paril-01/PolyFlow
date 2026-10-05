@@ -1,0 +1,41 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:32:24Z",
+  "validation_status": "MEASURED_DETERMINISM",
+  "trials_count": 5,
+  "is_deterministic": true,
+  "unique_prompt_hashes": 1,
+  "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae",
+  "trials": [
+    {
+      "trial": 1,
+      "tokens": 340,
+      "entries_count": 5,
+      "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae"
+    },
+    {
+      "trial": 2,
+      "tokens": 340,
+      "entries_count": 5,
+      "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae"
+    },
+    {
+      "trial": 3,
+      "tokens": 340,
+      "entries_count": 5,
+      "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae"
+    },
+    {
+      "trial": 4,
+      "tokens": 340,
+      "entries_count": 5,
+      "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae"
+    },
+    {
+      "trial": 5,
+      "tokens": 340,
+      "entries_count": 5,
+      "prompt_hash": "745c79ba91b5be65aa48a34a9313427ca69985837f3fb41a602f9d4cc47cd9ae"
+    }
+  ]
+}

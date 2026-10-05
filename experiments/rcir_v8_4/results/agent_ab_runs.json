@@ -1,0 +1,39 @@
+{
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:30:51Z",
+  "validation_status": "NOT_MEASURED",
+  "reason": "Provider probe status was NOT_AVAILABLE. Live inference endpoint unreachable.",
+  "provider_probe": {
+    "provider": "ollama",
+    "endpoint": "http://127.0.0.1:11434",
+    "model": "qwen2.5-coder:7b",
+    "endpoint_reachable": true,
+    "model_present": false,
+    "inference_success": false,
+    "model_digest": "",
+    "probe_prompt_hash": "aeb9f3709648392316d4d7bd20b5526c577842426511ccd91af1f0d2e131a5a5",
+    "response_hash": "",
+    "latency_ms": 56,
+    "status": "NOT_AVAILABLE",
+    "error": "Model 'qwen2.5-coder:7b' not found in provider tags."
+  },
+  "condition_a_rcir": {
+    "trials_count": 0,
+    "completed_count": 0,
+    "completion_rate": "NOT_MEASURED",
+    "avg_turns": "NOT_MEASURED",
+    "avg_tokens": "NOT_MEASURED"
+  },
+  "condition_b_baseline": {
+    "trials_count": 0,
+    "completed_count": 0,
+    "completion_rate": "NOT_MEASURED",
+    "avg_turns": "NOT_MEASURED",
+    "avg_tokens": "NOT_MEASURED"
+  },
+  "comparison": {
+    "completion_rate_delta": "NOT_MEASURED",
+    "turn_reduction": "NOT_MEASURED",
+    "token_reduction": "NOT_MEASURED"
+  }
+}

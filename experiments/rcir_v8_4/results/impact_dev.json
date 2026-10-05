@@ -1,0 +1,176 @@
+{
+  "split": "dev",
+  "version": "8.4",
+  "evaluated_at": "2026-10-04T21:41:33Z",
+  "summary": {
+    "tasks_count": 8,
+    "macro_candidate_recall": 0.7104,
+    "micro_candidate_recall": 0.7222,
+    "critical_micro_recall": 0.8095,
+    "worst_task_recall": 0.3333,
+    "worst_task_id": "TASK-DEV-07",
+    "silent_misses_count": 10
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-DEV-01",
+      "target_entity": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "expected_files_count": 5,
+      "recalled_files_count": 4,
+      "candidate_recall": 0.8,
+      "critical_recall": 0.6667,
+      "missed_files": [
+        "apps/files/lib/Service/PreviewService.php"
+      ]
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "expected_files_count": 6,
+      "recalled_files_count": 3,
+      "candidate_recall": 0.5,
+      "critical_recall": 0.6667,
+      "missed_files": [
+        "apps/files_trashbin/lib/Storage.php",
+        "lib/private/Files/Node/Folder.php",
+        "tests/lib/Files/Node/EventTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-DEV-03",
+      "target_entity": "php://OCP\\Share\\IShare::getId",
+      "expected_files_count": 5,
+      "recalled_files_count": 5,
+      "candidate_recall": 1.0,
+      "critical_recall": 1.0,
+      "missed_files": []
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "target_entity": "php://OCP\\IUser::getUID",
+      "expected_files_count": 5,
+      "recalled_files_count": 4,
+      "candidate_recall": 0.8,
+      "critical_recall": 1.0,
+      "missed_files": [
+        "apps/files/lib/Controller/ViewController.php"
+      ]
+    },
+    {
+      "task_id": "TASK-DEV-05",
+      "target_entity": "php://OCA\\Files_Trashbin\\Trashbin",
+      "expected_files_count": 4,
+      "recalled_files_count": 4,
+      "candidate_recall": 1.0,
+      "critical_recall": 1.0,
+      "missed_files": []
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "target_entity": "php://OCP\\AppFramework\\Http\\TemplateResponse",
+      "expected_files_count": 4,
+      "recalled_files_count": 3,
+      "candidate_recall": 0.75,
+      "critical_recall": 0.6667,
+      "missed_files": [
+        "lib/private/AppFramework/Http/Dispatcher.php"
+      ]
+    },
+    {
+      "task_id": "TASK-DEV-07",
+      "target_entity": "php://OCA\\Files\\Command\\Scan",
+      "expected_files_count": 3,
+      "recalled_files_count": 1,
+      "candidate_recall": 0.3333,
+      "critical_recall": 0.5,
+      "missed_files": [
+        "apps/files/lib/App.php",
+        "apps/files/tests/Command/ScanTest.php"
+      ]
+    },
+    {
+      "task_id": "TASK-DEV-08",
+      "target_entity": "php://OCP\\Files\\Folder::get",
+      "expected_files_count": 4,
+      "recalled_files_count": 2,
+      "candidate_recall": 0.5,
+      "critical_recall": 1.0,
+      "missed_files": [
+        "apps/files/lib/Service/PreviewService.php",
+        "tests/lib/Files/Node/FolderTest.php"
+      ]
+    }
+  ],
+  "silent_miss_catalog": [
+    {
+      "task_id": "TASK-DEV-01",
+      "missed_file": "apps/files/lib/Service/PreviewService.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/Service/PreviewService.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "missed_file": "tests/lib/Files/Node/EventTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/Files/Node/EventTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "missed_file": "lib/private/Files/Node/Folder.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency lib/private/Files/Node/Folder.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "missed_file": "apps/files_trashbin/lib/Storage.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files_trashbin/lib/Storage.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "missed_file": "apps/files/lib/Controller/ViewController.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/Controller/ViewController.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "missed_file": "lib/private/AppFramework/Http/Dispatcher.php",
+      "is_critical": true,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency lib/private/AppFramework/Http/Dispatcher.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-07",
+      "missed_file": "apps/files/lib/App.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/App.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-07",
+      "missed_file": "apps/files/tests/Command/ScanTest.php",
+      "is_critical": true,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency apps/files/tests/Command/ScanTest.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-08",
+      "missed_file": "apps/files/lib/Service/PreviewService.php",
+      "is_critical": false,
+      "miss_stage": "EDGE_EXTRACTION",
+      "reason": "Expected dependency apps/files/lib/Service/PreviewService.php not in candidate pool"
+    },
+    {
+      "task_id": "TASK-DEV-08",
+      "missed_file": "tests/lib/Files/Node/FolderTest.php",
+      "is_critical": false,
+      "miss_stage": "TRAVERSAL_POLICY",
+      "reason": "Expected dependency tests/lib/Files/Node/FolderTest.php not in candidate pool"
+    }
+  ]
+}
