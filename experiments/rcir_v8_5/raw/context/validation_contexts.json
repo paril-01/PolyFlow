@@ -1,0 +1,1048 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "split": "validation",
+  "token_budget": 4000,
+  "total_tasks": 5,
+  "tasks": {
+    "TASK-VAL-01": {
+      "task_id": "TASK-VAL-01",
+      "total_tokens": 3382,
+      "token_budget": 4000,
+      "entries_count": 13,
+      "critical_file_recall": 1.0,
+      "critical_source_recall": 1.0,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\Files\\Folder::get",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/Files/Folder.php",
+          "source_lines": [
+            59,
+            112
+          ],
+          "estimated_tokens": 378,
+          "content_snippet": "\t * Get the node at $path\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @return \\OCP\\Files\\Node\n\t * @throws \\OCP\\Files\\NotFoundException\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function get($path);\n\n\t/**\n\t * Get or create new folder if the folder does not already exist.\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @throw \\OCP\\Files\\NotPermittedException\n\t * @since 33.0.0\n\t */\n\tpublic function getOrCreateFolder(string $path, int $maxRetries = 5): Folder;\n\n\t/**\n\t * Check if a file or folder exists in the folder\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @return bool\n\t * @since 6.0.0\n\t */\n\tpublic function nodeExists($path);\n\n\t/**\n\t * Create a new folder\n\t *\n\t * @param string $path relative path of the new folder\n\t * @return \\OCP\\Files\\Folder\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function newFolder($path);\n\n\t/**\n\t * Create a new file\n\t *\n\t * @param string $path relative path of the new file\n\t * @param string|resource|null $content content for the new file, since 19.0.0\n\t * @return \\OCP\\Files\\File\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function newFile($path, $content = null);\n\n\t/**\n\t * search for files with the name matching $query\n\t *\n\t * @param string|ISearchQuery $query\n\t * @return \\OCP\\Files\\Node[]",
+          "span_metadata": {
+            "start_line": 59,
+            "end_line": 112,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "get"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\Files\\Folder"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "dcc2113a50adcbb56bca26336124358f3806f8697d8fbb43a095646b0b26f984",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://p",
+          "rank": 4,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/private/Template/functions.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 150,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nuse OC\\Security\\CSP\\ContentSecurityPolicyNonceManager;\nuse OCP\\Files\\IMimeTypeDetector;\nuse OCP\\IDateTimeFormatter;\nuse OCP\\IURLGenerator;\nuse OCP\\Server;\nuse OCP\\Util;\n\n/**\n * @param string $string\n */\nfunction p($string): void {\n\tprint(Util::sanitizeHTML($string));\n}\n\n/**\n * Prints a <link> tag for loading css\n * @param string $href the source URL, ignored when empty",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://p"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b7d53d6a780a7dc49537bb859474a65462b5be4d1ef5f1daa1f1ca2473d10587",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Comments\\Search\\CommentsSearchProvider::getFileForComment",
+          "rank": 5,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/comments/lib/Search/CommentsSearchProvider.php",
+          "source_lines": [
+            76,
+            95
+          ],
+          "estimated_tokens": 201,
+          "content_snippet": "\t\t\t\t\t$file = $this->getFileForComment($userFolder, $comment);\n\n\t\t\t\t\t$isUser = $this->userManager->userExists($comment->getActorId());\n\t\t\t\t\t$avatarUrl = $isUser\n\t\t\t\t\t\t? $this->urlGenerator->linkToRouteAbsolute('core.avatar.getAvatar', ['userId' => $comment->getActorId(), 'size' => 42])\n\t\t\t\t\t\t: $this->urlGenerator->linkToRouteAbsolute('core.GuestAvatar.getAvatar', ['guestName' => $comment->getActorId(), 'size' => 42]);\n\t\t\t\t\t$link = $this->urlGenerator->linkToRoute(\n\t\t\t\t\t\t'files.View.showFile',\n\t\t\t\t\t\t['fileid' => $file->getId()]\n\t\t\t\t\t);\n\n\t\t\t\t\t$result[] = new SearchResultEntry(\n\t\t\t\t\t\t$avatarUrl,\n\t\t\t\t\t\t$displayName,\n\t\t\t\t\t\t$file->getPath(),\n\t\t\t\t\t\t$link,\n\t\t\t\t\t\t'',\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\t\t\t\t} catch (NotFoundException|InvalidPathException $e) {",
+          "span_metadata": {
+            "start_line": 76,
+            "end_line": 95,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getFileForComment"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "a4a9f49cd4e244603b39a4f0586ddc2c5b8de3f6ac07ed549e8c4245a0174b89",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\Connector\\Sabre\\SharesPlugin::getSharesFolder",
+          "rank": 6,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/dav/lib/Connector/Sabre/SharesPlugin.php",
+          "source_lines": [
+            152,
+            162
+          ],
+          "estimated_tokens": 56,
+          "content_snippet": "\t/**\n\t * @param Folder $node\n\t * @return IShare[][]\n\t */\n\tprivate function getSharesFolder(Folder $node): array {\n\t\treturn $this->shareManager->getSharesInFolder(\n\t\t\t$this->userId,\n\t\t\t$node,\n\t\t\ttrue\n\t\t);\n\t}",
+          "span_metadata": {
+            "start_line": 152,
+            "end_line": 162,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getSharesFolder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "a638308ea429e31dd447778d63dd9840b72cdd42d5f5424a4126e353466050ea",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\Files\\FileSearchBackend::getFolderForPath",
+          "rank": 7,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/dav/lib/Files/FileSearchBackend.php",
+          "source_lines": [
+            149,
+            164
+          ],
+          "estimated_tokens": 142,
+          "content_snippet": "\tprivate function getFolderForPath(?string $path = null): Folder {\n\t\tif ($path === null) {\n\t\t\tthrow new \\InvalidArgumentException('Using uri\\'s as scope is not supported, please use a path relative to the search arbiter instead');\n\t\t}\n\n\t\t$node = $this->tree->getNodeForPath($path);\n\n\t\tif (!$node instanceof Directory) {\n\t\t\tthrow new \\InvalidArgumentException('Search is only supported on directories');\n\t\t}\n\n\t\t$fileInfo = $node->getFileInfo();\n\n\t\t/** @var Folder */\n\t\treturn $this->rootFolder->get($fileInfo->getPath());\n\t}",
+          "span_metadata": {
+            "start_line": 149,
+            "end_line": 164,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getFolderForPath"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "9b5a6da89de65c2355e5f1471555b59e5c34e3d99e827b2bd5f499fc9263e7dc",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockFolder",
+          "rank": 8,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php",
+          "source_lines": [
+            375,
+            394
+          ],
+          "estimated_tokens": 174,
+          "content_snippet": "\t/**\n\t * Mocks the folder at $path, with its ancestors up to the user root as parents\n\t */\n\tprivate function mockFolder(string $path, IMountPoint $mountPoint): Folder&MockObject {\n\t\t$parent = $this->mockUserRoot();\n\t\t$currentPath = self::USER_ROOT;\n\t\tforeach (explode('/', substr($path, strlen(self::USER_ROOT) + 1)) as $name) {\n\t\t\t$currentPath .= '/' . $name;\n\t\t\t$folder = $this->createMock(Folder::class);\n\t\t\t$folder->method('getPath')\n\t\t\t\t->willReturn($currentPath);\n\t\t\t$folder->method('getParent')\n\t\t\t\t->willReturn($parent);\n\t\t\t$folder->method('getMountPoint')\n\t\t\t\t->willReturn($mountPoint);\n\t\t\t$parent = $folder;\n\t\t}\n\n\t\treturn $folder;\n\t}",
+          "span_metadata": {
+            "start_line": 375,
+            "end_line": 394,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "mockFolder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "1ba1ccd943f5d47ceaabdcd8afa5b323b61ea87fa0529f19674061b52b4ce1b3",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockSourceNode",
+          "rank": 9,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php",
+          "source_lines": [
+            323,
+            348
+          ],
+          "estimated_tokens": 188,
+          "content_snippet": "\tprivate function mockSourceNode(\n\t\tIStorage $storage,\n\t\tbool $shareable = false,\n\t\tbool $deletable = false,\n\t\tstring $internalPath = 'source.txt',\n\t\t?IMountPoint $mountPoint = null,\n\t\t?Folder $parent = null,\n\t): FileNode&MockObject {\n\t\t$node = $this->createMock(FileNode::class);\n\t\t$node->method('getStorage')\n\t\t\t->willReturn($storage);\n\t\t$node->method('isShareable')\n\t\t\t->willReturn($shareable);\n\t\t$node->method('isDeletable')\n\t\t\t->willReturn($deletable);\n\t\t$node->method('getInternalPath')\n\t\t\t->willReturn($internalPath);\n\t\t$node->method('getMountPoint')\n\t\t\t->willReturn($mountPoint);\n\t\tif ($parent !== null) {\n\t\t\t$node->method('getParent')\n\t\t\t\t->willReturn($parent);\n\t\t}\n\n\t\treturn $node;\n\t}",
+          "span_metadata": {
+            "start_line": 323,
+            "end_line": 348,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "mockSourceNode"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "78ab70a920566bf99be386d14ca6eb53e6c19df6d03b752eb7cef7dd77ae1799",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\Upload\\UploadHome::getUploadFolder",
+          "rank": 10,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/dav/lib/Upload/UploadHome.php",
+          "source_lines": [
+            105,
+            119
+          ],
+          "estimated_tokens": 123,
+          "content_snippet": "\tprivate function getUploadFolder(): Folder {\n\t\tif ($this->uploadFolder === null) {\n\t\t\t$path = '/' . $this->uid . '/uploads';\n\t\t\ttry {\n\t\t\t\t$folder = $this->rootFolder->get($path);\n\t\t\t\tif (!$folder instanceof Folder) {\n\t\t\t\t\tthrow new \\Exception('Upload folder is a file');\n\t\t\t\t}\n\t\t\t\t$this->uploadFolder = $folder;\n\t\t\t} catch (NotFoundException $e) {\n\t\t\t\t$this->uploadFolder = $this->rootFolder->newFolder($path);\n\t\t\t}\n\t\t}\n\t\treturn $this->uploadFolder;\n\t}",
+          "span_metadata": {
+            "start_line": 105,
+            "end_line": 119,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getUploadFolder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "e5723e58a21abb726f1560e21869eadd10c740aea7162d99c4fca25e22a69b9b",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Encryption\\Command\\FixKeyLocation::getAllEncryptedFiles",
+          "rank": 11,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/encryption/lib/Command/FixKeyLocation.php",
+          "source_lines": [
+            85,
+            153
+          ],
+          "estimated_tokens": 748,
+          "content_snippet": "\t\t\t$files = $this->getAllEncryptedFiles($mountRootFolder);\n\t\t\tforeach ($files as $file) {\n\t\t\t\t/** @var File $file */\n\t\t\t\t$hasSystemKey = $this->hasSystemKey($file);\n\t\t\t\t$hasUserKey = $this->hasUserKey($user, $file);\n\t\t\t\tif (!$hasSystemKey) {\n\t\t\t\t\tif ($hasUserKey) {\n\t\t\t\t\t\t// key was stored incorrectly as user key, migrate\n\n\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . '</info> needs migration');\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t$output->write('Migrating key for <info>' . $file->getPath() . '</info> ');\n\t\t\t\t\t\t\tif ($this->copyUserKeyToSystemAndValidate($user, $file)) {\n\t\t\t\t\t\t\t\t$output->writeln('<info>\u2713</info>');\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t$output->writeln('<fg=red>\u274c</>');\n\t\t\t\t\t\t\t\t$output->writeln('  Failed to validate key for <error>' . $file->getPath() . '</error>, key will not be migrated');\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t} else {\n\t\t\t\t\t\t// no matching key, probably from a broken cross-storage move\n\n\t\t\t\t\t\t$shouldBeEncrypted = $file->getStorage()->instanceOfStorage(Encryption::class);\n\t\t\t\t\t\t$isActuallyEncrypted = $this->isDataEncrypted($file);\n\t\t\t\t\t\tif ($isActuallyEncrypted) {\n\t\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t$output->write('<info>' . $file->getPath() . '</info> needs migration');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->write('<info>' . $file->getPath() . '</info> needs decryption');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t$foundKey = $this->findUserKeyForSystemFile($user, $file);\n\t\t\t\t\t\t\t\tif ($foundKey) {\n\t\t\t\t\t\t\t\t\t$output->writeln(', valid key found at <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->writeln(' <error>\u274c No key found</error>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t$output->write('<info>Migrating key for ' . $file->getPath() . '</info>');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->write('<info>Decrypting ' . $file->getPath() . '</info>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t$foundKey = $this->findUserKeyForSystemFile($user, $file);\n\t\t\t\t\t\t\t\tif ($foundKey) {\n\t\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t\t$systemKeyPath = $this->getSystemKeyPath($file);\n\t\t\t\t\t\t\t\t\t\t$this->rootView->copy($foundKey, $systemKeyPath);\n\t\t\t\t\t\t\t\t\t\t$output->writeln('  Migrated key from <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t\t$this->decryptWithSystemKey($file, $foundKey);\n\t\t\t\t\t\t\t\t\t\t$output->writeln('  Decrypted with key from <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->writeln(' <error>\u274c No key found</error>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . ' needs to be marked as not encrypted</info>');\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t$this->markAsUnEncrypted($file);\n\t\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . ' marked as not encrypted</info>');\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}",
+          "span_metadata": {
+            "start_line": 85,
+            "end_line": 153,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getAllEncryptedFiles"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "a4029fab1430aa5baeb501bfe406d112998551f8522efe1945fa8ad4945ed31b",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\FederatedFileSharing\\FederatedShareProvider::getAllSharesInFolder",
+          "rank": 12,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/federatedfilesharing/lib/FederatedShareProvider.php",
+          "source_lines": [
+            511,
+            513
+          ],
+          "estimated_tokens": 34,
+          "content_snippet": "\tpublic function getAllSharesInFolder(Folder $node): array {\n\t\treturn $this->getSharesInFolderInternal(null, $node, null);\n\t}",
+          "span_metadata": {
+            "start_line": 511,
+            "end_line": 513,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getAllSharesInFolder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "ec8fcd377e50f7a4507cdbb014654fd4963eb0db449036dc005882a9dec140e2",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_Sharing\\Tests\\SharedStorageTest::createRecursiveSourceNode",
+          "rank": 25,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/files_sharing/tests/SharedStorageTest.php",
+          "source_lines": [
+            520,
+            524
+          ],
+          "estimated_tokens": 63,
+          "content_snippet": "\tprivate function createRecursiveSourceNode(): Folder&MockObject {\n\t\t$storage = $this->createMock(Wrapper::class);\n\t\t$storage->method('isWrapperOf')->willReturn(true);\n\t\treturn $this->createSourceNode($storage, 'files/recursive');\n\t}",
+          "span_metadata": {
+            "start_line": 520,
+            "end_line": 524,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "createRecursiveSourceNode"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "4d61855d2015f342cb5293a30560ed4123b550c13c49e5a6576f457fcf6c7269",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OC\\Files\\Node\\Folder",
+          "rank": 48,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "inherits"
+          ],
+          "granularity": "summary",
+          "source_file": "lib/private/Files/Node/Folder.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 4348,
+          "content_snippet": "// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OC\\Files\\Node\\Folder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b3bd34f8c5ec9f0ba5e98661c8510cd22eef736f98174f3565b1b9fe1cbef708",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3382 / 4000 tokens | **Included Context Units:** 13 (merged 1)\n\n## [1] php://OCP\\Files\\Folder::get (full_implementation)\n- **File:** `lib/public/Files/Folder.php` (lines 59-112)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\Files\\Folder\n```\n* Get the node at $path\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @return \\OCP\\Files\\Node\n\t * @throws \\OCP\\Files\\NotFoundException\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function get($path);\n\n\t/**\n\t * Get or create new folder if the folder does not already exist.\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @throw \\OCP\\Files\\NotPermittedException\n\t * @since 33.0.0\n\t */\n\tpublic function getOrCreateFolder(string $path, int $maxRetries = 5): Folder;\n\n\t/**\n\t * Check if a file or folder exists in the folder\n\t *\n\t * @param string $path relative path of the file or folder\n\t * @return bool\n\t * @since 6.0.0\n\t */\n\tpublic function nodeExists($path);\n\n\t/**\n\t * Create a new folder\n\t *\n\t * @param string $path relative path of the new folder\n\t * @return \\OCP\\Files\\Folder\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function newFolder($path);\n\n\t/**\n\t * Create a new file\n\t *\n\t * @param string $path relative path of the new file\n\t * @param string|resource|null $content content for the new file, since 19.0.0\n\t * @return \\OCP\\Files\\File\n\t * @throws \\OCP\\Files\\NotPermittedException\n\t * @since 6.0.0\n\t */\n\tpublic function newFile($path, $content = null);\n\n\t/**\n\t * search for files with the name matching $query\n\t *\n\t * @param string|ISearchQuery $query\n\t * @return \\OCP\\Files\\Node[]\n```\n\n## [2] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [4] php://p (signature)\n- **File:** `lib/private/Template/functions.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nuse OC\\Security\\CSP\\ContentSecurityPolicyNonceManager;\nuse OCP\\Files\\IMimeTypeDetector;\nuse OCP\\IDateTimeFormatter;\nuse OCP\\IURLGenerator;\nuse OCP\\Server;\nuse OCP\\Util;\n\n/**\n * @param string $string\n */\nfunction p($string): void {\n\tprint(Util::sanitizeHTML($string));\n}\n\n/**\n * Prints a <link> tag for loading css\n * @param string $href the source URL, ignored when empty\n```\n\n## [5] php://OCA\\Comments\\Search\\CommentsSearchProvider::getFileForComment (signature)\n- **File:** `apps/comments/lib/Search/CommentsSearchProvider.php` (lines 76-95)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n$file = $this->getFileForComment($userFolder, $comment);\n\n\t\t\t\t\t$isUser = $this->userManager->userExists($comment->getActorId());\n\t\t\t\t\t$avatarUrl = $isUser\n\t\t\t\t\t\t? $this->urlGenerator->linkToRouteAbsolute('core.avatar.getAvatar', ['userId' => $comment->getActorId(), 'size' => 42])\n\t\t\t\t\t\t: $this->urlGenerator->linkToRouteAbsolute('core.GuestAvatar.getAvatar', ['guestName' => $comment->getActorId(), 'size' => 42]);\n\t\t\t\t\t$link = $this->urlGenerator->linkToRoute(\n\t\t\t\t\t\t'files.View.showFile',\n\t\t\t\t\t\t['fileid' => $file->getId()]\n\t\t\t\t\t);\n\n\t\t\t\t\t$result[] = new SearchResultEntry(\n\t\t\t\t\t\t$avatarUrl,\n\t\t\t\t\t\t$displayName,\n\t\t\t\t\t\t$file->getPath(),\n\t\t\t\t\t\t$link,\n\t\t\t\t\t\t'',\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\t\t\t\t} catch (NotFoundException|InvalidPathException $e) {\n```\n\n## [6] php://OCA\\DAV\\Connector\\Sabre\\SharesPlugin::getSharesFolder (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/SharesPlugin.php` (lines 152-162)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n/**\n\t * @param Folder $node\n\t * @return IShare[][]\n\t */\n\tprivate function getSharesFolder(Folder $node): array {\n\t\treturn $this->shareManager->getSharesInFolder(\n\t\t\t$this->userId,\n\t\t\t$node,\n\t\t\ttrue\n\t\t);\n\t}\n```\n\n## [7] php://OCA\\DAV\\Files\\FileSearchBackend::getFolderForPath (signature)\n- **File:** `apps/dav/lib/Files/FileSearchBackend.php` (lines 149-164)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nprivate function getFolderForPath(?string $path = null): Folder {\n\t\tif ($path === null) {\n\t\t\tthrow new \\InvalidArgumentException('Using uri\\'s as scope is not supported, please use a path relative to the search arbiter instead');\n\t\t}\n\n\t\t$node = $this->tree->getNodeForPath($path);\n\n\t\tif (!$node instanceof Directory) {\n\t\t\tthrow new \\InvalidArgumentException('Search is only supported on directories');\n\t\t}\n\n\t\t$fileInfo = $node->getFileInfo();\n\n\t\t/** @var Folder */\n\t\treturn $this->rootFolder->get($fileInfo->getPath());\n\t}\n```\n\n## [8] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockFolder (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php` (lines 375-394)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n/**\n\t * Mocks the folder at $path, with its ancestors up to the user root as parents\n\t */\n\tprivate function mockFolder(string $path, IMountPoint $mountPoint): Folder&MockObject {\n\t\t$parent = $this->mockUserRoot();\n\t\t$currentPath = self::USER_ROOT;\n\t\tforeach (explode('/', substr($path, strlen(self::USER_ROOT) + 1)) as $name) {\n\t\t\t$currentPath .= '/' . $name;\n\t\t\t$folder = $this->createMock(Folder::class);\n\t\t\t$folder->method('getPath')\n\t\t\t\t->willReturn($currentPath);\n\t\t\t$folder->method('getParent')\n\t\t\t\t->willReturn($parent);\n\t\t\t$folder->method('getMountPoint')\n\t\t\t\t->willReturn($mountPoint);\n\t\t\t$parent = $folder;\n\t\t}\n\n\t\treturn $folder;\n\t}\n```\n\n## [9] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockSourceNode (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php` (lines 323-348)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\nprivate function mockSourceNode(\n\t\tIStorage $storage,\n\t\tbool $shareable = false,\n\t\tbool $deletable = false,\n\t\tstring $internalPath = 'source.txt',\n\t\t?IMountPoint $mountPoint = null,\n\t\t?Folder $parent = null,\n\t): FileNode&MockObject {\n\t\t$node = $this->createMock(FileNode::class);\n\t\t$node->method('getStorage')\n\t\t\t->willReturn($storage);\n\t\t$node->method('isShareable')\n\t\t\t->willReturn($shareable);\n\t\t$node->method('isDeletable')\n\t\t\t->willReturn($deletable);\n\t\t$node->method('getInternalPath')\n\t\t\t->willReturn($internalPath);\n\t\t$node->method('getMountPoint')\n\t\t\t->willReturn($mountPoint);\n\t\tif ($parent !== null) {\n\t\t\t$node->method('getParent')\n\t\t\t\t->willReturn($parent);\n\t\t}\n\n\t\treturn $node;\n\t}\n```\n\n## [10] php://OCA\\DAV\\Upload\\UploadHome::getUploadFolder (signature)\n- **File:** `apps/dav/lib/Upload/UploadHome.php` (lines 105-119)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nprivate function getUploadFolder(): Folder {\n\t\tif ($this->uploadFolder === null) {\n\t\t\t$path = '/' . $this->uid . '/uploads';\n\t\t\ttry {\n\t\t\t\t$folder = $this->rootFolder->get($path);\n\t\t\t\tif (!$folder instanceof Folder) {\n\t\t\t\t\tthrow new \\Exception('Upload folder is a file');\n\t\t\t\t}\n\t\t\t\t$this->uploadFolder = $folder;\n\t\t\t} catch (NotFoundException $e) {\n\t\t\t\t$this->uploadFolder = $this->rootFolder->newFolder($path);\n\t\t\t}\n\t\t}\n\t\treturn $this->uploadFolder;\n\t}\n```\n\n## [11] php://OCA\\Encryption\\Command\\FixKeyLocation::getAllEncryptedFiles (signature)\n- **File:** `apps/encryption/lib/Command/FixKeyLocation.php` (lines 85-153)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n$files = $this->getAllEncryptedFiles($mountRootFolder);\n\t\t\tforeach ($files as $file) {\n\t\t\t\t/** @var File $file */\n\t\t\t\t$hasSystemKey = $this->hasSystemKey($file);\n\t\t\t\t$hasUserKey = $this->hasUserKey($user, $file);\n\t\t\t\tif (!$hasSystemKey) {\n\t\t\t\t\tif ($hasUserKey) {\n\t\t\t\t\t\t// key was stored incorrectly as user key, migrate\n\n\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . '</info> needs migration');\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t$output->write('Migrating key for <info>' . $file->getPath() . '</info> ');\n\t\t\t\t\t\t\tif ($this->copyUserKeyToSystemAndValidate($user, $file)) {\n\t\t\t\t\t\t\t\t$output->writeln('<info>\u2713</info>');\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t$output->writeln('<fg=red>\u274c</>');\n\t\t\t\t\t\t\t\t$output->writeln('  Failed to validate key for <error>' . $file->getPath() . '</error>, key will not be migrated');\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t} else {\n\t\t\t\t\t\t// no matching key, probably from a broken cross-storage move\n\n\t\t\t\t\t\t$shouldBeEncrypted = $file->getStorage()->instanceOfStorage(Encryption::class);\n\t\t\t\t\t\t$isActuallyEncrypted = $this->isDataEncrypted($file);\n\t\t\t\t\t\tif ($isActuallyEncrypted) {\n\t\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t$output->write('<info>' . $file->getPath() . '</info> needs migration');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->write('<info>' . $file->getPath() . '</info> needs decryption');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t$foundKey = $this->findUserKeyForSystemFile($user, $file);\n\t\t\t\t\t\t\t\tif ($foundKey) {\n\t\t\t\t\t\t\t\t\t$output->writeln(', valid key found at <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->writeln(' <error>\u274c No key found</error>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t$output->write('<info>Migrating key for ' . $file->getPath() . '</info>');\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->write('<info>Decrypting ' . $file->getPath() . '</info>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t$foundKey = $this->findUserKeyForSystemFile($user, $file);\n\t\t\t\t\t\t\t\tif ($foundKey) {\n\t\t\t\t\t\t\t\t\tif ($shouldBeEncrypted) {\n\t\t\t\t\t\t\t\t\t\t$systemKeyPath = $this->getSystemKeyPath($file);\n\t\t\t\t\t\t\t\t\t\t$this->rootView->copy($foundKey, $systemKeyPath);\n\t\t\t\t\t\t\t\t\t\t$output->writeln('  Migrated key from <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t\t$this->decryptWithSystemKey($file, $foundKey);\n\t\t\t\t\t\t\t\t\t\t$output->writeln('  Decrypted with key from <info>' . $foundKey . '</info>');\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t$output->writeln(' <error>\u274c No key found</error>');\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tif ($dryRun) {\n\t\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . ' needs to be marked as not encrypted</info>');\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t$this->markAsUnEncrypted($file);\n\t\t\t\t\t\t\t\t$output->writeln('<info>' . $file->getPath() . ' marked as not encrypted</info>');\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n```\n\n## [12] php://OCA\\FederatedFileSharing\\FederatedShareProvider::getAllSharesInFolder (signature)\n- **File:** `apps/federatedfilesharing/lib/FederatedShareProvider.php` (lines 511-513)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getAllSharesInFolder(Folder $node): array {\n\t\treturn $this->getSharesInFolderInternal(null, $node, null);\n\t}\n```\n\n## [25] php://OCA\\Files_Sharing\\Tests\\SharedStorageTest::createRecursiveSourceNode (test_fragment)\n- **File:** `apps/files_sharing/tests/SharedStorageTest.php` (lines 520-524)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\nprivate function createRecursiveSourceNode(): Folder&MockObject {\n\t\t$storage = $this->createMock(Wrapper::class);\n\t\t$storage->method('isWrapperOf')->willReturn(true);\n\t\treturn $this->createSourceNode($storage, 'files/recursive');\n\t}\n```\n\n## [48] php://OC\\Files\\Node\\Folder (summary)\n- **File:** `lib/private/Files/Node/Folder.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-VAL-02": {
+      "task_id": "TASK-VAL-02",
+      "total_tokens": 1193,
+      "token_budget": 4000,
+      "entries_count": 5,
+      "critical_file_recall": 0.3333,
+      "critical_source_recall": 0.3333,
+      "entries": [
+        {
+          "entity_id": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "apps/files/lib/Controller/ApiController.php",
+          "source_lines": [
+            144,
+            166
+          ],
+          "estimated_tokens": 189,
+          "content_snippet": "\tpublic function updateFileTags($path, $tags = null) {\n\t\t$result = [];\n\t\t// if tags specified or empty array, update tags\n\t\tif (!is_null($tags)) {\n\t\t\ttry {\n\t\t\t\t$this->tagService->updateFileTags($path, $tags);\n\t\t\t} catch (NotFoundException $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_NOT_FOUND);\n\t\t\t} catch (StorageNotAvailableException $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_SERVICE_UNAVAILABLE);\n\t\t\t} catch (\\Exception $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_NOT_FOUND);\n\t\t\t}\n\t\t\t$result['tags'] = $tags;\n\t\t}\n\t\treturn new DataResponse($result);\n\t}",
+          "span_metadata": {
+            "start_line": 144,
+            "end_line": 166,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "updateFileTags"
+          },
+          "merged_entity_ids": [
+            "php://OCA\\Files\\Controller\\ApiController"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "c7eb90b16f6ce3f9af8cfc1411f5f9a2acefec09fc6fa33629bbc422c403840d",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files/tests/Controller/ApiControllerTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/files/tests/Controller/ApiControllerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 191,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files/tests/Controller/ApiControllerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "34c3be2513c6f70f1ee66fe08ab0846b0401f9f77c9d118947e8c871f06888d2",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/Share20/ManagerTest.php",
+          "rank": 3,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Share20/ManagerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 192,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/Share20/ManagerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6514ed37ec1e2218bb69ccb600f57c4aac6369dceab4f4ef25e8254674c73441",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 4,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Appstore\\Controller\\ApiController",
+          "rank": 5,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "apps/appstore/lib/Controller/ApiController.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 4837,
+          "content_snippet": "// [SUMMARY] apps/appstore/lib/Controller/ApiController.php :: php://OCA\\Appstore\\Controller\\ApiController | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCA\\Appstore\\Controller\\ApiController"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "c8bd68cc5959d5757a41d6f52eb9cc5545123ed2bf94b95e9e50228a0cdfb51a",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 1193 / 4000 tokens | **Included Context Units:** 5 (merged 9)\n\n## [1] php://OCA\\Files\\Controller\\ApiController::updateFileTags (full_implementation)\n- **File:** `apps/files/lib/Controller/ApiController.php` (lines 144-166)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCA\\Files\\Controller\\ApiController\n```\npublic function updateFileTags($path, $tags = null) {\n\t\t$result = [];\n\t\t// if tags specified or empty array, update tags\n\t\tif (!is_null($tags)) {\n\t\t\ttry {\n\t\t\t\t$this->tagService->updateFileTags($path, $tags);\n\t\t\t} catch (NotFoundException $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_NOT_FOUND);\n\t\t\t} catch (StorageNotAvailableException $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_SERVICE_UNAVAILABLE);\n\t\t\t} catch (\\Exception $e) {\n\t\t\t\treturn new DataResponse([\n\t\t\t\t\t'message' => $e->getMessage()\n\t\t\t\t], Http::STATUS_NOT_FOUND);\n\t\t\t}\n\t\t\t$result['tags'] = $tags;\n\t\t}\n\t\treturn new DataResponse($result);\n\t}\n```\n\n## [2] php://apps/files/tests/Controller/ApiControllerTest.php (test_fragment)\n- **File:** `apps/files/tests/Controller/ApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;\n```\n\n## [3] php://tests/lib/Share20/ManagerTest.php (test_fragment)\n- **File:** `tests/lib/Share20/ManagerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;\n```\n\n## [4] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [5] php://OCA\\Appstore\\Controller\\ApiController (summary)\n- **File:** `apps/appstore/lib/Controller/ApiController.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] apps/appstore/lib/Controller/ApiController.php :: php://OCA\\Appstore\\Controller\\ApiController | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-VAL-03": {
+      "task_id": "TASK-VAL-03",
+      "total_tokens": 1905,
+      "token_budget": 4000,
+      "entries_count": 9,
+      "critical_file_recall": 0.5,
+      "critical_source_recall": 0.5,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\IGroup::getGID",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/IGroup.php",
+          "source_lines": [
+            18,
+            67
+          ],
+          "estimated_tokens": 223,
+          "content_snippet": "\t/**\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getGID(): string;\n\n\t/**\n\t * Returns the group display name\n\t *\n\t * @return non-empty-string\n\t * @since 12.0.0\n\t */\n\tpublic function getDisplayName(): string;\n\n\t/**\n\t * Set the group display name\n\t *\n\t * @param string $displayName\n\t * @return bool\n\t * @since 18.0.0\n\t */\n\tpublic function setDisplayName(string $displayName): bool;\n\n\t/**\n\t * get all users in the group\n\t *\n\t * @return array<string, IUser>\n\t * @since 8.0.0\n\t */\n\tpublic function getUsers(): array;\n\n\t/**\n\t * check if a user is in the group\n\t *\n\t * @param IUser $user\n\t *\n\t * @return bool\n\t * @since 8.0.0\n\t */\n\tpublic function inGroup(IUser $user): bool;\n\n\t/**\n\t * add a user to the group\n\t *\n\t * @param IUser $user\n\t *\n\t * @since 8.0.0\n\t */\n\tpublic function addUser(IUser $user): void;\n",
+          "span_metadata": {
+            "start_line": 18,
+            "end_line": 67,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getGID"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\IGroup"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "fd93efaa9c3a1f545f00978c2b5b85b766d64b0bfad100b52b04f4669b21e5e9",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://p",
+          "rank": 4,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/private/Template/functions.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 150,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nuse OC\\Security\\CSP\\ContentSecurityPolicyNonceManager;\nuse OCP\\Files\\IMimeTypeDetector;\nuse OCP\\IDateTimeFormatter;\nuse OCP\\IURLGenerator;\nuse OCP\\Server;\nuse OCP\\Util;\n\n/**\n * @param string $string\n */\nfunction p($string): void {\n\tprint(Util::sanitizeHTML($string));\n}\n\n/**\n * Prints a <link> tag for loading css\n * @param string $href the source URL, ignored when empty",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://p"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b7d53d6a780a7dc49537bb859474a65462b5be4d1ef5f1daa1f1ca2473d10587",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_External\\Service\\GlobalStoragesService::getAllStoragesForGroup",
+          "rank": 5,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_external/lib/Service/GlobalStoragesService.php",
+          "source_lines": [
+            158,
+            170
+          ],
+          "estimated_tokens": 170,
+          "content_snippet": "\t/**\n\t * Gets all storages for the group, not including any global storages\n\t * @return StorageConfig[]\n\t */\n\tpublic function getAllStoragesForGroup(IGroup $group): array {\n\t\t$mounts = $this->dbConfig->getMountsForGroups([$group->getGID()]);\n\t\t$configs = array_map($this->getStorageConfigFromDBMount(...), $mounts);\n\t\t$configs = array_filter($configs, static fn (?StorageConfig $config): bool => $config instanceof StorageConfig);\n\t\t$keys = array_map(static fn (StorageConfig $config) => $config->getId(), $configs);\n\n\t\t$storages = array_combine($keys, $configs);\n\t\treturn array_filter($storages, $this->validateStorage(...));\n\t}",
+          "span_metadata": {
+            "start_line": 158,
+            "end_line": 170,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getAllStoragesForGroup"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "04fa93634cc89dd9a8917c6666a05dd9ca7c29a7e9654606d36f6fd1bc934f86",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_External\\Service\\MountCacheService::handleGroupDeleted",
+          "rank": 6,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_external/lib/Service/MountCacheService.php",
+          "source_lines": [
+            67,
+            69
+          ],
+          "estimated_tokens": 27,
+          "content_snippet": "\t\t\t$this->handleGroupDeleted($event->getGroup());\n\t\t}\n\t\tif ($event instanceof UserCreatedEvent) {",
+          "span_metadata": {
+            "start_line": 67,
+            "end_line": 69,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "handleGroupDeleted"
+          },
+          "merged_entity_ids": [
+            "php://OCA\\Files_External\\Service\\MountCacheService::handleUserAdded",
+            "php://OCA\\Files_External\\Service\\MountCacheService::handleUserRemoved"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "2ed22e891e72370461d181e58723d3b92e877889a6533028fb65a288ce4f78ea",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_External\\Service\\MountCacheService::removeGroupFromStorage",
+          "rank": 9,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_external/lib/Service/MountCacheService.php",
+          "source_lines": [
+            175,
+            182
+          ],
+          "estimated_tokens": 70,
+          "content_snippet": "\t\t\t$this->removeGroupFromStorage($storage, $group);\n\t\t}\n\t}\n\n\t/**\n\t * Remove mounts from users in a group, if they don't have access to the storage trough other means\n\t */\n\tprivate function removeGroupFromStorage(StorageConfig $storage, IGroup $group): void {",
+          "span_metadata": {
+            "start_line": 175,
+            "end_line": 182,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "removeGroupFromStorage"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b8d4da7efcecac151a874b06939fcd78679cfcba567225fa2bef017625c7bbf8",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_Sharing\\External\\ExternalShareMapper::deleteGroupShares",
+          "rank": 10,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_sharing/lib/External/ExternalShareMapper.php",
+          "source_lines": [
+            123,
+            149
+          ],
+          "estimated_tokens": 229,
+          "content_snippet": "\t/**\n\t * @throws Exception\n\t */\n\tpublic function deleteGroupShares(IGroup $group): void {\n\t\t$qb = $this->db->getQueryBuilder();\n\t\t$qb->select('*')\n\t\t\t->from(self::TABLE_NAME)\n\t\t\t->where($qb->expr()->eq('user', $qb->createNamedParameter($group->getGID())))\n\t\t\t->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_GROUP)));\n\n\t\t$this->yieldEntities($qb);\n\n\t\t$delete = $this->db->getQueryBuilder();\n\t\t$delete->delete(self::TABLE_NAME)\n\t\t\t->where(\n\t\t\t\t$qb->expr()->orX(\n\t\t\t\t\t$qb->expr()->eq('id', $qb->createParameter('share_id')),\n\t\t\t\t\t$qb->expr()->eq('parent', $qb->createParameter('share_parent_id'))\n\t\t\t\t)\n\t\t\t);\n\n\t\tforeach ($this->yieldEntities($qb) as $share) {\n\t\t\t$delete->setParameter('share_id', $share->getId());\n\t\t\t$delete->setParameter('share_parent_id', $share->getId());\n\t\t\t$delete->executeStatement();\n\t\t}\n\t}",
+          "span_metadata": {
+            "start_line": 123,
+            "end_line": 149,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "deleteGroupShares"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "69c85b31605b70f0a5ecd8d471151ac40149a6481e66e272557e1aac86a43db4",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Provisioning_API\\Tests\\Controller\\GroupsControllerTest::createGroup",
+          "rank": 12,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/provisioning_api/tests/Controller/GroupsControllerTest.php",
+          "source_lines": [
+            87,
+            109
+          ],
+          "estimated_tokens": 132,
+          "content_snippet": "\tprivate function createGroup(string $gid): IGroup&MockObject {\n\t\t$group = $this->createMock(IGroup::class);\n\t\t$group\n\t\t\t->method('getGID')\n\t\t\t->willReturn($gid);\n\t\t$group\n\t\t\t->method('getDisplayName')\n\t\t\t->willReturn($gid . '-name');\n\t\t$group\n\t\t\t->method('count')\n\t\t\t->willReturn(123);\n\t\t$group\n\t\t\t->method('countDisabled')\n\t\t\t->willReturn(11);\n\t\t$group\n\t\t\t->method('canAddUser')\n\t\t\t->willReturn(true);\n\t\t$group\n\t\t\t->method('canRemoveUser')\n\t\t\t->willReturn(true);\n\n\t\treturn $group;\n\t}",
+          "span_metadata": {
+            "start_line": 87,
+            "end_line": 109,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "createGroup"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "d04ae799f8da970510592303e7a827e19ccf5fc7684980b2463dc07d4df00cd0",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OC\\Group\\Group",
+          "rank": 47,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "inherits"
+          ],
+          "granularity": "summary",
+          "source_file": "lib/private/Group/Group.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 2458,
+          "content_snippet": "// [SUMMARY] lib/private/Group/Group.php :: php://OC\\Group\\Group | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OC\\Group\\Group"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "091356e4ae9a348ae6b6f3ccbf27f6bc84f1ffa7d4b2e180760190218dcbcdb9",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 1905 / 4000 tokens | **Included Context Units:** 9 (merged 3)\n\n## [1] php://OCP\\IGroup::getGID (full_implementation)\n- **File:** `lib/public/IGroup.php` (lines 18-67)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\IGroup\n```\n/**\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getGID(): string;\n\n\t/**\n\t * Returns the group display name\n\t *\n\t * @return non-empty-string\n\t * @since 12.0.0\n\t */\n\tpublic function getDisplayName(): string;\n\n\t/**\n\t * Set the group display name\n\t *\n\t * @param string $displayName\n\t * @return bool\n\t * @since 18.0.0\n\t */\n\tpublic function setDisplayName(string $displayName): bool;\n\n\t/**\n\t * get all users in the group\n\t *\n\t * @return array<string, IUser>\n\t * @since 8.0.0\n\t */\n\tpublic function getUsers(): array;\n\n\t/**\n\t * check if a user is in the group\n\t *\n\t * @param IUser $user\n\t *\n\t * @return bool\n\t * @since 8.0.0\n\t */\n\tpublic function inGroup(IUser $user): bool;\n\n\t/**\n\t * add a user to the group\n\t *\n\t * @param IUser $user\n\t *\n\t * @since 8.0.0\n\t */\n\tpublic function addUser(IUser $user): void;\n```\n\n## [2] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [4] php://p (signature)\n- **File:** `lib/private/Template/functions.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nuse OC\\Security\\CSP\\ContentSecurityPolicyNonceManager;\nuse OCP\\Files\\IMimeTypeDetector;\nuse OCP\\IDateTimeFormatter;\nuse OCP\\IURLGenerator;\nuse OCP\\Server;\nuse OCP\\Util;\n\n/**\n * @param string $string\n */\nfunction p($string): void {\n\tprint(Util::sanitizeHTML($string));\n}\n\n/**\n * Prints a <link> tag for loading css\n * @param string $href the source URL, ignored when empty\n```\n\n## [5] php://OCA\\Files_External\\Service\\GlobalStoragesService::getAllStoragesForGroup (signature)\n- **File:** `apps/files_external/lib/Service/GlobalStoragesService.php` (lines 158-170)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n/**\n\t * Gets all storages for the group, not including any global storages\n\t * @return StorageConfig[]\n\t */\n\tpublic function getAllStoragesForGroup(IGroup $group): array {\n\t\t$mounts = $this->dbConfig->getMountsForGroups([$group->getGID()]);\n\t\t$configs = array_map($this->getStorageConfigFromDBMount(...), $mounts);\n\t\t$configs = array_filter($configs, static fn (?StorageConfig $config): bool => $config instanceof StorageConfig);\n\t\t$keys = array_map(static fn (StorageConfig $config) => $config->getId(), $configs);\n\n\t\t$storages = array_combine($keys, $configs);\n\t\treturn array_filter($storages, $this->validateStorage(...));\n\t}\n```\n\n## [6] php://OCA\\Files_External\\Service\\MountCacheService::handleGroupDeleted (signature)\n- **File:** `apps/files_external/lib/Service/MountCacheService.php` (lines 67-69)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Merged Related Entities:** php://OCA\\Files_External\\Service\\MountCacheService::handleUserAdded, php://OCA\\Files_External\\Service\\MountCacheService::handleUserRemoved\n- **Evidence:** imports\n```\n$this->handleGroupDeleted($event->getGroup());\n\t\t}\n\t\tif ($event instanceof UserCreatedEvent) {\n```\n\n## [9] php://OCA\\Files_External\\Service\\MountCacheService::removeGroupFromStorage (signature)\n- **File:** `apps/files_external/lib/Service/MountCacheService.php` (lines 175-182)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n$this->removeGroupFromStorage($storage, $group);\n\t\t}\n\t}\n\n\t/**\n\t * Remove mounts from users in a group, if they don't have access to the storage trough other means\n\t */\n\tprivate function removeGroupFromStorage(StorageConfig $storage, IGroup $group): void {\n```\n\n## [10] php://OCA\\Files_Sharing\\External\\ExternalShareMapper::deleteGroupShares (signature)\n- **File:** `apps/files_sharing/lib/External/ExternalShareMapper.php` (lines 123-149)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n/**\n\t * @throws Exception\n\t */\n\tpublic function deleteGroupShares(IGroup $group): void {\n\t\t$qb = $this->db->getQueryBuilder();\n\t\t$qb->select('*')\n\t\t\t->from(self::TABLE_NAME)\n\t\t\t->where($qb->expr()->eq('user', $qb->createNamedParameter($group->getGID())))\n\t\t\t->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(IShare::TYPE_GROUP)));\n\n\t\t$this->yieldEntities($qb);\n\n\t\t$delete = $this->db->getQueryBuilder();\n\t\t$delete->delete(self::TABLE_NAME)\n\t\t\t->where(\n\t\t\t\t$qb->expr()->orX(\n\t\t\t\t\t$qb->expr()->eq('id', $qb->createParameter('share_id')),\n\t\t\t\t\t$qb->expr()->eq('parent', $qb->createParameter('share_parent_id'))\n\t\t\t\t)\n\t\t\t);\n\n\t\tforeach ($this->yieldEntities($qb) as $share) {\n\t\t\t$delete->setParameter('share_id', $share->getId());\n\t\t\t$delete->setParameter('share_parent_id', $share->getId());\n\t\t\t$delete->executeStatement();\n\t\t}\n\t}\n```\n\n## [12] php://OCA\\Provisioning_API\\Tests\\Controller\\GroupsControllerTest::createGroup (test_fragment)\n- **File:** `apps/provisioning_api/tests/Controller/GroupsControllerTest.php` (lines 87-109)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\nprivate function createGroup(string $gid): IGroup&MockObject {\n\t\t$group = $this->createMock(IGroup::class);\n\t\t$group\n\t\t\t->method('getGID')\n\t\t\t->willReturn($gid);\n\t\t$group\n\t\t\t->method('getDisplayName')\n\t\t\t->willReturn($gid . '-name');\n\t\t$group\n\t\t\t->method('count')\n\t\t\t->willReturn(123);\n\t\t$group\n\t\t\t->method('countDisabled')\n\t\t\t->willReturn(11);\n\t\t$group\n\t\t\t->method('canAddUser')\n\t\t\t->willReturn(true);\n\t\t$group\n\t\t\t->method('canRemoveUser')\n\t\t\t->willReturn(true);\n\n\t\treturn $group;\n\t}\n```\n\n## [47] php://OC\\Group\\Group (summary)\n- **File:** `lib/private/Group/Group.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/Group/Group.php :: php://OC\\Group\\Group | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-VAL-04": {
+      "task_id": "TASK-VAL-04",
+      "total_tokens": 2880,
+      "token_budget": 4000,
+      "entries_count": 1,
+      "critical_file_recall": 0.5,
+      "critical_source_recall": 0.5,
+      "entries": [
+        {
+          "entity_id": "php://OCA\\Files\\Service\\OwnershipTransferService",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "signature",
+          "source_file": "apps/files/lib/Service/OwnershipTransferService.php",
+          "source_lines": [
+            49,
+            698
+          ],
+          "estimated_tokens": 6135,
+          "content_snippet": "class OwnershipTransferService {\n\n\tpublic function __construct(\n\t\tprivate IEncryptionManager $encryptionManager,\n\t\tprivate IShareManager $shareManager,\n\t\tprivate IMountManager $mountManager,\n\t\tprivate IUserMountCache $userMountCache,\n\t\tprivate IUserManager $userManager,\n\t\tprivate IFactory $l10nFactory,\n\t\tprivate IRootFolder $rootFolder,\n\t\tprivate IEventDispatcher $eventDispatcher,\n\t\tprivate IDBConnection $connection,\n\t) {\n\t}\n\n\t/**\n\t * @param IUser $sourceUser\n\t * @param IUser $destinationUser\n\t * @param string $path\n\t *\n\t * @param IOutput|null $output\n\t * @param bool $move\n\t * @throws TransferOwnershipException\n\t * @throws UserNotFoundException\n\t */\n\tpublic function transfer(\n\t\tIUser $sourceUser,\n\t\tIUser $destinationUser,\n\t\tstring $path,\n\t\t?IOutput $output = null,\n\t\tbool $move = false,\n\t\tbool $firstLogin = false,\n\t\tbool $includeExternalStorage = false,\n\t\tbool $useUserId = false,\n\t): void {\n\t\t$output = $output ?? new NullOutput();\n\t\t$sourceUid = $sourceUser->getUID();\n\t\t$destinationUid = $destinationUser->getUID();\n\t\t$sourcePath = rtrim($sourceUid . '/files/' . $path, '/');\n\n\t\t// If encryption is on we have to ensure the user has logged in before and that all encryption modules are ready\n\t\tif (($this->encryptionManager->isEnabled() && $destinationUser->getLastLogin() === 0)\n\t\t\t|| !$this->encryptionManager->isReadyForUser($destinationUid)) {\n\t\t\tthrow new TransferOwnershipException('The target user is not ready to accept files. The user has at least to have logged in once.', 2);\n\t\t}\n\n\t\t// setup filesystem\n\t\t// Requesting the user folder will set it up if the user hasn't logged in before\n\t\t// We need a setupFS for the full filesystem setup before as otherwise we will just return\n\t\t// a lazy root folder which does not create the destination users folder\n\t\t\\OC_Util::setupFS($sourceUser->getUID());\n\t\t\\OC_Util::setupFS($destinationUser->getUID());\n\t\t$this->rootFolder->getUserFolder($sourceUser->getUID());\n\t\t$this->rootFolder->getUserFolder($destinationUser->getUID());\n\t\tFilesystem::initMountPoints($sourceUid);\n\t\tFilesystem::initMountPoints($destinationUid);\n\n\t\t$view = new View();\n\n\t\tif ($move) {\n\t\t\t$finalTarget = \"$destinationUid/files/\";\n\t\t} else {\n\t\t\t$l = $this->l10nFactory->get('files', $this->l10nFactory->getUserLanguage($destinationUser));\n\t\t\t$date = date('Y-m-d H-i-s');\n\n\t\t\tif ($useUserId) {\n\t\t\t\t$cleanUserName = $sourceUid;\n\t\t\t} else {\n\t\t\t\t$cleanUserName = $this->sanitizeFolderName($sourceUser->getDisplayName());\n\t\t\t\tif ($cleanUserName === '') {\n\t\t\t\t\t$cleanUserName = $sourceUid;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$finalTarget = \"$destinationUid/files/\" . $this->sanitizeFolderName($l->t('Transferred from %1$s on %2$s', [$cleanUserName, $date]));\n\t\t\ttry {\n\t\t\t\t$view->verifyPath(dirname($finalTarget), basename($finalTarget));\n\t\t\t} catch (InvalidPathException $e) {\n\t\t\t\t$finalTarget = \"$destinationUid/files/\" . $this->sanitizeFolderName($l->t('Transferred from %1$s on %2$s', [$sourceUid, $date]));\n\t\t\t}\n\t\t}\n\n\t\tif (!($view->is_dir($sourcePath) || $view->is_file($sourcePath))) {\n\t\t\tthrow new TransferOwnershipException(\"Unknown path provided: $path\", 1);\n\t\t}\n\n\t\tif ($move && !$view->is_dir($finalTarget)) {\n\t\t\t// Initialize storage\n\t\t\t\\OC_Util::setupFS($destinationUser->getUID());\n\t\t}\n\n\t\tif ($move && !$firstLogin && count($view->getDirectoryContent($finalTarget)) > 0) {\n\t\t\tthrow new TransferOwnershipException('Destination path does not exists or is not empty', 1);\n\t\t}\n\n\t\t// analyse source folder\n\t\t$this->analyse(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$sourcePath,\n\t\t\t$view,\n\t\t\t$output\n\t\t);\n\n\t\t// collect all the shares\n\t\t$shares = $this->collectUsersShares(\n\t\t\t$sourceUid,\n\t\t\t$output,\n\t\t\t$view,\n\t\t\t$sourcePath\n\t\t);\n\n\t\t$sourceSize = $view->getFileInfo($sourcePath)->getSize();\n\n\t\t// transfer the files\n\t\t$this->transferFiles(\n\t\t\t$sourceUid,\n\t\t\t$sourcePath,\n\t\t\t$finalTarget,\n\t\t\t$view,\n\t\t\t$output,\n\t\t\t$includeExternalStorage,\n\t\t);\n\t\t$sizeDifference = $sourceSize - $view->getFileInfo($finalTarget)->getSize();\n\n\t\t// Files in Team folders are not transferred, so their size needs to be subtracted to avoid warnings about size differences\n\t\t$mounts = Server::get(IMountManager::class)->getAll();\n\t\tforeach ($mounts as $mount) {\n\t\t\tif (!$mount instanceof GroupMountPoint || !str_starts_with($mount->getMountPoint(), '/' . $sourcePath . '/')) {\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$storage = $mount->getStorage();\n\t\t\tif ($storage === null) {\n\t\t\t\t$output->writeln('Failed to get storage for mount: ' . $mount->getMountPoint());\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$rootCacheEntry = $storage->getCache()->get('');\n\t\t\tif ($rootCacheEntry === false) {\n\t\t\t\t$output->writeln('Failed to get root cache entry for storage: ' . $mount->getMountPoint());\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$sizeDifference -= $rootCacheEntry->getSize();\n\t\t}\n\n\t\t// transfer the incoming shares\n\t\t$sourceShares = $this->collectIncomingShares(\n\t\t\t$sourceUid,\n\t\t\t$output,\n\t\t\t$sourcePath,\n\t\t);\n\t\t$destinationShares = $this->collectIncomingShares(\n\t\t\t$destinationUid,\n\t\t\t$output,\n\t\t\tnull,\n\t\t);\n\t\t$this->transferIncomingShares(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$sourceShares,\n\t\t\t$destinationShares,\n\t\t\t$output,\n\t\t\t$path,\n\t\t\t$finalTarget,\n\t\t\t$move\n\t\t);\n\n\t\t$destinationPath = $finalTarget . '/' . $path;\n\t\t// restore the shares\n\t\t$this->restoreShares(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$destinationPath,\n\t\t\t$shares,\n\t\t\t$output\n\t\t);\n\t\tif ($sizeDifference !== 0) {\n\t\t\t$output->writeln(\"Transferred folder have a size difference of: $sizeDifference Bytes which means the transfer may be incomplete. Please check the logs if there was any issue during the transfer operation.\");\n\t\t}\n\t}\n\n\tprivate function sanitizeFolderName(string $name): string {\n\t\t// Remove some characters which are prone to cause errors\n\t\t$name = str_replace(['\\\\', '/', ':', '.', '?', '#', '\\'', '\"'], '-', $name);\n\t\t// Replace multiple dashes with one dash\n\t\treturn preg_replace('/-{2,}/s', '-', $name);\n\t}\n\n\tprivate function walkFiles(View $view, $path, Closure $callBack) {\n\t\tforeach ($view->getDirectoryContent($path) as $fileInfo) {\n\t\t\tif (!$callBack($fileInfo)) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif ($fileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\t\t$this->walkFiles($view, $fileInfo->getPath(), $callBack);\n\t\t\t}\n\t\t}\n\t}\n\n\t/**\n\t * @param IOutput $output\n\t *\n\t * @throws TransferOwnershipException\n\t */\n\tprotected function analyse(\n\t\tstring $sourceUid,\n\t\tstring $destinationUid,\n\t\tstring $sourcePath,\n\t\tView $view,\n\t\tIOutput $output,\n\t\tbool $includeExternalStorage = false,\n\t): void {\n\t\t$output->writeln('Validating quota');\n\t\t$sourceFileInfo = $view->getFileInfo($sourcePath, false);\n\t\tif ($sourceFileInfo === false) {\n\t\t\tthrow new TransferOwnershipException(\"Unknown path provided: $sourcePath\", 1);\n\t\t}\n\t\t$size = $sourceFileInfo->getSize(false);\n\t\t$freeSpace = $view->free_space($destinationUid . '/files/');\n\t\tif ($size > $freeSpace && $freeSpace !== FileInfo::SPACE_UNKNOWN) {\n\t\t\tthrow new TransferOwnershipException('Target user does not have enough free space available.', 1);\n\t\t}\n\n\t\t$output->writeln(\"Analysing files of $sourceUid ...\");\n\t\t$output->progressStart();\n\n\t\tif ($this->encryptionManager->isEnabled()) {\n\t\t\t$masterKeyEnabled = Server::get(Util::class)->isMasterKeyEnabled();\n\t\t} else {\n\t\t\t$masterKeyEnabled = false;\n\t\t}\n\t\t$encryptedFiles = [];\n\t\tif ($sourceFileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\tif ($sourceFileInfo->isEncrypted()) {\n\t\t\t\t/* Encrypted folder means e2ee encrypted */\n\t\t\t\t$encryptedFiles[] = $sourceFileInfo;\n\t\t\t} else {\n\t\t\t\t$this->walkFiles($view, $sourcePath,\n\t\t\t\t\tfunction (FileInfo $fileInfo) use ($output, $masterKeyEnabled, &$encryptedFiles, $includeExternalStorage) {\n\t\t\t\t\t\tif ($fileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\t\t\t\t\t$mount = $fileInfo->getMountPoint();\n\t\t\t\t\t\t\t// only analyze into folders from main storage,\n\t\t\t\t\t\t\tif (\n\t\t\t\t\t\t\t\t$mount->getMountProvider() instanceof IHomeMountProvider\n\t\t\t\t\t\t\t\t|| ($includeExternalStorage && $mount->getMountProvider() instanceof ConfigAdapter)\n\t\t\t\t\t\t\t) {\n\t\t\t\t\t\t\t\tif ($fileInfo->isEncrypted()) {\n\t\t\t\t\t\t\t\t\t/* Encrypted folder means e2ee encrypted, we cannot transfer it */\n\t\t\t\t\t\t\t\t\t$encryptedFiles[] = $fileInfo;\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\t$output->progressAdvance();\n\t\t\t\t\t\tif ($fileInfo->isEncrypted() && !$masterKeyEnabled) {\n\t\t\t\t\t\t\t/* Encrypted file means SSE, we can only transfer it if master key is enabled */\n\t\t\t\t\t\t\t$encryptedFiles[] = $fileInfo;\n\t\t\t\t\t\t}\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t});\n\t\t\t}\n\t\t} elseif ($sourceFileInfo->isEncrypted() && !$masterKeyEnabled) {\n\t\t\t/* Encrypted file means SSE, we can only transfer it if master key is enabled */\n\t\t\t$encryptedFiles[] = $sourceFileInfo;\n\t\t}\n\t\t$output->progressFinish();\n\t\t$output->writeln('');\n\n\t\t// no file is allowed to be encrypted\n\t\tif (!empty($encryptedFiles)) {\n\t\t\t$output->writeln('<error>Some files are encrypted - please decrypt them first.</error>');\n\t\t\tforeach ($encryptedFiles as $encryptedFile) {\n\t\t\t\t/** @var FileInfo $encryptedFile */\n\t\t\t\t$output->writeln('  ' . $encryptedFile->getPath());\n\t\t\t}\n\t\t\tthrow new TransferOwnershipException('Some files are encrypted - please decrypt them first.', 1);\n\t\t}\n\t}\n\n\t/**\n\t * @return array<array{share: IShare, suffix: string}>\n\t */\n\tprivate function collectUsersShares(\n\t\tstring $sourceUid,\n\t\tIOutput $output,\n\t\tView $view,\n\t\tstring $path,\n\t): array {\n\t\t$output->writeln(\"Collecting all share information for files and folders of $sourceUid ...\");\n\n\t\t$shares = [];\n\t\t$output->progressStart();\n\n\t\t$normalizedPath = Filesystem::normalizePath($path);\n\n\t\t$supportedShareTypes = [\n\t\t\tIShare::TYPE_GROUP,\n\t\t\tIShare::TYPE_USER,\n\t\t\tIShare::TYPE_LINK,\n\t\t\tIShare::TYPE_REMOTE,\n\t\t\tIShare::TYPE_ROOM,\n\t\t\tIShare::TYPE_EMAIL,\n\t\t\tIShare::TYPE_CIRCLE,\n\t\t\tIShare::TYPE_DECK,\n\t\t];\n\n\t\tforeach ($supportedShareTypes as $shareType) {\n\t\t\t$offset = 0;\n\t\t\twhile (true) {\n\t\t\t\t$sharePage = $this->shareManager->getSharesBy($sourceUid, $shareType, null, true, 50, $offset, onlyValid: false);\n\t\t\t\t$output->progressAdvance(count($sharePage));\n\t\t\t\tif (empty($sharePage)) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tif ($path !== \"$sourceUid/files\") {\n\t\t\t\t\t$sharePage = array_filter($sharePage, function (IShare $share) use ($view, $normalizedPath) {\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\t$sourceNode = $share->getNode();\n\t\t\t\t\t\t\t$relativePath = $view->getRelativePath($sourceNode->getPath());\n\n\t\t\t\t\t\t\treturn str_starts_with($relativePath . '/', $normalizedPath . '/');\n// ... [truncated for budget]",
+          "span_metadata": {
+            "start_line": 49,
+            "end_line": 698,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "OwnershipTransferService"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "7c4194fe9e503533aaeaeece610526b090295b38d70c44bdb1087d9f0f76b9f1",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2880 / 4000 tokens | **Included Context Units:** 1 (merged 3)\n\n## [1] php://OCA\\Files\\Service\\OwnershipTransferService (signature)\n- **File:** `apps/files/lib/Service/OwnershipTransferService.php` (lines 49-698)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\nclass OwnershipTransferService {\n\n\tpublic function __construct(\n\t\tprivate IEncryptionManager $encryptionManager,\n\t\tprivate IShareManager $shareManager,\n\t\tprivate IMountManager $mountManager,\n\t\tprivate IUserMountCache $userMountCache,\n\t\tprivate IUserManager $userManager,\n\t\tprivate IFactory $l10nFactory,\n\t\tprivate IRootFolder $rootFolder,\n\t\tprivate IEventDispatcher $eventDispatcher,\n\t\tprivate IDBConnection $connection,\n\t) {\n\t}\n\n\t/**\n\t * @param IUser $sourceUser\n\t * @param IUser $destinationUser\n\t * @param string $path\n\t *\n\t * @param IOutput|null $output\n\t * @param bool $move\n\t * @throws TransferOwnershipException\n\t * @throws UserNotFoundException\n\t */\n\tpublic function transfer(\n\t\tIUser $sourceUser,\n\t\tIUser $destinationUser,\n\t\tstring $path,\n\t\t?IOutput $output = null,\n\t\tbool $move = false,\n\t\tbool $firstLogin = false,\n\t\tbool $includeExternalStorage = false,\n\t\tbool $useUserId = false,\n\t): void {\n\t\t$output = $output ?? new NullOutput();\n\t\t$sourceUid = $sourceUser->getUID();\n\t\t$destinationUid = $destinationUser->getUID();\n\t\t$sourcePath = rtrim($sourceUid . '/files/' . $path, '/');\n\n\t\t// If encryption is on we have to ensure the user has logged in before and that all encryption modules are ready\n\t\tif (($this->encryptionManager->isEnabled() && $destinationUser->getLastLogin() === 0)\n\t\t\t|| !$this->encryptionManager->isReadyForUser($destinationUid)) {\n\t\t\tthrow new TransferOwnershipException('The target user is not ready to accept files. The user has at least to have logged in once.', 2);\n\t\t}\n\n\t\t// setup filesystem\n\t\t// Requesting the user folder will set it up if the user hasn't logged in before\n\t\t// We need a setupFS for the full filesystem setup before as otherwise we will just return\n\t\t// a lazy root folder which does not create the destination users folder\n\t\t\\OC_Util::setupFS($sourceUser->getUID());\n\t\t\\OC_Util::setupFS($destinationUser->getUID());\n\t\t$this->rootFolder->getUserFolder($sourceUser->getUID());\n\t\t$this->rootFolder->getUserFolder($destinationUser->getUID());\n\t\tFilesystem::initMountPoints($sourceUid);\n\t\tFilesystem::initMountPoints($destinationUid);\n\n\t\t$view = new View();\n\n\t\tif ($move) {\n\t\t\t$finalTarget = \"$destinationUid/files/\";\n\t\t} else {\n\t\t\t$l = $this->l10nFactory->get('files', $this->l10nFactory->getUserLanguage($destinationUser));\n\t\t\t$date = date('Y-m-d H-i-s');\n\n\t\t\tif ($useUserId) {\n\t\t\t\t$cleanUserName = $sourceUid;\n\t\t\t} else {\n\t\t\t\t$cleanUserName = $this->sanitizeFolderName($sourceUser->getDisplayName());\n\t\t\t\tif ($cleanUserName === '') {\n\t\t\t\t\t$cleanUserName = $sourceUid;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$finalTarget = \"$destinationUid/files/\" . $this->sanitizeFolderName($l->t('Transferred from %1$s on %2$s', [$cleanUserName, $date]));\n\t\t\ttry {\n\t\t\t\t$view->verifyPath(dirname($finalTarget), basename($finalTarget));\n\t\t\t} catch (InvalidPathException $e) {\n\t\t\t\t$finalTarget = \"$destinationUid/files/\" . $this->sanitizeFolderName($l->t('Transferred from %1$s on %2$s', [$sourceUid, $date]));\n\t\t\t}\n\t\t}\n\n\t\tif (!($view->is_dir($sourcePath) || $view->is_file($sourcePath))) {\n\t\t\tthrow new TransferOwnershipException(\"Unknown path provided: $path\", 1);\n\t\t}\n\n\t\tif ($move && !$view->is_dir($finalTarget)) {\n\t\t\t// Initialize storage\n\t\t\t\\OC_Util::setupFS($destinationUser->getUID());\n\t\t}\n\n\t\tif ($move && !$firstLogin && count($view->getDirectoryContent($finalTarget)) > 0) {\n\t\t\tthrow new TransferOwnershipException('Destination path does not exists or is not empty', 1);\n\t\t}\n\n\t\t// analyse source folder\n\t\t$this->analyse(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$sourcePath,\n\t\t\t$view,\n\t\t\t$output\n\t\t);\n\n\t\t// collect all the shares\n\t\t$shares = $this->collectUsersShares(\n\t\t\t$sourceUid,\n\t\t\t$output,\n\t\t\t$view,\n\t\t\t$sourcePath\n\t\t);\n\n\t\t$sourceSize = $view->getFileInfo($sourcePath)->getSize();\n\n\t\t// transfer the files\n\t\t$this->transferFiles(\n\t\t\t$sourceUid,\n\t\t\t$sourcePath,\n\t\t\t$finalTarget,\n\t\t\t$view,\n\t\t\t$output,\n\t\t\t$includeExternalStorage,\n\t\t);\n\t\t$sizeDifference = $sourceSize - $view->getFileInfo($finalTarget)->getSize();\n\n\t\t// Files in Team folders are not transferred, so their size needs to be subtracted to avoid warnings about size differences\n\t\t$mounts = Server::get(IMountManager::class)->getAll();\n\t\tforeach ($mounts as $mount) {\n\t\t\tif (!$mount instanceof GroupMountPoint || !str_starts_with($mount->getMountPoint(), '/' . $sourcePath . '/')) {\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$storage = $mount->getStorage();\n\t\t\tif ($storage === null) {\n\t\t\t\t$output->writeln('Failed to get storage for mount: ' . $mount->getMountPoint());\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$rootCacheEntry = $storage->getCache()->get('');\n\t\t\tif ($rootCacheEntry === false) {\n\t\t\t\t$output->writeln('Failed to get root cache entry for storage: ' . $mount->getMountPoint());\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$sizeDifference -= $rootCacheEntry->getSize();\n\t\t}\n\n\t\t// transfer the incoming shares\n\t\t$sourceShares = $this->collectIncomingShares(\n\t\t\t$sourceUid,\n\t\t\t$output,\n\t\t\t$sourcePath,\n\t\t);\n\t\t$destinationShares = $this->collectIncomingShares(\n\t\t\t$destinationUid,\n\t\t\t$output,\n\t\t\tnull,\n\t\t);\n\t\t$this->transferIncomingShares(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$sourceShares,\n\t\t\t$destinationShares,\n\t\t\t$output,\n\t\t\t$path,\n\t\t\t$finalTarget,\n\t\t\t$move\n\t\t);\n\n\t\t$destinationPath = $finalTarget . '/' . $path;\n\t\t// restore the shares\n\t\t$this->restoreShares(\n\t\t\t$sourceUid,\n\t\t\t$destinationUid,\n\t\t\t$destinationPath,\n\t\t\t$shares,\n\t\t\t$output\n\t\t);\n\t\tif ($sizeDifference !== 0) {\n\t\t\t$output->writeln(\"Transferred folder have a size difference of: $sizeDifference Bytes which means the transfer may be incomplete. Please check the logs if there was any issue during the transfer operation.\");\n\t\t}\n\t}\n\n\tprivate function sanitizeFolderName(string $name): string {\n\t\t// Remove some characters which are prone to cause errors\n\t\t$name = str_replace(['\\\\', '/', ':', '.', '?', '#', '\\'', '\"'], '-', $name);\n\t\t// Replace multiple dashes with one dash\n\t\treturn preg_replace('/-{2,}/s', '-', $name);\n\t}\n\n\tprivate function walkFiles(View $view, $path, Closure $callBack) {\n\t\tforeach ($view->getDirectoryContent($path) as $fileInfo) {\n\t\t\tif (!$callBack($fileInfo)) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif ($fileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\t\t$this->walkFiles($view, $fileInfo->getPath(), $callBack);\n\t\t\t}\n\t\t}\n\t}\n\n\t/**\n\t * @param IOutput $output\n\t *\n\t * @throws TransferOwnershipException\n\t */\n\tprotected function analyse(\n\t\tstring $sourceUid,\n\t\tstring $destinationUid,\n\t\tstring $sourcePath,\n\t\tView $view,\n\t\tIOutput $output,\n\t\tbool $includeExternalStorage = false,\n\t): void {\n\t\t$output->writeln('Validating quota');\n\t\t$sourceFileInfo = $view->getFileInfo($sourcePath, false);\n\t\tif ($sourceFileInfo === false) {\n\t\t\tthrow new TransferOwnershipException(\"Unknown path provided: $sourcePath\", 1);\n\t\t}\n\t\t$size = $sourceFileInfo->getSize(false);\n\t\t$freeSpace = $view->free_space($destinationUid . '/files/');\n\t\tif ($size > $freeSpace && $freeSpace !== FileInfo::SPACE_UNKNOWN) {\n\t\t\tthrow new TransferOwnershipException('Target user does not have enough free space available.', 1);\n\t\t}\n\n\t\t$output->writeln(\"Analysing files of $sourceUid ...\");\n\t\t$output->progressStart();\n\n\t\tif ($this->encryptionManager->isEnabled()) {\n\t\t\t$masterKeyEnabled = Server::get(Util::class)->isMasterKeyEnabled();\n\t\t} else {\n\t\t\t$masterKeyEnabled = false;\n\t\t}\n\t\t$encryptedFiles = [];\n\t\tif ($sourceFileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\tif ($sourceFileInfo->isEncrypted()) {\n\t\t\t\t/* Encrypted folder means e2ee encrypted */\n\t\t\t\t$encryptedFiles[] = $sourceFileInfo;\n\t\t\t} else {\n\t\t\t\t$this->walkFiles($view, $sourcePath,\n\t\t\t\t\tfunction (FileInfo $fileInfo) use ($output, $masterKeyEnabled, &$encryptedFiles, $includeExternalStorage) {\n\t\t\t\t\t\tif ($fileInfo->getType() === FileInfo::TYPE_FOLDER) {\n\t\t\t\t\t\t\t$mount = $fileInfo->getMountPoint();\n\t\t\t\t\t\t\t// only analyze into folders from main storage,\n\t\t\t\t\t\t\tif (\n\t\t\t\t\t\t\t\t$mount->getMountProvider() instanceof IHomeMountProvider\n\t\t\t\t\t\t\t\t|| ($includeExternalStorage && $mount->getMountProvider() instanceof ConfigAdapter)\n\t\t\t\t\t\t\t) {\n\t\t\t\t\t\t\t\tif ($fileInfo->isEncrypted()) {\n\t\t\t\t\t\t\t\t\t/* Encrypted folder means e2ee encrypted, we cannot transfer it */\n\t\t\t\t\t\t\t\t\t$encryptedFiles[] = $fileInfo;\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\t$output->progressAdvance();\n\t\t\t\t\t\tif ($fileInfo->isEncrypted() && !$masterKeyEnabled) {\n\t\t\t\t\t\t\t/* Encrypted file means SSE, we can only transfer it if master key is enabled */\n\t\t\t\t\t\t\t$encryptedFiles[] = $fileInfo;\n\t\t\t\t\t\t}\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t});\n\t\t\t}\n\t\t} elseif ($sourceFileInfo->isEncrypted() && !$masterKeyEnabled) {\n\t\t\t/* Encrypted file means SSE, we can only transfer it if master key is enabled */\n\t\t\t$encryptedFiles[] = $sourceFileInfo;\n\t\t}\n\t\t$output->progressFinish();\n\t\t$output->writeln('');\n\n\t\t// no file is allowed to be encrypted\n\t\tif (!empty($encryptedFiles)) {\n\t\t\t$output->writeln('<error>Some files are encrypted - please decrypt them first.</error>');\n\t\t\tforeach ($encryptedFiles as $encryptedFile) {\n\t\t\t\t/** @var FileInfo $encryptedFile */\n\t\t\t\t$output->writeln('  ' . $encryptedFile->getPath());\n\t\t\t}\n\t\t\tthrow new TransferOwnershipException('Some files are encrypted - please decrypt them first.', 1);\n\t\t}\n\t}\n\n\t/**\n\t * @return array<array{share: IShare, suffix: string}>\n\t */\n\tprivate function collectUsersShares(\n\t\tstring $sourceUid,\n\t\tIOutput $output,\n\t\tView $view,\n\t\tstring $path,\n\t): array {\n\t\t$output->writeln(\"Collecting all share information for files and folders of $sourceUid ...\");\n\n\t\t$shares = [];\n\t\t$output->progressStart();\n\n\t\t$normalizedPath = Filesystem::normalizePath($path);\n\n\t\t$supportedShareTypes = [\n\t\t\tIShare::TYPE_GROUP,\n\t\t\tIShare::TYPE_USER,\n\t\t\tIShare::TYPE_LINK,\n\t\t\tIShare::TYPE_REMOTE,\n\t\t\tIShare::TYPE_ROOM,\n\t\t\tIShare::TYPE_EMAIL,\n\t\t\tIShare::TYPE_CIRCLE,\n\t\t\tIShare::TYPE_DECK,\n\t\t];\n\n\t\tforeach ($supportedShareTypes as $shareType) {\n\t\t\t$offset = 0;\n\t\t\twhile (true) {\n\t\t\t\t$sharePage = $this->shareManager->getSharesBy($sourceUid, $shareType, null, true, 50, $offset, onlyValid: false);\n\t\t\t\t$output->progressAdvance(count($sharePage));\n\t\t\t\tif (empty($sharePage)) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tif ($path !== \"$sourceUid/files\") {\n\t\t\t\t\t$sharePage = array_filter($sharePage, function (IShare $share) use ($view, $normalizedPath) {\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\t$sourceNode = $share->getNode();\n\t\t\t\t\t\t\t$relativePath = $view->getRelativePath($sourceNode->getPath());\n\n\t\t\t\t\t\t\treturn str_starts_with($relativePath . '/', $normalizedPath . '/');\n// ... [truncated for budget]\n```\n"
+    },
+    "TASK-VAL-05": {
+      "task_id": "TASK-VAL-05",
+      "total_tokens": 3909,
+      "token_budget": 4000,
+      "entries_count": 6,
+      "critical_file_recall": 1.0,
+      "critical_source_recall": 1.0,
+      "entries": [
+        {
+          "entity_id": "php://OCA\\Files\\AppInfo\\Application::register",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "apps/files/lib/AppInfo/Application.php",
+          "source_lines": [
+            74,
+            135
+          ],
+          "estimated_tokens": 1199,
+          "content_snippet": "\tpublic function register(IRegistrationContext $context): void {\n\t\t/*\n\t\t * Register capabilities\n\t\t */\n\t\t$context->registerCapability(Capabilities::class);\n\t\t$context->registerCapability(AdvancedCapabilities::class);\n\t\t$context->registerCapability(DirectEditingCapabilities::class);\n\n\t\t$context->registerEventListener(LoadSidebar::class, LoadSidebarListener::class);\n\t\t$context->registerEventListener(RenderReferenceEvent::class, RenderReferenceEventListener::class);\n\t\t$context->registerEventListener(BeforeNodeRenamedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(BeforeNodeDeletedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(CacheEntriesRemovedEvent::class, SyncLivePhotosListener::class, 1); // Ensure this happen before the metadata are deleted.\n\t\t$context->registerEventListener(BeforeNodeCopiedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(NodeCopiedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(LoadSearchPlugins::class, LoadSearchPluginsListener::class);\n\t\t$context->registerEventListener(NodeAddedToFavorite::class, NodeAddedToFavoriteListener::class);\n\t\t$context->registerEventListener(NodeRemovedFromFavorite::class, NodeRemovedFromFavoriteListener::class);\n\t\t$context->registerEventListener(UserFirstTimeLoggedInEvent::class, UserFirstTimeLoggedInListener::class);\n\n\t\t$context->registerEventListener(ShareCreatedEvent::class, Listener::class);\n\t\t$context->registerEventListener(ShareDeletedEvent::class, Listener::class);\n\t\t$context->registerEventListener(ShareDeletedFromSelfEvent::class, Listener::class);\n\n\t\t$context->registerSearchProvider(FilesSearchProvider::class);\n\n\t\t$context->registerNotifierService(Notifier::class);\n\t\t$context->registerDashboardWidget(FavoriteWidget::class);\n\n\t\t$context->registerConfigLexicon(ConfigLexicon::class);\n\n\t\t$context->registerEventListener(RestrictInteractionEvent::class, RestrictInteractionListener::class);\n\n\t\t$registry = Server::get(ISharingRegistry::class);\n\n\t\t$registry->registerSourceType(Server::get(NodeShareSourceType::class));\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(ExpirationDateSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(LabelSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(NoteSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(PasswordSharePropertyType::class, NodeShareSourceType::class);\n\n\t\t$registry->registerPropertyType(new NodeGridViewSharePropertyType());\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(NodeGridViewSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithRecipientType(NodeGridViewSharePropertyType::class, TokenShareRecipientType::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeCreateSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeCreateSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, new NodeReadSharePermissionType());\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeReadSharePermissionType::class, ViewSharePermissionPreset::class);\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeReadSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeUpdateSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeUpdateSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeDeleteSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDeleteSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeDownloadSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDownloadSharePermissionType::class, ViewSharePermissionPreset::class);\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDownloadSharePermissionType::class, EditSharePermissionPreset::class);\n\t}",
+          "span_metadata": {
+            "start_line": 74,
+            "end_line": 135,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "register"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "fe1a37b85ed895cddeed96d2098123adf716808889e9007c8d53e8f84b363a5c",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files/appinfo/routes.php",
+          "rank": 2,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "route_to_controller"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files/appinfo/routes.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 119,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\AppInfo;\n\nreturn [\n\t'routes' => [\n\t\t[\n\t\t\t'name' => 'view#index',\n\t\t\t'url' => '/',\n\t\t\t'verb' => 'GET',\n\t\t],\n\t\t[\n\t\t\t'name' => 'View#showFile',\n\t\t\t'url' => '/f/{fileid}',\n\t\t\t'verb' => 'GET',\n\t\t\t'root' => '',\n\t\t],",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files/appinfo/routes.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "dd15384bdf7a45f8bfe00cd8cb4d69505aad43f8d2310cd980f1f10baba6e1d5",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/Share20/ManagerTest.php",
+          "rank": 3,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Share20/ManagerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 192,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/Share20/ManagerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6514ed37ec1e2218bb69ccb600f57c4aac6369dceab4f4ef25e8254674c73441",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 4,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\AdminAudit\\AppInfo\\Application",
+          "rank": 5,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/admin_audit/lib/AppInfo/Application.php",
+          "source_lines": [
+            73,
+            222
+          ],
+          "estimated_tokens": 1685,
+          "content_snippet": "class Application extends App implements IBootstrap {\n\tpublic function __construct() {\n\t\tparent::__construct('admin_audit');\n\t}\n\n\t#[\\Override]\n\tpublic function register(IRegistrationContext $context): void {\n\t\t$context->registerServiceAlias(IAuditLogger::class, AuditLogger::class);\n\n\t\t$context->registerEventListener(CriticalActionPerformedEvent::class, CriticalActionPerformedEventListener::class);\n\n\t\t// User management events\n\t\t$context->registerEventListener(UserCreatedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserDeletedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserChangedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(PasswordUpdatedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserIdAssignedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserIdUnassignedEvent::class, UserManagementEventListener::class);\n\n\t\t// Group management events\n\t\t$context->registerEventListener(UserAddedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(UserRemovedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(GroupCreatedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(GroupDeletedEvent::class, GroupManagementEventListener::class);\n\n\t\t// Sharing events\n\t\t$context->registerEventListener(ShareCreatedEvent::class, SharingEventListener::class);\n\t\t$context->registerEventListener(ShareDeletedEvent::class, SharingEventListener::class);\n\n\t\t// Auth events\n\t\t$context->registerEventListener(BeforeUserLoggedInEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(UserLoggedInWithCookieEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(UserLoggedInEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(BeforeUserLoggedOutEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(AnyLoginFailedEvent::class, AuthEventListener::class);\n\n\t\t// File events\n\t\t$context->registerEventListener(BeforePreviewFetchedEvent::class, FileEventListener::class);\n\t\t$context->registerEventListener(VersionRestoredEvent::class, FileEventListener::class);\n\n\t\t// Security events\n\t\t$context->registerEventListener(TwoFactorProviderChallengePassed::class, SecurityEventListener::class);\n\t\t$context->registerEventListener(TwoFactorProviderChallengeFailed::class, SecurityEventListener::class);\n\n\t\t// App management events\n\t\t$context->registerEventListener(AppEnableEvent::class, AppManagementEventListener::class);\n\t\t$context->registerEventListener(AppDisableEvent::class, AppManagementEventListener::class);\n\t\t$context->registerEventListener(AppUpdateEvent::class, AppManagementEventListener::class);\n\n\t\t// Console events\n\t\t$context->registerEventListener(ConsoleEvent::class, ConsoleEventListener::class);\n\n\t\t// Cache events\n\t\t$context->registerEventListener(CacheEntryInsertedEvent::class, CacheEventListener::class);\n\t\t$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEventListener::class);\n\n\t\t// System tag event\n\t\t$context->registerEventListener(TagCreatedEvent::class, TagEventListener::class);\n\t}\n\n\t#[\\Override]\n\tpublic function boot(IBootContext $context): void {\n\t\t/** @var IAuditLogger $logger */\n\t\t$logger = $context->getAppContainer()->get(IAuditLogger::class);\n\n\t\t/*\n\t\t * TODO: once the hooks are migrated to lazy events, this should be done\n\t\t *       in \\OCA\\AdminAudit\\AppInfo\\Application::register\n\t\t */\n\t\t$this->registerLegacyHooks($logger, $context->getServerContainer());\n\t}\n\n\t/**\n\t * Register hooks in order to log them\n\t */\n\tprivate function registerLegacyHooks(IAuditLogger $logger, ContainerInterface $serverContainer): void {\n\t\t/** @var IEventDispatcher $eventDispatcher */\n\t\t$eventDispatcher = $serverContainer->get(IEventDispatcher::class);\n\t\t$this->sharingLegacyHooks($logger);\n\t\t$this->fileHooks($logger, $eventDispatcher);\n\t\t$this->trashbinHooks($logger);\n\t\t$this->versionsHooks($logger);\n\t}\n\n\tprivate function sharingLegacyHooks(IAuditLogger $logger): void {\n\t\t$shareActions = new Sharing($logger);\n\n\t\tUtil::connectHook(Share::class, 'post_update_permissions', $shareActions, 'updatePermissions');\n\t\tUtil::connectHook(Share::class, 'post_update_password', $shareActions, 'updatePassword');\n\t\tUtil::connectHook(Share::class, 'post_set_expiration_date', $shareActions, 'updateExpirationDate');\n\t\tUtil::connectHook(Share::class, 'share_link_access', $shareActions, 'shareAccessed');\n\t}\n\n\tprivate function fileHooks(IAuditLogger $logger, IEventDispatcher $eventDispatcher): void {\n\t\t$fileActions = new Files($logger);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeRenamedEvent::class,\n\t\t\tfunction (NodeRenamedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->afterRename($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeCreatedEvent::class,\n\t\t\tfunction (NodeCreatedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->create($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeCopiedEvent::class,\n\t\t\tfunction (NodeCopiedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->copy($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeWrittenEvent::class,\n\t\t\tfunction (NodeWrittenEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->write($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tBeforeNodeReadEvent::class,\n\t\t\tfunction (BeforeNodeReadEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->read($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tBeforeNodeDeletedEvent::class,\n\t\t\tfunction (BeforeNodeDeletedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->delete($event);\n\t\t\t}\n\t\t);\n\t}\n\n\tprivate function versionsHooks(IAuditLogger $logger): void {\n\t\t$versionsActions = new Versions($logger);\n\t\tUtil::connectHook('\\OCP\\Versions', 'delete', $versionsActions, 'delete');\n\t}\n\n\tprivate function trashbinHooks(IAuditLogger $logger): void {\n\t\t$trashActions = new Trashbin($logger);\n\t\tUtil::connectHook('\\OCP\\Trashbin', 'preDelete', $trashActions, 'delete');\n\t\tUtil::connectHook('\\OCA\\Files_Trashbin\\Trashbin', 'post_restore', $trashActions, 'restore');\n\t}\n}",
+          "span_metadata": {
+            "start_line": 73,
+            "end_line": 222,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "Application"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "688b2211b30de340e0bf5cee5b4b15737ee953d54be2183a2295e47dce555760",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Appstore\\AppInfo\\Application",
+          "rank": 6,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/appstore/lib/AppInfo/Application.php",
+          "source_lines": [
+            17,
+            32
+          ],
+          "estimated_tokens": 113,
+          "content_snippet": "final class Application extends App implements IBootstrap {\n\tpublic const string APP_ID = 'appstore';\n\n\tpublic function __construct(array $urlParams = []) {\n\t\tparent::__construct(self::APP_ID, $urlParams);\n\t}\n\n\t#[\\Override]\n\tpublic function register(IRegistrationContext $context): void {\n\t\t$context->registerSearchProvider(AppSearch::class);\n\t}\n\n\t#[\\Override]\n\tpublic function boot(IBootContext $context): void {\n\t}\n}",
+          "span_metadata": {
+            "start_line": 17,
+            "end_line": 32,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "Application"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "d83807c0986a96ad8536e93fbc8444722c4d9471696367b05d1aa8772016e979",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3909 / 4000 tokens | **Included Context Units:** 6 (merged 0)\n\n## [1] php://OCA\\Files\\AppInfo\\Application::register (full_implementation)\n- **File:** `apps/files/lib/AppInfo/Application.php` (lines 74-135)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\npublic function register(IRegistrationContext $context): void {\n\t\t/*\n\t\t * Register capabilities\n\t\t */\n\t\t$context->registerCapability(Capabilities::class);\n\t\t$context->registerCapability(AdvancedCapabilities::class);\n\t\t$context->registerCapability(DirectEditingCapabilities::class);\n\n\t\t$context->registerEventListener(LoadSidebar::class, LoadSidebarListener::class);\n\t\t$context->registerEventListener(RenderReferenceEvent::class, RenderReferenceEventListener::class);\n\t\t$context->registerEventListener(BeforeNodeRenamedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(BeforeNodeDeletedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(CacheEntriesRemovedEvent::class, SyncLivePhotosListener::class, 1); // Ensure this happen before the metadata are deleted.\n\t\t$context->registerEventListener(BeforeNodeCopiedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(NodeCopiedEvent::class, SyncLivePhotosListener::class);\n\t\t$context->registerEventListener(LoadSearchPlugins::class, LoadSearchPluginsListener::class);\n\t\t$context->registerEventListener(NodeAddedToFavorite::class, NodeAddedToFavoriteListener::class);\n\t\t$context->registerEventListener(NodeRemovedFromFavorite::class, NodeRemovedFromFavoriteListener::class);\n\t\t$context->registerEventListener(UserFirstTimeLoggedInEvent::class, UserFirstTimeLoggedInListener::class);\n\n\t\t$context->registerEventListener(ShareCreatedEvent::class, Listener::class);\n\t\t$context->registerEventListener(ShareDeletedEvent::class, Listener::class);\n\t\t$context->registerEventListener(ShareDeletedFromSelfEvent::class, Listener::class);\n\n\t\t$context->registerSearchProvider(FilesSearchProvider::class);\n\n\t\t$context->registerNotifierService(Notifier::class);\n\t\t$context->registerDashboardWidget(FavoriteWidget::class);\n\n\t\t$context->registerConfigLexicon(ConfigLexicon::class);\n\n\t\t$context->registerEventListener(RestrictInteractionEvent::class, RestrictInteractionListener::class);\n\n\t\t$registry = Server::get(ISharingRegistry::class);\n\n\t\t$registry->registerSourceType(Server::get(NodeShareSourceType::class));\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(ExpirationDateSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(LabelSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(NoteSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(PasswordSharePropertyType::class, NodeShareSourceType::class);\n\n\t\t$registry->registerPropertyType(new NodeGridViewSharePropertyType());\n\t\t$registry->markPropertyTypeCompatibleWithSourceType(NodeGridViewSharePropertyType::class, NodeShareSourceType::class);\n\t\t$registry->markPropertyTypeCompatibleWithRecipientType(NodeGridViewSharePropertyType::class, TokenShareRecipientType::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeCreateSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeCreateSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, new NodeReadSharePermissionType());\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeReadSharePermissionType::class, ViewSharePermissionPreset::class);\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeReadSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeUpdateSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeUpdateSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeDeleteSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDeleteSharePermissionType::class, EditSharePermissionPreset::class);\n\n\t\t$registry->registerPermissionType(NodeShareSourceType::class, Server::get(NodeDownloadSharePermissionType::class));\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDownloadSharePermissionType::class, ViewSharePermissionPreset::class);\n\t\t$registry->markPermissionTypeCompatibleWithPermissionPreset(NodeDownloadSharePermissionType::class, EditSharePermissionPreset::class);\n\t}\n```\n\n## [2] php://apps/files/appinfo/routes.php (signature)\n- **File:** `apps/files/appinfo/routes.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** route_to_controller\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\AppInfo;\n\nreturn [\n\t'routes' => [\n\t\t[\n\t\t\t'name' => 'view#index',\n\t\t\t'url' => '/',\n\t\t\t'verb' => 'GET',\n\t\t],\n\t\t[\n\t\t\t'name' => 'View#showFile',\n\t\t\t'url' => '/f/{fileid}',\n\t\t\t'verb' => 'GET',\n\t\t\t'root' => '',\n\t\t],\n```\n\n## [3] php://tests/lib/Share20/ManagerTest.php (test_fragment)\n- **File:** `tests/lib/Share20/ManagerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;\n```\n\n## [4] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [5] php://OCA\\AdminAudit\\AppInfo\\Application (signature)\n- **File:** `apps/admin_audit/lib/AppInfo/Application.php` (lines 73-222)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\nclass Application extends App implements IBootstrap {\n\tpublic function __construct() {\n\t\tparent::__construct('admin_audit');\n\t}\n\n\t#[\\Override]\n\tpublic function register(IRegistrationContext $context): void {\n\t\t$context->registerServiceAlias(IAuditLogger::class, AuditLogger::class);\n\n\t\t$context->registerEventListener(CriticalActionPerformedEvent::class, CriticalActionPerformedEventListener::class);\n\n\t\t// User management events\n\t\t$context->registerEventListener(UserCreatedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserDeletedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserChangedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(PasswordUpdatedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserIdAssignedEvent::class, UserManagementEventListener::class);\n\t\t$context->registerEventListener(UserIdUnassignedEvent::class, UserManagementEventListener::class);\n\n\t\t// Group management events\n\t\t$context->registerEventListener(UserAddedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(UserRemovedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(GroupCreatedEvent::class, GroupManagementEventListener::class);\n\t\t$context->registerEventListener(GroupDeletedEvent::class, GroupManagementEventListener::class);\n\n\t\t// Sharing events\n\t\t$context->registerEventListener(ShareCreatedEvent::class, SharingEventListener::class);\n\t\t$context->registerEventListener(ShareDeletedEvent::class, SharingEventListener::class);\n\n\t\t// Auth events\n\t\t$context->registerEventListener(BeforeUserLoggedInEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(UserLoggedInWithCookieEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(UserLoggedInEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(BeforeUserLoggedOutEvent::class, AuthEventListener::class);\n\t\t$context->registerEventListener(AnyLoginFailedEvent::class, AuthEventListener::class);\n\n\t\t// File events\n\t\t$context->registerEventListener(BeforePreviewFetchedEvent::class, FileEventListener::class);\n\t\t$context->registerEventListener(VersionRestoredEvent::class, FileEventListener::class);\n\n\t\t// Security events\n\t\t$context->registerEventListener(TwoFactorProviderChallengePassed::class, SecurityEventListener::class);\n\t\t$context->registerEventListener(TwoFactorProviderChallengeFailed::class, SecurityEventListener::class);\n\n\t\t// App management events\n\t\t$context->registerEventListener(AppEnableEvent::class, AppManagementEventListener::class);\n\t\t$context->registerEventListener(AppDisableEvent::class, AppManagementEventListener::class);\n\t\t$context->registerEventListener(AppUpdateEvent::class, AppManagementEventListener::class);\n\n\t\t// Console events\n\t\t$context->registerEventListener(ConsoleEvent::class, ConsoleEventListener::class);\n\n\t\t// Cache events\n\t\t$context->registerEventListener(CacheEntryInsertedEvent::class, CacheEventListener::class);\n\t\t$context->registerEventListener(CacheEntryRemovedEvent::class, CacheEventListener::class);\n\n\t\t// System tag event\n\t\t$context->registerEventListener(TagCreatedEvent::class, TagEventListener::class);\n\t}\n\n\t#[\\Override]\n\tpublic function boot(IBootContext $context): void {\n\t\t/** @var IAuditLogger $logger */\n\t\t$logger = $context->getAppContainer()->get(IAuditLogger::class);\n\n\t\t/*\n\t\t * TODO: once the hooks are migrated to lazy events, this should be done\n\t\t *       in \\OCA\\AdminAudit\\AppInfo\\Application::register\n\t\t */\n\t\t$this->registerLegacyHooks($logger, $context->getServerContainer());\n\t}\n\n\t/**\n\t * Register hooks in order to log them\n\t */\n\tprivate function registerLegacyHooks(IAuditLogger $logger, ContainerInterface $serverContainer): void {\n\t\t/** @var IEventDispatcher $eventDispatcher */\n\t\t$eventDispatcher = $serverContainer->get(IEventDispatcher::class);\n\t\t$this->sharingLegacyHooks($logger);\n\t\t$this->fileHooks($logger, $eventDispatcher);\n\t\t$this->trashbinHooks($logger);\n\t\t$this->versionsHooks($logger);\n\t}\n\n\tprivate function sharingLegacyHooks(IAuditLogger $logger): void {\n\t\t$shareActions = new Sharing($logger);\n\n\t\tUtil::connectHook(Share::class, 'post_update_permissions', $shareActions, 'updatePermissions');\n\t\tUtil::connectHook(Share::class, 'post_update_password', $shareActions, 'updatePassword');\n\t\tUtil::connectHook(Share::class, 'post_set_expiration_date', $shareActions, 'updateExpirationDate');\n\t\tUtil::connectHook(Share::class, 'share_link_access', $shareActions, 'shareAccessed');\n\t}\n\n\tprivate function fileHooks(IAuditLogger $logger, IEventDispatcher $eventDispatcher): void {\n\t\t$fileActions = new Files($logger);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeRenamedEvent::class,\n\t\t\tfunction (NodeRenamedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->afterRename($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeCreatedEvent::class,\n\t\t\tfunction (NodeCreatedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->create($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeCopiedEvent::class,\n\t\t\tfunction (NodeCopiedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->copy($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tNodeWrittenEvent::class,\n\t\t\tfunction (NodeWrittenEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->write($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tBeforeNodeReadEvent::class,\n\t\t\tfunction (BeforeNodeReadEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->read($event);\n\t\t\t}\n\t\t);\n\n\t\t$eventDispatcher->addListener(\n\t\t\tBeforeNodeDeletedEvent::class,\n\t\t\tfunction (BeforeNodeDeletedEvent $event) use ($fileActions): void {\n\t\t\t\t$fileActions->delete($event);\n\t\t\t}\n\t\t);\n\t}\n\n\tprivate function versionsHooks(IAuditLogger $logger): void {\n\t\t$versionsActions = new Versions($logger);\n\t\tUtil::connectHook('\\OCP\\Versions', 'delete', $versionsActions, 'delete');\n\t}\n\n\tprivate function trashbinHooks(IAuditLogger $logger): void {\n\t\t$trashActions = new Trashbin($logger);\n\t\tUtil::connectHook('\\OCP\\Trashbin', 'preDelete', $trashActions, 'delete');\n\t\tUtil::connectHook('\\OCA\\Files_Trashbin\\Trashbin', 'post_restore', $trashActions, 'restore');\n\t}\n}\n```\n\n## [6] php://OCA\\Appstore\\AppInfo\\Application (signature)\n- **File:** `apps/appstore/lib/AppInfo/Application.php` (lines 17-32)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\nfinal class Application extends App implements IBootstrap {\n\tpublic const string APP_ID = 'appstore';\n\n\tpublic function __construct(array $urlParams = []) {\n\t\tparent::__construct(self::APP_ID, $urlParams);\n\t}\n\n\t#[\\Override]\n\tpublic function register(IRegistrationContext $context): void {\n\t\t$context->registerSearchProvider(AppSearch::class);\n\t}\n\n\t#[\\Override]\n\tpublic function boot(IBootContext $context): void {\n\t}\n}\n```\n"
+    }
+  }
+}

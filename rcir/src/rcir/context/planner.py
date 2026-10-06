@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Optional
+import math
 
 from rcir.context.summarizer import ImpactSummary
 from rcir.query.change_spec import ChangeOperation, ChangeSpecification
@@ -175,7 +176,7 @@ class ContextPlanner:
             if spec.requested_symbol:
                 pinned.add(spec.requested_symbol)
 
-        # Distribute budget across roles ensuring sum(role budgets) <= token_budget (Phase 53)
+        # Distribute budget across roles ensuring sum(role budgets) + summary <= token_budget (Phase 43)
         summary_budget = int(token_budget * quota.summary_fraction)
         avail_budget = max(0, token_budget - summary_budget)
 
@@ -184,17 +185,26 @@ class ContextPlanner:
         caller_budget = int(avail_budget * quota.caller_fraction)
         test_budget = int(avail_budget * quota.test_fraction)
         boundary_budget = int(avail_budget * quota.boundary_fraction)
-        indirect_budget = max(0, avail_budget - (target_budget + impl_budget + caller_budget + test_budget + boundary_budget))
+        
+        # Explicit CONFIG_SCHEMA allocation carved out from boundary budget (Phase 43)
+        config_schema_budget = min(boundary_budget // 2, 100) if boundary_budget > 10 else 0
+        adj_boundary_budget = max(0, boundary_budget - config_schema_budget)
+        
+        allocated_so_far = target_budget + impl_budget + caller_budget + test_budget + adj_boundary_budget + config_schema_budget
+        indirect_budget = max(0, avail_budget - allocated_so_far)
 
         role_budgets = {
             ContextRole.TARGET: target_budget,
             ContextRole.IMPLEMENTATION: impl_budget,
             ContextRole.DIRECT_CALLER: caller_budget,
             ContextRole.TEST: test_budget,
-            ContextRole.BOUNDARY: boundary_budget,
-            ContextRole.CONFIG_SCHEMA: max(1, boundary_budget // 2),
+            ContextRole.BOUNDARY: adj_boundary_budget,
+            ContextRole.CONFIG_SCHEMA: config_schema_budget,
             ContextRole.INDIRECT_SUPPORT: indirect_budget,
         }
+
+        # Invariant check
+        assert sum(role_budgets.values()) + summary_budget <= token_budget, "Budget accounting invariant violation!"
 
         # Role candidate queues
         role_queues: dict[ContextRole, list[RankedCandidate]] = {r: [] for r in ContextRole}
@@ -206,18 +216,19 @@ class ContextPlanner:
         planned_items: list[PlannedItem] = []
         tokens_spent_by_role: dict[ContextRole, int] = {r: 0 for r in ContextRole}
 
-        # 1. First Pass: PIN Target candidates (mandatory reservation)
+        # 1. First Pass: PIN Target candidates (mandatory reservation, Phase 44)
         for cand in role_queues[ContextRole.TARGET]:
-            planned_items.append(PlannedItem(
-                candidate=cand,
-                role=ContextRole.TARGET,
-                inclusion_reason="Primary change target entity (PINNED)",
-            ))
-            tokens_spent_by_role[ContextRole.TARGET] += 250
-            if tokens_spent_by_role[ContextRole.TARGET] >= target_budget:
-                break
+            target_cost = 200  # Target representation
+            if tokens_spent_by_role[ContextRole.TARGET] + target_cost <= target_budget or not planned_items:
+                planned_items.append(PlannedItem(
+                    candidate=cand,
+                    role=ContextRole.TARGET,
+                    allocated_tokens=target_cost,
+                    inclusion_reason="Primary change target entity (PINNED)",
+                ))
+                tokens_spent_by_role[ContextRole.TARGET] += target_cost
 
-        # 2. Second Pass: Allocate remaining budget to respective candidates by role priority
+        # 2. Second Pass: Utility-per-token candidate selection (Phase 44 & 45)
         role_priority = [
             ContextRole.IMPLEMENTATION,
             ContextRole.DIRECT_CALLER,
@@ -228,16 +239,29 @@ class ContextPlanner:
         ]
 
         for role in role_priority:
-            # If target is already satisfied / not in queue, allow dependencies to utilize full budget
             budget = role_budgets[role] if role_queues[ContextRole.TARGET] else avail_budget
             cands = role_queues[role]
-            for cand in cands:
-                cost = 150
+
+            # Dynamic cost and utility per token optimization (Phase 45)
+            def compute_cand_cost_and_utility(c: RankedCandidate, r: ContextRole) -> tuple[int, float]:
+                cost = 80 if r == ContextRole.BOUNDARY else 100 if r == ContextRole.CONFIG_SCHEMA else 120 if r == ContextRole.TEST else 150
+                rel_conf = 1.0 if c.evidence.resolution_class == "static_exact" else 0.7 if c.evidence.resolution_class == "static_inference" else 0.4
+                rank_boost = 1.0 / math.log2(c.rank + 2)
+                crit = 1.5 if r in (ContextRole.IMPLEMENTATION, ContextRole.DIRECT_CALLER) else 1.0
+                utility = (rel_conf * 20.0 + rank_boost * 30.0) * crit
+                return cost, utility / cost
+
+            # Sort by utility-per-token descending
+            cands_with_metric = [(c, compute_cand_cost_and_utility(c, role)) for c in cands]
+            cands_with_metric.sort(key=lambda item: (-item[1][1], item[0].rank))
+
+            for cand, (cost, util_per_tok) in cands_with_metric:
                 if tokens_spent_by_role[role] + cost <= budget:
                     planned_items.append(PlannedItem(
                         candidate=cand,
                         role=role,
-                        inclusion_reason=f"Role allocation: {role.value}",
+                        allocated_tokens=cost,
+                        inclusion_reason=f"Role allocation: {role.value} (utility/tok: {util_per_tok:.2f})",
                     ))
                     tokens_spent_by_role[role] += cost
 

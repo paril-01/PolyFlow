@@ -1,0 +1,213 @@
+{
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "total_call_sites": 12,
+  "resolvable_count": 10,
+  "abstention_count": 2,
+  "call_sites": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 76,
+      "enclosing_method": "__construct",
+      "receiver_expression": "$user",
+      "called_method": "getUID",
+      "expected_receiver_type": "OCP\\IUser",
+      "acceptable_interfaces": [
+        "OCP\\IUser",
+        "OC\\User\\User"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$this->userFolder = $this->rootFolder->getUserFolder($user->getUID());",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 108,
+      "enclosing_method": "getThumbnail",
+      "receiver_expression": "$file",
+      "called_method": "getId",
+      "expected_receiver_type": "OCP\\Files\\File",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Node",
+        "OCP\\Files\\File",
+        "OC\\Files\\Node\\File"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "|| ($file->getId() <= 0)",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 115,
+      "enclosing_method": "getThumbnail",
+      "receiver_expression": "$file",
+      "called_method": "getStorage",
+      "expected_receiver_type": "OCP\\Files\\File",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Node",
+        "OCP\\Files\\File"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$storage = $file->getStorage();",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 118,
+      "enclosing_method": "getThumbnail",
+      "receiver_expression": "$storage",
+      "called_method": "getShare",
+      "expected_receiver_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Storage\\ISharedStorage"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$share = $storage->getShare();",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 119,
+      "enclosing_method": "getThumbnail",
+      "receiver_expression": "$share",
+      "called_method": "canSeeContent",
+      "expected_receiver_type": "OCP\\Share\\IShare",
+      "acceptable_interfaces": [
+        "OCP\\Share\\IShare",
+        "OC\\Share20\\Share"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "if (!$share->canSeeContent()) {",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_006",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 175,
+      "enclosing_method": "updateFileTags",
+      "receiver_expression": "$node",
+      "called_method": "getId",
+      "expected_receiver_type": "OCP\\Files\\Node",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Node",
+        "OCP\\Files\\File",
+        "OCP\\Files\\Folder",
+        "OC\\Files\\Node\\Node"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$shareTypes = $shareTypesForNodes[$node->getId()] ?? [];",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 176,
+      "enclosing_method": "updateFileTags",
+      "receiver_expression": "$node",
+      "called_method": "getFileInfo",
+      "expected_receiver_type": "OCP\\Files\\Node",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Node",
+        "OCP\\Files\\File",
+        "OCP\\Files\\Folder",
+        "OC\\Files\\Node\\Node"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$file = Helper::formatFileInfo($node->getFileInfo());",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_008",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 295,
+      "enclosing_method": "getParents",
+      "receiver_expression": "$currentFolder",
+      "called_method": "getParent",
+      "expected_receiver_type": "OCP\\Files\\Folder",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Folder",
+        "OCP\\Files\\Node"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$parentFolder = $currentFolder->getParent();",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 296,
+      "enclosing_method": "getParents",
+      "receiver_expression": "$parentFolder",
+      "called_method": "getDirectoryListing",
+      "expected_receiver_type": "OCP\\Files\\Folder",
+      "acceptable_interfaces": [
+        "OCP\\Files\\Folder",
+        "OC\\Files\\Node\\Folder"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$parentContent = $parentFolder->getDirectoryListing('httpd/unix-directory');",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 496,
+      "enclosing_method": "serviceWorker",
+      "receiver_expression": "$response",
+      "called_method": "setContentSecurityPolicy",
+      "expected_receiver_type": "OCP\\AppFramework\\Http\\Response",
+      "acceptable_interfaces": [
+        "OCP\\AppFramework\\Http\\Response",
+        "OCP\\AppFramework\\Http\\FileDisplayResponse",
+        "OCP\\AppFramework\\Http\\StreamResponse"
+      ],
+      "is_abstention": false,
+      "source_fingerprint": "$response->setContentSecurityPolicy($policy);",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_011_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 358,
+      "enclosing_method": "getFolderTree",
+      "receiver_expression": "$th",
+      "called_method": "getMessage",
+      "expected_receiver_type": "UNKNOWN",
+      "acceptable_interfaces": [],
+      "is_abstention": true,
+      "source_fingerprint": "$this->logger->error($th->getMessage(), ['exception' => $th]);",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    },
+    {
+      "call_id": "tf_012_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 391,
+      "enclosing_method": "setViewConfig",
+      "receiver_expression": "$e",
+      "called_method": "getMessage",
+      "expected_receiver_type": "UNKNOWN",
+      "acceptable_interfaces": [],
+      "is_abstention": true,
+      "source_fingerprint": "return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_BAD_REQUEST);",
+      "source_content_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "verified": true
+    }
+  ]
+}

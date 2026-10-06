@@ -1,0 +1,125 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "provenance_status": "PASSED",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "audited_commits": [
+    "da57df078d0808a7235a0177bd99d23c010b472e"
+  ],
+  "total_tasks_audited": 16,
+  "total_errors": 0,
+  "errors": [],
+  "tasks": [
+    {
+      "task_id": "TASK-DEV-01",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "target_symbol": "getThumbnail",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "target_symbol": "NodeDeletedEvent",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-DEV-03",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/Share/IShare.php",
+      "target_symbol": "getId",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/IConfig.php",
+      "target_symbol": "getSystemValue",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-DEV-05",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/IUserSession.php",
+      "target_symbol": "getUser",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/IUser.php",
+      "target_symbol": "getUID",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-VAL-01",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/Files/Folder.php",
+      "target_symbol": "get",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-VAL-02",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "target_symbol": "updateFileTags",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-VAL-03",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/IGroup.php",
+      "target_symbol": "getGID",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-VAL-04",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/Service/OwnershipTransferService.php",
+      "target_symbol": "OwnershipTransferService",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-VAL-05",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/AppInfo/Application.php",
+      "target_symbol": "register",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-TEST-01",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/AppFramework/Http/Response.php",
+      "target_symbol": "render",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+      "target_symbol": "NodeCreatedEvent",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "lib/private/Share20/Manager.php",
+      "target_symbol": "createShare",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/Service/DirectEditingService.php",
+      "target_symbol": "DirectEditingService",
+      "status": "VALID"
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "target_file": "apps/files/lib/Service/UserConfig.php",
+      "target_symbol": "UserConfig",
+      "status": "VALID"
+    }
+  ]
+}

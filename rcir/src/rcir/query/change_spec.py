@@ -24,6 +24,7 @@ class ChangeOperation(str, Enum):
     CONFIG_CHANGE = "config_change"
     PERMISSION_CHANGE = "permission_change"
     SERVICE_BOUNDARY_CHANGE = "service_boundary_change"
+    DEPENDENCY_CHANGE = "dependency_change"
 
 
 class RequestedScope(str, Enum):

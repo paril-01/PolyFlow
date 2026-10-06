@@ -1,0 +1,16 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "evaluated_at": "2026-10-05T19:08:22Z",
+  "validation_status": "MEASURED_TURN_BUDGET",
+  "model": "qwen2.5-coder:1.5b",
+  "turn_budgets": {
+    "5": {
+      "trials_evaluated": 2,
+      "completion_rate": 0.0
+    },
+    "8": {
+      "trials_evaluated": 2,
+      "completion_rate": 0.0
+    }
+  }
+}

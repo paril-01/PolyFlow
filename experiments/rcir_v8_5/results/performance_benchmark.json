@@ -1,0 +1,40 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "evaluated_at": "2026-10-05T18:58:31Z",
+  "validation_status": "MEASURED_PERFORMANCE",
+  "graph_ingestion": {
+    "node_count": 48611,
+    "edge_count": 143225,
+    "json_load_seconds": 0.5758,
+    "graph_build_seconds": 13.7971,
+    "total_graph_seconds": 14.3728
+  },
+  "retrieval_and_ranking": {
+    "tasks_evaluated": 16,
+    "mean_latency_ms": 191.79,
+    "p95_latency_ms": 923.19,
+    "total_time_seconds": 3.0687,
+    "throughput_tasks_per_sec": 5.21
+  },
+  "context_compilation": {
+    "contexts_compiled": 16,
+    "mean_latency_ms": 68.73,
+    "p95_latency_ms": 95.7,
+    "total_time_seconds": 1.0997,
+    "throughput_tasks_per_sec": 14.55,
+    "mean_tokens": 2307.1
+  },
+  "type_flow_analysis": {
+    "files_analyzed": 4,
+    "call_sites_discovered": 888,
+    "mean_latency_ms": 838.17
+  },
+  "memory_footprint_mb": {
+    "initial_rss": 26.7,
+    "post_graph_rss": 456.99,
+    "peak_rss": 464.07,
+    "rss_delta": 437.37
+  }
+}

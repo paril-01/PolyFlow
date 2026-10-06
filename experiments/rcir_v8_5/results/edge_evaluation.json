@@ -1,0 +1,269 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "status": "ADVISORY_ONLY",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "positive_edges_total": 22,
+  "positive_exact_typed_matches": 7,
+  "positive_relaxed_endpoint_matches": 14,
+  "positive_wrong_relation_matches": 7,
+  "positive_missing_edges": 8,
+  "exact_typed_edge_recall": 0.3182,
+  "relaxed_endpoint_recall": 0.6364,
+  "hard_negative_edges_total": 3,
+  "hard_negative_correct_rejections": 3,
+  "hard_negative_violations": 0,
+  "hard_negative_rejection_rate": 1.0,
+  "precision_methodology": "NOT_MEASURED (Requires full open-world edge adjudication corpus)",
+  "eval_records": [
+    {
+      "edge_id": "edge_impl_01",
+      "source": "php://OC\\SystemConfig",
+      "target": "php://OCP\\IConfig",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_impl_02",
+      "source": "php://OC\\AllConfig",
+      "target": "php://OCP\\IConfig",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_03",
+      "source": "php://OC\\User\\Session",
+      "target": "php://OCP\\IUserSession",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_04",
+      "source": "php://OC\\User\\User",
+      "target": "php://OCP\\IUser",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_05",
+      "source": "php://OC\\Share20\\Share",
+      "target": "php://OCP\\Share\\IShare",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_06",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\Files\\Folder",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_07",
+      "source": "php://OC\\Files\\Node\\File",
+      "target": "php://OCP\\Files\\File",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_impl_08",
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://OCP\\Files\\Node",
+      "expected_edge_type": "implements",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_ENDPOINT_WRONG_RELATION (inherits vs implements)"
+    },
+    {
+      "edge_id": "edge_inh_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "expected_edge_type": "inherits",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_inh_02",
+      "source": "php://OCA\\Files\\Controller\\ViewController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "expected_edge_type": "inherits",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_inh_03",
+      "source": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "expected_edge_type": "inherits",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_inh_04",
+      "source": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "expected_edge_type": "inherits",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_inh_05",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OC\\Files\\Node\\Node",
+      "expected_edge_type": "inherits",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_call_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\File::getId",
+      "expected_edge_type": "calls",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_call_02",
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\File::getStorage",
+      "expected_edge_type": "calls",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_call_03",
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IUser::getUID",
+      "expected_edge_type": "calls",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_route_01",
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "expected_edge_type": "route_to_controller",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_route_02",
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+      "expected_edge_type": "route_to_controller",
+      "is_positive": true,
+      "matched_exact_typed": true,
+      "matched_relaxed_endpoint": true,
+      "status": "CORRECT_EXACT_TYPED"
+    },
+    {
+      "edge_id": "edge_event_01",
+      "source": "php://OC\\Files\\Node\\HookConnector",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "expected_edge_type": "event_dispatch",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_event_02",
+      "source": "php://OC\\Files\\Node\\HookConnector",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent",
+      "expected_edge_type": "event_dispatch",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_cfg_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\IConfig",
+      "expected_edge_type": "config_reads",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_test_01",
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://apps/files/tests/Controller/ApiControllerTest.php",
+      "expected_edge_type": "source_to_test",
+      "is_positive": true,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "MISSING_IN_GRAPH"
+    },
+    {
+      "edge_id": "edge_neg_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "expected_edge_type": "inherits",
+      "is_positive": false,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "CORRECT_NEGATIVE_REJECTION"
+    },
+    {
+      "edge_id": "edge_neg_02",
+      "source": "php://OC\\SystemConfig",
+      "target": "php://OCP\\IUser",
+      "expected_edge_type": "implements",
+      "is_positive": false,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "CORRECT_NEGATIVE_REJECTION"
+    },
+    {
+      "edge_id": "edge_neg_03",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "expected_edge_type": "inherits",
+      "is_positive": false,
+      "matched_exact_typed": false,
+      "matched_relaxed_endpoint": false,
+      "status": "CORRECT_NEGATIVE_REJECTION"
+    }
+  ]
+}

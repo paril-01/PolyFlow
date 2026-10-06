@@ -1,0 +1,116 @@
+{
+  "split": "dev",
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "description": "RCIR v8.5 DEV split verified against real source tree da57df078d0808a7235a0177bd99d23c010b472e.",
+  "tasks": [
+    {
+      "task_id": "TASK-DEV-01",
+      "title": "Refactor Controller Endpoint",
+      "category": "route_change",
+      "query": "getThumbnail route_change refactor",
+      "description": "Refactor ApiController thumbnail endpoint and update affected callers and routes",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "getThumbnail",
+        "target_file_hint": "apps/files/lib/Controller/ApiController.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Controller\\ApiController::getThumbnail"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor ApiController thumbnail endpoint and update affected callers and routes"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "title": "Event Contract Evolution",
+      "category": "event_change",
+      "query": "NodeDeletedEvent event_change refactor",
+      "description": "Evolve NodeDeletedEvent contract and update dispatchers and listeners",
+      "spec": {
+        "operation": "event_change",
+        "requested_symbol": "NodeDeletedEvent",
+        "target_file_hint": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve NodeDeletedEvent contract and update dispatchers and listeners"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-03",
+      "title": "Share Interface Signature Evolution",
+      "category": "signature_change",
+      "query": "getId signature_change refactor",
+      "description": "Refactor IShare getId method signature and update share implementations and consumers",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getId",
+        "target_file_hint": "lib/public/Share/IShare.php",
+        "canonical_target_ids": [
+          "php://OCP\\Share\\IShare::getId"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IShare getId method signature and update share implementations and consumers"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "title": "System Configuration Provider Contract",
+      "category": "config_change",
+      "query": "getSystemValue config_change refactor",
+      "description": "Evolve IConfig getSystemValue contract and update implementations",
+      "spec": {
+        "operation": "config_change",
+        "requested_symbol": "getSystemValue",
+        "target_file_hint": "lib/public/IConfig.php",
+        "canonical_target_ids": [
+          "php://OCP\\IConfig::getSystemValue"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve IConfig getSystemValue contract and update implementations"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-05",
+      "title": "User Session Retrieval Evolution",
+      "category": "signature_change",
+      "query": "getUser signature_change refactor",
+      "description": "Refactor IUserSession getUser contract and session implementation",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getUser",
+        "target_file_hint": "lib/public/IUserSession.php",
+        "canonical_target_ids": [
+          "php://OCP\\IUserSession::getUser"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IUserSession getUser contract and session implementation"
+      }
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "title": "User Entity UID Accessor Refactoring",
+      "category": "behavior_change",
+      "query": "getUID behavior_change refactor",
+      "description": "Refactor IUser getUID contract and private user model",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "getUID",
+        "target_file_hint": "lib/public/IUser.php",
+        "canonical_target_ids": [
+          "php://OCP\\IUser::getUID"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor IUser getUID contract and private user model"
+      }
+    }
+  ]
+}

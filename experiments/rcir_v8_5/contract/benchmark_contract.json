@@ -1,0 +1,55 @@
+{
+  "contract_version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "target_repository": "nextcloud/server",
+  "target_repository_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "impact_plane": {
+    "macro_pool_recall_min": 0.9,
+    "worst_task_pool_recall_floor": 0.8,
+    "max_silent_misses": 20
+  },
+  "ranking_plane": {
+    "precision_at_20_excluding_target_min": 0.35,
+    "precision_at_50_excluding_target_min": 0.2,
+    "ndcg_at_50_graded_min": 0.5,
+    "dependency_mrr_min": 0.7
+  },
+  "context_plane": {
+    "critical_source_recall_at_4k_min": 0.6,
+    "strict_token_budget_invariant": true,
+    "context_compiler_deterministic": true
+  },
+  "type_flow": {
+    "coverage_min": 0.6,
+    "resolved_precision_min": 0.9,
+    "wrong_exact_rate_max": 0.05
+  },
+  "canonicalization": {
+    "wrong_canonical_resolution_max": 0.01
+  },
+  "edge_evaluation": {
+    "status": "ADVISORY_ONLY"
+  },
+  "agent": {
+    "requires_real_provider": true,
+    "requires_non_empty_diff": true,
+    "requires_acceptance_transition": true,
+    "allow_simulation": false
+  },
+  "decision_rules": {
+    "option_a": {
+      "description": "All primary impact, context, type-flow, and live agent execution gates satisfied on TEST split with zero simulation.",
+      "requires_all_primary_gates": true,
+      "allow_simulation": false
+    },
+    "option_b": {
+      "description": "Substantial architectural progress on TEST split: macro recall >= 90%, P@50 improvement >= 15%, deterministic compiler, strictly obeying contract specifications.",
+      "macro_pool_recall_min": 0.9,
+      "worst_task_pool_recall_floor": 0.8,
+      "context_compiler_deterministic": true
+    },
+    "option_c": {
+      "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required."
+    }
+  }
+}

@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -25,12 +27,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov
+        pip install pytest pytest-cov psutil
 
-    - name: Run Rule 0 Ground Truth Leakage Audit
+    - name: Run Ground Truth Provenance Validation
       run: |
-        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+        python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py
 
-    - name: Run RCIR v8.3 Unit and Regression Tests
+    - name: Run RCIR v8.5 Regression and Unit Tests
       run: |
-        PYTHONPATH=rcir/src pytest tests/test_rcir_v8_3.py -v
+        PYTHONPATH=rcir/src:experiments/rcir_v8_5/scripts pytest tests/test_rcir_v8_5.py -v

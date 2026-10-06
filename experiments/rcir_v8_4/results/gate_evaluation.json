@@ -1,8 +1,13 @@
 {
   "version": "8.4",
   "evaluated_at": "2026-10-04T21:42:01Z",
-  "run_validity": "VALID",
-  "architecture_decision": "OPTION_B",
+  "run_validity": "INVALID",
+  "architecture_decision": "NOT_EVALUATED",
+  "reasons": [
+    "GROUND_TRUTH_PROVENANCE_FAILURE",
+    "SOURCE_ROOT_CONFIGURATION_FAILURE",
+    "GATE_CONTRACT_MISMATCH"
+  ],
   "gates": {
     "gate_1_test_macro_recall": {
       "metric": "TEST Macro Candidate Recall",

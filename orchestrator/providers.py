@@ -93,6 +93,8 @@ class LLMProvider:
             return self._call_anthropic(system_prompt, user_prompt, t0)
         elif self.provider_name == "gemini":
             return self._call_gemini(system_prompt, user_prompt, t0)
+        elif self.provider_name == "ollama":
+            return self._call_ollama(system_prompt, user_prompt, t0)
         else:
             raise LLMProviderError(f"Unsupported LLM provider: '{self.provider_name}'")
 
@@ -218,6 +220,42 @@ class LLMProvider:
             return resp
         except Exception as e:
             raise LLMProviderError(f"Gemini provider call failed: {e}") from e
+
+    def _call_ollama(self, system_prompt: str, user_prompt: str, start_time: float) -> LLMResponse:
+        import urllib.request
+        import json
+        endpoint = os.environ.get("OLLAMA_ENDPOINT", "http://127.0.0.1:11434").rstrip("/")
+        model_name = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
+        url = f"{endpoint}/api/generate"
+        payload = json.dumps({
+            "model": model_name,
+            "prompt": f"{system_prompt}\n\n{user_prompt}",
+            "stream": False,
+        }).encode("utf-8")
+        req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp_raw:
+                res_data = json.loads(resp_raw.read().decode("utf-8"))
+            content = res_data.get("response", "")
+            p_tokens = res_data.get("prompt_eval_count", len(system_prompt + user_prompt) // 4)
+            c_tokens = res_data.get("eval_count", len(content) // 4)
+            t_tokens = p_tokens + c_tokens
+            self.total_tokens_consumed += t_tokens
+            resp = LLMResponse(
+                content=content,
+                provider="ollama",
+                endpoint=endpoint,
+                model=model_name,
+                prompt_tokens=p_tokens,
+                completion_tokens=c_tokens,
+                total_tokens=t_tokens,
+                latency_seconds=time.time() - start_time,
+                simulation_fallback=False,
+            )
+            self.last_response = resp
+            return resp
+        except Exception as e:
+            raise LLMProviderError(f"Ollama provider call failed: {e}") from e
 
     def _simulated_response(self, system_prompt: str, user_prompt: str) -> str:
         """Dry-run simulation for verifying pipeline mechanics without external API keys."""

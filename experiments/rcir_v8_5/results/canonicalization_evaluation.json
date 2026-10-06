@@ -1,0 +1,79 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "total_test_records": 8,
+  "correct_exact": 8,
+  "correct_unique_alias": 0,
+  "wrong_resolution": 0,
+  "ambiguous": 0,
+  "unresolved": 0,
+  "accuracy": 1.0,
+  "wrong_resolution_rate": 0.0,
+  "meets_contract_target": true,
+  "eval_records": [
+    {
+      "raw_reference": "ApiController::getThumbnail",
+      "context_file": "apps/files/lib/Controller/ApiController.php",
+      "expected_canonical_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "predicted_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "context_file": "apps/files/lib/Controller/ApiController.php",
+      "expected_canonical_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "predicted_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "IConfig",
+      "context_file": "lib/public/IConfig.php",
+      "expected_canonical_id": "php://OCP\\IConfig",
+      "predicted_id": "php://OCP\\IConfig",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "OCP\\IConfig",
+      "context_file": "lib/public/IConfig.php",
+      "expected_canonical_id": "php://OCP\\IConfig",
+      "predicted_id": "php://OCP\\IConfig",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "NodeDeletedEvent",
+      "context_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "expected_canonical_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "predicted_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "apps/files/lib/Controller/ApiController.php",
+      "context_file": "apps/files/lib/Controller/ApiController.php",
+      "expected_canonical_id": "php://apps/files/lib/Controller/ApiController.php",
+      "predicted_id": "php://apps/files/lib/Controller/ApiController.php",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "Psr\\Log\\LoggerInterface",
+      "context_file": "lib/private/Server.php",
+      "expected_canonical_id": "external://Psr\\Log\\LoggerInterface",
+      "predicted_id": "external://Psr\\Log\\LoggerInterface",
+      "resolution_status": "CORRECT_EXACT",
+      "is_correct": true
+    },
+    {
+      "raw_reference": "Unknown\\NonExistentClass",
+      "context_file": "",
+      "expected_canonical_id": "unresolved://Unknown\\NonExistentClass",
+      "predicted_id": "php://Unknown\\NonExistentClass",
+      "resolution_status": "CORRECT_UNRESOLVED",
+      "is_correct": false
+    }
+  ]
+}

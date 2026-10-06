@@ -1,0 +1,98 @@
+{
+  "split": "validation",
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "description": "RCIR v8.5 VALIDATION split verified against real source tree da57df078d0808a7235a0177bd99d23c010b472e.",
+  "tasks": [
+    {
+      "task_id": "TASK-VAL-01",
+      "title": "Folder Retrieval Method Evolution",
+      "category": "signature_change",
+      "query": "get signature_change refactor",
+      "description": "Refactor Folder get signature and update node implementation hierarchy",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "get",
+        "target_file_hint": "lib/public/Files/Folder.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Folder::get"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Folder get signature and update node implementation hierarchy"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-02",
+      "title": "Files Tag Management Endpoint",
+      "category": "route_change",
+      "query": "updateFileTags route_change refactor",
+      "description": "Update updateFileTags API controller method and TagService integration",
+      "spec": {
+        "operation": "route_change",
+        "requested_symbol": "updateFileTags",
+        "target_file_hint": "apps/files/lib/Controller/ApiController.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Controller\\ApiController::updateFileTags"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Update updateFileTags API controller method and TagService integration"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-03",
+      "title": "Group Entity Interface Evolution",
+      "category": "signature_change",
+      "query": "getGID signature_change refactor",
+      "description": "Evolve IGroup getGID accessor signature across group consumers",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "getGID",
+        "target_file_hint": "lib/public/IGroup.php",
+        "canonical_target_ids": [
+          "php://OCP\\IGroup::getGID"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve IGroup getGID accessor signature across group consumers"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-04",
+      "title": "Ownership Transfer Service Evolution",
+      "category": "dependency_change",
+      "query": "OwnershipTransferService dependency_change refactor",
+      "description": "Refactor OwnershipTransferService dependencies and ApiController endpoints",
+      "spec": {
+        "operation": "dependency_change",
+        "requested_symbol": "OwnershipTransferService",
+        "target_file_hint": "apps/files/lib/Service/OwnershipTransferService.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Service\\OwnershipTransferService"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor OwnershipTransferService dependencies and ApiController endpoints"
+      }
+    },
+    {
+      "task_id": "TASK-VAL-05",
+      "title": "Application Bootstrap Refactoring",
+      "category": "behavior_change",
+      "query": "register behavior_change refactor",
+      "description": "Refactor Files Application bootstrap and service registration container",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "register",
+        "target_file_hint": "apps/files/lib/AppInfo/Application.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\AppInfo\\Application::register"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Files Application bootstrap and service registration container"
+      }
+    }
+  ]
+}

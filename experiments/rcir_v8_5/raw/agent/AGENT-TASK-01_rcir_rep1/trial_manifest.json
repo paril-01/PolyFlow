@@ -1,0 +1,16 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "trial_id": "AGENT-TASK-01_rcir_rep1",
+  "task_id": "AGENT-TASK-01",
+  "condition": "rcir",
+  "replicate": 1,
+  "model": "qwen2.5-coder:1.5b",
+  "duration_seconds": 193.785,
+  "turns": 7,
+  "tokens": 7833,
+  "tool_calls": 3,
+  "files_modified": [],
+  "diff_bytes": 0,
+  "success": false,
+  "created_at": "2026-10-05T19:06:39Z"
+}

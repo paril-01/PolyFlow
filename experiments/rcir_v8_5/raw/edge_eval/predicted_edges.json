@@ -1,0 +1,1374 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "total_predicted_dumped": 228,
+  "predictions": [
+    {
+      "source": "php://OC\\AllConfig",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\User\\Session",
+      "target": "php://OCP\\IUserSession",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\User\\Session",
+      "target": "php://OC\\Hooks\\Emitter",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\User\\Session",
+      "target": "php://OCP\\AppFramework\\Db\\TTransactional",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\User\\User",
+      "target": "php://OCP\\IUser",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\User\\User",
+      "target": "php://OCP\\Server::get",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Share20\\Share",
+      "target": "php://OCP\\Share\\IShare",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\Files\\Folder",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\File",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\File",
+      "target": "php://OCP\\Files\\File",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://OCP\\Files\\Node",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://OC\\Files\\Filesystem::normalizePath",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://OCP\\PreConditionNotMetException",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://inferred::getRoot",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://inferred::getUid",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ViewController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ViewController",
+      "target": "php://OCA\\Files\\Controller\\ViewController::__construct",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "target": "php://OCP\\AppFramework\\Http\\JSONResponse::addHeader",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "target": "php://OCP\\AppFramework\\Http\\JSONResponse::__construct",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\Files\\Folder",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\NotFoundException",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\AppFramework\\Http\\FileDisplayResponse",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\Node::getId",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getStorage",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::instanceOfStorage",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getShare",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::canSeeContent",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getMimeType",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\NotFoundException",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\AppFramework\\Http\\FileDisplayResponse",
+      "edge_type": "calls",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\Node::getId",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getStorage",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::instanceOfStorage",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getShare",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::canSeeContent",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://inferred::getMimeType",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IRequest",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IUserSession",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCA\\Files\\Service\\TagService",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IPreview",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\Share\\IManager",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCA\\Files\\Service\\UserConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCA\\Files\\Service\\ViewConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IL10N",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\Files\\IRootFolder",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "external://Psr\\Log\\LoggerInterface",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::index",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/f/{fileid}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::showFile",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/files/{path}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/recent/",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getRecentFiles",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/stats",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getStorageStats",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/views/{view}/{key}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::setViewConfig",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/views",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/views",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getViewConfigs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/config/{key}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::setConfig",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/configs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getConfigs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/showhidden",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::showHiddenFiles",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/cropimagepreviews",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::cropImagePreviews",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/showgridview",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::showGridView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/showgridview",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getGridView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/directEditing/{token}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingViewController::edit",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/preview-service-worker.js",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::serviceWorker",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/{view}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::indexView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/{view}/{fileid}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::indexViewFileid",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/directEditing",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::info",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/directEditing/templates/{editorId}/{creatorId}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::templates",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/directEditing/open",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::open",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/directEditing/create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/templates",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::list",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/templates/fields/{fileId}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::listTemplateFields",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/templates/create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/templates/path",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::path",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/transferownership",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::transfer",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/transferownership/{id}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::accept",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://DELETE::/apps/files/api/v1/transferownership/{id}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::reject",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/openlocaleditor",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\OpenLocalEditorController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/openlocaleditor/{token}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\OpenLocalEditorController::validate",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::index",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/f/{fileid}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::showFile",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/files/{path}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/recent/",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getRecentFiles",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/stats",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getStorageStats",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/views/{view}/{key}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::setViewConfig",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/views",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/views",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getViewConfigs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://PUT::/apps/files/api/v1/config/{key}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::setConfig",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/configs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getConfigs",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/showhidden",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::showHiddenFiles",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/cropimagepreviews",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::cropImagePreviews",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/showgridview",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::showGridView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/showgridview",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getGridView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/directEditing/{token}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingViewController::edit",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/preview-service-worker.js",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::serviceWorker",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/{view}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::indexView",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/{view}/{fileid}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ViewController::indexViewFileid",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/directEditing",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::info",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/directEditing/templates/{editorId}/{creatorId}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::templates",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/directEditing/open",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::open",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/directEditing/create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\DirectEditingController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/templates",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::list",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://GET::/apps/files/api/v1/templates/fields/{fileId}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::listTemplateFields",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/templates/create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/templates/path",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TemplateController::path",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/transferownership",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::transfer",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/transferownership/{id}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::accept",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://DELETE::/apps/files/api/v1/transferownership/{id}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\TransferOwnershipController::reject",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/openlocaleditor",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\OpenLocalEditorController::create",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://POST::/apps/files/api/v1/openlocaleditor/{token}",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\OpenLocalEditorController::validate",
+      "edge_type": "route_to_controller",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://inferred::getUid",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCA\\Files\\Helper",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCA\\Files\\ResponseDefinitions",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCA\\Files\\Service\\TagService",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCA\\Files\\Service\\UserConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCA\\Files\\Service\\ViewConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\ApiRoute",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\NoAdminRequired",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\NoCSRFRequired",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\OpenAPI",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\PublicPage",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Attribute\\StrictCookiesRequired",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\ContentSecurityPolicy",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\FileDisplayResponse",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Http\\StreamResponse",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\File",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\Folder",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\InvalidPathException",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\IRootFolder",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\NotFoundException",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\NotPermittedException",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\Storage\\ISharedStorage",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Files\\StorageNotAvailableException",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IL10N",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IPreview",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IRequest",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IUser",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\IUserSession",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\PreConditionNotMetException",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Share\\IManager",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\Share\\IShare",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "external://Psr\\Log\\LoggerInterface",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://OCP\\AppFramework\\Attribute\\Throwable",
+      "edge_type": "imports",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://inferred::getUid",
+      "edge_type": "calls",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "inherits",
+      "resolution": "static_inference"
+    },
+    {
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\Files\\Folder",
+      "edge_type": "inherits",
+      "resolution": "static_exact"
+    }
+  ]
+}

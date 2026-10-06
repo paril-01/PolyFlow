@@ -1,0 +1,973 @@
+{
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "target_repository": "nextcloud/server",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "parent_commits": [
+    "3ef7cefe575a589e98a0e77b45986705c4692417",
+    "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+  ],
+  "adjudication_method": "INDEPENDENT_REAL_HISTORY_AND_SOURCE_CONTENT_HASHING",
+  "total_tasks": 16,
+  "tasks": {
+    "TASK-DEV-01": {
+      "task_id": "TASK-DEV-01",
+      "title": "Refactor Controller Endpoint",
+      "category": "route_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "target_symbol": "getThumbnail",
+      "target_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "expected_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/tests/Controller/ApiControllerTest.php",
+        "apps/files/lib/Helper.php",
+        "apps/files/lib/Service/TagService.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/tests/Controller/ApiControllerTest.php"
+      ],
+      "must_change": [
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "must_inspect": [
+        "apps/files/appinfo/routes.php",
+        "apps/files/tests/Controller/ApiControllerTest.php"
+      ],
+      "supporting_context": [
+        "apps/files/lib/Helper.php",
+        "apps/files/lib/Service/TagService.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/Controller/ApiController.php": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+        "apps/files/appinfo/routes.php": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e",
+        "apps/files/tests/Controller/ApiControllerTest.php": "d85d67f3ab640810ac4f8896afee16376318cbe4f676dc4e1c31e1c81ef07865",
+        "apps/files/lib/Helper.php": "7fab0d59565fd9b0906cbbcecf780c76ffcafbe524bf06a427ce790aa0417e9b",
+        "apps/files/lib/Service/TagService.php": "35f88274e057b0cbb052f20bad1321007815daa5cb7df2dcd750b497aedddfc0"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/Controller/ApiController.php",
+          "apps/files/appinfo/routes.php",
+          "apps/files/tests/Controller/ApiControllerTest.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/lib/Helper.php",
+          "apps/files/lib/Service/TagService.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor ApiController thumbnail endpoint and update affected callers and routes"
+    },
+    "TASK-DEV-02": {
+      "task_id": "TASK-DEV-02",
+      "title": "Event Contract Evolution",
+      "category": "event_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "target_symbol": "NodeDeletedEvent",
+      "target_file_hash": "95ef454202624b97f051bf87c9cd8630b76e4c7c9cae8f9c85e5668610d17979",
+      "expected_files": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "lib/private/Files/Node/Root.php",
+        "lib/private/Files/Node/Folder.php",
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "must_change": [
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+      ],
+      "must_inspect": [
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "supporting_context": [
+        "lib/private/Files/Node/Root.php",
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php": "95ef454202624b97f051bf87c9cd8630b76e4c7c9cae8f9c85e5668610d17979",
+        "lib/private/Files/Node/Root.php": "f0d158b4b8eebaf58d39614cb29e3a20e8442de71e66aec3c7e883541600866c",
+        "lib/private/Files/Node/Folder.php": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52",
+        "lib/private/Files/Node/HookConnector.php": "99828e13c3f2c16a9e309b5386f34662eafee76106652a1d72a2dbe24be89d78",
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php": "bf9ac039be5b314c1634d51bfa655db14fd83d0fb0c3e67830c32cc855560963"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+          "lib/private/Files/Node/HookConnector.php",
+          "lib/private/Files/Node/Folder.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Files/Node/Root.php",
+          "lib/public/Files/Events/Node/NodeCreatedEvent.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Evolve NodeDeletedEvent contract and update dispatchers and listeners"
+    },
+    "TASK-DEV-03": {
+      "task_id": "TASK-DEV-03",
+      "title": "Share Interface Signature Evolution",
+      "category": "signature_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\Share\\IShare::getId",
+      "target_file": "lib/public/Share/IShare.php",
+      "target_symbol": "getId",
+      "target_file_hash": "d41959465de2b5b2ec8c493fd3fe6514e9655c06330e226b9722315de0f33d80",
+      "expected_files": [
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Manager.php",
+        "lib/private/Share20/Share.php",
+        "lib/private/Share20/DefaultShareProvider.php",
+        "tests/lib/Share20/ManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Share.php",
+        "lib/private/Share20/Manager.php"
+      ],
+      "must_change": [
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Share.php"
+      ],
+      "must_inspect": [
+        "lib/private/Share20/Manager.php",
+        "tests/lib/Share20/ManagerTest.php"
+      ],
+      "supporting_context": [
+        "lib/private/Share20/DefaultShareProvider.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/Share/IShare.php": "d41959465de2b5b2ec8c493fd3fe6514e9655c06330e226b9722315de0f33d80",
+        "lib/private/Share20/Manager.php": "84dc8110a843d8ac05d28c01e7114c78d5aad8e0e6faed9d0e5dbf18adb81656",
+        "lib/private/Share20/Share.php": "155e5f448d03a767ad2402dd46af9d71a5275228da3446e62dfaf9acc90b9513",
+        "lib/private/Share20/DefaultShareProvider.php": "1a8f8fe2da1f7ff182129dc337e218298dee1ad543519a700647c3deb35f6198",
+        "tests/lib/Share20/ManagerTest.php": "ee255f9a8a448695db4509f5702a0044071491abef874c560dec9a7496f18cfe"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/Share/IShare.php",
+          "lib/private/Share20/Share.php",
+          "lib/private/Share20/Manager.php",
+          "tests/lib/Share20/ManagerTest.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Share20/DefaultShareProvider.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor IShare getId method signature and update share implementations and consumers"
+    },
+    "TASK-DEV-04": {
+      "task_id": "TASK-DEV-04",
+      "title": "System Configuration Provider Contract",
+      "category": "config_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\IConfig::getSystemValue",
+      "target_file": "lib/public/IConfig.php",
+      "target_symbol": "getSystemValue",
+      "target_file_hash": "6a562bdaf965fe6189014e6f1336ebfdc3afe45083d3fc0d8dd8dc9d3542536b",
+      "expected_files": [
+        "lib/public/IConfig.php",
+        "lib/private/SystemConfig.php",
+        "lib/private/Config.php",
+        "lib/private/AllConfig.php",
+        "lib/private/Server.php"
+      ],
+      "critical_files": [
+        "lib/public/IConfig.php",
+        "lib/private/SystemConfig.php",
+        "lib/private/AllConfig.php"
+      ],
+      "must_change": [
+        "lib/public/IConfig.php",
+        "lib/private/SystemConfig.php"
+      ],
+      "must_inspect": [
+        "lib/private/AllConfig.php",
+        "lib/private/Config.php"
+      ],
+      "supporting_context": [
+        "lib/private/Server.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/IConfig.php": "6a562bdaf965fe6189014e6f1336ebfdc3afe45083d3fc0d8dd8dc9d3542536b",
+        "lib/private/SystemConfig.php": "832212b408cced6c26f877973b33e9212c8f871b3e25fe7dd18a8b0ceacdc918",
+        "lib/private/Config.php": "290a5e793e9ec08f03162aed06887f04a8eccdf92cee29144ab1edafeca528a0",
+        "lib/private/AllConfig.php": "7b4bdfc1917b8d35619e73656ffc4a922ae14712f3bd95d15bf589a841f0a1fc",
+        "lib/private/Server.php": "2dc3fb2269674c0236ffe1eeae191ad1142020debfa9b058edea4060636a1e34"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/IConfig.php",
+          "lib/private/SystemConfig.php",
+          "lib/private/AllConfig.php",
+          "lib/private/Config.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Server.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Evolve IConfig getSystemValue contract and update implementations"
+    },
+    "TASK-DEV-05": {
+      "task_id": "TASK-DEV-05",
+      "title": "User Session Retrieval Evolution",
+      "category": "signature_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\IUserSession::getUser",
+      "target_file": "lib/public/IUserSession.php",
+      "target_symbol": "getUser",
+      "target_file_hash": "c66ab7c41053cb62d79be1e9cf5c09ee67d9bf5361a35934fa36d822af5f9316",
+      "expected_files": [
+        "lib/public/IUserSession.php",
+        "lib/private/User/Session.php",
+        "tests/lib/User/SessionTest.php",
+        "lib/public/IUser.php",
+        "lib/private/Server.php"
+      ],
+      "critical_files": [
+        "lib/public/IUserSession.php",
+        "lib/private/User/Session.php",
+        "tests/lib/User/SessionTest.php"
+      ],
+      "must_change": [
+        "lib/public/IUserSession.php",
+        "lib/private/User/Session.php"
+      ],
+      "must_inspect": [
+        "tests/lib/User/SessionTest.php",
+        "lib/public/IUser.php"
+      ],
+      "supporting_context": [
+        "lib/private/Server.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/IUserSession.php": "c66ab7c41053cb62d79be1e9cf5c09ee67d9bf5361a35934fa36d822af5f9316",
+        "lib/private/User/Session.php": "716d85cc70951f012f350bb5c310e4b0ff342e9c2b642422c4709fa986138e0f",
+        "tests/lib/User/SessionTest.php": "2ff14b2fecb703f7e75d8bc9476c50475112d98920f17ff276c4390cc55e9d35",
+        "lib/public/IUser.php": "81e60a11a260ee45812144f250eeae20a5261dd4f008645032de70d6f76fae0c",
+        "lib/private/Server.php": "2dc3fb2269674c0236ffe1eeae191ad1142020debfa9b058edea4060636a1e34"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/IUserSession.php",
+          "lib/private/User/Session.php",
+          "tests/lib/User/SessionTest.php",
+          "lib/public/IUser.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Server.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor IUserSession getUser contract and session implementation"
+    },
+    "TASK-DEV-06": {
+      "task_id": "TASK-DEV-06",
+      "title": "User Entity UID Accessor Refactoring",
+      "category": "behavior_change",
+      "split": "dev",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\IUser::getUID",
+      "target_file": "lib/public/IUser.php",
+      "target_symbol": "getUID",
+      "target_file_hash": "81e60a11a260ee45812144f250eeae20a5261dd4f008645032de70d6f76fae0c",
+      "expected_files": [
+        "lib/public/IUser.php",
+        "lib/private/User/User.php",
+        "lib/private/User/Manager.php",
+        "lib/private/Server.php"
+      ],
+      "critical_files": [
+        "lib/public/IUser.php",
+        "lib/private/User/User.php"
+      ],
+      "must_change": [
+        "lib/public/IUser.php",
+        "lib/private/User/User.php"
+      ],
+      "must_inspect": [
+        "lib/private/User/Manager.php"
+      ],
+      "supporting_context": [
+        "lib/private/Server.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/IUser.php": "81e60a11a260ee45812144f250eeae20a5261dd4f008645032de70d6f76fae0c",
+        "lib/private/User/User.php": "dbb1afbd66402a8cc6e9cd38ab70c9b05cf96dfc5bababf4129f02f7ee66c99d",
+        "lib/private/User/Manager.php": "41a5e64ef48b345af94535238296789ba325fa8209ee5ce26dfb6045ee0b334f",
+        "lib/private/Server.php": "2dc3fb2269674c0236ffe1eeae191ad1142020debfa9b058edea4060636a1e34"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/IUser.php",
+          "lib/private/User/User.php",
+          "lib/private/User/Manager.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Server.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor IUser getUID contract and private user model"
+    },
+    "TASK-VAL-01": {
+      "task_id": "TASK-VAL-01",
+      "title": "Folder Retrieval Method Evolution",
+      "category": "signature_change",
+      "split": "validation",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\Files\\Folder::get",
+      "target_file": "lib/public/Files/Folder.php",
+      "target_symbol": "get",
+      "target_file_hash": "96020efbf9a3772ea4593e6bad34288c63916bc1b02b02425a5350dd3096db2a",
+      "expected_files": [
+        "lib/public/Files/Folder.php",
+        "lib/public/Files/Node.php",
+        "lib/private/Files/Node/Folder.php",
+        "lib/private/Files/Node/Root.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Folder.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "must_change": [
+        "lib/public/Files/Folder.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "must_inspect": [
+        "lib/public/Files/Node.php",
+        "lib/private/Files/Node/Root.php"
+      ],
+      "supporting_context": [],
+      "file_content_hashes": {
+        "lib/public/Files/Folder.php": "96020efbf9a3772ea4593e6bad34288c63916bc1b02b02425a5350dd3096db2a",
+        "lib/public/Files/Node.php": "bc9520b42f5b6aa9c906faf3be15b5ad6aa94b8adc3b87435a21cdfadfad0d7a",
+        "lib/private/Files/Node/Folder.php": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52",
+        "lib/private/Files/Node/Root.php": "f0d158b4b8eebaf58d39614cb29e3a20e8442de71e66aec3c7e883541600866c"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/Files/Folder.php",
+          "lib/private/Files/Node/Folder.php",
+          "lib/public/Files/Node.php",
+          "lib/private/Files/Node/Root.php"
+        ],
+        "semantic_dependencies": [],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor Folder get signature and update node implementation hierarchy"
+    },
+    "TASK-VAL-02": {
+      "task_id": "TASK-VAL-02",
+      "title": "Files Tag Management Endpoint",
+      "category": "route_change",
+      "split": "validation",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "target_symbol": "updateFileTags",
+      "target_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+      "expected_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/tests/Controller/ApiControllerTest.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/appinfo/routes.php"
+      ],
+      "must_change": [
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "must_inspect": [
+        "apps/files/lib/Service/TagService.php",
+        "apps/files/appinfo/routes.php"
+      ],
+      "supporting_context": [
+        "apps/files/tests/Controller/ApiControllerTest.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/Controller/ApiController.php": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+        "apps/files/lib/Service/TagService.php": "35f88274e057b0cbb052f20bad1321007815daa5cb7df2dcd750b497aedddfc0",
+        "apps/files/appinfo/routes.php": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e",
+        "apps/files/tests/Controller/ApiControllerTest.php": "d85d67f3ab640810ac4f8896afee16376318cbe4f676dc4e1c31e1c81ef07865"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/Controller/ApiController.php",
+          "apps/files/lib/Service/TagService.php",
+          "apps/files/appinfo/routes.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/tests/Controller/ApiControllerTest.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Update updateFileTags API controller method and TagService integration"
+    },
+    "TASK-VAL-03": {
+      "task_id": "TASK-VAL-03",
+      "title": "Group Entity Interface Evolution",
+      "category": "signature_change",
+      "split": "validation",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\IGroup::getGID",
+      "target_file": "lib/public/IGroup.php",
+      "target_symbol": "getGID",
+      "target_file_hash": "1ce899172f85befca18fd0d840cbae18be5dbb68da3da9e2673cca7bcf508714",
+      "expected_files": [
+        "lib/public/IGroup.php",
+        "lib/private/Server.php",
+        "lib/public/IUser.php"
+      ],
+      "critical_files": [
+        "lib/public/IGroup.php",
+        "lib/private/Server.php"
+      ],
+      "must_change": [
+        "lib/public/IGroup.php"
+      ],
+      "must_inspect": [
+        "lib/private/Server.php"
+      ],
+      "supporting_context": [
+        "lib/public/IUser.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/IGroup.php": "1ce899172f85befca18fd0d840cbae18be5dbb68da3da9e2673cca7bcf508714",
+        "lib/private/Server.php": "2dc3fb2269674c0236ffe1eeae191ad1142020debfa9b058edea4060636a1e34",
+        "lib/public/IUser.php": "81e60a11a260ee45812144f250eeae20a5261dd4f008645032de70d6f76fae0c"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/IGroup.php",
+          "lib/private/Server.php"
+        ],
+        "semantic_dependencies": [
+          "lib/public/IUser.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Evolve IGroup getGID accessor signature across group consumers"
+    },
+    "TASK-VAL-04": {
+      "task_id": "TASK-VAL-04",
+      "title": "Ownership Transfer Service Evolution",
+      "category": "dependency_change",
+      "split": "validation",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\Service\\OwnershipTransferService",
+      "target_file": "apps/files/lib/Service/OwnershipTransferService.php",
+      "target_symbol": "OwnershipTransferService",
+      "target_file_hash": "e0845bd66053329bc7e62b6baec3664d4331031d92f3828d38e94d5c3f8ef1f7",
+      "expected_files": [
+        "apps/files/lib/Service/OwnershipTransferService.php",
+        "apps/files/lib/Controller/ApiController.php",
+        "apps/files/appinfo/routes.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Service/OwnershipTransferService.php",
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "must_change": [
+        "apps/files/lib/Service/OwnershipTransferService.php"
+      ],
+      "must_inspect": [
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "supporting_context": [
+        "apps/files/appinfo/routes.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/Service/OwnershipTransferService.php": "e0845bd66053329bc7e62b6baec3664d4331031d92f3828d38e94d5c3f8ef1f7",
+        "apps/files/lib/Controller/ApiController.php": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+        "apps/files/appinfo/routes.php": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/Service/OwnershipTransferService.php",
+          "apps/files/lib/Controller/ApiController.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/appinfo/routes.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor OwnershipTransferService dependencies and ApiController endpoints"
+    },
+    "TASK-VAL-05": {
+      "task_id": "TASK-VAL-05",
+      "title": "Application Bootstrap Refactoring",
+      "category": "behavior_change",
+      "split": "validation",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\AppInfo\\Application::register",
+      "target_file": "apps/files/lib/AppInfo/Application.php",
+      "target_symbol": "register",
+      "target_file_hash": "13984b82eeb6fb3140b1f588b25bf93e9dd5ce1d0303f8365e743b19208ff0f0",
+      "expected_files": [
+        "apps/files/lib/AppInfo/Application.php",
+        "apps/files/appinfo/routes.php",
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/AppInfo/Application.php",
+        "apps/files/appinfo/routes.php"
+      ],
+      "must_change": [
+        "apps/files/lib/AppInfo/Application.php"
+      ],
+      "must_inspect": [
+        "apps/files/appinfo/routes.php"
+      ],
+      "supporting_context": [
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/AppInfo/Application.php": "13984b82eeb6fb3140b1f588b25bf93e9dd5ce1d0303f8365e743b19208ff0f0",
+        "apps/files/appinfo/routes.php": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e",
+        "apps/files/lib/Controller/ApiController.php": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/AppInfo/Application.php",
+          "apps/files/appinfo/routes.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/lib/Controller/ApiController.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor Files Application bootstrap and service registration container"
+    },
+    "TASK-TEST-01": {
+      "task_id": "TASK-TEST-01",
+      "title": "HTTP Response Render Method Evolution",
+      "category": "signature_change",
+      "split": "test",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\AppFramework\\Http\\Response::render",
+      "target_file": "lib/public/AppFramework/Http/Response.php",
+      "target_symbol": "render",
+      "target_file_hash": "74f77b249418103f82494c6a3b6a804f62fe24ce1ca64b6934b0031e680fba8e",
+      "expected_files": [
+        "lib/public/AppFramework/Http/Response.php",
+        "lib/public/AppFramework/Http/DataResponse.php",
+        "lib/public/AppFramework/Http/JSONResponse.php",
+        "lib/public/AppFramework/Controller.php"
+      ],
+      "critical_files": [
+        "lib/public/AppFramework/Http/Response.php",
+        "lib/public/AppFramework/Http/DataResponse.php",
+        "lib/public/AppFramework/Http/JSONResponse.php"
+      ],
+      "must_change": [
+        "lib/public/AppFramework/Http/Response.php"
+      ],
+      "must_inspect": [
+        "lib/public/AppFramework/Http/DataResponse.php",
+        "lib/public/AppFramework/Http/JSONResponse.php"
+      ],
+      "supporting_context": [
+        "lib/public/AppFramework/Controller.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/AppFramework/Http/Response.php": "74f77b249418103f82494c6a3b6a804f62fe24ce1ca64b6934b0031e680fba8e",
+        "lib/public/AppFramework/Http/DataResponse.php": "c345ee12e483341e1a730aeaa77f62b8a592a5aeca2692856ccb624b7fae6572",
+        "lib/public/AppFramework/Http/JSONResponse.php": "bd67e57e67d179912f3e3c54e86fc9ac9d93bba0c33ff46c5a7c5bb0470b1e6f",
+        "lib/public/AppFramework/Controller.php": "8e20015821a62168e6d269a9123ddf88223d76d0c66ca2aa7a05053bb6a3b7e5"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/AppFramework/Http/Response.php",
+          "lib/public/AppFramework/Http/DataResponse.php",
+          "lib/public/AppFramework/Http/JSONResponse.php"
+        ],
+        "semantic_dependencies": [
+          "lib/public/AppFramework/Controller.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor Response render contract and update child response types"
+    },
+    "TASK-TEST-02": {
+      "task_id": "TASK-TEST-02",
+      "title": "Node Creation Event Dispatch Contract",
+      "category": "event_change",
+      "split": "test",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+      "target_symbol": "NodeCreatedEvent",
+      "target_file_hash": "bf9ac039be5b314c1634d51bfa655db14fd83d0fb0c3e67830c32cc855560963",
+      "expected_files": [
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "lib/private/Files/Node/Root.php",
+        "lib/private/Files/Node/Folder.php",
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+      ],
+      "critical_files": [
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "must_change": [
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php"
+      ],
+      "must_inspect": [
+        "lib/private/Files/Node/HookConnector.php",
+        "lib/private/Files/Node/Folder.php"
+      ],
+      "supporting_context": [
+        "lib/private/Files/Node/Root.php",
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+      ],
+      "file_content_hashes": {
+        "lib/public/Files/Events/Node/NodeCreatedEvent.php": "bf9ac039be5b314c1634d51bfa655db14fd83d0fb0c3e67830c32cc855560963",
+        "lib/private/Files/Node/Root.php": "f0d158b4b8eebaf58d39614cb29e3a20e8442de71e66aec3c7e883541600866c",
+        "lib/private/Files/Node/Folder.php": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52",
+        "lib/private/Files/Node/HookConnector.php": "99828e13c3f2c16a9e309b5386f34662eafee76106652a1d72a2dbe24be89d78",
+        "lib/public/Files/Events/Node/NodeDeletedEvent.php": "95ef454202624b97f051bf87c9cd8630b76e4c7c9cae8f9c85e5668610d17979"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+          "lib/private/Files/Node/HookConnector.php",
+          "lib/private/Files/Node/Folder.php"
+        ],
+        "semantic_dependencies": [
+          "lib/private/Files/Node/Root.php",
+          "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Evolve NodeCreatedEvent payload and update storage dispatch hooks"
+    },
+    "TASK-TEST-03": {
+      "task_id": "TASK-TEST-03",
+      "title": "Share Creation Manager Method Evolution",
+      "category": "behavior_change",
+      "split": "test",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OC\\Share20\\Manager::createShare",
+      "target_file": "lib/private/Share20/Manager.php",
+      "target_symbol": "createShare",
+      "target_file_hash": "84dc8110a843d8ac05d28c01e7114c78d5aad8e0e6faed9d0e5dbf18adb81656",
+      "expected_files": [
+        "lib/private/Share20/Manager.php",
+        "lib/public/Share/IShare.php",
+        "lib/private/Share20/Share.php",
+        "tests/lib/Share20/ManagerTest.php"
+      ],
+      "critical_files": [
+        "lib/private/Share20/Manager.php",
+        "lib/private/Share20/Share.php",
+        "lib/public/Share/IShare.php"
+      ],
+      "must_change": [
+        "lib/private/Share20/Manager.php"
+      ],
+      "must_inspect": [
+        "lib/private/Share20/Share.php",
+        "tests/lib/Share20/ManagerTest.php"
+      ],
+      "supporting_context": [
+        "lib/public/Share/IShare.php"
+      ],
+      "file_content_hashes": {
+        "lib/private/Share20/Manager.php": "84dc8110a843d8ac05d28c01e7114c78d5aad8e0e6faed9d0e5dbf18adb81656",
+        "lib/public/Share/IShare.php": "d41959465de2b5b2ec8c493fd3fe6514e9655c06330e226b9722315de0f33d80",
+        "lib/private/Share20/Share.php": "155e5f448d03a767ad2402dd46af9d71a5275228da3446e62dfaf9acc90b9513",
+        "tests/lib/Share20/ManagerTest.php": "ee255f9a8a448695db4509f5702a0044071491abef874c560dec9a7496f18cfe"
+      },
+      "evidence": {
+        "diff_files": [
+          "lib/private/Share20/Manager.php",
+          "lib/private/Share20/Share.php",
+          "tests/lib/Share20/ManagerTest.php"
+        ],
+        "semantic_dependencies": [
+          "lib/public/Share/IShare.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor Share Manager share creation workflow and validation logic"
+    },
+    "TASK-TEST-04": {
+      "task_id": "TASK-TEST-04",
+      "title": "Direct Editing Service Boundary Contract",
+      "category": "dependency_change",
+      "split": "test",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\Service\\DirectEditingService",
+      "target_file": "apps/files/lib/Service/DirectEditingService.php",
+      "target_symbol": "DirectEditingService",
+      "target_file_hash": "ea872bc63916f86918d690537c5824b8eeb2378654e965a32c4805151092db2e",
+      "expected_files": [
+        "apps/files/lib/Service/DirectEditingService.php",
+        "apps/files/lib/Controller/DirectEditingController.php",
+        "apps/files/appinfo/routes.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Service/DirectEditingService.php",
+        "apps/files/lib/Controller/DirectEditingController.php"
+      ],
+      "must_change": [
+        "apps/files/lib/Service/DirectEditingService.php"
+      ],
+      "must_inspect": [
+        "apps/files/lib/Controller/DirectEditingController.php"
+      ],
+      "supporting_context": [
+        "apps/files/appinfo/routes.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/Service/DirectEditingService.php": "ea872bc63916f86918d690537c5824b8eeb2378654e965a32c4805151092db2e",
+        "apps/files/lib/Controller/DirectEditingController.php": "0d9aff7524cd766868f92d45784e8284988d97357f262b4592b9441a9b13675c",
+        "apps/files/appinfo/routes.php": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/Service/DirectEditingService.php",
+          "apps/files/lib/Controller/DirectEditingController.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/appinfo/routes.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor DirectEditingService and associated API controller endpoints"
+    },
+    "TASK-TEST-05": {
+      "task_id": "TASK-TEST-05",
+      "title": "Files User Configuration Service Contract",
+      "category": "config_change",
+      "split": "test",
+      "upstream_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "parent_commits": [
+        "3ef7cefe575a589e98a0e77b45986705c4692417",
+        "c25ad001b357bf4f168a65ee7b0833fce0504b72"
+      ],
+      "commit_verified": true,
+      "target_entity": "php://OCA\\Files\\Service\\UserConfig",
+      "target_file": "apps/files/lib/Service/UserConfig.php",
+      "target_symbol": "UserConfig",
+      "target_file_hash": "5a32342e5f558d537970eb33b35bad6c6c1a01fc78a134de2345b1b2d7373632",
+      "expected_files": [
+        "apps/files/lib/Service/UserConfig.php",
+        "apps/files/lib/Controller/ApiController.php",
+        "lib/public/IConfig.php",
+        "apps/files/lib/Service/ViewConfig.php"
+      ],
+      "critical_files": [
+        "apps/files/lib/Service/UserConfig.php",
+        "apps/files/lib/Controller/ApiController.php"
+      ],
+      "must_change": [
+        "apps/files/lib/Service/UserConfig.php"
+      ],
+      "must_inspect": [
+        "apps/files/lib/Controller/ApiController.php",
+        "lib/public/IConfig.php"
+      ],
+      "supporting_context": [
+        "apps/files/lib/Service/ViewConfig.php"
+      ],
+      "file_content_hashes": {
+        "apps/files/lib/Service/UserConfig.php": "5a32342e5f558d537970eb33b35bad6c6c1a01fc78a134de2345b1b2d7373632",
+        "apps/files/lib/Controller/ApiController.php": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407",
+        "lib/public/IConfig.php": "6a562bdaf965fe6189014e6f1336ebfdc3afe45083d3fc0d8dd8dc9d3542536b",
+        "apps/files/lib/Service/ViewConfig.php": "f2782d8a1e5fe883efd45a1c979a8da09f0b386c52f67ab03e04d89c5d62564c"
+      },
+      "evidence": {
+        "diff_files": [
+          "apps/files/lib/Service/UserConfig.php",
+          "apps/files/lib/Controller/ApiController.php",
+          "lib/public/IConfig.php"
+        ],
+        "semantic_dependencies": [
+          "apps/files/lib/Service/ViewConfig.php"
+        ],
+        "tree_commit": "da57df078d0808a7235a0177bd99d23c010b472e"
+      },
+      "adjudication": {
+        "reviewer": "rcir_v8_5_provenance_auditor",
+        "method": "REAL_SOURCE_CONTENT_HASH_AND_AST_VERIFICATION",
+        "verified": true
+      },
+      "description": "Refactor UserConfig service and configuration read delegation"
+    }
+  }
+}

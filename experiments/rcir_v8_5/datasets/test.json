@@ -1,0 +1,98 @@
+{
+  "split": "test",
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "description": "RCIR v8.5 TEST split verified against real source tree da57df078d0808a7235a0177bd99d23c010b472e.",
+  "tasks": [
+    {
+      "task_id": "TASK-TEST-01",
+      "title": "HTTP Response Render Method Evolution",
+      "category": "signature_change",
+      "query": "render signature_change refactor",
+      "description": "Refactor Response render contract and update child response types",
+      "spec": {
+        "operation": "signature_change",
+        "requested_symbol": "render",
+        "target_file_hint": "lib/public/AppFramework/Http/Response.php",
+        "canonical_target_ids": [
+          "php://OCP\\AppFramework\\Http\\Response::render"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Response render contract and update child response types"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-02",
+      "title": "Node Creation Event Dispatch Contract",
+      "category": "event_change",
+      "query": "NodeCreatedEvent event_change refactor",
+      "description": "Evolve NodeCreatedEvent payload and update storage dispatch hooks",
+      "spec": {
+        "operation": "event_change",
+        "requested_symbol": "NodeCreatedEvent",
+        "target_file_hint": "lib/public/Files/Events/Node/NodeCreatedEvent.php",
+        "canonical_target_ids": [
+          "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Evolve NodeCreatedEvent payload and update storage dispatch hooks"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-03",
+      "title": "Share Creation Manager Method Evolution",
+      "category": "behavior_change",
+      "query": "createShare behavior_change refactor",
+      "description": "Refactor Share Manager share creation workflow and validation logic",
+      "spec": {
+        "operation": "behavior_change",
+        "requested_symbol": "createShare",
+        "target_file_hint": "lib/private/Share20/Manager.php",
+        "canonical_target_ids": [
+          "php://OC\\Share20\\Manager::createShare"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor Share Manager share creation workflow and validation logic"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-04",
+      "title": "Direct Editing Service Boundary Contract",
+      "category": "dependency_change",
+      "query": "DirectEditingService dependency_change refactor",
+      "description": "Refactor DirectEditingService and associated API controller endpoints",
+      "spec": {
+        "operation": "dependency_change",
+        "requested_symbol": "DirectEditingService",
+        "target_file_hint": "apps/files/lib/Service/DirectEditingService.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Service\\DirectEditingService"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor DirectEditingService and associated API controller endpoints"
+      }
+    },
+    {
+      "task_id": "TASK-TEST-05",
+      "title": "Files User Configuration Service Contract",
+      "category": "config_change",
+      "query": "UserConfig config_change refactor",
+      "description": "Refactor UserConfig service and configuration read delegation",
+      "spec": {
+        "operation": "config_change",
+        "requested_symbol": "UserConfig",
+        "target_file_hint": "apps/files/lib/Service/UserConfig.php",
+        "canonical_target_ids": [
+          "php://OCA\\Files\\Service\\UserConfig"
+        ],
+        "requested_scope": "repository",
+        "language": "php",
+        "description": "Refactor UserConfig service and configuration read delegation"
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "evaluated_at": "2026-10-05T19:08:22Z",
+  "validation_status": "MEASURED_AGENT_VALIDATION",
+  "provider": {
+    "name": "ollama",
+    "model": "qwen2.5-coder:1.5b",
+    "parameter_size": "1.5B",
+    "is_simulation": false
+  },
+  "condition_a_rcir": {
+    "trials_count": 1,
+    "completed_count": 0,
+    "completion_rate": 0.0,
+    "avg_turns": 7.0,
+    "avg_tokens": 7833.0
+  },
+  "condition_b_baseline": {
+    "trials_count": 1,
+    "completed_count": 0,
+    "completion_rate": 0.0,
+    "avg_turns": 8.0,
+    "avg_tokens": 13230.0
+  },
+  "comparison": {
+    "completion_rate_delta": 0.0,
+    "turn_reduction": 1.0,
+    "token_reduction": 5397.0
+  },
+  "trials": [
+    {
+      "run_id": "rcir-v8.5-primary",
+      "trial_id": "AGENT-TASK-01_rcir_rep1",
+      "task_id": "AGENT-TASK-01",
+      "condition": "rcir",
+      "replicate": 1,
+      "model": "qwen2.5-coder:1.5b",
+      "duration_seconds": 193.785,
+      "turns": 7,
+      "tokens": 7833,
+      "tool_calls": 3,
+      "files_modified": [],
+      "diff_bytes": 0,
+      "success": false,
+      "created_at": "2026-10-05T19:06:39Z"
+    },
+    {
+      "run_id": "rcir-v8.5-primary",
+      "trial_id": "AGENT-TASK-01_baseline_rep1",
+      "task_id": "AGENT-TASK-01",
+      "condition": "baseline",
+      "replicate": 1,
+      "model": "qwen2.5-coder:1.5b",
+      "duration_seconds": 62.208,
+      "turns": 8,
+      "tokens": 13230,
+      "tool_calls": 5,
+      "files_modified": [],
+      "diff_bytes": 0,
+      "success": false,
+      "created_at": "2026-10-05T19:08:04Z"
+    }
+  ]
+}

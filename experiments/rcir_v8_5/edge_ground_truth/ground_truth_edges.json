@@ -1,0 +1,260 @@
+{
+  "version": "8.5",
+  "run_id": "rcir-v8.5-primary",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "total_edges": 25,
+  "positive_count": 22,
+  "negative_count": 3,
+  "edges": [
+    {
+      "edge_id": "edge_impl_01",
+      "source": "php://OC\\SystemConfig",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class SystemConfig implements IConfig",
+      "source_file": "lib/private/SystemConfig.php",
+      "source_file_hash": "832212b408cced6c26f877973b33e9212c8f871b3e25fe7dd18a8b0ceacdc918"
+    },
+    {
+      "edge_id": "edge_impl_02",
+      "source": "php://OC\\AllConfig",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class AllConfig implements IConfig",
+      "source_file": "lib/private/AllConfig.php",
+      "source_file_hash": "7b4bdfc1917b8d35619e73656ffc4a922ae14712f3bd95d15bf589a841f0a1fc"
+    },
+    {
+      "edge_id": "edge_impl_03",
+      "source": "php://OC\\User\\Session",
+      "target": "php://OCP\\IUserSession",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class Session implements IUserSession",
+      "source_file": "lib/private/User/Session.php",
+      "source_file_hash": "716d85cc70951f012f350bb5c310e4b0ff342e9c2b642422c4709fa986138e0f"
+    },
+    {
+      "edge_id": "edge_impl_04",
+      "source": "php://OC\\User\\User",
+      "target": "php://OCP\\IUser",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class User implements IUser",
+      "source_file": "lib/private/User/User.php",
+      "source_file_hash": "dbb1afbd66402a8cc6e9cd38ab70c9b05cf96dfc5bababf4129f02f7ee66c99d"
+    },
+    {
+      "edge_id": "edge_impl_05",
+      "source": "php://OC\\Share20\\Share",
+      "target": "php://OCP\\Share\\IShare",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class Share implements IShare",
+      "source_file": "lib/private/Share20/Share.php",
+      "source_file_hash": "155e5f448d03a767ad2402dd46af9d71a5275228da3446e62dfaf9acc90b9513"
+    },
+    {
+      "edge_id": "edge_impl_06",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\Files\\Folder",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class Folder extends Node implements Folder",
+      "source_file": "lib/private/Files/Node/Folder.php",
+      "source_file_hash": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52"
+    },
+    {
+      "edge_id": "edge_impl_07",
+      "source": "php://OC\\Files\\Node\\File",
+      "target": "php://OCP\\Files\\File",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class File extends Node implements File",
+      "source_file": "lib/private/Files/Node/File.php",
+      "source_file_hash": "0810f0fba631e8a1f25f4740bcafd9b19ae341284508af1081ba2a4761a732f6"
+    },
+    {
+      "edge_id": "edge_impl_08",
+      "source": "php://OC\\Files\\Node\\Node",
+      "target": "php://OCP\\Files\\Node",
+      "edge_type": "implements",
+      "is_positive": true,
+      "evidence": "class Node implements Node",
+      "source_file": "lib/private/Files/Node/Node.php",
+      "source_file_hash": "9db1744e83612a6f7145255085b468bacd42660fd096d2ea97334afb8dce43b5"
+    },
+    {
+      "edge_id": "edge_inh_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "is_positive": true,
+      "evidence": "class ApiController extends Controller",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_inh_02",
+      "source": "php://OCA\\Files\\Controller\\ViewController",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "is_positive": true,
+      "evidence": "class ViewController extends Controller",
+      "source_file": "apps/files/lib/Controller/ViewController.php",
+      "source_file_hash": "3491ce401b6f86492fdb3b609661bf888ab66fc0e9fb4806c0b51525179b7b8e"
+    },
+    {
+      "edge_id": "edge_inh_03",
+      "source": "php://OCP\\AppFramework\\Http\\JSONResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "edge_type": "inherits",
+      "is_positive": true,
+      "evidence": "class JSONResponse extends Response",
+      "source_file": "lib/public/AppFramework/Http/JSONResponse.php",
+      "source_file_hash": "bd67e57e67d179912f3e3c54e86fc9ac9d93bba0c33ff46c5a7c5bb0470b1e6f"
+    },
+    {
+      "edge_id": "edge_inh_04",
+      "source": "php://OCP\\AppFramework\\Http\\DataResponse",
+      "target": "php://OCP\\AppFramework\\Http\\Response",
+      "edge_type": "inherits",
+      "is_positive": true,
+      "evidence": "class DataResponse extends Response",
+      "source_file": "lib/public/AppFramework/Http/DataResponse.php",
+      "source_file_hash": "c345ee12e483341e1a730aeaa77f62b8a592a5aeca2692856ccb624b7fae6572"
+    },
+    {
+      "edge_id": "edge_inh_05",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OC\\Files\\Node\\Node",
+      "edge_type": "inherits",
+      "is_positive": true,
+      "evidence": "class Folder extends Node",
+      "source_file": "lib/private/Files/Node/Folder.php",
+      "source_file_hash": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52"
+    },
+    {
+      "edge_id": "edge_call_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\File::getId",
+      "edge_type": "calls",
+      "is_positive": true,
+      "evidence": "$file->getId() call at line 108",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_call_02",
+      "source": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "target": "php://OCP\\Files\\File::getStorage",
+      "edge_type": "calls",
+      "is_positive": true,
+      "evidence": "$file->getStorage() call at line 115",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_call_03",
+      "source": "php://OCA\\Files\\Controller\\ApiController::__construct",
+      "target": "php://OCP\\IUser::getUID",
+      "edge_type": "calls",
+      "is_positive": true,
+      "evidence": "$user->getUID() call at line 76",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_route_01",
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+      "edge_type": "route_to_controller",
+      "is_positive": true,
+      "evidence": "Api#getThumbnail route mapping",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_file_hash": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e"
+    },
+    {
+      "edge_id": "edge_route_02",
+      "source": "php://apps/files/appinfo/routes.php",
+      "target": "php://OCA\\Files\\Controller\\ApiController::updateFileTags",
+      "edge_type": "route_to_controller",
+      "is_positive": true,
+      "evidence": "Api#updateFileTags route mapping",
+      "source_file": "apps/files/appinfo/routes.php",
+      "source_file_hash": "7b974e250406ad63cc18f378588f36e4b095f4dceaadc9f933209ac00eb8d59e"
+    },
+    {
+      "edge_id": "edge_event_01",
+      "source": "php://OC\\Files\\Node\\HookConnector",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "edge_type": "event_dispatch",
+      "is_positive": true,
+      "evidence": "eventDispatcher->dispatch NodeDeletedEvent",
+      "source_file": "lib/private/Files/Node/HookConnector.php",
+      "source_file_hash": "99828e13c3f2c16a9e309b5386f34662eafee76106652a1d72a2dbe24be89d78"
+    },
+    {
+      "edge_id": "edge_event_02",
+      "source": "php://OC\\Files\\Node\\HookConnector",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeCreatedEvent",
+      "edge_type": "event_dispatch",
+      "is_positive": true,
+      "evidence": "eventDispatcher->dispatch NodeCreatedEvent",
+      "source_file": "lib/private/Files/Node/HookConnector.php",
+      "source_file_hash": "99828e13c3f2c16a9e309b5386f34662eafee76106652a1d72a2dbe24be89d78"
+    },
+    {
+      "edge_id": "edge_cfg_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\IConfig",
+      "edge_type": "config_reads",
+      "is_positive": true,
+      "evidence": "IConfig injected into ApiController",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_test_01",
+      "source": "php://apps/files/lib/Controller/ApiController.php",
+      "target": "php://apps/files/tests/Controller/ApiControllerTest.php",
+      "edge_type": "source_to_test",
+      "is_positive": true,
+      "evidence": "Controller test suite for ApiController",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_neg_01",
+      "source": "php://OCA\\Files\\Controller\\ApiController",
+      "target": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+      "edge_type": "inherits",
+      "is_positive": false,
+      "evidence": "ApiController does NOT inherit NodeDeletedEvent",
+      "source_file": "apps/files/lib/Controller/ApiController.php",
+      "source_file_hash": "4a05ac7b8bfa5b6da59d459e94dca9c68cf7c0fb909ab824495402bd1dd9f407"
+    },
+    {
+      "edge_id": "edge_neg_02",
+      "source": "php://OC\\SystemConfig",
+      "target": "php://OCP\\IUser",
+      "edge_type": "implements",
+      "is_positive": false,
+      "evidence": "SystemConfig does NOT implement IUser",
+      "source_file": "lib/private/SystemConfig.php",
+      "source_file_hash": "832212b408cced6c26f877973b33e9212c8f871b3e25fe7dd18a8b0ceacdc918"
+    },
+    {
+      "edge_id": "edge_neg_03",
+      "source": "php://OC\\Files\\Node\\Folder",
+      "target": "php://OCP\\AppFramework\\Controller",
+      "edge_type": "inherits",
+      "is_positive": false,
+      "evidence": "Folder does NOT inherit Controller",
+      "source_file": "lib/private/Files/Node/Folder.php",
+      "source_file_hash": "4b9d6bf643678d543c0c5eecb304f5c9c31e27e4f64ede7ca5b954c1c8f87f52"
+    }
+  ]
+}

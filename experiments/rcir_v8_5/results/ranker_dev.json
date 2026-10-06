@@ -1,0 +1,30 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "split": "dev",
+  "selected_ranker_config": "R0",
+  "metrics": {
+    "macro_pool_recall": 0.925,
+    "worst_task_pool_recall": 0.75,
+    "precision_at_20_excluding_target": 0.1,
+    "precision_at_50_excluding_target": 0.04,
+    "dependency_mrr": 0.5833,
+    "graded_ndcg_at_50": 0.4535,
+    "multi_objective_score": 0.5943,
+    "silent_misses": 2,
+    "total_tasks_evaluated": 6
+  },
+  "channel_discovery_stats": {
+    "channel_a_exact_graph": 3839,
+    "channel_b_type_flow": 42,
+    "channel_c_boundary": 1,
+    "channel_d_events": 3,
+    "channel_e_config": 4,
+    "channel_f_verification": 13,
+    "channel_g_lexical": 0
+  },
+  "gate_compliance": {
+    "macro_recall_passed": true,
+    "worst_task_recall_passed": false,
+    "silent_misses_passed": true
+  }
+}

@@ -1,0 +1,739 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "split": "dev",
+  "token_budget": 4000,
+  "total_tasks": 6,
+  "tasks": {
+    "TASK-DEV-01": {
+      "task_id": "TASK-DEV-01",
+      "total_tokens": 1326,
+      "token_budget": 4000,
+      "entries_count": 5,
+      "critical_file_recall": 0.6667,
+      "critical_source_recall": 0.6667,
+      "entries": [
+        {
+          "entity_id": "php://OCA\\Files\\Controller\\ApiController::getThumbnail",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "apps/files/lib/Controller/ApiController.php",
+          "source_lines": [
+            99,
+            132
+          ],
+          "estimated_tokens": 322,
+          "content_snippet": "\tpublic function getThumbnail($x, $y, $file) {\n\t\tif ($x < 1 || $y < 1) {\n\t\t\treturn new DataResponse(['message' => 'Requested size must be numeric and a positive value.'], Http::STATUS_BAD_REQUEST);\n\t\t}\n\n\t\ttry {\n\t\t\t$file = $this->userFolder?->get($file);\n\t\t\tif ($file === null\n\t\t\t\t|| !($file instanceof File)\n\t\t\t\t|| ($file->getId() <= 0)\n\t\t\t) {\n\t\t\t\tthrow new NotFoundException();\n\t\t\t}\n\n\t\t\t// Validate the user is allowed to download the file (preview is some kind of download)\n\t\t\t/** @var ISharedStorage $storage */\n\t\t\t$storage = $file->getStorage();\n\t\t\tif ($storage->instanceOfStorage(ISharedStorage::class)) {\n\t\t\t\t/** @var IShare $share */\n\t\t\t\t$share = $storage->getShare();\n\t\t\t\tif (!$share->canSeeContent()) {\n\t\t\t\t\tthrow new NotFoundException();\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$preview = $this->previewManager->getPreview($file, $x, $y, true);\n\n\t\t\treturn new FileDisplayResponse($preview, Http::STATUS_OK, ['Content-Type' => $preview->getMimeType()]);\n\t\t} catch (NotFoundException|NotPermittedException|InvalidPathException) {\n\t\t\treturn new DataResponse(['message' => 'File not found.'], Http::STATUS_NOT_FOUND);\n\t\t} catch (\\Exception $e) {\n\t\t\treturn new DataResponse([], Http::STATUS_BAD_REQUEST);\n\t\t}\n\t}",
+          "span_metadata": {
+            "start_line": 99,
+            "end_line": 132,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getThumbnail"
+          },
+          "merged_entity_ids": [
+            "php://OCA\\Files\\Controller\\ApiController"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "a1f2b2d8a21d09ece2ae4fd01a7ea17b719b55e835ad641f5c117343ca59f91e",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files/tests/Controller/ApiControllerTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/files/tests/Controller/ApiControllerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 191,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files/tests/Controller/ApiControllerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "34c3be2513c6f70f1ee66fe08ab0846b0401f9f77c9d118947e8c871f06888d2",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/Share20/ManagerTest.php",
+          "rank": 3,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Share20/ManagerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 192,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/Share20/ManagerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6514ed37ec1e2218bb69ccb600f57c4aac6369dceab4f4ef25e8254674c73441",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 4,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Appstore\\Controller\\ApiController",
+          "rank": 5,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "apps/appstore/lib/Controller/ApiController.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 4837,
+          "content_snippet": "// [SUMMARY] apps/appstore/lib/Controller/ApiController.php :: php://OCA\\Appstore\\Controller\\ApiController | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCA\\Appstore\\Controller\\ApiController"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "c8bd68cc5959d5757a41d6f52eb9cc5545123ed2bf94b95e9e50228a0cdfb51a",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 1326 / 4000 tokens | **Included Context Units:** 5 (merged 8)\n\n## [1] php://OCA\\Files\\Controller\\ApiController::getThumbnail (full_implementation)\n- **File:** `apps/files/lib/Controller/ApiController.php` (lines 99-132)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCA\\Files\\Controller\\ApiController\n```\npublic function getThumbnail($x, $y, $file) {\n\t\tif ($x < 1 || $y < 1) {\n\t\t\treturn new DataResponse(['message' => 'Requested size must be numeric and a positive value.'], Http::STATUS_BAD_REQUEST);\n\t\t}\n\n\t\ttry {\n\t\t\t$file = $this->userFolder?->get($file);\n\t\t\tif ($file === null\n\t\t\t\t|| !($file instanceof File)\n\t\t\t\t|| ($file->getId() <= 0)\n\t\t\t) {\n\t\t\t\tthrow new NotFoundException();\n\t\t\t}\n\n\t\t\t// Validate the user is allowed to download the file (preview is some kind of download)\n\t\t\t/** @var ISharedStorage $storage */\n\t\t\t$storage = $file->getStorage();\n\t\t\tif ($storage->instanceOfStorage(ISharedStorage::class)) {\n\t\t\t\t/** @var IShare $share */\n\t\t\t\t$share = $storage->getShare();\n\t\t\t\tif (!$share->canSeeContent()) {\n\t\t\t\t\tthrow new NotFoundException();\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$preview = $this->previewManager->getPreview($file, $x, $y, true);\n\n\t\t\treturn new FileDisplayResponse($preview, Http::STATUS_OK, ['Content-Type' => $preview->getMimeType()]);\n\t\t} catch (NotFoundException|NotPermittedException|InvalidPathException) {\n\t\t\treturn new DataResponse(['message' => 'File not found.'], Http::STATUS_NOT_FOUND);\n\t\t} catch (\\Exception $e) {\n\t\t\treturn new DataResponse([], Http::STATUS_BAD_REQUEST);\n\t\t}\n\t}\n```\n\n## [2] php://apps/files/tests/Controller/ApiControllerTest.php (test_fragment)\n- **File:** `apps/files/tests/Controller/ApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;\n```\n\n## [3] php://tests/lib/Share20/ManagerTest.php (test_fragment)\n- **File:** `tests/lib/Share20/ManagerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace Test\\Share20;\n\nuse DateTimeZone;\nuse OC\\Files\\Utils\\PathHelper;\nuse OC\\KnownUser\\KnownUserService;\nuse OC\\Share20\\DefaultShareProvider;\nuse OC\\Share20\\Exception\\ProviderException;\nuse OC\\Share20\\Manager;\nuse OC\\Share20\\Share;\nuse OC\\Share20\\ShareDisableChecker;\nuse OCA\\Files_Sharing\\Listener\\RestrictInteractionListener;\nuse OCP\\Constants;\nuse OCP\\DB\\IResult;\nuse OCP\\DB\\QueryBuilder\\IExpressionBuilder;\nuse OCP\\DB\\QueryBuilder\\IQueryBuilder;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;\n```\n\n## [4] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [5] php://OCA\\Appstore\\Controller\\ApiController (summary)\n- **File:** `apps/appstore/lib/Controller/ApiController.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] apps/appstore/lib/Controller/ApiController.php :: php://OCA\\Appstore\\Controller\\ApiController | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-DEV-02": {
+      "task_id": "TASK-DEV-02",
+      "total_tokens": 201,
+      "token_budget": 4000,
+      "entries_count": 2,
+      "critical_file_recall": 0.6667,
+      "critical_source_recall": 0.6667,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+          "source_lines": [
+            12,
+            16
+          ],
+          "estimated_tokens": 21,
+          "content_snippet": "/**\n * @since 20.0.0\n */\nclass NodeDeletedEvent extends AbstractNodeEvent {\n}",
+          "span_metadata": {
+            "start_line": 12,
+            "end_line": 16,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "NodeDeletedEvent"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "43d4e85eb5f7ec8e497169d7019bd3d708bae8554fbbbd2ee6aea6151138dad3",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OC\\Files\\Node\\Folder",
+          "rank": 2,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "event_dispatch"
+          ],
+          "granularity": "summary",
+          "source_file": "lib/private/Files/Node/Folder.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 4348,
+          "content_snippet": "// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OC\\Files\\Node\\Folder"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b3bd34f8c5ec9f0ba5e98661c8510cd22eef736f98174f3565b1b9fe1cbef708",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 201 / 4000 tokens | **Included Context Units:** 2 (merged 1)\n\n## [1] php://OCP\\Files\\Events\\Node\\NodeDeletedEvent (full_implementation)\n- **File:** `lib/public/Files/Events/Node/NodeDeletedEvent.php` (lines 12-16)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n * @since 20.0.0\n */\nclass NodeDeletedEvent extends AbstractNodeEvent {\n}\n```\n\n## [2] php://OC\\Files\\Node\\Folder (summary)\n- **File:** `lib/private/Files/Node/Folder.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** event_dispatch\n```\n// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-DEV-03": {
+      "task_id": "TASK-DEV-03",
+      "total_tokens": 2263,
+      "token_budget": 4000,
+      "entries_count": 3,
+      "critical_file_recall": 0.3333,
+      "critical_source_recall": 0.3333,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\Share\\IShare::getId",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/Share/IShare.php",
+          "source_lines": [
+            132,
+            458
+          ],
+          "estimated_tokens": 1810,
+          "content_snippet": "\t/**\n\t * Get the internal id of the share.\n\t *\n\t * @since 9.0.0\n\t */\n\tpublic function getId(): string;\n\n\t/**\n\t * Get the full share id. This is the <providerid>:<internalid>.\n\t * The full id is unique in the system.\n\t *\n\t * @since 9.0.0\n\t * @throws \\UnexpectedValueException If the fullId could not be constructed\n\t */\n\tpublic function getFullId(): string;\n\n\t/**\n\t * Set the provider id of the share\n\t * It is only allowed to set the provider id of a share once.\n\t * Attempts to override the provider id will result in an IllegalIDChangeException\n\t *\n\t * @throws IllegalIDChangeException\n\t * @since 9.1.0\n\t */\n\tpublic function setProviderId(string $id): self;\n\n\t/**\n\t * Set the node of the file/folder that is shared\n\t *\n\t * @param Node $node\n\t * @since 9.0.0\n\t */\n\tpublic function setNode(Node $node): self;\n\n\t/**\n\t * Get the node of the file/folder that is shared\n\t *\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNode(): Node;\n\n\t/**\n\t * Set file id for lazy evaluation of the node\n\t * @param int $fileId\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeId($fileId);\n\n\t/**\n\t * Get the fileid of the node of this share\n\t * @return int\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeId(): int;\n\n\t/**\n\t * Set the type of node (file/folder)\n\t *\n\t * @param string $type\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeType($type);\n\n\t/**\n\t * Get the type of node (file/folder)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeType();\n\n\t/**\n\t * Set the shareType\n\t *\n\t * @param self::TYPE_* $shareType\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareType($shareType);\n\n\t/**\n\t * Get the shareType\n\t *\n\t * @return self::TYPE_*\n\t * @since 9.0.0\n\t */\n\tpublic function getShareType();\n\n\t/**\n\t * Set the receiver of this share.\n\t *\n\t * @param string $sharedWith\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedWith($sharedWith);\n\n\t/**\n\t * Get the receiver of this share.\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedWith();\n\n\t/**\n\t * Set the display name of the receiver of this share.\n\t *\n\t * @param string $displayName\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithDisplayName($displayName);\n\n\t/**\n\t * Get the display name of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithDisplayName();\n\n\t/**\n\t * Set the avatar of the receiver of this share.\n\t *\n\t * @param string $src\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithAvatar($src);\n\n\t/**\n\t * Get the avatar of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithAvatar();\n\n\t/**\n\t * Set the permissions.\n\t *\n\t * @param int-mask-of<Constants::PERMISSION_*> $permissions\n\t * @return IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPermissions($permissions);\n\n\t/**\n\t * Get the share permissions\n\t *\n\t * @return int-mask-of<Constants::PERMISSION_*>\n\t * @since 9.0.0\n\t */\n\tpublic function getPermissions();\n\n\t/**\n\t * Create share attributes object\n\t *\n\t * @since 25.0.0\n\t * @return IAttributes\n\t */\n\tpublic function newAttributes(): IAttributes;\n\n\t/**\n\t * Set share attributes\n\t *\n\t * @param ?IAttributes $attributes\n\t * @since 25.0.0\n\t * @return IShare The modified object\n\t */\n\tpublic function setAttributes(?IAttributes $attributes);\n\n\t/**\n\t * Get share attributes\n\t *\n\t * @since 25.0.0\n\t * @return ?IAttributes\n\t */\n\tpublic function getAttributes(): ?IAttributes;\n\n\t/**\n\t * Set the accepted status\n\t *\n\t * @param self::STATUS_* $status\n\t * @return IShare The modified object\n\t * @since 18.0.0\n\t */\n\tpublic function setStatus(int $status): IShare;\n\n\t/**\n\t * Get the accepted status\n\t *\n\t * @return ?self::STATUS_*\n\t * @since 18.0.0\n\t */\n\tpublic function getStatus(): ?int;\n\n\t/**\n\t * Attach a note to a share\n\t *\n\t * @param string $note\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setNote($note);\n\n\t/**\n\t * Get note attached to a share\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getNote();\n\n\t/**\n\t * Set the expiration date\n\t *\n\t * @param \\DateTime|null $expireDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setExpirationDate(?\\DateTime $expireDate);\n\n\t/**\n\t * Get the expiration date\n\t *\n\t * @return \\DateTime|null\n\t * @since 9.0.0\n\t */\n\tpublic function getExpirationDate();\n\n\t/**\n\t * Set overwrite flag for falsy expiry date values\n\t *\n\t * @param bool $noExpirationDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 30.0.0\n\t */\n\tpublic function setNoExpirationDate(bool $noExpirationDate);\n\n\t/**\n\t * Get value of overwrite falsy expiry date flag\n\t *\n\t * @return bool\n\t * @since 30.0.0\n\t */\n\tpublic function getNoExpirationDate();\n\n\t/**\n\t * Is the share expired ?\n\t *\n\t * @return boolean\n\t * @since 18.0.0\n\t */\n\tpublic function isExpired();\n\n\t/**\n\t * set a label for a share, some shares, e.g. public links can have a label\n\t *\n\t * @param string $label\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 15.0.0\n\t */\n\tpublic function setLabel($label);\n\n\t/**\n\t * get label for the share, some shares, e.g. public links can have a label\n\t *\n\t * @return string\n\t * @since 15.0.0\n\t */\n\tpublic function getLabel();\n\n\t/**\n\t * Set the sharer of the path.\n\t *\n\t * @param string $sharedBy\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedBy($sharedBy);\n\n\t/**\n\t * Get share sharer\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedBy();\n\n\t/**\n\t * Set the original share owner (who owns the path that is shared)\n\t *\n\t * @param string $shareOwner\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareOwner($shareOwner);\n\n\t/**\n\t * Get the original share owner (who owns the path that is shared)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getShareOwner();\n\n\t/**\n\t * Set the password for this share.\n\t * When the share is passed to the share manager to be created\n\t * or updated the password will be hashed.\n\t *\n\t * @param string|null $password\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPassword($password);\n\n\t/**\n\t * Sets the password for the shared, but in it's already hashed form.\n\t * Use {@see isPasswordHashed} to check if the return value of {@see getPassword} is already hashed.",
+          "span_metadata": {
+            "start_line": 132,
+            "end_line": 458,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getId"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\Share\\IShare"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "65246f1462838b56495632a1ceab050032393b9a6969547c9444a0cb40f511d5",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://NCU\\Sharing\\Share",
+          "rank": 3,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "lib/unstable/Sharing/Share.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 2027,
+          "content_snippet": "// [SUMMARY] lib/unstable/Sharing/Share.php :: php://NCU\\Sharing\\Share | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://NCU\\Sharing\\Share"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "035537e928aaecff724867130d78e23b814ce0c510d400a1bdb1b1939712d5b0",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2263 / 4000 tokens | **Included Context Units:** 3 (merged 2)\n\n## [1] php://OCP\\Share\\IShare::getId (full_implementation)\n- **File:** `lib/public/Share/IShare.php` (lines 132-458)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\Share\\IShare\n```\n/**\n\t * Get the internal id of the share.\n\t *\n\t * @since 9.0.0\n\t */\n\tpublic function getId(): string;\n\n\t/**\n\t * Get the full share id. This is the <providerid>:<internalid>.\n\t * The full id is unique in the system.\n\t *\n\t * @since 9.0.0\n\t * @throws \\UnexpectedValueException If the fullId could not be constructed\n\t */\n\tpublic function getFullId(): string;\n\n\t/**\n\t * Set the provider id of the share\n\t * It is only allowed to set the provider id of a share once.\n\t * Attempts to override the provider id will result in an IllegalIDChangeException\n\t *\n\t * @throws IllegalIDChangeException\n\t * @since 9.1.0\n\t */\n\tpublic function setProviderId(string $id): self;\n\n\t/**\n\t * Set the node of the file/folder that is shared\n\t *\n\t * @param Node $node\n\t * @since 9.0.0\n\t */\n\tpublic function setNode(Node $node): self;\n\n\t/**\n\t * Get the node of the file/folder that is shared\n\t *\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNode(): Node;\n\n\t/**\n\t * Set file id for lazy evaluation of the node\n\t * @param int $fileId\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeId($fileId);\n\n\t/**\n\t * Get the fileid of the node of this share\n\t * @return int\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeId(): int;\n\n\t/**\n\t * Set the type of node (file/folder)\n\t *\n\t * @param string $type\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeType($type);\n\n\t/**\n\t * Get the type of node (file/folder)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeType();\n\n\t/**\n\t * Set the shareType\n\t *\n\t * @param self::TYPE_* $shareType\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareType($shareType);\n\n\t/**\n\t * Get the shareType\n\t *\n\t * @return self::TYPE_*\n\t * @since 9.0.0\n\t */\n\tpublic function getShareType();\n\n\t/**\n\t * Set the receiver of this share.\n\t *\n\t * @param string $sharedWith\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedWith($sharedWith);\n\n\t/**\n\t * Get the receiver of this share.\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedWith();\n\n\t/**\n\t * Set the display name of the receiver of this share.\n\t *\n\t * @param string $displayName\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithDisplayName($displayName);\n\n\t/**\n\t * Get the display name of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithDisplayName();\n\n\t/**\n\t * Set the avatar of the receiver of this share.\n\t *\n\t * @param string $src\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithAvatar($src);\n\n\t/**\n\t * Get the avatar of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithAvatar();\n\n\t/**\n\t * Set the permissions.\n\t *\n\t * @param int-mask-of<Constants::PERMISSION_*> $permissions\n\t * @return IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPermissions($permissions);\n\n\t/**\n\t * Get the share permissions\n\t *\n\t * @return int-mask-of<Constants::PERMISSION_*>\n\t * @since 9.0.0\n\t */\n\tpublic function getPermissions();\n\n\t/**\n\t * Create share attributes object\n\t *\n\t * @since 25.0.0\n\t * @return IAttributes\n\t */\n\tpublic function newAttributes(): IAttributes;\n\n\t/**\n\t * Set share attributes\n\t *\n\t * @param ?IAttributes $attributes\n\t * @since 25.0.0\n\t * @return IShare The modified object\n\t */\n\tpublic function setAttributes(?IAttributes $attributes);\n\n\t/**\n\t * Get share attributes\n\t *\n\t * @since 25.0.0\n\t * @return ?IAttributes\n\t */\n\tpublic function getAttributes(): ?IAttributes;\n\n\t/**\n\t * Set the accepted status\n\t *\n\t * @param self::STATUS_* $status\n\t * @return IShare The modified object\n\t * @since 18.0.0\n\t */\n\tpublic function setStatus(int $status): IShare;\n\n\t/**\n\t * Get the accepted status\n\t *\n\t * @return ?self::STATUS_*\n\t * @since 18.0.0\n\t */\n\tpublic function getStatus(): ?int;\n\n\t/**\n\t * Attach a note to a share\n\t *\n\t * @param string $note\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setNote($note);\n\n\t/**\n\t * Get note attached to a share\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getNote();\n\n\t/**\n\t * Set the expiration date\n\t *\n\t * @param \\DateTime|null $expireDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setExpirationDate(?\\DateTime $expireDate);\n\n\t/**\n\t * Get the expiration date\n\t *\n\t * @return \\DateTime|null\n\t * @since 9.0.0\n\t */\n\tpublic function getExpirationDate();\n\n\t/**\n\t * Set overwrite flag for falsy expiry date values\n\t *\n\t * @param bool $noExpirationDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 30.0.0\n\t */\n\tpublic function setNoExpirationDate(bool $noExpirationDate);\n\n\t/**\n\t * Get value of overwrite falsy expiry date flag\n\t *\n\t * @return bool\n\t * @since 30.0.0\n\t */\n\tpublic function getNoExpirationDate();\n\n\t/**\n\t * Is the share expired ?\n\t *\n\t * @return boolean\n\t * @since 18.0.0\n\t */\n\tpublic function isExpired();\n\n\t/**\n\t * set a label for a share, some shares, e.g. public links can have a label\n\t *\n\t * @param string $label\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 15.0.0\n\t */\n\tpublic function setLabel($label);\n\n\t/**\n\t * get label for the share, some shares, e.g. public links can have a label\n\t *\n\t * @return string\n\t * @since 15.0.0\n\t */\n\tpublic function getLabel();\n\n\t/**\n\t * Set the sharer of the path.\n\t *\n\t * @param string $sharedBy\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedBy($sharedBy);\n\n\t/**\n\t * Get share sharer\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedBy();\n\n\t/**\n\t * Set the original share owner (who owns the path that is shared)\n\t *\n\t * @param string $shareOwner\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareOwner($shareOwner);\n\n\t/**\n\t * Get the original share owner (who owns the path that is shared)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getShareOwner();\n\n\t/**\n\t * Set the password for this share.\n\t * When the share is passed to the share manager to be created\n\t * or updated the password will be hashed.\n\t *\n\t * @param string|null $password\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPassword($password);\n\n\t/**\n\t * Sets the password for the shared, but in it's already hashed form.\n\t * Use {@see isPasswordHashed} to check if the return value of {@see getPassword} is already hashed.\n```\n\n## [2] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [3] php://NCU\\Sharing\\Share (summary)\n- **File:** `lib/unstable/Sharing/Share.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] lib/unstable/Sharing/Share.php :: php://NCU\\Sharing\\Share | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-DEV-04": {
+      "task_id": "TASK-DEV-04",
+      "total_tokens": 3650,
+      "token_budget": 4000,
+      "entries_count": 5,
+      "critical_file_recall": 0.6667,
+      "critical_source_recall": 0.6667,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\IConfig::getSystemValue",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/IConfig.php",
+          "source_lines": [
+            43,
+            107
+          ],
+          "estimated_tokens": 591,
+          "content_snippet": "\t/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 6.0.0 - parameter $default was added in 7.0.0\n\t */\n\tpublic function getSystemValue($key, $default = '');\n\n\t/**\n\t * Looks up a boolean system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param bool $default the default value to be returned if the value isn't set\n\t * @return bool the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueBool(string $key, bool $default = false): bool;\n\n\t/**\n\t * Looks up an integer system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param int $default the default value to be returned if the value isn't set\n\t * @return int the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueInt(string $key, int $default = 0): int;\n\n\t/**\n\t * Looks up a string system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param string $default the default value to be returned if the value isn't set\n\t * @return string the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueString(string $key, string $default = ''): string;\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 8.2.0\n\t */\n\tpublic function getFilteredSystemValue($key, $default = '');\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @since 8.0.0\n\t */\n\tpublic function deleteSystemValue($key);\n\n\t/**\n\t * Get all keys stored for an app\n\t *\n\t * @param string $appName the appName that we stored the value under\n\t * @return string[] the keys stored for the app\n\t * @since 8.0.0\n\t * @deprecated 29.0.0 Use {@see IAppConfig} directly",
+          "span_metadata": {
+            "start_line": 43,
+            "end_line": 107,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getSystemValue"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\IConfig"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "63702580072a1be8cb1a2b49a55221693342367f6a883a2a5912851f28664197",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files\\Service\\UserConfig",
+          "rank": 2,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "config_reads"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files/lib/Service/UserConfig.php",
+          "source_lines": [
+            15,
+            185
+          ],
+          "estimated_tokens": 1183,
+          "content_snippet": "class UserConfig {\n\tpublic const ALLOWED_CONFIGS = [\n\t\t[\n\t\t\t// Whether to crop the files previews or not in the files list\n\t\t\t'key' => 'crop_image_previews',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// The view to start the files app in\n\t\t\t'key' => 'default_view',\n\t\t\t'default' => 'files',\n\t\t\t'allowed' => ['files', 'personal'],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the folder tree\n\t\t\t'key' => 'folder_tree',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the files list in grid view or not\n\t\t\t'key' => 'grid_view',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the \"confirm file deletion\" warning\n\t\t\t'key' => 'show_dialog_deletion',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the \"confirm file extension change\" warning\n\t\t\t'key' => 'show_dialog_file_extension',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the files extensions in the files list or not\n\t\t\t'key' => 'show_files_extensions',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the hidden files or not in the files list\n\t\t\t'key' => 'show_hidden',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the mime column or not\n\t\t\t'key' => 'show_mime_column',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to sort favorites first in the list or not\n\t\t\t'key' => 'sort_favorites_first',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to sort folders before files in the list or not\n\t\t\t'key' => 'sort_folders_first',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t];\n\tprotected ?IUser $user = null;\n\n\tpublic function __construct(\n\t\tprotected IConfig $config,\n\t\tIUserSession $userSession,\n\t) {\n\t\t$this->user = $userSession->getUser();\n\t}\n\n\t/**\n\t * Get the list of all allowed user config keys\n\t * @return string[]\n\t */\n\tpublic function getAllowedConfigKeys(): array {\n\t\treturn array_map(function ($config) {\n\t\t\treturn $config['key'];\n\t\t}, self::ALLOWED_CONFIGS);\n\t}\n\n\t/**\n\t * Get the list of allowed config values for a given key\n\t *\n\t * @param string $key a valid config key\n\t * @return array\n\t */\n\tprivate function getAllowedConfigValues(string $key): array {\n\t\tforeach (self::ALLOWED_CONFIGS as $config) {\n\t\t\tif ($config['key'] === $key) {\n\t\t\t\treturn $config['allowed'];\n\t\t\t}\n\t\t}\n\t\treturn [];\n\t}\n\n\t/**\n\t * Get the default config value for a given key\n\t *\n\t * @param string $key a valid config key\n\t * @return string|bool\n\t */\n\tprivate function getDefaultConfigValue(string $key) {\n\t\tforeach (self::ALLOWED_CONFIGS as $config) {\n\t\t\tif ($config['key'] === $key) {\n\t\t\t\treturn $config['default'];\n\t\t\t}\n\t\t}\n\t\treturn '';\n\t}\n\n\t/**\n\t * Set a user config\n\t *\n\t * @param string $key\n\t * @param string|bool $value\n\t * @throws \\Exception\n\t * @throws \\InvalidArgumentException\n\t */\n\tpublic function setConfig(string $key, $value): void {\n\t\tif ($this->user === null) {\n\t\t\tthrow new \\Exception('No user logged in');\n\t\t}\n\n\t\tif (!in_array($key, $this->getAllowedConfigKeys(), true)) {\n\t\t\tthrow new \\InvalidArgumentException('Unknown config key');\n\t\t}\n\n\t\t// $value is a string, but allowed values may be booleans (e.g. for toggle configs), so comparison must stay loose\n\t\t/** @psalm-suppress UnrecognizedExpression */\n\t\tif (!in_array($value, $this->getAllowedConfigValues($key))) {\n\t\t\tthrow new \\InvalidArgumentException('Invalid config value');\n\t\t}\n\n\t\tif (is_bool($value)) {\n\t\t\t$value = $value ? '1' : '0';\n\t\t}\n\n\t\t$this->config->setUserValue($this->user->getUID(), Application::APP_ID, $key, $value);\n\t}\n\n\t/**\n\t * Get the current user configs array\n\t *\n\t * @return array\n\t */\n\tpublic function getConfigs(): array {\n\t\tif ($this->user === null) {\n\t\t\tthrow new \\Exception('No user logged in');\n\t\t}\n\n\t\t$userId = $this->user->getUID();\n\t\t$userConfigs = array_map(function (string $key) use ($userId) {\n\t\t\t$value = $this->config->getUserValue($userId, Application::APP_ID, $key, $this->getDefaultConfigValue($key));\n\t\t\t// If the default is expected to be a boolean, we need to cast the value\n\t\t\tif (is_bool($this->getDefaultConfigValue($key)) && is_string($value)) {\n\t\t\t\treturn $value === '1';\n\t\t\t}\n\t\t\treturn $value;\n\t\t}, $this->getAllowedConfigKeys());\n\n\t\treturn array_combine($this->getAllowedConfigKeys(), $userConfigs);\n\t}\n}",
+          "span_metadata": {
+            "start_line": 15,
+            "end_line": 185,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "UserConfig"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "55b137b211d157a346a49941c2f03e34e0cbb8434fdd4a7d1612c7c4da5e0829",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OC\\SystemConfig",
+          "rank": 3,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "config_reads"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/private/SystemConfig.php",
+          "source_lines": [
+            13,
+            211
+          ],
+          "estimated_tokens": 1320,
+          "content_snippet": "/**\n * Class which provides access to the system config values stored in config.php\n * Internal class for bootstrap only.\n * fixes cyclic DI: AllConfig needs AppConfig needs Database needs AllConfig\n */\nclass SystemConfig {\n\tprotected array $sensitiveValues;\n\n\tprotected const DEFAULT_SENSITIVE_VALUES = [\n\t\t'instanceid' => true,\n\t\t'datadirectory' => true,\n\t\t'dbname' => true,\n\t\t'dbhost' => true,\n\t\t'dbpassword' => true,\n\t\t'dbuser' => true,\n\t\t'dbreplica' => true,\n\t\t'activity_dbname' => true,\n\t\t'activity_dbhost' => true,\n\t\t'activity_dbpassword' => true,\n\t\t'activity_dbuser' => true,\n\t\t'mail_from_address' => true,\n\t\t'mail_domain' => true,\n\t\t'mail_smtphost' => true,\n\t\t'mail_smtpname' => true,\n\t\t'mail_smtppassword' => true,\n\t\t'passwordsalt' => true,\n\t\t'secret' => true,\n\t\t'updater.secret' => true,\n\t\t'updater.server.url' => true,\n\t\t'trusted_proxies' => true,\n\t\t'preview_imaginary_url' => true,\n\t\t'preview_imaginary_key' => true,\n\t\t'proxyuserpwd' => true,\n\t\t'sentry.dsn' => true,\n\t\t'sentry.public-dsn' => true,\n\t\t'sentry.csp-report-url' => true,\n\t\t'zammad.download.secret' => true,\n\t\t'zammad.portal.secret' => true,\n\t\t'zammad.secret' => true,\n\t\t'github.client_id' => true,\n\t\t'github.client_secret' => true,\n\t\t'log.condition' => [\n\t\t\t'shared_secret' => true,\n\t\t\t'matches' => true,\n\t\t],\n\t\t'license-key' => true,\n\t\t'redis' => [\n\t\t\t'host' => true,\n\t\t\t'password' => true,\n\t\t],\n\t\t'redis.cluster' => [\n\t\t\t'seeds' => true,\n\t\t\t'password' => true,\n\t\t],\n\t\t'objectstore' => [\n\t\t\t'arguments' => [\n\t\t\t\t// Legacy Swift (https://github.com/nextcloud/server/pull/17696#discussion_r341302207)\n\t\t\t\t'options' => [\n\t\t\t\t\t'credentials' => [\n\t\t\t\t\t\t'key' => true,\n\t\t\t\t\t\t'secret' => true,\n\t\t\t\t\t]\n\t\t\t\t],\n\t\t\t\t// S3\n\t\t\t\t'key' => true,\n\t\t\t\t'secret' => true,\n\t\t\t\t'sse_c_key' => true,\n\t\t\t\t// Swift v2\n\t\t\t\t'username' => true,\n\t\t\t\t'password' => true,\n\t\t\t\t// Swift v3\n\t\t\t\t'user' => [\n\t\t\t\t\t'name' => true,\n\t\t\t\t\t'password' => true,\n\t\t\t\t],\n\t\t\t],\n\t\t],\n\t\t'objectstore_multibucket' => [\n\t\t\t'arguments' => [\n\t\t\t\t'options' => [\n\t\t\t\t\t'credentials' => [\n\t\t\t\t\t\t'key' => true,\n\t\t\t\t\t\t'secret' => true,\n\t\t\t\t\t]\n\t\t\t\t],\n\t\t\t\t// S3\n\t\t\t\t'key' => true,\n\t\t\t\t'secret' => true,\n\t\t\t\t// Swift v2\n\t\t\t\t'username' => true,\n\t\t\t\t'password' => true,\n\t\t\t\t// Swift v3\n\t\t\t\t'user' => [\n\t\t\t\t\t'name' => true,\n\t\t\t\t\t'password' => true,\n\t\t\t\t],\n\t\t\t],\n\t\t],\n\t\t'eurooffice' => [\n\t\t\t'jwt_secret' => true,\n\t\t],\n\t\t'onlyoffice' => [\n\t\t\t'jwt_secret' => true,\n\t\t],\n\t\t'PASS' => true,\n\t];\n\n\tpublic function __construct(\n\t\tprivate Config $config,\n\t) {\n\t\t$this->sensitiveValues = array_merge(self::DEFAULT_SENSITIVE_VALUES, $this->config->getValue('config_extra_sensitive_values', []));\n\t}\n\n\t/**\n\t * Lists all available config keys\n\t * @return array an array of key names\n\t */\n\tpublic function getKeys() {\n\t\treturn $this->config->getKeys();\n\t}\n\n\t/**\n\t * Sets a new system wide value\n\t *\n\t * @param string $key the key of the value, under which will be saved\n\t * @param mixed $value the value that should be stored\n\t */\n\tpublic function setValue($key, $value) {\n\t\t$this->config->setValue($key, $value);\n\t}\n\n\t/**\n\t * Sets and deletes values and writes the config.php\n\t *\n\t * @param array $configs Associative array with `key => value` pairs\n\t *                       If value is null, the config key will be deleted\n\t */\n\tpublic function setValues(array $configs) {\n\t\t$this->config->setValues($configs);\n\t}\n\n\t/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t */\n\tpublic function getValue($key, $default = '') {\n\t\treturn $this->config->getValue($key, $default);\n\t}\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t */\n\tpublic function getFilteredValue($key, $default = '') {\n\t\t$value = $this->getValue($key, $default);\n\n\t\tif (isset($this->sensitiveValues[$key])) {\n\t\t\t$value = $this->removeSensitiveValue($this->sensitiveValues[$key], $value);\n\t\t}\n\n\t\treturn $value;\n\t}\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t */\n\tpublic function deleteValue($key) {\n\t\t$this->config->deleteKey($key);\n\t}\n\n\t/**\n\t * @param bool|array $keysToRemove\n\t * @param mixed $value\n\t * @return mixed\n\t */\n\tprotected function removeSensitiveValue($keysToRemove, $value) {\n\t\tif ($keysToRemove === true) {\n\t\t\treturn IConfig::SENSITIVE_VALUE;\n\t\t}\n\n\t\tif (is_array($value)) {\n\t\t\tforeach ($keysToRemove as $keyToRemove => $valueToRemove) {\n\t\t\t\tif (isset($value[$keyToRemove])) {\n\t\t\t\t\t$value[$keyToRemove] = $this->removeSensitiveValue($valueToRemove, $value[$keyToRemove]);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn $value;\n\t}\n}",
+          "span_metadata": {
+            "start_line": 13,
+            "end_line": 211,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "SystemConfig"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "1912bc7ff0724a339df8fce99d66dc76025ab542e1c1c8286f77a3c6c0938555",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\CloudFederationAPI\\Config",
+          "rank": 4,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/cloud_federation_api/lib/Config.php",
+          "source_lines": [
+            13,
+            43
+          ],
+          "estimated_tokens": 194,
+          "content_snippet": "/**\n * Class config\n *\n * handles all the config parameters\n *\n * @package OCA\\CloudFederationAPI\n */\nclass Config {\n\n\tpublic function __construct(\n\t\tprivate ICloudFederationProviderManager $cloudFederationProviderManager,\n\t\tprivate LoggerInterface $logger,\n\t) {\n\t}\n\n\t/**\n\t * get a list of supported share types\n\t *\n\t * @param string $resourceType\n\t * @return array\n\t */\n\tpublic function getSupportedShareTypes($resourceType) {\n\t\ttry {\n\t\t\t$provider = $this->cloudFederationProviderManager->getCloudFederationProvider($resourceType);\n\t\t\treturn $provider->getSupportedShareTypes();\n\t\t} catch (\\Exception $e) {\n\t\t\t$this->logger->error('Failed to create federation provider', ['exception' => $e]);\n\t\t\treturn [];\n\t\t}\n\t}\n}",
+          "span_metadata": {
+            "start_line": 13,
+            "end_line": 43,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "Config"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "e54af62bb3af0e581ce9e8b6218a395094350d1c21d2f085ffbff5977c11f2c9",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Files_External\\Command\\Config",
+          "rank": 5,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "apps/files_external/lib/Command/Config.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 746,
+          "content_snippet": "// [SUMMARY] apps/files_external/lib/Command/Config.php :: php://OCA\\Files_External\\Command\\Config | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCA\\Files_External\\Command\\Config"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "a4c41c5c5d278c8c5a7deaabdf69a49696bbf7e37b2c601d691102a7d3134446",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3650 / 4000 tokens | **Included Context Units:** 5 (merged 1)\n\n## [1] php://OCP\\IConfig::getSystemValue (full_implementation)\n- **File:** `lib/public/IConfig.php` (lines 43-107)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\IConfig\n```\n/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 6.0.0 - parameter $default was added in 7.0.0\n\t */\n\tpublic function getSystemValue($key, $default = '');\n\n\t/**\n\t * Looks up a boolean system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param bool $default the default value to be returned if the value isn't set\n\t * @return bool the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueBool(string $key, bool $default = false): bool;\n\n\t/**\n\t * Looks up an integer system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param int $default the default value to be returned if the value isn't set\n\t * @return int the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueInt(string $key, int $default = 0): int;\n\n\t/**\n\t * Looks up a string system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param string $default the default value to be returned if the value isn't set\n\t * @return string the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueString(string $key, string $default = ''): string;\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 8.2.0\n\t */\n\tpublic function getFilteredSystemValue($key, $default = '');\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @since 8.0.0\n\t */\n\tpublic function deleteSystemValue($key);\n\n\t/**\n\t * Get all keys stored for an app\n\t *\n\t * @param string $appName the appName that we stored the value under\n\t * @return string[] the keys stored for the app\n\t * @since 8.0.0\n\t * @deprecated 29.0.0 Use {@see IAppConfig} directly\n```\n\n## [2] php://OCA\\Files\\Service\\UserConfig (signature)\n- **File:** `apps/files/lib/Service/UserConfig.php` (lines 15-185)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** config_reads\n```\nclass UserConfig {\n\tpublic const ALLOWED_CONFIGS = [\n\t\t[\n\t\t\t// Whether to crop the files previews or not in the files list\n\t\t\t'key' => 'crop_image_previews',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// The view to start the files app in\n\t\t\t'key' => 'default_view',\n\t\t\t'default' => 'files',\n\t\t\t'allowed' => ['files', 'personal'],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the folder tree\n\t\t\t'key' => 'folder_tree',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the files list in grid view or not\n\t\t\t'key' => 'grid_view',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the \"confirm file deletion\" warning\n\t\t\t'key' => 'show_dialog_deletion',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the \"confirm file extension change\" warning\n\t\t\t'key' => 'show_dialog_file_extension',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the files extensions in the files list or not\n\t\t\t'key' => 'show_files_extensions',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the hidden files or not in the files list\n\t\t\t'key' => 'show_hidden',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to show the mime column or not\n\t\t\t'key' => 'show_mime_column',\n\t\t\t'default' => false,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to sort favorites first in the list or not\n\t\t\t'key' => 'sort_favorites_first',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t\t[\n\t\t\t// Whether to sort folders before files in the list or not\n\t\t\t'key' => 'sort_folders_first',\n\t\t\t'default' => true,\n\t\t\t'allowed' => [true, false],\n\t\t],\n\t];\n\tprotected ?IUser $user = null;\n\n\tpublic function __construct(\n\t\tprotected IConfig $config,\n\t\tIUserSession $userSession,\n\t) {\n\t\t$this->user = $userSession->getUser();\n\t}\n\n\t/**\n\t * Get the list of all allowed user config keys\n\t * @return string[]\n\t */\n\tpublic function getAllowedConfigKeys(): array {\n\t\treturn array_map(function ($config) {\n\t\t\treturn $config['key'];\n\t\t}, self::ALLOWED_CONFIGS);\n\t}\n\n\t/**\n\t * Get the list of allowed config values for a given key\n\t *\n\t * @param string $key a valid config key\n\t * @return array\n\t */\n\tprivate function getAllowedConfigValues(string $key): array {\n\t\tforeach (self::ALLOWED_CONFIGS as $config) {\n\t\t\tif ($config['key'] === $key) {\n\t\t\t\treturn $config['allowed'];\n\t\t\t}\n\t\t}\n\t\treturn [];\n\t}\n\n\t/**\n\t * Get the default config value for a given key\n\t *\n\t * @param string $key a valid config key\n\t * @return string|bool\n\t */\n\tprivate function getDefaultConfigValue(string $key) {\n\t\tforeach (self::ALLOWED_CONFIGS as $config) {\n\t\t\tif ($config['key'] === $key) {\n\t\t\t\treturn $config['default'];\n\t\t\t}\n\t\t}\n\t\treturn '';\n\t}\n\n\t/**\n\t * Set a user config\n\t *\n\t * @param string $key\n\t * @param string|bool $value\n\t * @throws \\Exception\n\t * @throws \\InvalidArgumentException\n\t */\n\tpublic function setConfig(string $key, $value): void {\n\t\tif ($this->user === null) {\n\t\t\tthrow new \\Exception('No user logged in');\n\t\t}\n\n\t\tif (!in_array($key, $this->getAllowedConfigKeys(), true)) {\n\t\t\tthrow new \\InvalidArgumentException('Unknown config key');\n\t\t}\n\n\t\t// $value is a string, but allowed values may be booleans (e.g. for toggle configs), so comparison must stay loose\n\t\t/** @psalm-suppress UnrecognizedExpression */\n\t\tif (!in_array($value, $this->getAllowedConfigValues($key))) {\n\t\t\tthrow new \\InvalidArgumentException('Invalid config value');\n\t\t}\n\n\t\tif (is_bool($value)) {\n\t\t\t$value = $value ? '1' : '0';\n\t\t}\n\n\t\t$this->config->setUserValue($this->user->getUID(), Application::APP_ID, $key, $value);\n\t}\n\n\t/**\n\t * Get the current user configs array\n\t *\n\t * @return array\n\t */\n\tpublic function getConfigs(): array {\n\t\tif ($this->user === null) {\n\t\t\tthrow new \\Exception('No user logged in');\n\t\t}\n\n\t\t$userId = $this->user->getUID();\n\t\t$userConfigs = array_map(function (string $key) use ($userId) {\n\t\t\t$value = $this->config->getUserValue($userId, Application::APP_ID, $key, $this->getDefaultConfigValue($key));\n\t\t\t// If the default is expected to be a boolean, we need to cast the value\n\t\t\tif (is_bool($this->getDefaultConfigValue($key)) && is_string($value)) {\n\t\t\t\treturn $value === '1';\n\t\t\t}\n\t\t\treturn $value;\n\t\t}, $this->getAllowedConfigKeys());\n\n\t\treturn array_combine($this->getAllowedConfigKeys(), $userConfigs);\n\t}\n}\n```\n\n## [3] php://OC\\SystemConfig (signature)\n- **File:** `lib/private/SystemConfig.php` (lines 13-211)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** config_reads\n```\n/**\n * Class which provides access to the system config values stored in config.php\n * Internal class for bootstrap only.\n * fixes cyclic DI: AllConfig needs AppConfig needs Database needs AllConfig\n */\nclass SystemConfig {\n\tprotected array $sensitiveValues;\n\n\tprotected const DEFAULT_SENSITIVE_VALUES = [\n\t\t'instanceid' => true,\n\t\t'datadirectory' => true,\n\t\t'dbname' => true,\n\t\t'dbhost' => true,\n\t\t'dbpassword' => true,\n\t\t'dbuser' => true,\n\t\t'dbreplica' => true,\n\t\t'activity_dbname' => true,\n\t\t'activity_dbhost' => true,\n\t\t'activity_dbpassword' => true,\n\t\t'activity_dbuser' => true,\n\t\t'mail_from_address' => true,\n\t\t'mail_domain' => true,\n\t\t'mail_smtphost' => true,\n\t\t'mail_smtpname' => true,\n\t\t'mail_smtppassword' => true,\n\t\t'passwordsalt' => true,\n\t\t'secret' => true,\n\t\t'updater.secret' => true,\n\t\t'updater.server.url' => true,\n\t\t'trusted_proxies' => true,\n\t\t'preview_imaginary_url' => true,\n\t\t'preview_imaginary_key' => true,\n\t\t'proxyuserpwd' => true,\n\t\t'sentry.dsn' => true,\n\t\t'sentry.public-dsn' => true,\n\t\t'sentry.csp-report-url' => true,\n\t\t'zammad.download.secret' => true,\n\t\t'zammad.portal.secret' => true,\n\t\t'zammad.secret' => true,\n\t\t'github.client_id' => true,\n\t\t'github.client_secret' => true,\n\t\t'log.condition' => [\n\t\t\t'shared_secret' => true,\n\t\t\t'matches' => true,\n\t\t],\n\t\t'license-key' => true,\n\t\t'redis' => [\n\t\t\t'host' => true,\n\t\t\t'password' => true,\n\t\t],\n\t\t'redis.cluster' => [\n\t\t\t'seeds' => true,\n\t\t\t'password' => true,\n\t\t],\n\t\t'objectstore' => [\n\t\t\t'arguments' => [\n\t\t\t\t// Legacy Swift (https://github.com/nextcloud/server/pull/17696#discussion_r341302207)\n\t\t\t\t'options' => [\n\t\t\t\t\t'credentials' => [\n\t\t\t\t\t\t'key' => true,\n\t\t\t\t\t\t'secret' => true,\n\t\t\t\t\t]\n\t\t\t\t],\n\t\t\t\t// S3\n\t\t\t\t'key' => true,\n\t\t\t\t'secret' => true,\n\t\t\t\t'sse_c_key' => true,\n\t\t\t\t// Swift v2\n\t\t\t\t'username' => true,\n\t\t\t\t'password' => true,\n\t\t\t\t// Swift v3\n\t\t\t\t'user' => [\n\t\t\t\t\t'name' => true,\n\t\t\t\t\t'password' => true,\n\t\t\t\t],\n\t\t\t],\n\t\t],\n\t\t'objectstore_multibucket' => [\n\t\t\t'arguments' => [\n\t\t\t\t'options' => [\n\t\t\t\t\t'credentials' => [\n\t\t\t\t\t\t'key' => true,\n\t\t\t\t\t\t'secret' => true,\n\t\t\t\t\t]\n\t\t\t\t],\n\t\t\t\t// S3\n\t\t\t\t'key' => true,\n\t\t\t\t'secret' => true,\n\t\t\t\t// Swift v2\n\t\t\t\t'username' => true,\n\t\t\t\t'password' => true,\n\t\t\t\t// Swift v3\n\t\t\t\t'user' => [\n\t\t\t\t\t'name' => true,\n\t\t\t\t\t'password' => true,\n\t\t\t\t],\n\t\t\t],\n\t\t],\n\t\t'eurooffice' => [\n\t\t\t'jwt_secret' => true,\n\t\t],\n\t\t'onlyoffice' => [\n\t\t\t'jwt_secret' => true,\n\t\t],\n\t\t'PASS' => true,\n\t];\n\n\tpublic function __construct(\n\t\tprivate Config $config,\n\t) {\n\t\t$this->sensitiveValues = array_merge(self::DEFAULT_SENSITIVE_VALUES, $this->config->getValue('config_extra_sensitive_values', []));\n\t}\n\n\t/**\n\t * Lists all available config keys\n\t * @return array an array of key names\n\t */\n\tpublic function getKeys() {\n\t\treturn $this->config->getKeys();\n\t}\n\n\t/**\n\t * Sets a new system wide value\n\t *\n\t * @param string $key the key of the value, under which will be saved\n\t * @param mixed $value the value that should be stored\n\t */\n\tpublic function setValue($key, $value) {\n\t\t$this->config->setValue($key, $value);\n\t}\n\n\t/**\n\t * Sets and deletes values and writes the config.php\n\t *\n\t * @param array $configs Associative array with `key => value` pairs\n\t *                       If value is null, the config key will be deleted\n\t */\n\tpublic function setValues(array $configs) {\n\t\t$this->config->setValues($configs);\n\t}\n\n\t/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t */\n\tpublic function getValue($key, $default = '') {\n\t\treturn $this->config->getValue($key, $default);\n\t}\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t */\n\tpublic function getFilteredValue($key, $default = '') {\n\t\t$value = $this->getValue($key, $default);\n\n\t\tif (isset($this->sensitiveValues[$key])) {\n\t\t\t$value = $this->removeSensitiveValue($this->sensitiveValues[$key], $value);\n\t\t}\n\n\t\treturn $value;\n\t}\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t */\n\tpublic function deleteValue($key) {\n\t\t$this->config->deleteKey($key);\n\t}\n\n\t/**\n\t * @param bool|array $keysToRemove\n\t * @param mixed $value\n\t * @return mixed\n\t */\n\tprotected function removeSensitiveValue($keysToRemove, $value) {\n\t\tif ($keysToRemove === true) {\n\t\t\treturn IConfig::SENSITIVE_VALUE;\n\t\t}\n\n\t\tif (is_array($value)) {\n\t\t\tforeach ($keysToRemove as $keyToRemove => $valueToRemove) {\n\t\t\t\tif (isset($value[$keyToRemove])) {\n\t\t\t\t\t$value[$keyToRemove] = $this->removeSensitiveValue($valueToRemove, $value[$keyToRemove]);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn $value;\n\t}\n}\n```\n\n## [4] php://OCA\\CloudFederationAPI\\Config (signature)\n- **File:** `apps/cloud_federation_api/lib/Config.php` (lines 13-43)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n/**\n * Class config\n *\n * handles all the config parameters\n *\n * @package OCA\\CloudFederationAPI\n */\nclass Config {\n\n\tpublic function __construct(\n\t\tprivate ICloudFederationProviderManager $cloudFederationProviderManager,\n\t\tprivate LoggerInterface $logger,\n\t) {\n\t}\n\n\t/**\n\t * get a list of supported share types\n\t *\n\t * @param string $resourceType\n\t * @return array\n\t */\n\tpublic function getSupportedShareTypes($resourceType) {\n\t\ttry {\n\t\t\t$provider = $this->cloudFederationProviderManager->getCloudFederationProvider($resourceType);\n\t\t\treturn $provider->getSupportedShareTypes();\n\t\t} catch (\\Exception $e) {\n\t\t\t$this->logger->error('Failed to create federation provider', ['exception' => $e]);\n\t\t\treturn [];\n\t\t}\n\t}\n}\n```\n\n## [5] php://OCA\\Files_External\\Command\\Config (summary)\n- **File:** `apps/files_external/lib/Command/Config.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] apps/files_external/lib/Command/Config.php :: php://OCA\\Files_External\\Command\\Config | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-DEV-05": {
+      "task_id": "TASK-DEV-05",
+      "total_tokens": 2429,
+      "token_budget": 4000,
+      "entries_count": 5,
+      "critical_file_recall": 0.6667,
+      "critical_source_recall": 0.6667,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\IUserSession::getUser",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/IUserSession.php",
+          "source_lines": [
+            62,
+            99
+          ],
+          "estimated_tokens": 370,
+          "content_snippet": "\t/**\n\t * Returns the currently authenticated user for this session, or null if the session has no active user.\n\t *\n\t * @return \\OCP\\IUser|null The active user, or null if the session is anonymous, expired, or in incognito mode.\n\t * @since 8.0.0\n\t */\n\tpublic function getUser();\n\n\t/**\n\t * Checks whether a user is currently logged in for this session.\n\t *\n\t * @return bool True if a user is authenticated and enabled, false otherwise.\n\t * @since 8.0.0\n\t */\n\tpublic function isLoggedIn();\n\n\t/**\n\t * Returns the user ID of the impersonator if another user is being impersonated.\n\t *\n\t * @return string|null The impersonating user's ID, or null if not impersonating.\n\t * @since 18.0.0\n\t */\n\tpublic function getImpersonatingUserID(): ?string;\n\n\t/**\n\t * Sets or clears the impersonator's user ID in the current session.\n\t *\n\t * Note: This does not initiate impersonation, but only records the identity of the impersonator in the session.\n\t *\n\t * If $useCurrentUser is true (default), records the current user's ID as the impersonator.\n\t * If false, removes any impersonator information from the session.\n\t *\n\t * @param bool $useCurrentUser Whether to assign the current user as the impersonator or to clear it.\n\t * @throws UserNotFoundException When the user is not found\n\t * @since 18.0.0\n\t */\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void;\n}",
+          "span_metadata": {
+            "start_line": 62,
+            "end_line": 99,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getUser"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\IUserSession"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "c0369dc53a11596c72e54a32b755c5dc78c948c52c272ddadbb47acd3f2fa9e1",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/User/SessionTest.php",
+          "rank": 2,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/User/SessionTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 211,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/User/SessionTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6f2f2d0bc9aba09bd0bf5dc07690a2c6c6dd86769fdfa5273303dceb0e32a5ae",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\CalDAV\\Principal\\User",
+          "rank": 3,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/dav/lib/CalDAV/Principal/User.php",
+          "source_lines": [
+            12,
+            83
+          ],
+          "estimated_tokens": 536,
+          "content_snippet": "/**\n * Class User\n *\n * @package OCA\\DAV\\CalDAV\\Principal\n */\nclass User extends \\Sabre\\CalDAV\\Principal\\User {\n\n\t/**\n\t * Returns a list of ACE's for this node.\n\t *\n\t * Each ACE has the following properties:\n\t *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are\n\t *     currently the only supported privileges\n\t *   * 'principal', a url to the principal who owns the node\n\t *   * 'protected' (optional), indicating that this ACE is not allowed to\n\t *      be updated.\n\t *\n\t * @return array\n\t */\n\t#[\\Override]\n\tpublic function getACL() {\n\t\t$acl = parent::getACL();\n\t\t$acl[] = [\n\t\t\t'privilege' => '{DAV:}read',\n\t\t\t'principal' => '{DAV:}authenticated',\n\t\t\t'protected' => true,\n\t\t];\n\t\treturn $acl;\n\t}\n\n\t/**\n\t * Returns a specific child node, referenced by its name.\n\t *\n\t * @param string $name\n\t *\n\t * @return \\Sabre\\DAV\\INode\n\t */\n\t#[\\Override]\n\tpublic function getChild($name) {\n\t\t$principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/' . $name);\n\t\tif (!$principal) {\n\t\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t\t}\n\t\tif ($name === 'calendar-proxy-read') {\n\t\t\treturn new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tif ($name === 'calendar-proxy-write') {\n\t\t\treturn new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t}\n\n\t/**\n\t * Returns an array with all the child nodes.\n\t *\n\t * @return \\Sabre\\DAV\\INode[]\n\t */\n\t#[\\Override]\n\tpublic function getChildren() {\n\t\t$r = [];\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-read')) {\n\t\t\t$r[] = new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-write')) {\n\t\t\t$r[] = new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\treturn $r;\n\t}\n}",
+          "span_metadata": {
+            "start_line": 12,
+            "end_line": 83,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "User"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "7982724b4e08634c2bb307a6d2c0449bc9a9bbd8a3bf15397374a6f639ddce61",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\Encryption\\Session",
+          "rank": 4,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/encryption/lib/Session.php",
+          "source_lines": [
+            16,
+            154
+          ],
+          "estimated_tokens": 955,
+          "content_snippet": "class Session {\n\tpublic const NOT_INITIALIZED = '0';\n\tpublic const INIT_EXECUTED = '1';\n\tpublic const INIT_SUCCESSFUL = '2';\n\n\tpublic function __construct(\n\t\tprotected ISession $session,\n\t) {\n\t}\n\n\t/**\n\t * Sets status of encryption app\n\t *\n\t * @param string $status INIT_SUCCESSFUL, INIT_EXECUTED, NOT_INITIALIZED\n\t */\n\tpublic function setStatus(string $status): void {\n\t\t$this->session->set('encryptionInitialized', $status);\n\t}\n\n\t/**\n\t * Gets status if we already tried to initialize the encryption app\n\t *\n\t * @return string init status INIT_SUCCESSFUL, INIT_EXECUTED, NOT_INITIALIZED\n\t */\n\tpublic function getStatus(): string {\n\t\t$status = $this->session->get('encryptionInitialized');\n\t\tif (is_null($status)) {\n\t\t\t$status = self::NOT_INITIALIZED;\n\t\t}\n\n\t\treturn $status;\n\t}\n\n\t/**\n\t * check if encryption was initialized successfully\n\t */\n\tpublic function isReady(): bool {\n\t\t$status = $this->getStatus();\n\t\treturn $status === self::INIT_SUCCESSFUL;\n\t}\n\n\t/**\n\t * Gets user or public share private key from session\n\t *\n\t * @return string $privateKey The user's plaintext private key\n\t * @throws Exceptions\\PrivateKeyMissingException\n\t */\n\tpublic function getPrivateKey(): string {\n\t\t$key = $this->session->get('privateKey');\n\t\tif (is_null($key)) {\n\t\t\tthrow new PrivateKeyMissingException('please try to log-out and log-in again');\n\t\t}\n\t\treturn $key;\n\t}\n\n\t/**\n\t * check if private key is set\n\t */\n\tpublic function isPrivateKeySet(): bool {\n\t\t$key = $this->session->get('privateKey');\n\t\tif (is_null($key)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn true;\n\t}\n\n\t/**\n\t * Sets user private key to session\n\t *\n\t * @param string $key users private key\n\t *\n\t * @note this should only be set on login\n\t */\n\tpublic function setPrivateKey(string $key): void {\n\t\t$this->session->set('privateKey', $key);\n\t}\n\n\t/**\n\t * store data needed for the decrypt all operation in the session\n\t */\n\tpublic function prepareDecryptAll(string $user, string $key): void {\n\t\t$this->session->set('decryptAll', true);\n\t\t$this->session->set('decryptAllKey', $key);\n\t\t$this->session->set('decryptAllUid', $user);\n\t}\n\n\t/**\n\t * check if we are in decrypt all mode\n\t */\n\tpublic function decryptAllModeActivated(): bool {\n\t\t$decryptAll = $this->session->get('decryptAll');\n\t\treturn ($decryptAll === true);\n\t}\n\n\t/**\n\t * get uid used for decrypt all operation\n\t *\n\t * @throws \\Exception\n\t */\n\tpublic function getDecryptAllUid(): string {\n\t\t$uid = $this->session->get('decryptAllUid');\n\t\tif (is_null($uid) && $this->decryptAllModeActivated()) {\n\t\t\tthrow new \\Exception('No uid found while in decrypt all mode');\n\t\t} elseif (is_null($uid)) {\n\t\t\tthrow new \\Exception('Please activate decrypt all mode first');\n\t\t}\n\n\t\treturn $uid;\n\t}\n\n\t/**\n\t * get private key for decrypt all operation\n\t *\n\t * @throws PrivateKeyMissingException\n\t */\n\tpublic function getDecryptAllKey(): string {\n\t\t$privateKey = $this->session->get('decryptAllKey');\n\t\tif (is_null($privateKey) && $this->decryptAllModeActivated()) {\n\t\t\tthrow new PrivateKeyMissingException('No private key found while in decrypt all mode');\n\t\t} elseif (is_null($privateKey)) {\n\t\t\tthrow new PrivateKeyMissingException('Please activate decrypt all mode first');\n\t\t}\n\n\t\treturn $privateKey;\n\t}\n\n\t/**\n\t * remove keys from session\n\t */\n\tpublic function clear(): void {\n\t\t$this->session->remove('publicSharePrivateKey');\n\t\t$this->session->remove('privateKey');\n\t\t$this->session->remove('encryptionInitialized');\n\t\t$this->session->remove('decryptAll');\n\t\t$this->session->remove('decryptAllKey');\n\t\t$this->session->remove('decryptAllUid');\n\t}\n}",
+          "span_metadata": {
+            "start_line": 16,
+            "end_line": 154,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "Session"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "d3377b295ce20c16517bb15a6507cf36f4ec119382f28fc35fc157387bda4a1b",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\User_LDAP\\User\\User",
+          "rank": 5,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "apps/user_ldap/lib/User/User.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 6741,
+          "content_snippet": "// [SUMMARY] apps/user_ldap/lib/User/User.php :: php://OCA\\User_LDAP\\User\\User | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCA\\User_LDAP\\User\\User"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "1ba75b0b6e85069bbc1c691d864856cd39e39cab70fc7132445b0d85f917b6f8",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2429 / 4000 tokens | **Included Context Units:** 5 (merged 1)\n\n## [1] php://OCP\\IUserSession::getUser (full_implementation)\n- **File:** `lib/public/IUserSession.php` (lines 62-99)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\IUserSession\n```\n/**\n\t * Returns the currently authenticated user for this session, or null if the session has no active user.\n\t *\n\t * @return \\OCP\\IUser|null The active user, or null if the session is anonymous, expired, or in incognito mode.\n\t * @since 8.0.0\n\t */\n\tpublic function getUser();\n\n\t/**\n\t * Checks whether a user is currently logged in for this session.\n\t *\n\t * @return bool True if a user is authenticated and enabled, false otherwise.\n\t * @since 8.0.0\n\t */\n\tpublic function isLoggedIn();\n\n\t/**\n\t * Returns the user ID of the impersonator if another user is being impersonated.\n\t *\n\t * @return string|null The impersonating user's ID, or null if not impersonating.\n\t * @since 18.0.0\n\t */\n\tpublic function getImpersonatingUserID(): ?string;\n\n\t/**\n\t * Sets or clears the impersonator's user ID in the current session.\n\t *\n\t * Note: This does not initiate impersonation, but only records the identity of the impersonator in the session.\n\t *\n\t * If $useCurrentUser is true (default), records the current user's ID as the impersonator.\n\t * If false, removes any impersonator information from the session.\n\t *\n\t * @param bool $useCurrentUser Whether to assign the current user as the impersonator or to clear it.\n\t * @throws UserNotFoundException When the user is not found\n\t * @since 18.0.0\n\t */\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void;\n}\n```\n\n## [2] php://tests/lib/User/SessionTest.php (test_fragment)\n- **File:** `tests/lib/User/SessionTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\User;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OC\\Authentication\\Events\\LoginFailed;\nuse OC\\Authentication\\Exceptions\\PasswordlessTokenException;\nuse OC\\Authentication\\Exceptions\\PasswordLoginForbiddenException;\nuse OC\\Authentication\\Token\\IProvider;\nuse OC\\Authentication\\Token\\PublicKeyToken;\nuse OC\\Security\\CSRF\\CsrfTokenManager;\nuse OC\\Session\\Memory;\nuse OC\\User\\LoginException;\nuse OC\\User\\Manager;\nuse OC\\User\\Session;\nuse OC\\User\\User;\nuse OCA\\DAV\\Connector\\Sabre\\Auth;\nuse OCP\\AppFramework\\Utility\\ITimeFactory;\nuse OCP\\Authentication\\Exceptions\\InvalidTokenException;\n```\n\n## [3] php://OCA\\DAV\\CalDAV\\Principal\\User (signature)\n- **File:** `apps/dav/lib/CalDAV/Principal/User.php` (lines 12-83)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n/**\n * Class User\n *\n * @package OCA\\DAV\\CalDAV\\Principal\n */\nclass User extends \\Sabre\\CalDAV\\Principal\\User {\n\n\t/**\n\t * Returns a list of ACE's for this node.\n\t *\n\t * Each ACE has the following properties:\n\t *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are\n\t *     currently the only supported privileges\n\t *   * 'principal', a url to the principal who owns the node\n\t *   * 'protected' (optional), indicating that this ACE is not allowed to\n\t *      be updated.\n\t *\n\t * @return array\n\t */\n\t#[\\Override]\n\tpublic function getACL() {\n\t\t$acl = parent::getACL();\n\t\t$acl[] = [\n\t\t\t'privilege' => '{DAV:}read',\n\t\t\t'principal' => '{DAV:}authenticated',\n\t\t\t'protected' => true,\n\t\t];\n\t\treturn $acl;\n\t}\n\n\t/**\n\t * Returns a specific child node, referenced by its name.\n\t *\n\t * @param string $name\n\t *\n\t * @return \\Sabre\\DAV\\INode\n\t */\n\t#[\\Override]\n\tpublic function getChild($name) {\n\t\t$principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/' . $name);\n\t\tif (!$principal) {\n\t\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t\t}\n\t\tif ($name === 'calendar-proxy-read') {\n\t\t\treturn new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tif ($name === 'calendar-proxy-write') {\n\t\t\treturn new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t}\n\n\t/**\n\t * Returns an array with all the child nodes.\n\t *\n\t * @return \\Sabre\\DAV\\INode[]\n\t */\n\t#[\\Override]\n\tpublic function getChildren() {\n\t\t$r = [];\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-read')) {\n\t\t\t$r[] = new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-write')) {\n\t\t\t$r[] = new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\treturn $r;\n\t}\n}\n```\n\n## [4] php://OCA\\Encryption\\Session (signature)\n- **File:** `apps/encryption/lib/Session.php` (lines 16-154)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\nclass Session {\n\tpublic const NOT_INITIALIZED = '0';\n\tpublic const INIT_EXECUTED = '1';\n\tpublic const INIT_SUCCESSFUL = '2';\n\n\tpublic function __construct(\n\t\tprotected ISession $session,\n\t) {\n\t}\n\n\t/**\n\t * Sets status of encryption app\n\t *\n\t * @param string $status INIT_SUCCESSFUL, INIT_EXECUTED, NOT_INITIALIZED\n\t */\n\tpublic function setStatus(string $status): void {\n\t\t$this->session->set('encryptionInitialized', $status);\n\t}\n\n\t/**\n\t * Gets status if we already tried to initialize the encryption app\n\t *\n\t * @return string init status INIT_SUCCESSFUL, INIT_EXECUTED, NOT_INITIALIZED\n\t */\n\tpublic function getStatus(): string {\n\t\t$status = $this->session->get('encryptionInitialized');\n\t\tif (is_null($status)) {\n\t\t\t$status = self::NOT_INITIALIZED;\n\t\t}\n\n\t\treturn $status;\n\t}\n\n\t/**\n\t * check if encryption was initialized successfully\n\t */\n\tpublic function isReady(): bool {\n\t\t$status = $this->getStatus();\n\t\treturn $status === self::INIT_SUCCESSFUL;\n\t}\n\n\t/**\n\t * Gets user or public share private key from session\n\t *\n\t * @return string $privateKey The user's plaintext private key\n\t * @throws Exceptions\\PrivateKeyMissingException\n\t */\n\tpublic function getPrivateKey(): string {\n\t\t$key = $this->session->get('privateKey');\n\t\tif (is_null($key)) {\n\t\t\tthrow new PrivateKeyMissingException('please try to log-out and log-in again');\n\t\t}\n\t\treturn $key;\n\t}\n\n\t/**\n\t * check if private key is set\n\t */\n\tpublic function isPrivateKeySet(): bool {\n\t\t$key = $this->session->get('privateKey');\n\t\tif (is_null($key)) {\n\t\t\treturn false;\n\t\t}\n\n\t\treturn true;\n\t}\n\n\t/**\n\t * Sets user private key to session\n\t *\n\t * @param string $key users private key\n\t *\n\t * @note this should only be set on login\n\t */\n\tpublic function setPrivateKey(string $key): void {\n\t\t$this->session->set('privateKey', $key);\n\t}\n\n\t/**\n\t * store data needed for the decrypt all operation in the session\n\t */\n\tpublic function prepareDecryptAll(string $user, string $key): void {\n\t\t$this->session->set('decryptAll', true);\n\t\t$this->session->set('decryptAllKey', $key);\n\t\t$this->session->set('decryptAllUid', $user);\n\t}\n\n\t/**\n\t * check if we are in decrypt all mode\n\t */\n\tpublic function decryptAllModeActivated(): bool {\n\t\t$decryptAll = $this->session->get('decryptAll');\n\t\treturn ($decryptAll === true);\n\t}\n\n\t/**\n\t * get uid used for decrypt all operation\n\t *\n\t * @throws \\Exception\n\t */\n\tpublic function getDecryptAllUid(): string {\n\t\t$uid = $this->session->get('decryptAllUid');\n\t\tif (is_null($uid) && $this->decryptAllModeActivated()) {\n\t\t\tthrow new \\Exception('No uid found while in decrypt all mode');\n\t\t} elseif (is_null($uid)) {\n\t\t\tthrow new \\Exception('Please activate decrypt all mode first');\n\t\t}\n\n\t\treturn $uid;\n\t}\n\n\t/**\n\t * get private key for decrypt all operation\n\t *\n\t * @throws PrivateKeyMissingException\n\t */\n\tpublic function getDecryptAllKey(): string {\n\t\t$privateKey = $this->session->get('decryptAllKey');\n\t\tif (is_null($privateKey) && $this->decryptAllModeActivated()) {\n\t\t\tthrow new PrivateKeyMissingException('No private key found while in decrypt all mode');\n\t\t} elseif (is_null($privateKey)) {\n\t\t\tthrow new PrivateKeyMissingException('Please activate decrypt all mode first');\n\t\t}\n\n\t\treturn $privateKey;\n\t}\n\n\t/**\n\t * remove keys from session\n\t */\n\tpublic function clear(): void {\n\t\t$this->session->remove('publicSharePrivateKey');\n\t\t$this->session->remove('privateKey');\n\t\t$this->session->remove('encryptionInitialized');\n\t\t$this->session->remove('decryptAll');\n\t\t$this->session->remove('decryptAllKey');\n\t\t$this->session->remove('decryptAllUid');\n\t}\n}\n```\n\n## [5] php://OCA\\User_LDAP\\User\\User (summary)\n- **File:** `apps/user_ldap/lib/User/User.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] apps/user_ldap/lib/User/User.php :: php://OCA\\User_LDAP\\User\\User | Rank context reference in dependency blast radius\n```\n"
+    },
+    "TASK-DEV-06": {
+      "task_id": "TASK-DEV-06",
+      "total_tokens": 1093,
+      "token_budget": 4000,
+      "entries_count": 3,
+      "critical_file_recall": 0.5,
+      "critical_source_recall": 0.5,
+      "entries": [
+        {
+          "entity_id": "php://OCP\\IUser::getUID",
+          "rank": 1,
+          "reason": "Primary change target entity (PINNED)",
+          "evidence": [],
+          "granularity": "full_implementation",
+          "source_file": "lib/public/IUser.php",
+          "source_lines": [
+            27,
+            78
+          ],
+          "estimated_tokens": 319,
+          "content_snippet": "\t/**\n\t * get the user id\n\t *\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getUID(): string;\n\n\t/**\n\t * get the display name for the user, if no specific display name is set it will fallback to the user id\n\t *\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getDisplayName(): string;\n\n\t/**\n\t * set the display name for the user\n\t *\n\t * @since 8.0.0\n\t *\n\t * @since 25.0.0 Throw InvalidArgumentException\n\t * @throws \\InvalidArgumentException\n\t */\n\tpublic function setDisplayName(string $displayName): bool;\n\n\t/**\n\t * returns the timestamp of the user's last login or 0 if the user did never\n\t * login\n\t *\n\t * @since 8.0.0\n\t */\n\tpublic function getLastLogin(): int;\n\n\t/**\n\t * Returns the timestamp of the user's first login, 0 if the user did never login, or -1 if the data is unknown (first login was on an older version)\n\t *\n\t * @since 31.0.0\n\t */\n\tpublic function getFirstLogin(): int;\n\n\t/**\n\t * Updates the timestamp of the most recent login of this user (and first login if needed)\n\t *\n\t * @return bool whether this is the first login\n\t * @since 8.0.0\n\t */\n\tpublic function updateLastLoginTimestamp(): bool;\n\n\t/**\n\t * Delete the user\n\t *",
+          "span_metadata": {
+            "start_line": 27,
+            "end_line": 78,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "getUID"
+          },
+          "merged_entity_ids": [
+            "php://OCP\\IUser"
+          ],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "05e7b69c5144c28b6721b6cf6a89325a4c24629004d1726c73fc6da1f276fc11",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\DAV\\CalDAV\\Principal\\User",
+          "rank": 2,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/dav/lib/CalDAV/Principal/User.php",
+          "source_lines": [
+            12,
+            83
+          ],
+          "estimated_tokens": 536,
+          "content_snippet": "/**\n * Class User\n *\n * @package OCA\\DAV\\CalDAV\\Principal\n */\nclass User extends \\Sabre\\CalDAV\\Principal\\User {\n\n\t/**\n\t * Returns a list of ACE's for this node.\n\t *\n\t * Each ACE has the following properties:\n\t *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are\n\t *     currently the only supported privileges\n\t *   * 'principal', a url to the principal who owns the node\n\t *   * 'protected' (optional), indicating that this ACE is not allowed to\n\t *      be updated.\n\t *\n\t * @return array\n\t */\n\t#[\\Override]\n\tpublic function getACL() {\n\t\t$acl = parent::getACL();\n\t\t$acl[] = [\n\t\t\t'privilege' => '{DAV:}read',\n\t\t\t'principal' => '{DAV:}authenticated',\n\t\t\t'protected' => true,\n\t\t];\n\t\treturn $acl;\n\t}\n\n\t/**\n\t * Returns a specific child node, referenced by its name.\n\t *\n\t * @param string $name\n\t *\n\t * @return \\Sabre\\DAV\\INode\n\t */\n\t#[\\Override]\n\tpublic function getChild($name) {\n\t\t$principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/' . $name);\n\t\tif (!$principal) {\n\t\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t\t}\n\t\tif ($name === 'calendar-proxy-read') {\n\t\t\treturn new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tif ($name === 'calendar-proxy-write') {\n\t\t\treturn new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t}\n\n\t/**\n\t * Returns an array with all the child nodes.\n\t *\n\t * @return \\Sabre\\DAV\\INode[]\n\t */\n\t#[\\Override]\n\tpublic function getChildren() {\n\t\t$r = [];\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-read')) {\n\t\t\t$r[] = new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-write')) {\n\t\t\t$r[] = new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\treturn $r;\n\t}\n}",
+          "span_metadata": {
+            "start_line": 12,
+            "end_line": 83,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "User"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "7982724b4e08634c2bb307a6d2c0449bc9a9bbd8a3bf15397374a6f639ddce61",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCA\\User_LDAP\\User\\User",
+          "rank": 3,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "implements"
+          ],
+          "granularity": "summary",
+          "source_file": "apps/user_ldap/lib/User/User.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 6741,
+          "content_snippet": "// [SUMMARY] apps/user_ldap/lib/User/User.php :: php://OCA\\User_LDAP\\User\\User | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCA\\User_LDAP\\User\\User"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "1ba75b0b6e85069bbc1c691d864856cd39e39cab70fc7132445b0d85f917b6f8",
+          "representation_type": "SOURCE_SPAN"
+        }
+      ],
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 1093 / 4000 tokens | **Included Context Units:** 3 (merged 4)\n\n## [1] php://OCP\\IUser::getUID (full_implementation)\n- **File:** `lib/public/IUser.php` (lines 27-78)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\IUser\n```\n/**\n\t * get the user id\n\t *\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getUID(): string;\n\n\t/**\n\t * get the display name for the user, if no specific display name is set it will fallback to the user id\n\t *\n\t * @return non-empty-string\n\t * @since 8.0.0\n\t */\n\tpublic function getDisplayName(): string;\n\n\t/**\n\t * set the display name for the user\n\t *\n\t * @since 8.0.0\n\t *\n\t * @since 25.0.0 Throw InvalidArgumentException\n\t * @throws \\InvalidArgumentException\n\t */\n\tpublic function setDisplayName(string $displayName): bool;\n\n\t/**\n\t * returns the timestamp of the user's last login or 0 if the user did never\n\t * login\n\t *\n\t * @since 8.0.0\n\t */\n\tpublic function getLastLogin(): int;\n\n\t/**\n\t * Returns the timestamp of the user's first login, 0 if the user did never login, or -1 if the data is unknown (first login was on an older version)\n\t *\n\t * @since 31.0.0\n\t */\n\tpublic function getFirstLogin(): int;\n\n\t/**\n\t * Updates the timestamp of the most recent login of this user (and first login if needed)\n\t *\n\t * @return bool whether this is the first login\n\t * @since 8.0.0\n\t */\n\tpublic function updateLastLoginTimestamp(): bool;\n\n\t/**\n\t * Delete the user\n\t *\n```\n\n## [2] php://OCA\\DAV\\CalDAV\\Principal\\User (signature)\n- **File:** `apps/dav/lib/CalDAV/Principal/User.php` (lines 12-83)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n/**\n * Class User\n *\n * @package OCA\\DAV\\CalDAV\\Principal\n */\nclass User extends \\Sabre\\CalDAV\\Principal\\User {\n\n\t/**\n\t * Returns a list of ACE's for this node.\n\t *\n\t * Each ACE has the following properties:\n\t *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are\n\t *     currently the only supported privileges\n\t *   * 'principal', a url to the principal who owns the node\n\t *   * 'protected' (optional), indicating that this ACE is not allowed to\n\t *      be updated.\n\t *\n\t * @return array\n\t */\n\t#[\\Override]\n\tpublic function getACL() {\n\t\t$acl = parent::getACL();\n\t\t$acl[] = [\n\t\t\t'privilege' => '{DAV:}read',\n\t\t\t'principal' => '{DAV:}authenticated',\n\t\t\t'protected' => true,\n\t\t];\n\t\treturn $acl;\n\t}\n\n\t/**\n\t * Returns a specific child node, referenced by its name.\n\t *\n\t * @param string $name\n\t *\n\t * @return \\Sabre\\DAV\\INode\n\t */\n\t#[\\Override]\n\tpublic function getChild($name) {\n\t\t$principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/' . $name);\n\t\tif (!$principal) {\n\t\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t\t}\n\t\tif ($name === 'calendar-proxy-read') {\n\t\t\treturn new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tif ($name === 'calendar-proxy-write') {\n\t\t\treturn new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\tthrow new \\Sabre\\DAV\\Exception\\NotFound(\"Node with name $name was not found\");\n\t}\n\n\t/**\n\t * Returns an array with all the child nodes.\n\t *\n\t * @return \\Sabre\\DAV\\INode[]\n\t */\n\t#[\\Override]\n\tpublic function getChildren() {\n\t\t$r = [];\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-read')) {\n\t\t\t$r[] = new ProxyRead($this->principalBackend, $this->principalProperties);\n\t\t}\n\t\tif ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-write')) {\n\t\t\t$r[] = new ProxyWrite($this->principalBackend, $this->principalProperties);\n\t\t}\n\n\t\treturn $r;\n\t}\n}\n```\n\n## [3] php://OCA\\User_LDAP\\User\\User (summary)\n- **File:** `apps/user_ldap/lib/User/User.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** implements\n```\n// [SUMMARY] apps/user_ldap/lib/User/User.php :: php://OCA\\User_LDAP\\User\\User | Rank context reference in dependency blast radius\n```\n"
+    }
+  }
+}

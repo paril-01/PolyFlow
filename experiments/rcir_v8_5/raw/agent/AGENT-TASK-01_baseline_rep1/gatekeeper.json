@@ -1,0 +1,15 @@
+{
+  "trial_id": "AGENT-TASK-01_baseline_rep1",
+  "task_id": "AGENT-TASK-01",
+  "condition": "baseline",
+  "verdict": "REJECT",
+  "checks": {
+    "is_live_inference": true,
+    "acceptance_before_failed": true,
+    "acceptance_after_passed": false,
+    "regression_passed": false,
+    "non_empty_diff": false,
+    "tool_calls_executed": true
+  },
+  "gatekeeper_timestamp": "2026-10-05T19:08:04Z"
+}

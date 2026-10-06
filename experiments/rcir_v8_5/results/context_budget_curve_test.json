@@ -1,0 +1,41 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "split": "test",
+  "saturation_curve": {
+    "1000": {
+      "budget": 1000,
+      "critical_file_recall": 0.4667,
+      "critical_source_recall": 0.4667,
+      "mean_tokens_delivered": 686.4,
+      "budget_violations": 0
+    },
+    "2000": {
+      "budget": 2000,
+      "critical_file_recall": 0.5667,
+      "critical_source_recall": 0.5667,
+      "mean_tokens_delivered": 1459.8,
+      "budget_violations": 0
+    },
+    "4000": {
+      "budget": 4000,
+      "critical_file_recall": 0.5667,
+      "critical_source_recall": 0.5667,
+      "mean_tokens_delivered": 2635.8,
+      "budget_violations": 0
+    },
+    "8000": {
+      "budget": 8000,
+      "critical_file_recall": 0.7667,
+      "critical_source_recall": 0.7667,
+      "mean_tokens_delivered": 6065.6,
+      "budget_violations": 0
+    },
+    "16000": {
+      "budget": 16000,
+      "critical_file_recall": 0.7667,
+      "critical_source_recall": 0.7667,
+      "mean_tokens_delivered": 13707.2,
+      "budget_violations": 0
+    }
+  }
+}

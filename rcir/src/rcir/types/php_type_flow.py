@@ -117,6 +117,24 @@ class PHPTypeFlowAnalyzer:
         self.method_summaries[("OCP\\IUserSession", "getUser")] = TypeBinding(
             {"OCP\\IUser"}, TypeResolutionConfidence.PROVEN_EXACT, ["session_contract"]
         )
+        self.method_summaries[("OCP\\Files\\IRootFolder", "getUserFolder")] = TypeBinding(
+            {"OCP\\Files\\Folder"}, TypeResolutionConfidence.PROVEN_EXACT, ["framework_contract"]
+        )
+        self.method_summaries[("OCP\\Files\\File", "getStorage")] = TypeBinding(
+            {"OCP\\Files\\Storage\\ISharedStorage"}, TypeResolutionConfidence.PROVEN_EXACT, ["storage_contract"]
+        )
+        self.method_summaries[("OCP\\Files\\Storage\\ISharedStorage", "getShare")] = TypeBinding(
+            {"OCP\\Share\\IShare"}, TypeResolutionConfidence.PROVEN_EXACT, ["share_contract"]
+        )
+        self.method_summaries[("OCP\\Files\\Folder", "getParent")] = TypeBinding(
+            {"OCP\\Files\\Folder"}, TypeResolutionConfidence.PROVEN_EXACT, ["folder_contract"]
+        )
+        self.method_summaries[("OCP\\Files\\Folder", "getDirectoryListing")] = TypeBinding(
+            {"OCP\\Files\\Node[]"}, TypeResolutionConfidence.PROVEN_EXACT, ["folder_contract"]
+        )
+        self.method_summaries[("OCP\\Files\\Node", "getFileInfo")] = TypeBinding(
+            {"OCP\\Files\\FileInfo"}, TypeResolutionConfidence.PROVEN_EXACT, ["node_contract"]
+        )
 
     def parse_use_statements(self, content: str) -> dict[str, str]:
         """Resolve PHP `use` declarations into an alias -> FQN mapping (Phase 31)."""
@@ -214,16 +232,25 @@ class PHPTypeFlowAnalyzer:
                 ev = ["property_type_declaration" if sig_type else "property_phpdoc_var"]
                 ctx.properties[prop_name] = TypeBinding(cand, conf, ev)
 
-        # Parse methods with line spans
+        # Parse methods with line spans (PHASE 35)
         method_pattern = re.compile(
-            r'(/\*\*[\s\S]*?\*/\s*)?(?:public|protected|private)\s+(?:static\s+)?function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)(?:\s*:\s*([A-Za-z0-9_\\|&?]+))?\s*\{'
+            r'(?:public|protected|private)\s+(?:static\s+)?function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)(?:\s*:\s*([A-Za-z0-9_\\|&?]+))?\s*\{'
         )
 
         for m in method_pattern.finditer(content):
-            docblock = m.group(1) or ""
-            method_name = m.group(2)
-            params_str = m.group(3)
-            ret_type_str = m.group(4) or ""
+            method_name = m.group(1)
+            params_str = m.group(2)
+            ret_type_str = m.group(3) or ""
+
+            # Extract docblock immediately preceding method without backtracking
+            docblock = ""
+            pre_text = content[:m.start()].rstrip()
+            if pre_text.endswith("*/"):
+                doc_start = pre_text.rfind("/**")
+                if doc_start != -1:
+                    candidate_doc = pre_text[doc_start:]
+                    if "class " not in candidate_doc and "function " not in candidate_doc:
+                        docblock = candidate_doc
 
             # Register method summary
             if ret_type_str and ctx.fqn:
@@ -257,12 +284,13 @@ class PHPTypeFlowAnalyzer:
                 for dp in re.finditer(r'@param\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', docblock):
                     doc_params[dp.group(2)] = dp.group(1)
 
-            # Parameters
+            # Parameters & Constructor Promotion (PHP 8, Phase 35)
             for p_item in params_str.split(","):
                 p_item = p_item.strip()
                 if not p_item:
                     continue
-                p_m = re.search(r'(?:([A-Za-z0-9_\\|&?]+)\s+)?\$([A-Za-z0-9_]+)', p_item)
+                promoted = bool(re.search(r'\b(private|protected|public)\b', p_item))
+                p_m = re.search(r'(?:(?:private|protected|public)\s+)?(?:readonly\s+)?(?:([A-Za-z0-9_\\|&?]+)\s+)?\$([A-Za-z0-9_]+)', p_item)
                 if p_m:
                     sig_t = p_m.group(1)
                     p_name = p_m.group(2)
@@ -271,7 +299,10 @@ class PHPTypeFlowAnalyzer:
                         cand = self.parse_type_expression(raw_t, ctx)
                         conf = TypeResolutionConfidence.PROVEN_EXACT if sig_t else TypeResolutionConfidence.HEURISTIC_INFERRED
                         ev = [f"parameter_typehint:{p_name}" if sig_t else f"param_phpdoc:{p_name}"]
-                        env[p_name] = TypeBinding(cand, conf, ev)
+                        binding = TypeBinding(cand, conf, ev)
+                        env[p_name] = binding
+                        if promoted and method_name == "__construct":
+                            ctx.properties[p_name] = binding
 
             # Line-by-line forward simulation (Phase 27, 28, 29)
             body_lines = method_body.splitlines()
@@ -281,6 +312,29 @@ class PHPTypeFlowAnalyzer:
             for line_idx, raw_line in enumerate(body_lines):
                 line_no = body_start_line + line_idx
                 stripped = raw_line.strip()
+
+                # Inline PHPDoc @var inside method body (Phase 35)
+                var_doc_m = re.search(r'@var\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', stripped)
+                if var_doc_m:
+                    v_type = self.resolve_type_fqn(var_doc_m.group(1), ctx)
+                    v_name = var_doc_m.group(2)
+                    current_env[v_name] = TypeBinding({v_type}, TypeResolutionConfidence.HEURISTIC_INFERRED, ["inline_phpdoc_var"])
+
+                # Instanceof type narrowing (Phase 35)
+                inst_m = re.search(r'\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+                if inst_m:
+                    v_name = inst_m.group(1)
+                    t_name = self.resolve_type_fqn(inst_m.group(2), ctx)
+                    current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
+
+                # Inline closure parameters (Phase 35)
+                closure_m = re.search(r'function\s*\(([^)]+)\)', stripped)
+                if closure_m:
+                    for cp in closure_m.group(1).split(","):
+                        c_match = re.search(r'(?:([A-Za-z0-9_\\]+)\s+)?\$([A-Za-z0-9_]+)', cp.strip())
+                        if c_match and c_match.group(1):
+                            c_type = self.resolve_type_fqn(c_match.group(1), ctx)
+                            current_env[c_match.group(2)] = TypeBinding({c_type}, TypeResolutionConfidence.PROVEN_EXACT, ["closure_parameter"])
 
                 # Control-flow branch points: if / else / elseif
                 if re.match(r'^(?:if|elseif)\s*\(', stripped):
@@ -327,9 +381,9 @@ class PHPTypeFlowAnalyzer:
                         current_env[var_name] = TypeBinding(
                             {cls_name}, TypeResolutionConfidence.PROVEN_EXACT, ["new_instantiation"]
                         )
-                    # Property read: $this->prop
-                    elif expr.startswith("$this->"):
-                        prop_name = expr.replace("$this->", "").split("(")[0].strip()
+                    # Simple property read: $this->prop
+                    elif re.match(r'^\$this->([A-Za-z0-9_]+)$', expr):
+                        prop_name = re.match(r'^\$this->([A-Za-z0-9_]+)$', expr).group(1)
                         if prop_name in ctx.properties:
                             p_bind = ctx.properties[prop_name]
                             current_env[var_name] = TypeBinding(
@@ -340,9 +394,10 @@ class PHPTypeFlowAnalyzer:
                         src_var = expr.lstrip("$")
                         if src_var in current_env:
                             current_env[var_name] = current_env[src_var]
-                    # Chained call or method call: $receiver->method(...)
-                    elif "->" in expr:
-                        resolved_t = self._evaluate_expression_type(expr, current_env, ctx)
+                    # Chained call or method call: $receiver->method(...) or $this->prop?->method(...) (Phase 35)
+                    elif "->" in expr or "?->" in expr:
+                        clean_expr = expr.replace("?->", "->")
+                        resolved_t = self._evaluate_expression_type(clean_expr, current_env, ctx)
                         if resolved_t:
                             current_env[var_name] = resolved_t
 
@@ -422,16 +477,37 @@ class PHPTypeFlowAnalyzer:
     def _evaluate_expression_type(
         self, expr: str, env: dict[str, TypeBinding], ctx: ClassContext
     ) -> Optional[TypeBinding]:
-        """Evaluate type of an expression chain like $event->getNode() or $folder->get($p)."""
-        # Match head->method()
-        chain_m = re.match(r'^(\$[A-Za-z0-9_]+)\s*->\s*([A-Za-z0-9_]+)\s*\([^)]*\)$', expr)
+        """Evaluate type of an expression chain like $event->getNode(), $this->userSession->getUser(), or $file->getStorage()."""
+        chain_m = re.match(r'^(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+)?))\s*->\s*([A-Za-z0-9_]+)\s*\([^)]*\)$', expr)
         if chain_m:
-            head_var = chain_m.group(1).lstrip("$")
-            called_m = chain_m.group(2)
-            head_binding = env.get(head_var)
+            head_expr = chain_m.group(1).strip()
+            called_m = chain_m.group(2).strip()
+
+            head_binding = None
+            if head_expr.startswith("$this->"):
+                p_name = head_expr.replace("$this->", "").strip()
+                head_binding = ctx.properties.get(p_name)
+            elif head_expr == "$this":
+                if ctx.fqn:
+                    head_binding = TypeBinding({ctx.fqn}, TypeResolutionConfidence.PROVEN_EXACT, ["this_receiver"])
+            else:
+                var_name = head_expr.lstrip("$")
+                head_binding = env.get(var_name)
+
             if head_binding:
                 for head_t in head_binding.candidate_types:
                     summary_key = (head_t, called_m)
                     if summary_key in self.method_summaries:
                         return self.method_summaries[summary_key]
         return None
+
+    def analyze_file(self, rel_path: str) -> list[CallSiteInfo]:
+        """Analyze a file located under repo_root (PHASE 27)."""
+        if not self.repo_root:
+            raise ValueError("repo_root must be configured to call analyze_file")
+        clean = rel_path.replace("\\", "/").lstrip("/")
+        full_path = self.repo_root / clean
+        if not full_path.exists():
+            return []
+        content = full_path.read_text(encoding="utf-8", errors="ignore")
+        return self.analyze_source_content(content, file_path=clean)

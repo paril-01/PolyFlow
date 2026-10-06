@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -23,14 +25,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
 
-    - name: Audit Ground Truth Leakage Barrier
+    - name: Validate Ground Truth Provenance
       run: |
-        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+        python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py
 
     - name: Validate Report Byte/Hash Invariance
       run: |
-        python experiments/rcir_v8_3/scripts/validate_report_consistency.py
+        python experiments/rcir_v8_5/scripts/validate_report_consistency.py
 
     - name: Verify Gate Evaluator Consistency
       run: |
-        python experiments/rcir_v8_3/scripts/evaluate_gates.py
+        python experiments/rcir_v8_5/scripts/evaluate_gates.py

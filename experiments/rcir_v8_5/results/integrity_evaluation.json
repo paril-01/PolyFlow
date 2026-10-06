@@ -1,0 +1,13 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "status": "PASSED",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "manifest_valid": true,
+  "run_id_consistent": true,
+  "provenance_passed": true,
+  "token_budget_invariant_passed": true,
+  "unexpected_external_ratio_zero": true,
+  "failures": [],
+  "evaluated_at": "2026-10-06T06:20:15Z"
+}

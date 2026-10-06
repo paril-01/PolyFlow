@@ -1,0 +1,127 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "total_predictions": 12,
+  "predictions": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 76,
+      "receiver": "$user",
+      "method": "getUID",
+      "predicted_type": "OCP\\IUser",
+      "confidence": "proven_exact",
+      "matched_site_line": 76
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 108,
+      "receiver": "$file",
+      "method": "getId",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "proven_exact",
+      "matched_site_line": 108
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 115,
+      "receiver": "$file",
+      "method": "getStorage",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "ambiguous",
+      "matched_site_line": 115
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 118,
+      "receiver": "$storage",
+      "method": "getShare",
+      "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "confidence": "proven_exact",
+      "matched_site_line": 118
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 119,
+      "receiver": "$share",
+      "method": "canSeeContent",
+      "predicted_type": "OCP\\Share\\IShare",
+      "confidence": "proven_exact",
+      "matched_site_line": 119
+    },
+    {
+      "call_id": "tf_006",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 175,
+      "receiver": "$node",
+      "method": "getId",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "matched_site_line": 175
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 176,
+      "receiver": "$node",
+      "method": "getFileInfo",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "matched_site_line": 176
+    },
+    {
+      "call_id": "tf_008",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 295,
+      "receiver": "$currentFolder",
+      "method": "getParent",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "proven_exact",
+      "matched_site_line": 295
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 296,
+      "receiver": "$parentFolder",
+      "method": "getDirectoryListing",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "proven_exact",
+      "matched_site_line": 296
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 496,
+      "receiver": "$response",
+      "method": "setContentSecurityPolicy",
+      "predicted_type": "OCP\\AppFramework\\Http\\StreamResponse",
+      "confidence": "proven_exact",
+      "matched_site_line": 496
+    },
+    {
+      "call_id": "tf_011_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 358,
+      "receiver": "$th",
+      "method": "getMessage",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "matched_site_line": 358
+    },
+    {
+      "call_id": "tf_012_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 391,
+      "receiver": "$e",
+      "method": "getMessage",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "matched_site_line": 391
+    }
+  ]
+}

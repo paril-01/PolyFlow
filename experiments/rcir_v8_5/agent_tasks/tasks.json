@@ -1,0 +1,18 @@
+{
+  "version": "8.5",
+  "generated_at": "2026-10-06T00:00:00Z",
+  "tasks": [
+    {
+      "task_id": "AGENT-TASK-01",
+      "title": "Add Optional Crop Parameter to Preview Thumbnail",
+      "category": "route_and_service",
+      "target_symbol": "getThumbnail",
+      "target_file": "apps/files/lib/Controller/ApiController.php",
+      "prompt": "Update ApiController getThumbnail to accept an optional $crop parameter with default true: public function getThumbnail($x, $y, $file, $crop = true), and pass $crop to $this->previewManager->getPreview($file, $x, $y, $crop).",
+      "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task1.py {worktree}",
+      "regression_suite": "python -c \"import os; assert os.path.exists('{worktree}/lib/public/IConfig.php')\"",
+      "max_turns": 8,
+      "timeout_seconds": 120
+    }
+  ]
+}

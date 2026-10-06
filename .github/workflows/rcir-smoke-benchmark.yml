@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -24,14 +26,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
 
-    - name: Run Leakage Guard Audit
+    - name: Verify Environment & Sentinels
       run: |
-        python experiments/rcir_v8_3/scripts/audit_ground_truth_leakage.py
+        python experiments/rcir_v8_5/scripts/environment.py
+
+    - name: Validate Ground Truth Provenance
+      run: |
+        python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py
 
     - name: Run Fast Capability Probing
       run: |
-        python experiments/rcir_v8_3/scripts/run_agent_validation.py
+        python experiments/rcir_v8_5/scripts/probe_provider.py
 
-    - name: Run External Generalization Evaluator
+    - name: Run Generalization Readiness Evaluator
       run: |
-        python experiments/rcir_v8_3/scripts/run_external_generalization.py
+        python experiments/rcir_v8_5/scripts/evaluate_generalization.py

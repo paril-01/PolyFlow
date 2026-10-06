@@ -1,0 +1,1 @@
+{"provider": "ollama", "endpoint": "http://127.0.0.1:11434", "model": "qwen2.5-coder:1.5b", "prompt_tokens": 6726, "completion_tokens": 1107, "total_tokens": 7833, "latency_seconds": 73.539, "simulation_fallback": false}

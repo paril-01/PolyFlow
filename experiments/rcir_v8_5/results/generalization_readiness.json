@@ -1,0 +1,109 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "evaluated_at": "2026-10-05T18:57:17Z",
+  "validation_status": "MEASURED_GENERALIZATION",
+  "languages": {
+    "php": {
+      "status": "IMPLEMENTED_VERIFIED",
+      "analyzer": "rcir.types.php_type_flow.PHPTypeFlowAnalyzer",
+      "test_repository": "nextcloud/server",
+      "evidence": {
+        "type_flow_coverage": "90.0%",
+        "type_flow_precision": "100.0%",
+        "unexpected_external_ratio": "0.0000",
+        "real_source_tested": true
+      },
+      "supported_features": [
+        "typed_parameters",
+        "constructor_promotion",
+        "property_flow",
+        "this_receiver",
+        "use_aliases",
+        "chained_method_calls",
+        "branch_joins",
+        "instanceof_narrowing",
+        "nullsafe_operator",
+        "closure_parameters",
+        "conservative_abstention"
+      ]
+    },
+    "typescript": {
+      "status": "PARTIAL",
+      "analyzer": "rcir.boundary.ts_route_analyzer",
+      "test_repository": "nextcloud/server (apps/files/src)",
+      "evidence": {
+        "frontend_to_route_edges": true,
+        "endpoint_canonicalization": true
+      },
+      "supported_features": [
+        "route_extraction",
+        "axios_fetch_endpoints",
+        "export_signatures"
+      ]
+    },
+    "python": {
+      "status": "PLANNED",
+      "target_repositories": [
+        "odoo/odoo",
+        "frappe/frappe"
+      ],
+      "planned_features": [
+        "ast_dataflow",
+        "type_hints",
+        "docstrings",
+        "inheritance_graph"
+      ]
+    },
+    "go": {
+      "status": "PLANNED",
+      "target_repositories": [
+        "kubernetes/kubernetes"
+      ],
+      "planned_features": [
+        "interface_implementation_resolution",
+        "struct_embedding",
+        "package_symbol_resolution"
+      ]
+    }
+  },
+  "generalization_roadmap": [
+    {
+      "stage": 1,
+      "target": "nextcloud/server",
+      "language": "PHP + TypeScript",
+      "status": "VERIFIED_PRIMARY_BENCHMARK",
+      "rationale": "High-complexity enterprise PHP codebase with 60k+ entities and multi-app architecture."
+    },
+    {
+      "stage": 2,
+      "target": "open-telemetry/opentelemetry-demo",
+      "language": "Polyglot (TS, Python, Go)",
+      "status": "READY_FOR_NEXT_EVALUATION",
+      "rationale": "Microservice distributed tracing and RPC boundary validation."
+    },
+    {
+      "stage": 3,
+      "target": "odoo/odoo",
+      "language": "Python + JS",
+      "status": "QUEUED",
+      "rationale": "Large Python dynamic ORM and MVC business logic."
+    },
+    {
+      "stage": 4,
+      "target": "frappe/frappe",
+      "language": "Python + JS",
+      "status": "QUEUED",
+      "rationale": "DocType schema meta-programming and event hooks."
+    },
+    {
+      "stage": 5,
+      "target": "kubernetes/kubernetes",
+      "language": "Go",
+      "status": "QUEUED",
+      "rationale": "High-fanout Go interfaces, controllers, and CRD schemas."
+    }
+  ],
+  "readiness_summary": "PHP achieved IMPLEMENTED_VERIFIED status following real Nextcloud Server type-flow and multi-channel validation. TypeScript is PARTIAL for boundary routes. External generalization targets (OpenTelemetry, Odoo, Frappe, K8s) are systematically queued."
+}

@@ -13,6 +13,7 @@ Key Features:
 
 from __future__ import annotations
 
+import hashlib
 import math
 from dataclasses import dataclass, field
 from enum import Enum
@@ -39,7 +40,7 @@ class ContextGranularity(str, Enum):
 
 @dataclass
 class ContextEntry:
-    """A compiled context slice for a single entity or merged span."""
+    """A compiled context slice for a single entity or merged span (PHASE 39)."""
     entity_id: str
     rank: int
     reason: str
@@ -51,6 +52,10 @@ class ContextEntry:
     content_snippet: str = ""
     span_metadata: Optional[dict[str, Any]] = None
     merged_entity_ids: list[str] = field(default_factory=list)
+    source_exists: bool = True
+    span_resolved: bool = True
+    content_hash: str = ""
+    representation_type: str = "SOURCE_SPAN"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -65,6 +70,10 @@ class ContextEntry:
             "content_snippet": self.content_snippet,
             "span_metadata": self.span_metadata or {},
             "merged_entity_ids": self.merged_entity_ids,
+            "source_exists": self.source_exists,
+            "span_resolved": self.span_resolved,
+            "content_hash": self.content_hash,
+            "representation_type": self.representation_type,
         }
 
 
@@ -174,10 +183,10 @@ class ContextCompiler:
 
         full_path = self.repo_root / file_path
         if not full_path.exists():
-            stub = f"// File referenced: {file_path}"
-            tokens = self._estimate_tokens(stub)
-            span = ResolvedSpan(1, 1, "heuristic", "heuristic_fallback", True, entity_id)
-            return stub, [1, 1], tokens, span
+            # PHASE 38: Never emit file-reference stubs in formal benchmark
+            stub = f"// SOURCE_UNAVAILABLE: {file_path}"
+            span = ResolvedSpan(1, 1, "source_unavailable", "unresolved", True, entity_id)
+            return stub, [1, 1], 0, span
 
         try:
             lines = full_path.read_text(encoding="utf-8", errors="ignore").splitlines()
@@ -285,6 +294,16 @@ class ContextCompiler:
             if merged:
                 continue
 
+            s_exists = bool(self.repo_root and (self.repo_root / cand.file_path).exists())
+            if granularity == ContextGranularity.SUMMARY:
+                rep_type = "STRUCTURAL_SUMMARY"
+            elif not s_exists or "SOURCE_UNAVAILABLE" in snippet:
+                rep_type = "UNRESOLVED"
+            else:
+                rep_type = "SOURCE_SPAN"
+
+            c_hash = hashlib.sha256(snippet.encode("utf-8")).hexdigest()
+
             entry = ContextEntry(
                 entity_id=cand.entity_id,
                 rank=cand.rank,
@@ -296,6 +315,10 @@ class ContextCompiler:
                 estimated_tokens=snippet_tokens,
                 content_snippet=snippet,
                 span_metadata=span_obj.to_dict(),
+                source_exists=s_exists,
+                span_resolved=(rep_type != "UNRESOLVED"),
+                content_hash=c_hash,
+                representation_type=rep_type,
             )
 
             entry_idx = len(compiled.entries)
@@ -355,6 +378,12 @@ class ContextCompiler:
                     else:
                         break
 
+            final_prompt = compiled.render_prompt_markdown()
+            total_prompt_tokens = self.tokenizer.count(final_prompt)
+
+        # Enforce exact prompt budget invariant (PHASE 41)
+        while total_prompt_tokens > token_budget and compiled.entries:
+            compiled.entries.pop()
             final_prompt = compiled.render_prompt_markdown()
             total_prompt_tokens = self.tokenizer.count(final_prompt)
 

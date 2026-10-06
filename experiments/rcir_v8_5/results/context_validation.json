@@ -1,0 +1,13 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "split": "validation",
+  "token_budget": 4000,
+  "critical_file_recall_at_4k": 0.6667,
+  "critical_source_recall_at_4k": 0.6667,
+  "mean_delivered_tokens": 2653.8,
+  "token_budget_violations": 0,
+  "unresolved_span_rate": 0.0,
+  "relevant_token_ratio": 0.4962,
+  "strict_budget_invariant_satisfied": true,
+  "meets_4k_source_target": true
+}

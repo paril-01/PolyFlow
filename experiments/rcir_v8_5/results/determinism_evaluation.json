@@ -1,0 +1,243 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "evaluated_at": "2026-10-06T06:09:44Z",
+  "validation_status": "MEASURED_DETERMINISM",
+  "trials_per_task": 5,
+  "tasks_evaluated": 3,
+  "is_deterministic": true,
+  "pipeline_stages_verified": [
+    "candidate_discovery",
+    "multi_objective_ranking",
+    "context_planning",
+    "context_compilation_and_rendering"
+  ],
+  "tasks": [
+    {
+      "task_id": "TASK-DEV-01",
+      "target_symbol": "getThumbnail",
+      "is_deterministic": true,
+      "candidates_deterministic": true,
+      "ranking_deterministic": true,
+      "planning_deterministic": true,
+      "prompt_deterministic": true,
+      "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+      "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+      "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+      "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe",
+      "trials": [
+        {
+          "trial": 1,
+          "candidate_count": 122,
+          "ranked_count": 122,
+          "plan_items_count": 24,
+          "compiled_entries": 5,
+          "total_tokens": 1326,
+          "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+          "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+          "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+          "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe"
+        },
+        {
+          "trial": 2,
+          "candidate_count": 122,
+          "ranked_count": 122,
+          "plan_items_count": 24,
+          "compiled_entries": 5,
+          "total_tokens": 1326,
+          "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+          "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+          "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+          "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe"
+        },
+        {
+          "trial": 3,
+          "candidate_count": 122,
+          "ranked_count": 122,
+          "plan_items_count": 24,
+          "compiled_entries": 5,
+          "total_tokens": 1326,
+          "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+          "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+          "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+          "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe"
+        },
+        {
+          "trial": 4,
+          "candidate_count": 122,
+          "ranked_count": 122,
+          "plan_items_count": 24,
+          "compiled_entries": 5,
+          "total_tokens": 1326,
+          "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+          "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+          "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+          "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe"
+        },
+        {
+          "trial": 5,
+          "candidate_count": 122,
+          "ranked_count": 122,
+          "plan_items_count": 24,
+          "compiled_entries": 5,
+          "total_tokens": 1326,
+          "candidate_hash": "5de1d498639a1a149823c6ae9da6f1a433ac965da0884a3b50bf989657016452",
+          "ranked_hash": "fdbce28370bd92fe204fb159e29e2bffe62a2840184250c8fcb5560fe2d81ee9",
+          "plan_hash": "3b250dbfecbfa8f8577ea4e1c4d2503f3f2a2559c0f8c6612d6949d8b02948ae",
+          "prompt_hash": "8eeaec23757c382ae06dd93751a2d2340a4522fe0362f341a31d083870109fbe"
+        }
+      ]
+    },
+    {
+      "task_id": "TASK-VAL-01",
+      "target_symbol": "get",
+      "is_deterministic": true,
+      "candidates_deterministic": true,
+      "ranking_deterministic": true,
+      "planning_deterministic": true,
+      "prompt_deterministic": true,
+      "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+      "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+      "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+      "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64",
+      "trials": [
+        {
+          "trial": 1,
+          "candidate_count": 271,
+          "ranked_count": 271,
+          "plan_items_count": 19,
+          "compiled_entries": 13,
+          "total_tokens": 3382,
+          "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+          "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+          "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+          "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64"
+        },
+        {
+          "trial": 2,
+          "candidate_count": 271,
+          "ranked_count": 271,
+          "plan_items_count": 19,
+          "compiled_entries": 13,
+          "total_tokens": 3382,
+          "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+          "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+          "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+          "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64"
+        },
+        {
+          "trial": 3,
+          "candidate_count": 271,
+          "ranked_count": 271,
+          "plan_items_count": 19,
+          "compiled_entries": 13,
+          "total_tokens": 3382,
+          "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+          "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+          "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+          "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64"
+        },
+        {
+          "trial": 4,
+          "candidate_count": 271,
+          "ranked_count": 271,
+          "plan_items_count": 19,
+          "compiled_entries": 13,
+          "total_tokens": 3382,
+          "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+          "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+          "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+          "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64"
+        },
+        {
+          "trial": 5,
+          "candidate_count": 271,
+          "ranked_count": 271,
+          "plan_items_count": 19,
+          "compiled_entries": 13,
+          "total_tokens": 3382,
+          "candidate_hash": "68340ccd011678d151230a20217e1fd86ea6be5dd8a618eeca4b31da4e342a19",
+          "ranked_hash": "20959a0c8fe41a71bfd3bc2f21a858adb0ba1230197a00312c142c5224151914",
+          "plan_hash": "d36ce56268580ba5026009d68eb965a7d36aaf33f55056e8d55c7e2617b3531e",
+          "prompt_hash": "3fad2079f8c5b3012818276663bb8cffc908829c15272d2ac9936c17bf62dd64"
+        }
+      ]
+    },
+    {
+      "task_id": "TASK-TEST-01",
+      "target_symbol": "render",
+      "is_deterministic": true,
+      "candidates_deterministic": true,
+      "ranking_deterministic": true,
+      "planning_deterministic": true,
+      "prompt_deterministic": true,
+      "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+      "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+      "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+      "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf",
+      "trials": [
+        {
+          "trial": 1,
+          "candidate_count": 295,
+          "ranked_count": 295,
+          "plan_items_count": 19,
+          "compiled_entries": 16,
+          "total_tokens": 3711,
+          "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+          "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+          "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+          "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf"
+        },
+        {
+          "trial": 2,
+          "candidate_count": 295,
+          "ranked_count": 295,
+          "plan_items_count": 19,
+          "compiled_entries": 16,
+          "total_tokens": 3711,
+          "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+          "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+          "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+          "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf"
+        },
+        {
+          "trial": 3,
+          "candidate_count": 295,
+          "ranked_count": 295,
+          "plan_items_count": 19,
+          "compiled_entries": 16,
+          "total_tokens": 3711,
+          "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+          "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+          "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+          "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf"
+        },
+        {
+          "trial": 4,
+          "candidate_count": 295,
+          "ranked_count": 295,
+          "plan_items_count": 19,
+          "compiled_entries": 16,
+          "total_tokens": 3711,
+          "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+          "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+          "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+          "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf"
+        },
+        {
+          "trial": 5,
+          "candidate_count": 295,
+          "ranked_count": 295,
+          "plan_items_count": 19,
+          "compiled_entries": 16,
+          "total_tokens": 3711,
+          "candidate_hash": "69f07b37a4431fcdd4724395d27726f979d1611e3618d58b6245cc6876faca7d",
+          "ranked_hash": "9282d784400001929a0daf55869f80a1e4b736092889e61efebc0c7f7b563456",
+          "plan_hash": "3b462a0034ccc26302332962c1fbbbd01e9cb8fbec6015a48e22b2752fac4966",
+          "prompt_hash": "0624d13fa0c8d2dc0c226b94b5b544ec5bbad772755ff3d5b04a8d74cb8914cf"
+        }
+      ]
+    }
+  ]
+}

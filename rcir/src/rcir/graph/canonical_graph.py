@@ -15,6 +15,7 @@ from enum import Enum
 from typing import Any, Optional
 
 from rcir.entities.canonical import CanonicalEntityRegistry, CanonicalEntityID, SourceSpan, EntityKind
+from rcir.entities.legacy_normalizer import LegacyEndpointNormalizer
 from rcir.query.change_spec import ChangeOperation
 
 
@@ -124,8 +125,9 @@ class ResolutionLedger:
 class CanonicalGraph:
     """Canonical dependency graph fabric."""
 
-    def __init__(self, registry: CanonicalEntityRegistry | None = None):
+    def __init__(self, registry: CanonicalEntityRegistry | None = None, target_repo_root: Optional[Path] = None):
         self.registry = registry or CanonicalEntityRegistry()
+        self.normalizer = LegacyEndpointNormalizer(target_repo_root=target_repo_root)
         self.nodes: dict[str, CanonicalEntityID] = {}
         # canonical_source_id -> list of CanonicalEdge
         self.outgoing_edges: dict[str, list[CanonicalEdge]] = defaultdict(list)
@@ -139,44 +141,32 @@ class CanonicalGraph:
         return uri
 
     def add_edge(self, edge: CanonicalEdge) -> None:
-        """Add an edge ensuring endpoints are strictly canonicalized (Phase 15)."""
+        """Add an edge ensuring endpoints are strictly canonicalized (Phase 15, 21, 22, 24)."""
         # Resolve source endpoint
         src_res = self.registry.resolve(edge.source_id)
         if src_res.canonical_id:
             canonical_src = src_res.canonical_id
-        elif "://" in edge.source_id:
-            canonical_src = edge.source_id
         else:
-            canonical_src = self.registry.register(
-                CanonicalEntityID(
-                    repository=self.registry.repository_name,
-                    language="external",
-                    file="",
-                    namespace="",
-                    owner_type="",
-                    symbol=edge.source_id,
-                    kind=EntityKind.EXTERNAL,
-                )
-            )
+            canonical_src = self.normalizer.normalize_endpoint(edge.source_id, self.registry)
+            if canonical_src not in self.registry.entities and "://" in canonical_src:
+                try:
+                    eid = CanonicalEntityID.from_uri(canonical_src)
+                    self.registry.register(eid)
+                except Exception:
+                    pass
 
         # Resolve target endpoint
         tgt_res = self.registry.resolve(edge.target_id)
         if tgt_res.canonical_id:
             canonical_tgt = tgt_res.canonical_id
-        elif "://" in edge.target_id:
-            canonical_tgt = edge.target_id
         else:
-            canonical_tgt = self.registry.register(
-                CanonicalEntityID(
-                    repository=self.registry.repository_name,
-                    language="external",
-                    file="",
-                    namespace="",
-                    owner_type="",
-                    symbol=edge.target_id,
-                    kind=EntityKind.EXTERNAL,
-                )
-            )
+            canonical_tgt = self.normalizer.normalize_endpoint(edge.target_id, self.registry)
+            if canonical_tgt not in self.registry.entities and "://" in canonical_tgt:
+                try:
+                    eid = CanonicalEntityID.from_uri(canonical_tgt)
+                    self.registry.register(eid)
+                except Exception:
+                    pass
 
         # Preserve original raw strings in evidence for auditability
         if "raw_source" not in edge.evidence:
@@ -289,9 +279,9 @@ class CanonicalGraph:
         )
 
     @classmethod
-    def from_legacy_dict(cls, raw_graph: dict[str, Any]) -> CanonicalGraph:
+    def from_legacy_dict(cls, raw_graph: dict[str, Any], target_repo_root: Optional[Path] = None) -> CanonicalGraph:
         """Construct a CanonicalGraph from raw extraction dictionary."""
-        cg = cls()
+        cg = cls(target_repo_root=target_repo_root)
         nodes_data = raw_graph.get("nodes", {})
         edges_data = raw_graph.get("edges", [])
 

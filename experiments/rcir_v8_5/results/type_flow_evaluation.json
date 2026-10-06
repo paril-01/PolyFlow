@@ -1,0 +1,165 @@
+{
+  "run_id": "rcir-v8.5-primary",
+  "validation_status": "PASSED",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "confusion_matrix": {
+    "correct_exact": 6,
+    "correct_compatible": 3,
+    "wrong_exact": 0,
+    "wrong_compatible": 0,
+    "correct_abstention": 2,
+    "false_abstention": 0,
+    "ambiguous": 1,
+    "invalid_gt": 0
+  },
+  "metrics": {
+    "resolvable_ground_truth_cases": 10,
+    "abstention_ground_truth_cases": 2,
+    "coverage": 0.9,
+    "exact_precision": 1.0,
+    "resolved_precision": 1.0,
+    "wrong_exact_rate": 0.0,
+    "abstention_accuracy": 1.0,
+    "ambiguity_rate": 0.1
+  },
+  "contract_thresholds": {
+    "coverage_min": 0.6,
+    "resolved_precision_min": 0.9,
+    "wrong_exact_rate_max": 0.05
+  },
+  "contract_gate_satisfied": true,
+  "eval_records": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 76,
+      "receiver": "$user",
+      "method": "getUID",
+      "expected_type": "OCP\\IUser",
+      "predicted_type": "OCP\\IUser",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 108,
+      "receiver": "$file",
+      "method": "getId",
+      "expected_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 115,
+      "receiver": "$file",
+      "method": "getStorage",
+      "expected_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "ambiguous",
+      "status": "AMBIGUOUS"
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 118,
+      "receiver": "$storage",
+      "method": "getShare",
+      "expected_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 119,
+      "receiver": "$share",
+      "method": "canSeeContent",
+      "expected_type": "OCP\\Share\\IShare",
+      "predicted_type": "OCP\\Share\\IShare",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_006",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 175,
+      "receiver": "$node",
+      "method": "getId",
+      "expected_type": "OCP\\Files\\Node",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "status": "CORRECT_COMPATIBLE (OC\\Files\\Node\\Node)"
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 176,
+      "receiver": "$node",
+      "method": "getFileInfo",
+      "expected_type": "OCP\\Files\\Node",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "status": "CORRECT_COMPATIBLE (OC\\Files\\Node\\Node)"
+    },
+    {
+      "call_id": "tf_008",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 295,
+      "receiver": "$currentFolder",
+      "method": "getParent",
+      "expected_type": "OCP\\Files\\Folder",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 296,
+      "receiver": "$parentFolder",
+      "method": "getDirectoryListing",
+      "expected_type": "OCP\\Files\\Folder",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 496,
+      "receiver": "$response",
+      "method": "setContentSecurityPolicy",
+      "expected_type": "OCP\\AppFramework\\Http\\Response",
+      "predicted_type": "OCP\\AppFramework\\Http\\StreamResponse",
+      "confidence": "proven_exact",
+      "status": "CORRECT_COMPATIBLE (OCP\\AppFramework\\Http\\StreamResponse)"
+    },
+    {
+      "call_id": "tf_011_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 358,
+      "receiver": "$th",
+      "method": "getMessage",
+      "expected_type": "UNKNOWN",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "CORRECT_ABSTENTION"
+    },
+    {
+      "call_id": "tf_012_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 391,
+      "receiver": "$e",
+      "method": "getMessage",
+      "expected_type": "UNKNOWN",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "CORRECT_ABSTENTION"
+    }
+  ]
+}
