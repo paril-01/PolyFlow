@@ -4,14 +4,14 @@
   "macro_pool_recall": 0.8667,
   "worst_task_pool_recall": 0.6667,
   "silent_misses": 2,
-  "total_candidates_pooled": 901,
+  "total_candidates_pooled": 893,
   "channel_discovery_stats": {
     "channel_a_exact_graph": 542,
     "channel_b_type_flow": 54,
     "channel_c_boundary": 3,
     "channel_d_events": 0,
     "channel_e_config": 0,
-    "channel_f_verification": 11,
+    "channel_f_verification": 1,
     "channel_g_lexical": 0
   }
 }

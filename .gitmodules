@@ -1,0 +1,15 @@
+[submodule "experiments/nextcloud_validation/nextcloud-server"]
+	path = experiments/nextcloud_validation/nextcloud-server
+	url = https://github.com/nextcloud/server.git
+
+[submodule "repos/flask"]
+	path = repos/flask
+	url = https://github.com/pallets/flask.git
+
+[submodule "repos/opentelemetry-demo"]
+	path = repos/opentelemetry-demo
+	url = https://github.com/open-telemetry/opentelemetry-demo.git
+
+[submodule "repos/requests"]
+	path = repos/requests
+	url = https://github.com/psf/requests.git

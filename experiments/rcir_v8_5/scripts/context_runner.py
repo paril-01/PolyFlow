@@ -139,7 +139,7 @@ def run_context_compilation():
                 total_entries += 1
                 if e.representation_type == "UNRESOLVED":
                     total_unresolved_spans += 1
-                elif e.representation_type in ("SOURCE_SPAN", "STRUCTURAL_SUMMARY"):
+                elif e.representation_type == "SOURCE_SPAN" and e.source_exists and e.span_resolved:
                     source_delivered.add(e.source_file)
                     if e.source_file in expected_files:
                         total_relevant_tokens += e.estimated_tokens
@@ -262,7 +262,11 @@ def run_context_compilation():
             files_del = {e.source_file for e in compiled.entries if e.source_file}
             b_file_recalls.append(len(critical_files.intersection(files_del)) / max(1, len(critical_files)))
 
-            src_del = {e.source_file for e in compiled.entries if e.representation_type in ("SOURCE_SPAN", "STRUCTURAL_SUMMARY")}
+            src_del = {
+                e.source_file
+                for e in compiled.entries
+                if e.representation_type == "SOURCE_SPAN" and e.source_exists and e.span_resolved
+            }
             b_source_recalls.append(len(critical_files.intersection(src_del)) / max(1, len(critical_files)))
 
         mean_f_rec = sum(b_file_recalls) / max(1, len(b_file_recalls))

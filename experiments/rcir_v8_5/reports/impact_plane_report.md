@@ -12,9 +12,9 @@
 ## Split-Level Performance
 | Split | Total Tasks | Macro Pool Recall | Worst Task Recall | Silent Misses | Total Candidates |
 |---|---|---|---|---|---|
-| **DEV** | 6 | `92.5%` | `75.0%` | `2` | `4370` |
-| **VALIDATION** | 5 | `86.7%` | `66.7%` | `2` | `901` |
-| **TEST** | 5 | `100.0%` | `100.0%` | `0` | `945` |
+| **DEV** | 6 | `89.2%` | `60.0%` | `3` | `4364` |
+| **VALIDATION** | 5 | `86.7%` | `66.7%` | `2` | `893` |
+| **TEST** | 5 | `100.0%` | `100.0%` | `0` | `936` |
 
 ## Impact Gate Compliance
 - **Macro Pool Recall on TEST**: `100.0%` (Floor: 90.0%) -> **PASSED**

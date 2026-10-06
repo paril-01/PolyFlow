@@ -320,6 +320,7 @@ class ContextCompiler:
                 content_hash=c_hash,
                 representation_type=rep_type,
             )
+            self._sync_entry_metadata(entry)
 
             entry_idx = len(compiled.entries)
             compiled.entries.append(entry)
@@ -346,6 +347,7 @@ class ContextCompiler:
                         e.content_snippet = snip
                         e.source_lines = lrange
                         e.span_metadata = sobj.to_dict()
+                        self._sync_entry_metadata(e)
                     else:
                         # Remove this entry
                         compiled.entries.pop(idx)
@@ -364,6 +366,7 @@ class ContextCompiler:
                         e.content_snippet = snip
                         e.source_lines = lrange
                         e.span_metadata = sobj.to_dict()
+                        self._sync_entry_metadata(e)
                         downgraded_pinned = True
                         break
                 if not downgraded_pinned:
@@ -373,6 +376,7 @@ class ContextCompiler:
                         lines = last_e.content_snippet.splitlines()
                         if len(lines) > 5:
                             last_e.content_snippet = "\n".join(lines[:max(3, len(lines) // 2)]) + "\n// ... [truncated for budget]"
+                            self._sync_entry_metadata(last_e)
                         else:
                             compiled.entries.pop()
                     else:
@@ -387,6 +391,24 @@ class ContextCompiler:
             final_prompt = compiled.render_prompt_markdown()
             total_prompt_tokens = self.tokenizer.count(final_prompt)
 
+        # Final pass: guarantee 100% metadata sync across all surviving entries (F09)
+        for e in compiled.entries:
+            self._sync_entry_metadata(e)
+
         compiled.candidates_included = len(compiled.entries)
         compiled.total_estimated_tokens = total_prompt_tokens
         return compiled
+
+    def _sync_entry_metadata(self, entry: ContextEntry) -> None:
+        """Centralized synchronization of hash, tokens, and representation metadata (F09)."""
+        s_exists = bool(self.repo_root and (self.repo_root / entry.source_file).exists())
+        entry.source_exists = s_exists
+        if entry.granularity == ContextGranularity.SUMMARY:
+            entry.representation_type = "STRUCTURAL_SUMMARY"
+        elif not s_exists or "SOURCE_UNAVAILABLE" in entry.content_snippet:
+            entry.representation_type = "UNRESOLVED"
+        else:
+            entry.representation_type = "SOURCE_SPAN"
+        entry.span_resolved = (entry.representation_type != "UNRESOLVED")
+        entry.content_hash = hashlib.sha256(entry.content_snippet.encode("utf-8")).hexdigest()
+        entry.estimated_tokens = self.tokenizer.count(entry.content_snippet)

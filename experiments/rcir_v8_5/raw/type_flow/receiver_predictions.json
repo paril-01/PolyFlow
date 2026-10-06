@@ -19,7 +19,7 @@
       "line": 108,
       "receiver": "$file",
       "method": "getId",
-      "predicted_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\Node",
       "confidence": "proven_exact",
       "matched_site_line": 108
     },
@@ -29,8 +29,8 @@
       "line": 115,
       "receiver": "$file",
       "method": "getStorage",
-      "predicted_type": "OCP\\Files\\File",
-      "confidence": "ambiguous",
+      "predicted_type": "OCP\\Files\\Node",
+      "confidence": "proven_exact",
       "matched_site_line": 115
     },
     {
@@ -40,7 +40,7 @@
       "receiver": "$storage",
       "method": "getShare",
       "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
-      "confidence": "proven_exact",
+      "confidence": "heuristic_inferred",
       "matched_site_line": 118
     },
     {

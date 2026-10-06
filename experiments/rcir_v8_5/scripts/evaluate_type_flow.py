@@ -95,18 +95,11 @@ def evaluate_type_flow():
 
         analyzed_sites = file_cache[rel_file]
 
-        # PHASE 29: Exact Call-Site Identity Matching
+        # PHASE 29: Exact Call-Site Identity Matching (F13)
         matched_call = None
         for site in analyzed_sites:
-            # Check within relocation window
+            # Check within relocation window (+/- 5 lines)
             if abs(site.line_number - line_no) <= 5:
-                if site.method_name == called_method and site.receiver_expr == receiver_expr:
-                    matched_call = site
-                    break
-
-        if not matched_call:
-            # Check by method and receiver alone
-            for site in analyzed_sites:
                 if site.method_name == called_method and site.receiver_expr == receiver_expr:
                     matched_call = site
                     break
@@ -149,13 +142,8 @@ def evaluate_type_flow():
                 correct_compatible += 1
                 status = f"CORRECT_COMPATIBLE ({pred_type})"
             else:
-                # Check if suffix or interface matches
-                if any(iface.endswith(pred_type) or pred_type.endswith(iface) for iface in acceptable_interfaces):
-                    correct_compatible += 1
-                    status = f"CORRECT_COMPATIBLE_SUFFIX ({pred_type})"
-                else:
-                    wrong_exact += 1
-                    status = f"WRONG_EXACT (pred: {pred_type} vs exp: {expected_type})"
+                wrong_exact += 1
+                status = f"WRONG_EXACT (pred: {pred_type} vs exp: {expected_type})"
 
         eval_records.append({
             "call_id": cid,
@@ -170,14 +158,15 @@ def evaluate_type_flow():
         })
         print(f"  [{status}] {rel_file}:{line_no} {receiver_expr}->{called_method}() => {pred_type}")
 
-    # PHASE 33: Type-Flow Metrics
+    # PHASE 33: Type-Flow Metrics (F13: Population-calibrated denominators)
     resolvable_cases = sum(1 for cs in call_sites if not cs.get("is_abstention", False))
     abstention_cases = sum(1 for cs in call_sites if cs.get("is_abstention", False))
 
-    resolved_non_abstention = correct_exact + correct_compatible + wrong_exact + wrong_compatible
+    # Coverage denominator is resolvable_cases; numerator is resolved non-abstaining predictions on resolvable cases
+    resolvable_resolved = sum(1 for r in eval_records if not r.get("is_abstention", False) and r["status"].startswith(("CORRECT_EXACT", "CORRECT_COMPATIBLE", "WRONG_EXACT")))
     total_non_abstaining_preds = correct_exact + correct_compatible + wrong_exact + wrong_compatible
 
-    coverage = resolved_non_abstention / max(1, resolvable_cases)
+    coverage = resolvable_resolved / max(1, resolvable_cases)
     exact_precision = correct_exact / max(1, (correct_exact + wrong_exact))
     resolved_precision = (correct_exact + correct_compatible) / max(1, total_non_abstaining_preds)
     wrong_exact_rate = wrong_exact / max(1, total_non_abstaining_preds)

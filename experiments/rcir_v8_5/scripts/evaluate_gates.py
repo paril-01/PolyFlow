@@ -105,6 +105,12 @@ def evaluate_gates():
         if violations > 0:
             integrity_failures.append(f"Context budget violations detected: {violations}")
 
+    manifest_valid = manifest_path.exists() and not any("manifest" in f.lower() for f in integrity_failures)
+    run_id_consistent = not any("run_id mismatch" in f.lower() for f in integrity_failures)
+    provenance_passed = gt_prov_path.exists() and not any("provenance" in f.lower() for f in integrity_failures)
+    token_budget_invariant_passed = not any("budget violations" in f.lower() for f in integrity_failures)
+    unexpected_external_ratio_zero = not any("external" in f.lower() for f in integrity_failures)
+
     integrity_passed = len(integrity_failures) == 0
     print(f"Integrity Gate Verdict: {'PASSED' if integrity_passed else 'FAILED'}")
     
@@ -113,11 +119,11 @@ def evaluate_gates():
         "status": "PASSED" if integrity_passed else "FAILED",
         "target_commit": env.target_repo_commit,
         "polyflow_commit": env.polyflow_commit,
-        "manifest_valid": True,
-        "run_id_consistent": True,
-        "provenance_passed": True,
-        "token_budget_invariant_passed": True,
-        "unexpected_external_ratio_zero": True,
+        "manifest_valid": manifest_valid,
+        "run_id_consistent": run_id_consistent,
+        "provenance_passed": provenance_passed,
+        "token_budget_invariant_passed": token_budget_invariant_passed,
+        "unexpected_external_ratio_zero": unexpected_external_ratio_zero,
         "failures": integrity_failures,
         "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
@@ -134,7 +140,7 @@ def evaluate_gates():
         }
         with open(env.results_root / "gate_evaluation.json", "w", encoding="utf-8") as f:
             json.dump(gate_result, f, indent=2)
-        return
+        return gate_result
 
     # -------------------------------------------------------------------------
     # STAGE 2: ARCHITECTURE CONTRACT GATES (PHASES 80-85)
@@ -225,7 +231,8 @@ def evaluate_gates():
         "determinism_passed": is_det is True,
     }
     context_gate["passed"] = (
-        context_gate["budget_invariant_passed"]
+        context_gate["source_recall_passed"]
+        and context_gate["budget_invariant_passed"]
         and context_gate["determinism_passed"]
     )
     print(f"  Context Gate: {'PASSED' if context_gate['passed'] else 'FAILED'} (CriticalSourceRecall@4k: {crit_src_recall*100:.1f}%, BudgetViolations: {violations}, Determinism: {is_det})")
@@ -271,24 +278,47 @@ def evaluate_gates():
         "rationale": "Edge precision methodology requires complete prediction adjudication before promoting to formal gate (PHASE 85).",
     }
 
-    # 7. Agent Gate
+    # 7. Agent Gate (F02: validates actual trials, non-empty diffs, and test transitions)
     agent_ab_path = env.results_root / "agent_ab_runs.json"
     agent_live_verified = False
+    agent_trials_verified = False
     agent_comp_rate = 0.0
+    trials_count = 0
     if agent_ab_path.exists():
         with open(agent_ab_path, "r", encoding="utf-8") as f:
             agent_data = json.load(f)
         prov = agent_data.get("provider", {})
         agent_live_verified = not prov.get("is_simulation", True) and agent_data.get("validation_status") == "MEASURED_AGENT_VALIDATION"
-        agent_comp_rate = agent_data.get("condition_a_rcir", {}).get("completion_rate", 0.0)
+        cond_a = agent_data.get("condition_a_rcir", {})
+        agent_comp_rate = cond_a.get("completion_rate", 0.0)
+        trials_count = cond_a.get("trials_count", 0)
+
+        # Verify actual trial manifests in raw/agent
+        agent_raw_dir = env.raw_root / "agent"
+        valid_trials = 0
+        if agent_raw_dir.exists():
+            for task_dir in agent_raw_dir.glob("*_rcir_rep*"):
+                manifest_file = task_dir / "trial_manifest.json"
+                diff_file = task_dir / "git_diff.patch"
+                if manifest_file.exists():
+                    try:
+                        m = json.loads(manifest_file.read_text(encoding="utf-8"))
+                        has_diff = diff_file.exists() and len(diff_file.read_text(encoding="utf-8").strip()) > 0
+                        if m.get("is_valid_trial", True) and m.get("success") and has_diff:
+                            valid_trials += 1
+                    except Exception:
+                        pass
+        agent_trials_verified = (trials_count > 0) and (valid_trials > 0)
 
     agent_gate = {
         "live_inference_verified": agent_live_verified,
+        "trials_evidence_verified": agent_trials_verified,
         "simulation_forbidden": True,
         "rcir_completion_rate": agent_comp_rate,
-        "passed": agent_live_verified,
+        "trials_count": trials_count,
+        "passed": agent_live_verified and agent_trials_verified and (agent_comp_rate >= 0.50),
     }
-    print(f"  Agent Gate: {'PASSED (Live Verified)' if agent_live_verified else 'NOT_VERIFIED'}")
+    print(f"  Agent Gate: {'PASSED' if agent_gate['passed'] else 'NOT_VERIFIED'}")
 
     # -------------------------------------------------------------------------
     # STAGE 3: FORMAL ARCHITECTURE DECISION (Option A vs Option B vs Option C)
@@ -300,14 +330,13 @@ def evaluate_gates():
         and type_flow_gate["passed"]
         and canon_gate["passed"]
         and agent_gate["passed"]
-        and agent_comp_rate >= 0.50
     )
 
     # Option B: Substantial architectural progress on TEST split
-    # macro recall >= 90%, worst task >= 80%, deterministic compiler, type flow passed, contract strictly obeyed
+    cfg_opt_b = contract["decision_rules"]["option_b"]
     option_b_satisfied = (
-        macro_recall >= contract["decision_rules"]["option_b"]["macro_pool_recall_min"]
-        and worst_recall >= contract["decision_rules"]["option_b"]["worst_task_pool_recall_floor"]
+        macro_recall >= cfg_opt_b["macro_pool_recall_min"]
+        and worst_recall >= cfg_opt_b["worst_task_pool_recall_floor"]
         and is_det is True
         and type_flow_gate["passed"]
         and canon_gate["passed"]
@@ -319,7 +348,12 @@ def evaluate_gates():
         decision_summary = "All primary impact, context, type-flow, ranking, and live agent validation gates fully passed."
     elif option_b_satisfied:
         formal_decision = "OPTION_B_ACCEPTED"
-        decision_summary = "Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 92.5%, Worst Task 80.0%, 100% Determinism, Type Flow 90% coverage/100% precision, 0 budget violations). Formal contract specifications strictly obeyed."
+        decision_summary = (
+            f"Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split "
+            f"(Macro Recall {macro_recall*100:.1f}%, Worst Task {worst_recall*100:.1f}%, Determinism: {is_det}, "
+            f"Type Flow {tf_cov*100:.1f}% cov / {tf_prec*100:.1f}% prec, 0 budget violations). "
+            f"Formal contract specifications strictly obeyed."
+        )
     else:
         formal_decision = "OPTION_C_REJECTED"
         decision_summary = "Formal benchmark thresholds not met; architectural retreat required."
@@ -353,7 +387,10 @@ def evaluate_gates():
         json.dump(gate_result, f, indent=2)
 
     print(f"Saved formal gate evaluation to: {out_file}")
+    return gate_result
 
 
 if __name__ == "__main__":
-    evaluate_gates()
+    res = evaluate_gates()
+    if not res or res.get("run_validity") != "VALID":
+        sys.exit(1)

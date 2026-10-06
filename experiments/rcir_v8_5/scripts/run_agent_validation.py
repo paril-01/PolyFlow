@@ -43,7 +43,7 @@ DEV_CONTEXTS_PATH = RCIR_V8_5_ROOT / "raw" / "context" / "dev_contexts.json"
 
 
 class ConcreteRCIRContextProvider(ContextProvider):
-    """Provides iterative or pre-compiled RCIR context to coding agents."""
+    """Provides iterative or pre-compiled RCIR context to coding agents (F04)."""
 
     def __init__(self, contexts: Dict[str, Any]):
         self.contexts = contexts
@@ -55,20 +55,90 @@ class ConcreteRCIRContextProvider(ContextProvider):
         already_seen: Optional[set[str]] = None,
         token_budget: int = 1500,
     ) -> Dict[str, Any]:
-        already_seen = already_seen or set()
+        if already_seen is None:
+            already_seen = set()
         matched = []
+        sym_lower = (symbol or "").lower()
+        query_lower = (query or "").lower()
+        accumulated_tokens = 0
+
         for tid, ctx in self.contexts.items():
-            if symbol.lower() in tid.lower() or symbol.lower() in str(ctx.get("target_symbol", "")).lower():
-                for entry in ctx.get("entries", []):
-                    ent_id = entry.get("canonical_id", "")
-                    if ent_id not in already_seen:
+            for entry in ctx.get("entries", []):
+                ent_id = entry.get("entity_id", "")
+                if not ent_id or ent_id in already_seen:
+                    continue
+
+                entry_sym = ent_id.split("::")[-1].lower() if "::" in ent_id else ent_id.lower()
+                source_file = entry.get("source_file", "").lower()
+                snippet = entry.get("content_snippet", "").lower()
+
+                matches_symbol = sym_lower and (sym_lower in entry_sym or sym_lower in ent_id.lower() or sym_lower in source_file)
+                matches_query = query_lower and (query_lower in snippet or query_lower in source_file)
+                matches_task = sym_lower and sym_lower in tid.lower()
+
+                if matches_symbol or matches_query or matches_task or not (symbol or query):
+                    entry_tokens = entry.get("estimated_tokens", 100)
+                    if accumulated_tokens + entry_tokens <= token_budget or not matched:
                         matched.append(entry)
                         already_seen.add(ent_id)
+                        accumulated_tokens += entry_tokens
+                    if accumulated_tokens >= token_budget:
+                        break
+            if accumulated_tokens >= token_budget:
+                break
+
         return {
             "entities_found": len(matched),
             "entries": matched[:5],
             "token_budget": token_budget,
+            "tokens_delivered": accumulated_tokens,
         }
+
+
+def execute_harness_command(
+    cmd_template: str,
+    worktree_path: Path,
+    polyflow_root: Path,
+    timeout_seconds: int = 120,
+) -> subprocess.CompletedProcess[str]:
+    """Execute harness commands with structured argument lists, sys.executable, and shell=False (F05)."""
+    # Normalize path to forward slashes to eliminate Python unicodeescape errors on Windows (\Users -> \U)
+    worktree_fwd = str(worktree_path).replace("\\", "/")
+    parts = cmd_template.split()
+    if parts and parts[0] == "python":
+        if len(parts) >= 3 and parts[1] == "-c":
+            # In-line python command
+            code_part = cmd_template.split("-c", 1)[1].strip()
+            # Strip surrounding outer quotes
+            if (code_part.startswith('"') and code_part.endswith('"')) or (code_part.startswith("'") and code_part.endswith("'")):
+                code_part = code_part[1:-1]
+            resolved_code = code_part.replace("{worktree}", worktree_fwd)
+            args = [sys.executable, "-c", resolved_code]
+        else:
+            # Script command: e.g. python experiments/.../verify_task1.py {worktree}
+            script_rel = parts[1]
+            script_path = (polyflow_root / script_rel).resolve()
+            args = [sys.executable, str(script_path), str(worktree_path)]
+    else:
+        resolved = cmd_template.format(worktree=str(worktree_path))
+        args = [a.replace("{worktree}", str(worktree_path)) for a in parts]
+
+    try:
+        return subprocess.run(
+            args,
+            shell=False,
+            cwd=str(polyflow_root),
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+        )
+    except Exception as exc:
+        return subprocess.CompletedProcess(
+            args=args,
+            returncode=127,
+            stdout="",
+            stderr=f"SETUP_ERROR: execution failed: {exc}",
+        )
 
 
 def setup_worktree(target_repo_root: Path, trial_id: str, worktrees_dir: Path) -> Path:
@@ -118,17 +188,15 @@ def execute_agent_trial(
     print(f"\n>>> Starting Trial: {trial_id} (Condition: {condition})")
     worktree_path = setup_worktree(target_repo_root, trial_id, worktrees_dir)
 
-    acceptance_cmd = task["acceptance_test"].format(worktree=str(worktree_path))
-    regression_cmd = task["regression_suite"].format(worktree=str(worktree_path))
-
     # Phase 74: Acceptance test before agent MUST FAIL
-    p_before = subprocess.run(acceptance_cmd, shell=True, capture_output=True, text=True)
+    p_before = execute_harness_command(task["acceptance_test"], worktree_path, env_info.polyflow_root)
     (trial_dir / "acceptance_before.log").write_text(
         f"ReturnCode: {p_before.returncode}\nSTDOUT:\n{p_before.stdout}\nSTDERR:\n{p_before.stderr}",
         encoding="utf-8",
     )
-    acceptance_before_failed = p_before.returncode != 0
-    print(f"  Acceptance test before trial: {'FAILED (Valid Pre-Condition)' if acceptance_before_failed else 'PASSED (Invalid Pre-Condition)'}")
+    is_setup_error_before = p_before.returncode not in (0, 1) or "SETUP_ERROR" in p_before.stderr
+    acceptance_before_failed = (p_before.returncode == 1) and not is_setup_error_before
+    print(f"  Acceptance test before trial: {'FAILED (Valid Pre-Condition)' if acceptance_before_failed else ('SETUP_ERROR (Invalid Environment)' if is_setup_error_before else 'PASSED (Invalid Pre-Condition)')}")
 
     # Set up RepoToolEnvironment
     tool_env = RepoToolEnvironment(
@@ -145,12 +213,12 @@ def execute_agent_trial(
         task_description=task["prompt"],
         condition=condition,
         context_prompt=prompt_to_use,
-        test_command=acceptance_cmd,
+        test_command=task["acceptance_test"].format(worktree=str(worktree_path)),
     )
     duration = time.time() - t_start
 
     # Phase 74: Acceptance test after agent
-    p_after = subprocess.run(acceptance_cmd, shell=True, capture_output=True, text=True)
+    p_after = execute_harness_command(task["acceptance_test"], worktree_path, env_info.polyflow_root)
     (trial_dir / "acceptance_after.log").write_text(
         f"ReturnCode: {p_after.returncode}\nSTDOUT:\n{p_after.stdout}\nSTDERR:\n{p_after.stderr}",
         encoding="utf-8",
@@ -159,7 +227,7 @@ def execute_agent_trial(
     print(f"  Acceptance test after trial: {'PASSED' if acceptance_after_passed else 'FAILED'}")
 
     # Run regression suite
-    p_reg = subprocess.run(regression_cmd, shell=True, capture_output=True, text=True)
+    p_reg = execute_harness_command(task["regression_suite"], worktree_path, env_info.polyflow_root)
     (trial_dir / "regression.log").write_text(
         f"ReturnCode: {p_reg.returncode}\nSTDOUT:\n{p_reg.stdout}\nSTDERR:\n{p_reg.stderr}",
         encoding="utf-8",
@@ -194,7 +262,12 @@ def execute_agent_trial(
         and regression_passed
         and non_empty_diff
     )
-    gatekeeper_verdict = "APPROVE" if gatekeeper_approved else "REJECT"
+    if is_setup_error_before:
+        gatekeeper_verdict = "INVALID_TRIAL"
+    elif gatekeeper_approved:
+        gatekeeper_verdict = "APPROVE"
+    else:
+        gatekeeper_verdict = "REJECT"
 
     gatekeeper_record = {
         "trial_id": trial_id,
@@ -202,6 +275,7 @@ def execute_agent_trial(
         "condition": condition,
         "verdict": gatekeeper_verdict,
         "checks": {
+            "setup_valid": not is_setup_error_before,
             "is_live_inference": is_live,
             "acceptance_before_failed": acceptance_before_failed,
             "acceptance_after_passed": acceptance_after_passed,
@@ -219,6 +293,7 @@ def execute_agent_trial(
         "task_id": task["task_id"],
         "condition": condition,
         "replicate": replicate_num,
+        "is_valid_trial": not is_setup_error_before,
         "model": loop_result.provenance.get("model", "qwen2.5-coder:1.5b"),
         "duration_seconds": round(duration, 3),
         "turns": loop_result.turns,
@@ -288,7 +363,10 @@ def run_agent_validation():
             dev_ctx_data = json.load(f)
             contexts_by_task = dev_ctx_data.get("tasks", {})
             if "TASK-DEV-01" in contexts_by_task:
-                rcir_context_prompt = contexts_by_task["TASK-DEV-01"].get("prompt_markdown", "")
+                rcir_context_prompt = (
+                    contexts_by_task["TASK-DEV-01"].get("rendered_prompt_markdown")
+                    or contexts_by_task["TASK-DEV-01"].get("prompt_markdown", "")
+                )
 
     context_provider = ConcreteRCIRContextProvider(contexts_by_task)
 

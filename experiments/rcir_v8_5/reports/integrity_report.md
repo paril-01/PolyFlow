@@ -7,7 +7,7 @@ This report establishes the baseline integrity and verification state for the **
 - **Target Repository**: `nextcloud/server`
 - **Verified Commit**: `da57df078d0808a7235a0177bd99d23c010b472e`
 - **Working Tree State**: `CLEAN`
-- **PolyFlow Baseline Commit**: `d14daaff946b4ecdecd499add3db11f7457188a5`
+- **PolyFlow Baseline Commit**: `8a3610e8bec25de6aa545f5391967f851fa3efa7`
 - **Run ID**: `rcir-v8.5-primary`
 
 ## Sentinel File Verification

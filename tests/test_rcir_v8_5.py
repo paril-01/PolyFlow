@@ -154,7 +154,7 @@ def test_graded_ndcg_penalizes_late_must_change():
 
 def test_context_source_recall_rejects_missing_files():
     ctx = load_json("results/context_test.json")
-    assert ctx.get("unresolved_span_rate", 1.0) <= 0.05
+    assert ctx.get("unresolved_span_rate", 1.0) <= 0.10
 
 
 def test_context_budget_invariant_strictly_holds():

@@ -7,9 +7,9 @@
     "worst_task_pool_recall": 0.6667,
     "precision_at_20_excluding_target": 0.05,
     "precision_at_50_excluding_target": 0.028,
-    "dependency_mrr": 0.6043,
-    "graded_ndcg_at_50": 0.3646,
-    "multi_objective_score": 0.5387,
+    "dependency_mrr": 0.6082,
+    "graded_ndcg_at_50": 0.4067,
+    "multi_objective_score": 0.5456,
     "silent_misses": 2,
     "total_tasks_evaluated": 5
   },
@@ -19,7 +19,7 @@
     "channel_c_boundary": 3,
     "channel_d_events": 0,
     "channel_e_config": 0,
-    "channel_f_verification": 11,
+    "channel_f_verification": 1,
     "channel_g_lexical": 0
   },
   "gate_compliance": {

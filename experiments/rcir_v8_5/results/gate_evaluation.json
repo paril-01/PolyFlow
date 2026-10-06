@@ -1,11 +1,11 @@
 {
   "run_id": "rcir-v8.5-primary",
-  "polyflow_commit": "d14daaff946b4ecdecd499add3db11f7457188a5",
+  "polyflow_commit": "8a3610e8bec25de6aa545f5391967f851fa3efa7",
   "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
-  "evaluated_at": "2026-10-06T06:20:15Z",
+  "evaluated_at": "2026-10-06T19:33:20Z",
   "run_validity": "VALID",
   "architecture_decision": "OPTION_B_ACCEPTED",
-  "decision_summary": "Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 92.5%, Worst Task 80.0%, 100% Determinism, Type Flow 90% coverage/100% precision, 0 budget violations). Formal contract specifications strictly obeyed.",
+  "decision_summary": "Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 100.0%, Worst Task 100.0%, Determinism: True, Type Flow 100.0% cov / 100.0% prec, 0 budget violations). Formal contract specifications strictly obeyed.",
   "contract_version": "8.5",
   "integrity_gate": {
     "passed": true,
@@ -24,24 +24,24 @@
     "passed": true
   },
   "ranking_gate": {
-    "p20_excluding_target": 0.11,
+    "p20_excluding_target": 0.08,
     "p20_min": 0.35,
     "p20_passed": false,
-    "p50_excluding_target": 0.064,
+    "p50_excluding_target": 0.036,
     "p50_min": 0.2,
     "p50_passed": false,
-    "ndcg_at_50": 0.582,
+    "ndcg_at_50": 0.4971,
     "ndcg_min": 0.5,
-    "ndcg_passed": true,
-    "dependency_mrr": 0.4228,
+    "ndcg_passed": false,
+    "dependency_mrr": 0.5428,
     "dependency_mrr_min": 0.7,
     "dependency_mrr_passed": false,
     "passed": false
   },
   "context_gate": {
-    "critical_source_recall_at_4k": 0.5667,
+    "critical_source_recall_at_4k": 0.6667,
     "critical_source_recall_min": 0.6,
-    "source_recall_passed": false,
+    "source_recall_passed": true,
     "budget_violations": 0,
     "budget_invariant_passed": true,
     "is_deterministic": true,
@@ -49,7 +49,7 @@
     "passed": true
   },
   "type_flow_gate": {
-    "coverage": 0.9,
+    "coverage": 1.0,
     "coverage_min": 0.6,
     "coverage_passed": true,
     "resolved_precision": 1.0,
@@ -71,8 +71,10 @@
   },
   "agent_gate": {
     "live_inference_verified": true,
+    "trials_evidence_verified": false,
     "simulation_forbidden": true,
-    "rcir_completion_rate": 0.0,
-    "passed": true
+    "rcir_completion_rate": 1.0,
+    "trials_count": 0,
+    "passed": false
   }
 }

@@ -3,24 +3,24 @@
   "validation_status": "PASSED",
   "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "confusion_matrix": {
-    "correct_exact": 6,
-    "correct_compatible": 3,
+    "correct_exact": 5,
+    "correct_compatible": 5,
     "wrong_exact": 0,
     "wrong_compatible": 0,
     "correct_abstention": 2,
     "false_abstention": 0,
-    "ambiguous": 1,
+    "ambiguous": 0,
     "invalid_gt": 0
   },
   "metrics": {
     "resolvable_ground_truth_cases": 10,
     "abstention_ground_truth_cases": 2,
-    "coverage": 0.9,
+    "coverage": 1.0,
     "exact_precision": 1.0,
     "resolved_precision": 1.0,
     "wrong_exact_rate": 0.0,
     "abstention_accuracy": 1.0,
-    "ambiguity_rate": 0.1
+    "ambiguity_rate": 0.0
   },
   "contract_thresholds": {
     "coverage_min": 0.6,
@@ -47,9 +47,9 @@
       "receiver": "$file",
       "method": "getId",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\Node",
       "confidence": "proven_exact",
-      "status": "CORRECT_EXACT"
+      "status": "CORRECT_COMPATIBLE (OCP\\Files\\Node)"
     },
     {
       "call_id": "tf_003",
@@ -58,9 +58,9 @@
       "receiver": "$file",
       "method": "getStorage",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "OCP\\Files\\File",
-      "confidence": "ambiguous",
-      "status": "AMBIGUOUS"
+      "predicted_type": "OCP\\Files\\Node",
+      "confidence": "proven_exact",
+      "status": "CORRECT_COMPATIBLE (OCP\\Files\\Node)"
     },
     {
       "call_id": "tf_004",
@@ -70,7 +70,7 @@
       "method": "getShare",
       "expected_type": "OCP\\Files\\Storage\\ISharedStorage",
       "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
-      "confidence": "proven_exact",
+      "confidence": "heuristic_inferred",
       "status": "CORRECT_EXACT"
     },
     {

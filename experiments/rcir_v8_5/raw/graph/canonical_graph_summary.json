@@ -38,5 +38,5 @@
   "internal_endpoints_count": 48676,
   "external_endpoints_count": 457,
   "unresolved_endpoints_count": 75,
-  "build_latency_seconds": 3.937
+  "build_latency_seconds": 6.115
 }

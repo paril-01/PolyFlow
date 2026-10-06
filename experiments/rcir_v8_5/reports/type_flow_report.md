@@ -4,7 +4,7 @@
 The PHP Type-Flow Analyzer (`PHPTypeFlowAnalyzer`) was audited, repaired, and evaluated against 12 real Nextcloud call sites.
 
 ## Gate Performance Metrics
-- **Receiver Coverage**: `90.0%` (Contract Floor: 60.0%) -> **PASSED**
+- **Receiver Coverage**: `100.0%` (Contract Floor: 60.0%) -> **PASSED**
 - **Resolved Precision**: `100.0%` (Contract Floor: 90.0%) -> **PASSED**
 - **Wrong Exact Rate**: `0.0%` (Contract Ceiling: 5.0%) -> **PASSED**
 - **Type Flow Gate Verdict**: `PASSED`

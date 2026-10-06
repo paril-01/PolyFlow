@@ -304,14 +304,88 @@ class PHPTypeFlowAnalyzer:
                         if promoted and method_name == "__construct":
                             ctx.properties[p_name] = binding
 
-            # Line-by-line forward simulation (Phase 27, 28, 29)
+            # Line-by-line forward simulation (Phase 27, 28, 29, F07)
             body_lines = method_body.splitlines()
             current_env = dict(env)
-            branch_envs: list[dict[str, TypeBinding]] = []
+            branch_stack: list[dict[str, Any]] = []
+            closure_stack: list[dict[str, Any]] = []
+            current_brace_depth = 0
 
             for line_idx, raw_line in enumerate(body_lines):
                 line_no = body_start_line + line_idx
                 stripped = raw_line.strip()
+
+                # Clean comments/strings for brace counting
+                clean_braces = re.sub(r'//.*$', '', stripped)
+                clean_braces = re.sub(r'/\*.*?\*/', '', clean_braces)
+                clean_braces = re.sub(r"'(?:\\.|[^'])*'", "''", clean_braces)
+                clean_braces = re.sub(r'"(?:\\.|[^"])*"', '""', clean_braces)
+
+                # Check if this line closes any scopes before processing new statements
+                if stripped.startswith("}") or "}" in clean_braces:
+                    closes_count = clean_braces.count("}")
+                    opens_count = clean_braces.count("{")
+
+                    # Pop closure scopes if we are closing a closure
+                    while closure_stack and (current_brace_depth - closes_count) < closure_stack[-1]["open_depth"]:
+                        top_closure = closure_stack.pop()
+                        # Restore outer environment: closure parameters do not leak out (F07)
+                        current_env = top_closure["saved_env"]
+
+                    # Pop or advance branch scopes
+                    while branch_stack and (current_brace_depth - closes_count) < branch_stack[-1]["open_depth"]:
+                        br = branch_stack.pop()
+                        if not br.get("has_early_return", False):
+                            br["branch_exits"].append(dict(current_env))
+
+                        if br.get("has_early_return", False) and not br["branch_exits"]:
+                            # Guard clause: early return occurred in the 'if' body.
+                            # Surviving path is when condition was FALSE!
+                            surviving_env = dict(br["pre_branch_env"])
+                            if br["is_negated"] and br["narrowed_var"] and br["narrowed_type"]:
+                                # if (!($x instanceof Foo)) { return; } -> after if, $x is Foo!
+                                surviving_env[br["narrowed_var"]] = TypeBinding(
+                                    {br["narrowed_type"]},
+                                    TypeResolutionConfidence.PROVEN_EXACT,
+                                    ["guard_clause_narrowing"],
+                                )
+                            elif not br["is_negated"] and br["narrowed_var"]:
+                                surviving_env.pop(br["narrowed_var"], None)
+                            current_env = surviving_env
+                        else:
+                            # Join all surviving paths + pre_branch_env if if-only branch
+                            all_paths = list(br["branch_exits"])
+                            if not stripped.startswith("else") and br["pre_branch_env"] not in all_paths:
+                                all_paths.append(dict(br["pre_branch_env"]))
+
+                            if all_paths:
+                                joined: dict[str, TypeBinding] = {}
+                                all_keys = set().union(*(p.keys() for p in all_paths))
+                                for k in all_keys:
+                                    types: set[str] = set()
+                                    evs = []
+                                    confs = []
+                                    present_in_all = True
+                                    for p in all_paths:
+                                        if k in p:
+                                            types.update(p[k].candidate_types)
+                                            evs.extend(p[k].evidence)
+                                            confs.append(p[k].confidence)
+                                        else:
+                                            present_in_all = False
+
+                                    if len(types) == 1 and present_in_all and all(c == TypeResolutionConfidence.PROVEN_EXACT for c in confs):
+                                        conf = TypeResolutionConfidence.PROVEN_EXACT
+                                    elif types:
+                                        conf = TypeResolutionConfidence.AMBIGUOUS if len(types) > 1 else TypeResolutionConfidence.HEURISTIC_INFERRED
+                                    else:
+                                        conf = TypeResolutionConfidence.UNKNOWN
+                                    joined[k] = TypeBinding(types, conf, list(set(evs)))
+                                current_env = joined
+
+                    current_brace_depth += (opens_count - closes_count)
+                else:
+                    current_brace_depth += clean_braces.count("{")
 
                 # Inline PHPDoc @var inside method body (Phase 35)
                 var_doc_m = re.search(r'@var\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', stripped)
@@ -320,53 +394,83 @@ class PHPTypeFlowAnalyzer:
                     v_name = var_doc_m.group(2)
                     current_env[v_name] = TypeBinding({v_type}, TypeResolutionConfidence.HEURISTIC_INFERRED, ["inline_phpdoc_var"])
 
-                # Instanceof type narrowing (Phase 35)
-                inst_m = re.search(r'\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
-                if inst_m:
-                    v_name = inst_m.group(1)
-                    t_name = self.resolve_type_fqn(inst_m.group(2), ctx)
-                    current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
-
-                # Inline closure parameters (Phase 35)
-                closure_m = re.search(r'function\s*\(([^)]+)\)', stripped)
+                # Closure parameter handling with lexical isolation (F07)
+                closure_m = re.search(r'function\s*\(([^)]*)\)', stripped)
                 if closure_m:
-                    for cp in closure_m.group(1).split(","):
-                        c_match = re.search(r'(?:([A-Za-z0-9_\\]+)\s+)?\$([A-Za-z0-9_]+)', cp.strip())
-                        if c_match and c_match.group(1):
-                            c_type = self.resolve_type_fqn(c_match.group(1), ctx)
-                            current_env[c_match.group(2)] = TypeBinding({c_type}, TypeResolutionConfidence.PROVEN_EXACT, ["closure_parameter"])
+                    saved_outer_env = dict(current_env)
+                    params_raw = closure_m.group(1).strip()
+                    if params_raw:
+                        for cp in params_raw.split(","):
+                            c_match = re.search(r'(?:([A-Za-z0-9_\\]+)\s+)?\$([A-Za-z0-9_]+)', cp.strip())
+                            if c_match and c_match.group(2):
+                                c_name = c_match.group(2)
+                                if c_match.group(1):
+                                    c_type = self.resolve_type_fqn(c_match.group(1), ctx)
+                                    current_env[c_name] = TypeBinding({c_type}, TypeResolutionConfidence.PROVEN_EXACT, ["closure_parameter"])
+                                else:
+                                    current_env[c_name] = TypeBinding(set(), TypeResolutionConfidence.UNKNOWN, ["closure_parameter"])
+                    closure_stack.append({
+                        "open_depth": current_brace_depth,
+                        "saved_env": saved_outer_env,
+                    })
 
-                # Control-flow branch points: if / else / elseif
-                if re.match(r'^(?:if|elseif)\s*\(', stripped):
-                    # Snapshot current environment before branch
-                    branch_envs.append(dict(current_env))
+                # Branch points: if / elseif / else with condition polarity (F07)
+                if re.match(r'^if\s*\(', stripped):
+                    pre_branch = dict(current_env)
+                    neg_inst_m = re.search(r'!\s*\(?\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+                    pos_inst_m = re.search(r'(?<![!])\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+
+                    br_record: dict[str, Any] = {
+                        "open_depth": current_brace_depth,
+                        "pre_branch_env": pre_branch,
+                        "is_negated": False,
+                        "narrowed_var": None,
+                        "narrowed_type": None,
+                        "branch_exits": [],
+                        "has_early_return": False,
+                    }
+
+                    if neg_inst_m:
+                        v_name = neg_inst_m.group(1)
+                        t_name = self.resolve_type_fqn(neg_inst_m.group(2), ctx)
+                        br_record["is_negated"] = True
+                        br_record["narrowed_var"] = v_name
+                        br_record["narrowed_type"] = t_name
+                    elif pos_inst_m:
+                        v_name = pos_inst_m.group(1)
+                        t_name = self.resolve_type_fqn(pos_inst_m.group(2), ctx)
+                        br_record["is_negated"] = False
+                        br_record["narrowed_var"] = v_name
+                        br_record["narrowed_type"] = t_name
+                        current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
+
+                    branch_stack.append(br_record)
+
+                elif re.match(r'^(?:else\s*if|elseif)\s*\(', stripped):
+                    if branch_stack:
+                        br = branch_stack[-1]
+                        if not br.get("has_early_return", False):
+                            br["branch_exits"].append(dict(current_env))
+                        current_env = dict(br["pre_branch_env"])
+                        br["has_early_return"] = False
+
                 elif stripped.startswith("else"):
-                    # Fork branch environment
-                    if branch_envs:
-                        branch_envs.append(dict(current_env))
-                        current_env = dict(branch_envs[0])
-                elif stripped.startswith("}") and branch_envs:
-                    # Join environments (Phase 28)
-                    joined: dict[str, TypeBinding] = {}
-                    all_keys = set(current_env.keys())
-                    for b in branch_envs:
-                        all_keys.update(b.keys())
-                    for k in all_keys:
-                        types: set[str] = set()
-                        conf = TypeResolutionConfidence.PROVEN_EXACT
-                        evs = []
-                        if k in current_env:
-                            types.update(current_env[k].candidate_types)
-                            evs.extend(current_env[k].evidence)
-                        for b in branch_envs:
-                            if k in b:
-                                types.update(b[k].candidate_types)
-                                evs.extend(b[k].evidence)
-                        if len(types) > 1:
-                            conf = TypeResolutionConfidence.AMBIGUOUS
-                        joined[k] = TypeBinding(types, conf, list(set(evs)))
-                    current_env = joined
-                    branch_envs.clear()
+                    if branch_stack:
+                        br = branch_stack[-1]
+                        if not br.get("has_early_return", False):
+                            br["branch_exits"].append(dict(current_env))
+                        current_env = dict(br["pre_branch_env"])
+                        br["has_early_return"] = False
+                        if br["is_negated"] and br["narrowed_var"] and br["narrowed_type"]:
+                            current_env[br["narrowed_var"]] = TypeBinding(
+                                {br["narrowed_type"]},
+                                TypeResolutionConfidence.PROVEN_EXACT,
+                                ["instanceof_else_narrowing"],
+                            )
+
+                if re.search(r'\b(return|throw)\b', stripped):
+                    if branch_stack:
+                        branch_stack[-1]["has_early_return"] = True
 
                 # 1. Check for assignments: $var = expr;
                 assign_m = re.match(r'^\$([A-Za-z0-9_]+)\s*=\s*([^;]+);', stripped)

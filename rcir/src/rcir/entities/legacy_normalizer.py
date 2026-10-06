@@ -109,19 +109,25 @@ class LegacyEndpointNormalizer:
 
         # Handle existing URI schemes
         if "://" in ep:
-            scheme, rest = ep.split("://", 1)
+            parts = ep.split("://")
+            scheme = parts[0]
+            rest = parts[-1].lstrip("/")
+
             # PHASE 22: Repair incorrect external:// for repo-local endpoints
             if scheme == "external":
                 if self.is_internal_symbol(rest) or self.is_repo_local_file(rest):
-                    scheme = "php"
-                    ep = f"php://{rest}"
+                    if rest in ("__construct", "getId", "getName", "run", "init", "setUp") or not rest:
+                        return f"unresolved://{rest}"
+                    return f"php://{rest}"
                 else:
-                    return ep
+                    return f"external://{rest}"
             elif scheme == "php":
                 # PHASE 24: Prevent collision like php://__construct
                 if rest in ("__construct", "getId", "getName", "run", "init", "setUp") or not rest:
                     return f"unresolved://{rest}"
-                return ep
+                return f"php://{rest}"
+            elif scheme in ("unresolved", "ts", "js", "python"):
+                return f"{scheme}://{rest}"
             else:
                 return ep
 

@@ -162,7 +162,7 @@ def discover_multi_channel_candidates(
     for root_id in roots:
         for ent_id, ent in cg.nodes.items():
             if ent.kind in (EntityKind.CLASS, EntityKind.INTERFACE):
-                # Check if implements root interface
+                # Check if implements root interface or class
                 if root_id in ent.aliases or root_id.endswith(ent.symbol):
                     channel_counts["channel_b_type_flow"] += 1
                     if ent_id not in candidates:
@@ -170,11 +170,11 @@ def discover_multi_channel_candidates(
                             entity_id=ent_id,
                             file_path=ent.file,
                             entity_match="none",
-                            resolution_class="static_exact",
-                            type_compatibility="exact",
+                            resolution_class="static_inference",
+                            type_compatibility="compatible",
                             edge_types=["implements"],
                             hop_distance=1,
-                            traversal_score=0.88,
+                            traversal_score=0.82,
                         )
 
     # CHANNEL C — BOUNDARY (Phase 53 Channel C: routes.php, API endpoints)
@@ -187,10 +187,10 @@ def discover_multi_channel_candidates(
                 entity_id=routes_id,
                 file_path=routes_file,
                 boundary_contract="route",
-                resolution_class="static_exact",
+                resolution_class="static_inference",
                 edge_types=["route_to_controller"],
                 hop_distance=1,
-                traversal_score=0.92,
+                traversal_score=0.85,
             )
 
     # CHANNEL D — EVENTS (Phase 53 Channel D)
@@ -207,10 +207,10 @@ def discover_multi_channel_candidates(
                     entity_id=ef_id,
                     file_path=ef_path,
                     boundary_contract="event",
-                    resolution_class="static_exact",
+                    resolution_class="static_inference",
                     edge_types=["event_dispatch"],
                     hop_distance=1,
-                    traversal_score=0.89,
+                    traversal_score=0.80,
                 )
 
     # CHANNEL E — CONFIG / DI (Phase 53 Channel E)
@@ -228,22 +228,24 @@ def discover_multi_channel_candidates(
                     entity_id=cf_id,
                     file_path=cf_path,
                     boundary_contract="config",
-                    resolution_class="static_exact",
+                    resolution_class="static_inference",
                     edge_types=["config_reads"],
                     hop_distance=1,
-                    traversal_score=0.86,
+                    traversal_score=0.80,
                 )
 
     # CHANNEL F — VERIFICATION (Phase 53 Channel F: direct test files)
-    # Check known test files corresponding to target
+    # Check known test files corresponding specifically to target
     if target_fp:
         base_name = target_fp.split("/")[-1].replace(".php", "")
         test_patterns = [
             f"apps/files/tests/Controller/{base_name}Test.php",
             f"tests/lib/{base_name}Test.php",
-            f"tests/lib/Share20/ManagerTest.php",
-            f"tests/lib/User/SessionTest.php",
         ]
+        if "Share" in target_fp:
+            test_patterns.append(f"tests/lib/Share20/{base_name}Test.php")
+        if "User" in target_fp:
+            test_patterns.append(f"tests/lib/User/{base_name}Test.php")
         for tp in test_patterns:
             if (env.target_repo_root / tp).exists():
                 tid = f"php://{tp}"
@@ -253,10 +255,10 @@ def discover_multi_channel_candidates(
                         entity_id=tid,
                         file_path=tp,
                         test_relationship="direct_test",
-                        resolution_class="static_exact",
+                        resolution_class="static_inference",
                         edge_types=["source_to_test"],
                         hop_distance=1,
-                        traversal_score=0.87,
+                        traversal_score=0.85,
                     )
 
     # CHANNEL G — LEXICAL FALLBACK (Phase 53 Channel G)
@@ -363,21 +365,29 @@ def compute_split_metrics(
         # Target-exclusion ranking (PHASE 49)
         cands_excl_target = [c for c in ranked_cands if c.file_path != target_file]
 
+        # File-level deduplication (F03): deduplicate ranked candidates by file path (first occurrence)
+        seen_files = set()
+        deduped_cands = []
+        for c in cands_excl_target:
+            if c.file_path and c.file_path not in seen_files:
+                seen_files.add(c.file_path)
+                deduped_cands.append(c)
+
         # P@20 excluding target (PHASE 47: Denominator is 20)
-        top_20 = cands_excl_target[:20]
+        top_20 = deduped_cands[:20]
         rel_20 = [c for c in top_20 if c.file_path in expected_files]
         p_at_20 = len(rel_20) / 20.0
         task_p20_excl.append(p_at_20)
 
         # P@50 excluding target (PHASE 47: Denominator is 50)
-        top_50 = cands_excl_target[:50]
+        top_50 = deduped_cands[:50]
         rel_50 = [c for c in top_50 if c.file_path in expected_files]
         p_at_50 = len(rel_50) / 50.0
         task_p50_excl.append(p_at_50)
 
         # Dependency MRR (PHASE 46: Excludes target entity)
         dep_mrr = 0.0
-        for rank_idx, c in enumerate(cands_excl_target[:100], 1):
+        for rank_idx, c in enumerate(deduped_cands[:100], 1):
             if c.file_path in expected_files:
                 dep_mrr = 1.0 / rank_idx
                 break
@@ -453,8 +463,8 @@ def execute_retrieval_suite():
 
     # 1. Load full Canonical Graph
     t0 = time.time()
-    print(f"Loading CanonicalGraph from {env.graph_path}...")
-    raw_graph = json.loads(env.graph_path.read_text(encoding="utf-8"))
+    with open(env.graph_path, "r", encoding="utf-8") as f:
+        raw_graph = json.load(f)
     cg = CanonicalGraph.from_legacy_dict(raw_graph, target_repo_root=env.target_repo_root)
     registry = cg.registry
     print(f"Loaded graph in {time.time() - t0:.2f}s with {len(registry.entities)} registry entities.")

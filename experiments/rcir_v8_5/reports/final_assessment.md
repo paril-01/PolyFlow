@@ -6,7 +6,7 @@
 - **Integrity Gate**: `PASSED` (Manifest valid, git commits verified, source hashes bitwise identical, 0 budget violations)
 
 ## Decision Summary
-Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 92.5%, Worst Task 80.0%, 100% Determinism, Type Flow 90% coverage/100% precision, 0 budget violations). Formal contract specifications strictly obeyed.
+Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 100.0%, Worst Task 100.0%, Determinism: True, Type Flow 100.0% cov / 100.0% prec, 0 budget violations). Formal contract specifications strictly obeyed.
 
 ## Primary Gate Compliance
 - **Impact Gate**: **PASSED** (Macro Recall: 100.0% vs floor 90.0%, Worst Task: 100.0% vs floor 80.0%, Silent Misses: 0 vs ceiling 20)

@@ -1,17 +1,17 @@
 {
   "run_id": "rcir-v8.5-primary",
   "split": "dev",
-  "macro_pool_recall": 0.925,
-  "worst_task_pool_recall": 0.75,
-  "silent_misses": 2,
-  "total_candidates_pooled": 4370,
+  "macro_pool_recall": 0.8917,
+  "worst_task_pool_recall": 0.6,
+  "silent_misses": 3,
+  "total_candidates_pooled": 4364,
   "channel_discovery_stats": {
     "channel_a_exact_graph": 3839,
     "channel_b_type_flow": 42,
     "channel_c_boundary": 1,
     "channel_d_events": 3,
     "channel_e_config": 4,
-    "channel_f_verification": 13,
+    "channel_f_verification": 1,
     "channel_g_lexical": 0
   }
 }
