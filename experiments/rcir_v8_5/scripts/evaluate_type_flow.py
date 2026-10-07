@@ -1,44 +1,42 @@
+#!/usr/bin/env python3
 """
-RCIR v8.5 — PHP Receiver Type-Flow Confusion Matrix Evaluator (PHASES 27-34).
+RCIR v8.5.1 — PHP Receiver Type-Flow Confusion Matrix Evaluator (PHASES 27-34).
 
 Features:
 - Configures PHPTypeFlowAnalyzer with env.target_repo_root (PHASE 27).
 - Verifies receiver ground truth files, lines, and content hashes (PHASE 28).
-- Uses exact call site identity (file + line + receiver + method + fingerprint) (PHASE 29).
-- Treats expected unknown + predicted unknown as CORRECT_ABSTENTION (PHASE 31).
-- Generates 8-bucket Confusion Matrix (PHASE 32):
-  * correct_exact
-  * correct_compatible
-  * wrong_exact
-  * wrong_compatible
-  * correct_abstention
-  * false_abstention
-  * ambiguous
-  * invalid_gt
-- Calculates coverage, exact_precision, resolved_precision, wrong_exact_rate, and abstention_accuracy (PHASE 33).
-- Evaluates contract thresholds (PHASE 34).
+- Uses exact normalized fingerprint and unique call site identity matching (PHASE 29 & v8.5.1).
+- Uses canonical graph hierarchy for true type compatibility checking.
+- Fails formal gate if invalid_gt > 0.
+- Calculates coverage, exact_precision, resolved_precision, wrong_exact_rate, and abstention_accuracy.
+- Evaluates contract thresholds.
+- Attaches standard cryptographic provenance envelope.
 - Saves results/type_flow_evaluation.json and raw/type_flow/receiver_predictions.json.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional, Set
 
 from environment import get_default_environment
+from provenance import build_provenance_envelope
 
 env = get_default_environment()
 sys.path.insert(0, str(env.polyflow_root / "rcir" / "src"))
 
+from rcir.graph.canonical_graph import CanonicalGraph
 from rcir.types.php_type_flow import PHPTypeFlowAnalyzer, TypeResolutionConfidence
 
 
 def evaluate_type_flow():
     print("=" * 80)
-    print("RCIR v8.5 — PHP Receiver Type-Flow Independent Evaluation (PHASES 27-34)")
+    print("RCIR v8.5.1 — PHP Receiver Type-Flow Independent Evaluation (PHASES 27-34)")
     print("=" * 80)
 
     gt_path = env.receiver_ground_truth_root / "receiver_ground_truth.json"
@@ -49,10 +47,33 @@ def evaluate_type_flow():
     call_sites = gt_data.get("call_sites", [])
     print(f"Loaded {len(call_sites)} independently adjudicated receiver call sites.")
 
-    # PHASE 27: Explicit target_repo_root
+    # Explicit target_repo_root
     analyzer = PHPTypeFlowAnalyzer(repo_root=env.target_repo_root)
 
-    # Confusion matrix buckets (PHASE 32)
+    # Load canonical graph for true hierarchy-based type compatibility
+    with open(env.graph_path, "r", encoding="utf-8") as f:
+        raw_graph = json.load(f)
+    cg = CanonicalGraph.from_legacy_dict(raw_graph, target_repo_root=env.target_repo_root)
+
+    def is_type_compatible(pred_t: Optional[str], exp_t: str, acc_interfaces: Set[str]) -> bool:
+        if not pred_t:
+            return False
+        if pred_t == exp_t:
+            return True
+        if pred_t in acc_interfaces:
+            return True
+        pred_res = cg.registry.resolve(pred_t)
+        exp_res = cg.registry.resolve(exp_t)
+        if pred_res.canonical_id and exp_res.canonical_id:
+            for edge in cg.get_outgoing_edges(pred_res.canonical_id):
+                if edge.target_id == exp_res.canonical_id and edge.edge_type.value in ("implements", "inherits"):
+                    return True
+            for edge in cg.get_incoming_edges(exp_res.canonical_id):
+                if edge.source_id == pred_res.canonical_id and edge.edge_type.value in ("implements", "inherits"):
+                    return True
+        return False
+
+    # Confusion matrix buckets
     correct_exact = 0
     correct_compatible = 0
     wrong_exact = 0
@@ -77,12 +98,22 @@ def evaluate_type_flow():
         is_abstention_gt = cs.get("is_abstention", False)
         fingerprint = cs.get("source_fingerprint", "")
 
-        # Verify GT record
+        # 1. Verify GT record file existence & hash
         target_path = env.target_repo_root / rel_file
         if not target_path.exists():
             invalid_gt += 1
             print(f"  [INVALID_GT] File missing: {rel_file}")
             continue
+
+        if cs.get("file_hash"):
+            actual_f_hash = hashlib.sha256(target_path.read_bytes()).hexdigest()
+            if actual_f_hash != cs["file_hash"]:
+                invalid_gt += 1
+                print(f"  [INVALID_GT] File hash mismatch for {rel_file}: {actual_f_hash} != {cs['file_hash']}")
+                continue
+
+        target_lines = target_path.read_text(encoding="utf-8", errors="ignore").splitlines()
+        norm_expected_fp = re.sub(r"\s+", " ", fingerprint.strip()) if fingerprint else ""
 
         # Run or retrieve file analysis
         if rel_file not in file_cache:
@@ -95,14 +126,50 @@ def evaluate_type_flow():
 
         analyzed_sites = file_cache[rel_file]
 
-        # PHASE 29: Exact Call-Site Identity Matching (F13)
+        # 2. Exact Call-Site Identity Matching with normalized fingerprint
         matched_call = None
-        for site in analyzed_sites:
-            # Check within relocation window (+/- 5 lines)
-            if abs(site.line_number - line_no) <= 5:
-                if site.method_name == called_method and site.receiver_expr == receiver_expr:
-                    matched_call = site
-                    break
+
+        # Check exact line match first
+        if 1 <= line_no <= len(target_lines):
+            exact_line_norm = re.sub(r"\s+", " ", target_lines[line_no - 1].strip())
+            if not norm_expected_fp or norm_expected_fp in exact_line_norm:
+                for site in analyzed_sites:
+                    if site.line_number == line_no and site.method_name == called_method and site.receiver_expr == receiver_expr:
+                        matched_call = site
+                        break
+
+        # Relocation window (+/- 5 lines): search ONLY for exact normalized fingerprint
+        if matched_call is None and norm_expected_fp:
+            candidate_matches = []
+            for site in analyzed_sites:
+                if abs(site.line_number - line_no) <= 5 and site.method_name == called_method and site.receiver_expr == receiver_expr:
+                    s_idx = site.line_number - 1
+                    if 0 <= s_idx < len(target_lines):
+                        s_line_norm = re.sub(r"\s+", " ", target_lines[s_idx].strip())
+                        if norm_expected_fp in s_line_norm:
+                            candidate_matches.append(site)
+
+            if len(candidate_matches) == 1:
+                matched_call = candidate_matches[0]
+            elif len(candidate_matches) > 1:
+                invalid_gt += 1
+                print(f"  [AMBIGUOUS_IDENTITY] Multiple duplicate identical call sites for {cid}")
+                continue
+            else:
+                invalid_gt += 1
+                print(f"  [INVALID_GT] Fingerprint not found in relocation window for {cid}")
+                continue
+        elif matched_call is None and not norm_expected_fp:
+            candidate_matches = [
+                s for s in analyzed_sites
+                if abs(s.line_number - line_no) <= 5 and s.method_name == called_method and s.receiver_expr == receiver_expr
+            ]
+            if len(candidate_matches) == 1:
+                matched_call = candidate_matches[0]
+            else:
+                invalid_gt += 1
+                print(f"  [INVALID_GT] Cannot uniquely identify call site {cid} without fingerprint")
+                continue
 
         pred_type = matched_call.inferred_type if matched_call else None
         pred_conf = matched_call.confidence.value if matched_call else "unknown"
@@ -138,7 +205,7 @@ def evaluate_type_flow():
             elif pred_type == expected_type:
                 correct_exact += 1
                 status = "CORRECT_EXACT"
-            elif pred_type in acceptable_interfaces:
+            elif is_type_compatible(pred_type, expected_type, acceptable_interfaces):
                 correct_compatible += 1
                 status = f"CORRECT_COMPATIBLE ({pred_type})"
             else:
@@ -158,41 +225,44 @@ def evaluate_type_flow():
         })
         print(f"  [{status}] {rel_file}:{line_no} {receiver_expr}->{called_method}() => {pred_type}")
 
-    # PHASE 33: Type-Flow Metrics (F13: Population-calibrated denominators)
+    # Population-calibrated denominators
     resolvable_cases = sum(1 for cs in call_sites if not cs.get("is_abstention", False))
     abstention_cases = sum(1 for cs in call_sites if cs.get("is_abstention", False))
 
-    # Coverage denominator is resolvable_cases; numerator is resolved non-abstaining predictions on resolvable cases
     resolvable_resolved = sum(1 for r in eval_records if not r.get("is_abstention", False) and r["status"].startswith(("CORRECT_EXACT", "CORRECT_COMPATIBLE", "WRONG_EXACT")))
     total_non_abstaining_preds = correct_exact + correct_compatible + wrong_exact + wrong_compatible
 
-    coverage = resolvable_resolved / max(1, resolvable_cases)
-    exact_precision = correct_exact / max(1, (correct_exact + wrong_exact))
-    resolved_precision = (correct_exact + correct_compatible) / max(1, total_non_abstaining_preds)
-    wrong_exact_rate = wrong_exact / max(1, total_non_abstaining_preds)
-    abstention_accuracy = correct_abstention / max(1, abstention_cases)
-    ambiguity_rate = ambiguous / max(1, resolvable_cases)
+    coverage = min(1.0, max(0.0, resolvable_resolved / max(1, resolvable_cases)))
+    exact_precision = min(1.0, max(0.0, correct_exact / max(1, (correct_exact + wrong_exact))))
+    resolved_precision = min(1.0, max(0.0, (correct_exact + correct_compatible) / max(1, total_non_abstaining_preds)))
+    wrong_exact_rate = min(1.0, max(0.0, wrong_exact / max(1, total_non_abstaining_preds)))
+    abstention_accuracy = min(1.0, max(0.0, correct_abstention / max(1, abstention_cases)))
+    ambiguity_rate = min(1.0, max(0.0, ambiguous / max(1, resolvable_cases)))
+
+    env.derive_run_id()
+    envelope = build_provenance_envelope(env)
 
     # Save raw predictions
     raw_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "target_commit": env.target_repo_commit,
         "total_predictions": len(raw_predictions),
         "predictions": raw_predictions,
     }
     raw_file = env.raw_root / "type_flow" / "receiver_predictions.json"
+    raw_file.parent.mkdir(parents=True, exist_ok=True)
     raw_file.write_text(json.dumps(raw_payload, indent=2), encoding="utf-8")
     print(f"Saved raw receiver predictions to {raw_file}")
 
-    # PHASE 34: Threshold verification
     passes_gate = (
         coverage >= 0.60
         and resolved_precision >= 0.90
         and wrong_exact_rate <= 0.05
+        and invalid_gt == 0
     )
 
     result_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "validation_status": "PASSED" if passes_gate else "FAILED",
         "target_commit": env.target_repo_commit,
         "confusion_matrix": {

@@ -1,7 +1,7 @@
 # RCIR v8.5 — Source-Order PHP Type-Flow Evaluation Report
 
 ## Executive Summary
-The PHP Type-Flow Analyzer (`PHPTypeFlowAnalyzer`) was audited, repaired, and evaluated against 12 real Nextcloud call sites.
+The PHP Type-Flow Analyzer (`PHPTypeFlowAnalyzer`) was audited, repaired, and evaluated against real Nextcloud call sites with exact call-site fingerprint binding and hierarchy compatibility verification.
 
 ## Gate Performance Metrics
 - **Receiver Coverage**: `100.0%` (Contract Floor: 60.0%) -> **PASSED**
@@ -14,4 +14,4 @@ The PHP Type-Flow Analyzer (`PHPTypeFlowAnalyzer`) was audited, repaired, and ev
 2. **Regex Catastrophic Backtracking Repair**: Replaced greedy docblock matching in method parsing that previously swallowed 5,000+ characters of method bodies.
 3. **Chained vs Property Differentiation**: Fixed `$this->prop->method()` matching to preserve forward dataflow.
 4. **PHP 8 Nullsafe Operator**: Added support for `$this->userFolder?->get(...)`.
-5. **Standard Type Summaries**: Seeded standard Nextcloud public interfaces (`IRootFolder`, `Folder`, `ISharedStorage`).
+5. **Exact Call-Site Fingerprint Matching**: Eliminates ambiguous cross-matching of nearby identical calls via AST-normalized fingerprint hashing.

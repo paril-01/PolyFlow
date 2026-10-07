@@ -104,9 +104,12 @@ def evaluate_graph_integrity():
     print(f"Saved raw graph summary to {raw_file}")
 
     # Write results/canonical_graph_integrity.json
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     integrity_result = {
-        "run_id": env.run_id,
-        "status": "PASSED" if unexpected_ratio < 0.05 else "WARNING",
+        **envelope,
+        "status": "PASSED" if unexpected_ratio <= 0.0 else "WARNING",
         "target_commit": env.target_repo_commit,
         "total_nodes": len(cg.nodes),
         "total_edges": total_edges,

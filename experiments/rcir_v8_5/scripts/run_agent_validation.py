@@ -43,10 +43,11 @@ DEV_CONTEXTS_PATH = RCIR_V8_5_ROOT / "raw" / "context" / "dev_contexts.json"
 
 
 class ConcreteRCIRContextProvider(ContextProvider):
-    """Provides iterative or pre-compiled RCIR context to coding agents (F04)."""
+    """Provides iterative or pre-compiled RCIR context to coding agents (F04, v8.5.1 delivery accounting)."""
 
-    def __init__(self, contexts: Dict[str, Any]):
+    def __init__(self, contexts: Dict[str, Any], scoped_task_id: Optional[str] = None):
         self.contexts = contexts
+        self.scoped_task_id = scoped_task_id
 
     def retrieve(
         self,
@@ -54,15 +55,25 @@ class ConcreteRCIRContextProvider(ContextProvider):
         query: Optional[str] = None,
         already_seen: Optional[set[str]] = None,
         token_budget: int = 1500,
+        entry_limit: int = 5,
     ) -> Dict[str, Any]:
         if already_seen is None:
             already_seen = set()
-        matched = []
+
         sym_lower = (symbol or "").lower()
         query_lower = (query or "").lower()
-        accumulated_tokens = 0
 
-        for tid, ctx in self.contexts.items():
+        # Task scoping: if scoped_task_id is given, constrain candidates to that task's context bundle
+        if self.scoped_task_id and self.scoped_task_id in self.contexts:
+            target_contexts = [(self.scoped_task_id, self.contexts[self.scoped_task_id])]
+        elif self.scoped_task_id:
+            target_contexts = []
+        else:
+            target_contexts = list(self.contexts.items())
+
+        # Step 1: Collect candidates without modifying already_seen
+        candidate_entries = []
+        for tid, ctx in target_contexts:
             for entry in ctx.get("entries", []):
                 ent_id = entry.get("entity_id", "")
                 if not ent_id or ent_id in already_seen:
@@ -72,26 +83,36 @@ class ConcreteRCIRContextProvider(ContextProvider):
                 source_file = entry.get("source_file", "").lower()
                 snippet = entry.get("content_snippet", "").lower()
 
-                matches_symbol = sym_lower and (sym_lower in entry_sym or sym_lower in ent_id.lower() or sym_lower in source_file)
-                matches_query = query_lower and (query_lower in snippet or query_lower in source_file)
-                matches_task = sym_lower and sym_lower in tid.lower()
+                matches_symbol = bool(sym_lower and (sym_lower in entry_sym or sym_lower in ent_id.lower() or sym_lower in source_file))
+                matches_query = bool(query_lower and (query_lower in snippet or query_lower in source_file))
+                matches_task = bool(sym_lower and sym_lower in tid.lower())
 
                 if matches_symbol or matches_query or matches_task or not (symbol or query):
-                    entry_tokens = entry.get("estimated_tokens", 100)
-                    if accumulated_tokens + entry_tokens <= token_budget or not matched:
-                        matched.append(entry)
-                        already_seen.add(ent_id)
-                        accumulated_tokens += entry_tokens
-                    if accumulated_tokens >= token_budget:
-                        break
-            if accumulated_tokens >= token_budget:
-                break
+                    candidate_entries.append(entry)
 
+        # Step 2 & 3: Enforce entry limit and strict token budget
+        delivered_entries = []
+        tokens_delivered = 0
+
+        for entry in candidate_entries:
+            if len(delivered_entries) >= entry_limit:
+                break
+            entry_tokens = entry.get("estimated_tokens", 100)
+            if tokens_delivered + entry_tokens <= token_budget:
+                delivered_entries.append(entry)
+                tokens_delivered += entry_tokens
+            # Strict budget invariant: never exceed budget to force inclusion
+
+        # Step 4 & 5: Only add delivered entries to already_seen
+        for entry in delivered_entries:
+            already_seen.add(entry["entity_id"])
+
+        # Step 6: Return synchronized entries and count
         return {
-            "entities_found": len(matched),
-            "entries": matched[:5],
+            "entities_found": len(delivered_entries),
+            "entries": delivered_entries,
             "token_budget": token_budget,
-            "tokens_delivered": accumulated_tokens,
+            "tokens_delivered": tokens_delivered,
         }
 
 

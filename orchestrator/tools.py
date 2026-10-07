@@ -225,7 +225,7 @@ class RepoToolEnvironment:
         if full_path not in self._modified_files:
             self._modified_files.append(full_path)
 
-        return f"SUCCESS: Successfully replaced target string in {path}."
+        return f"SUCCESS: Modified {path}. Successfully replaced target string."
 
     def apply_patch(self, patch: str, target_path: Optional[str] = None) -> str:
         """

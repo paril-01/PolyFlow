@@ -139,6 +139,8 @@ class BenchmarkEnvironment:
             self.target_repo_dirty = True
             self.target_repository_state = "UNKNOWN"
 
+    polyflow_worktree_diff_hash: str = ""
+
     def _capture_polyflow_git(self) -> None:
         """PHASE 4: Capture actual PolyFlow commit and dirty status."""
         try:
@@ -147,17 +149,35 @@ class BenchmarkEnvironment:
                 text=True, stderr=subprocess.DEVNULL
             ).strip()
             self.polyflow_commit = head
-        except Exception:
-            self.polyflow_commit = "d14daaff946b4ecdecd499add3db11f7457188a5"
+        except Exception as ex:
+            raise BenchmarkEnvironmentError(
+                f"Failed to resolve PolyFlow git HEAD commit: {ex}. Provenance cannot invent a source revision."
+            )
 
         try:
+            # Check status of PolyFlow repository
             status = subprocess.check_output(
-                ["git", "-C", str(self.polyflow_root), "status", "--porcelain"],
+                ["git", "-C", str(self.polyflow_root), "status", "--porcelain", "--ignore-submodules=dirty"],
                 text=True, stderr=subprocess.DEVNULL
             ).strip()
             self.polyflow_dirty = bool(status)
-        except Exception:
-            self.polyflow_dirty = False
+            if self.polyflow_dirty:
+                diff = subprocess.check_output(
+                    ["git", "-C", str(self.polyflow_root), "diff", "--ignore-submodules=dirty"],
+                    text=True, stderr=subprocess.DEVNULL
+                )
+                self.polyflow_worktree_diff_hash = hashlib.sha256(diff.encode("utf-8")).hexdigest()
+            else:
+                self.polyflow_worktree_diff_hash = ""
+        except Exception as ex:
+            raise BenchmarkEnvironmentError(f"Failed to check PolyFlow git status: {ex}")
+
+    def derive_run_id(self) -> str:
+        """Derive cryptographic immutable run ID from all benchmark inputs."""
+        from provenance import collect_input_hashes, compute_run_identity
+        inputs = collect_input_hashes(self)
+        self.run_id = compute_run_identity(inputs)
+        return self.run_id
 
     def ensure_directories(self) -> None:
         """Create all required artifact and result directories."""
@@ -207,6 +227,7 @@ class BenchmarkEnvironment:
             "working_tree_diff_hash": self.working_tree_diff_hash,
             "polyflow_commit": self.polyflow_commit,
             "polyflow_dirty": self.polyflow_dirty,
+            "polyflow_worktree_diff_hash": self.polyflow_worktree_diff_hash,
         }
 
 

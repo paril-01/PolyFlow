@@ -10,7 +10,8 @@
       "target_file": "apps/files/lib/Controller/ApiController.php",
       "prompt": "Update ApiController getThumbnail to accept an optional $crop parameter with default true: public function getThumbnail($x, $y, $file, $crop = true), and pass $crop to $this->previewManager->getPreview($file, $x, $y, $crop).",
       "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task1.py {worktree}",
-      "regression_suite": "python -c \"import os; assert os.path.exists('{worktree}/lib/public/IConfig.php')\"",
+      "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
+      "context_task_id": "TASK-DEV-01",
       "max_turns": 8,
       "timeout_seconds": 120
     }

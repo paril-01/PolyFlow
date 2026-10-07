@@ -154,8 +154,11 @@ def evaluate_edges():
     print(f"Saved predicted edges raw dump to {raw_file}")
 
     # Save results/edge_evaluation.json
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     result_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "status": "ADVISORY_ONLY",
         "target_commit": env.target_repo_commit,
         "positive_edges_total": pos_total,

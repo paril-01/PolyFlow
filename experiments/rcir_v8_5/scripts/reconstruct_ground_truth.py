@@ -16,10 +16,12 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import time
 from pathlib import Path
 from typing import Any
 
 from environment import get_default_environment
+from provenance import collect_input_hashes, compute_run_identity
 
 
 def compute_file_hash(path: Path) -> str:
@@ -1092,6 +1094,9 @@ def build_and_save_all():
             "requires_acceptance_transition": True,
             "allow_simulation": False,
         },
+        "canonical_graph": {
+            "max_external_ratio": 0.0,
+        },
         "decision_rules": {
             "option_a": {
                 "description": "All primary impact, context, type-flow, and live agent execution gates satisfied on TEST split with zero simulation.",
@@ -1102,7 +1107,15 @@ def build_and_save_all():
                 "description": "Substantial architectural progress on TEST split: macro recall >= 90%, P@50 improvement >= 15%, deterministic compiler, strictly obeying contract specifications.",
                 "macro_pool_recall_min": 0.90,
                 "worst_task_pool_recall_floor": 0.80,
-                "context_compiler_deterministic": True,
+                "requires_determinism": True,
+                "requires_type_flow_gate": True,
+                "requires_canonicalization_gate": True,
+                "requires_budget_invariant": True,
+                "ranking_improvement": {
+                    "metric": "precision_at_50_excluding_target",
+                    "baseline_artifact": "experiments/rcir_v8_5/results/ranker_baseline_r0.json",
+                    "min_relative_improvement": 0.15,
+                },
             },
             "option_c": {
                 "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required.",
@@ -1113,29 +1126,34 @@ def build_and_save_all():
     print("Saved benchmark_contract.json")
 
     # === RUN MANIFEST (PHASE 5) ===
+    env.derive_run_id()
+    input_hashes = collect_input_hashes(env)
     manifest_payload = {
         "run_id": env.run_id,
         "polyflow_commit": env.polyflow_commit,
         "polyflow_dirty": env.polyflow_dirty,
+        "polyflow_worktree_diff_hash": env.polyflow_worktree_diff_hash,
         "target_repository": env.target_repo_name,
         "target_repository_commit": target_commit,
         "target_repo_dirty": env.target_repo_dirty,
-        "contract_hash": hashlib.sha256((env.v8_5_root / "contract" / "benchmark_contract.json").read_bytes()).hexdigest(),
-        "dev_dataset_hash": hashlib.sha256((env.dataset_root / "dev.json").read_bytes()).hexdigest(),
-        "validation_dataset_hash": hashlib.sha256((env.dataset_root / "validation.json").read_bytes()).hexdigest(),
-        "test_dataset_hash": hashlib.sha256((env.dataset_root / "test.json").read_bytes()).hexdigest(),
-        "ground_truth_hash": hashlib.sha256((env.ground_truth_root / "ground_truth.json").read_bytes()).hexdigest(),
-        "edge_ground_truth_hash": hashlib.sha256((env.edge_ground_truth_root / "ground_truth_edges.json").read_bytes()).hexdigest(),
-        "receiver_ground_truth_hash": hashlib.sha256((env.receiver_ground_truth_root / "receiver_ground_truth.json").read_bytes()).hexdigest(),
-        "canonicalization_ground_truth_hash": hashlib.sha256((env.canonicalization_ground_truth_root / "canonicalization_corpus.json").read_bytes()).hexdigest(),
-        "graph_hash": hashlib.sha256(env.graph_path.read_bytes()).hexdigest(),
-        "candidate_config_hash": hashlib.sha256(b"rcir-v8.5-semantic-multi-channel").hexdigest(),
-        "ranker_config_hash": hashlib.sha256(b"rcir-v8.5-validation-selected").hexdigest(),
-        "context_config_hash": hashlib.sha256(b"rcir-v8.5-utility-per-token").hexdigest(),
-        "typeflow_config_hash": hashlib.sha256(b"rcir-v8.5-target-root-source-order").hexdigest(),
+        "contract_hash": input_hashes["contract_hash"],
+        "dev_dataset_hash": input_hashes["dataset_hashes"]["dev"],
+        "validation_dataset_hash": input_hashes["dataset_hashes"]["validation"],
+        "test_dataset_hash": input_hashes["dataset_hashes"]["test"],
+        "dataset_hashes": input_hashes["dataset_hashes"],
+        "ground_truth_hash": input_hashes["ground_truth_hashes"]["ground_truth"],
+        "edge_ground_truth_hash": input_hashes["ground_truth_hashes"]["edges"],
+        "receiver_ground_truth_hash": input_hashes["ground_truth_hashes"]["receivers"],
+        "canonicalization_ground_truth_hash": input_hashes["ground_truth_hashes"]["canonicalization"],
+        "graph_hash": input_hashes["graph_hash"],
+        "config_hashes": input_hashes["config_hashes"],
+        "candidate_config_hash": input_hashes["config_hashes"]["candidate_config"],
+        "ranker_config_hash": input_hashes["config_hashes"]["ranker_config"],
+        "context_config_hash": input_hashes["config_hashes"]["context_config"],
+        "typeflow_config_hash": input_hashes["config_hashes"]["typeflow_config"],
         "tokenizer": "cl100k_base_exact_with_header_invariant",
         "environment": env.to_dict(),
-        "created_at": "2026-10-05T20:00:00Z",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     (env.manifests_root / "benchmark_run_manifest.json").write_text(json.dumps(manifest_payload, indent=2), encoding="utf-8")
     print("Saved benchmark_run_manifest.json")

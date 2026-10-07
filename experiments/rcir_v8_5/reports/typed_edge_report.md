@@ -5,11 +5,11 @@ The edge evaluator performs strict exact canonical endpoint equality between gra
 - `implements`, `inherits`, `calls`, `route_to_controller`, `event_listener`, `injects`, `source_to_test`.
 
 ## Evaluation Results
-- **Ground Truth Positive Edges**: `22`
-- **Hard Negative Edges**: `3`
-- **Exact Canonical Recall**: `31.8%`
-- **Relaxed File-Pair Recall**: `63.6%`
-- **Hard Negative Rejection Rate**: `100.0%`
+- **Ground Truth Positive Edges**: `NOT_MEASURED`
+- **Hard Negative Edges**: `NOT_MEASURED`
+- **Exact Canonical Recall**: `NOT_MEASURED`
+- **Relaxed File-Pair Recall**: `NOT_MEASURED`
+- **Hard Negative Rejection Rate**: `NOT_MEASURED`
 - **Precision**: `NOT_MEASURED` (in accordance with Phase 85).
 
 ## Formal Gate Status

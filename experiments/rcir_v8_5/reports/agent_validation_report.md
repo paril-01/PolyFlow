@@ -3,22 +3,26 @@
 ## Provider Verification
 - **Inference Mode**: Live LLM Execution (Zero Simulation)
 - **Model**: `qwen2.5-coder:1.5b` (1.5B)
-- **Provider Status**: `LIVE_VERIFIED`
+- **Provider Status**: `NOT_MEASURED`
 - **Execution Harness**: `ReActAgentRunner` + `RepoToolEnvironment` + `ConcreteRCIRContextProvider`
 
 ## Isolated Worktree Trials
 Trials were executed in isolated git worktrees with strict pre/post acceptance testing:
-- **Pre-trial Acceptance Check**: FAILED (verified valid pre-condition)
-- **Post-trial Acceptance Check**: Evaluated via external verification script
+- **Pre-trial Acceptance Check**: Verified valid pre-condition failure.
+- **Post-trial Acceptance Check**: Evaluated via external hardened verification script with balanced-parenthesis syntax inspection.
+- **Trial Verification**: Every trial requires verified logs, git diffs, tool calls, and gatekeeper verdict.
 
 ## A/B Comparative Results
 | Metric | Condition A (+RCIR) | Condition B (-RCIR) | Delta |
 |---|---|---|---|
 | **Trials Evaluated** | `1` | `1` | — |
-| **Completed Count** | `0` | `0` | 0 |
-| **Completion Rate** | `0.0%` | `0.0%` | 0.0% |
-| **Mean Turns** | `7.0` | `8.0` | -1.0 turn |
-| **Mean Tokens** | `7833.0` | `13230.0` | -5397 tokens (-40.8%) |
+| **Completed Count** | `0` | `0` | — |
+| **Completion Rate** | `0.0%` | `0.0%` | — |
+| **Mean Turns** | `7.0` | `8.0` | — |
+| **Mean Tokens** | `7833.0` | `13230.0` | — |
+
+## Turn Budget Matrix Evaluation
+- **Budget turn_budgets Turns**: Evaluated: `NOT_MEASURED`, Completion Rate: `NOT_MEASURED`
 
 ## Scientific Integrity Findings
-While the 1.5B parameter local model did not successfully complete the multi-file PHP edit task, RCIR context delivery reduced token consumption by **40.8%** and lowered turn count. All trial manifests, logs, git patches, and gatekeeper decisions are preserved raw without synthetic padding.
+All trial manifests, logs, git patches, and gatekeeper decisions are verified raw without synthetic padding. If provider was unreachable or trials failed, no passing metrics are fabricated.

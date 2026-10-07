@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""
+Regression suite verification for coding agent trials.
+Validates PHP syntax and integrity of modified files.
+"""
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+def check_php_syntax(file_path: Path) -> Tuple[bool, str]:
+    # 1. Try php -l if php executable is available
+    php_bin = shutil.which("php")
+    if php_bin:
+        try:
+            res = subprocess.run([php_bin, "-l", str(file_path)], capture_output=True, text=True, timeout=10)
+            if res.returncode == 0:
+                return True, "php -l passed"
+            return False, f"php -l failed: {res.stderr.strip() or res.stdout.strip()}"
+        except Exception as e:
+            return False, f"php -l error: {e}"
+
+    # 2. Fallback AST / balanced delimiter check
+    content = file_path.read_text(encoding="utf-8", errors="replace")
+    if not content.strip().startswith("<?php"):
+        return False, "Missing <?php opening tag"
+
+    depth_brace = 0
+    depth_paren = 0
+    depth_bracket = 0
+    in_single = False
+    in_double = False
+    i = 0
+    n = len(content)
+
+    while i < n:
+        c = content[i]
+        if c == "\\" and (in_single or in_double):
+            i += 2
+            continue
+        if c == "'" and not in_double:
+            in_single = not in_single
+        elif c == '"' and not in_single:
+            in_double = not in_double
+        elif not in_single and not in_double:
+            if content[i : i + 2] == "/*":
+                end = content.find("*/", i + 2)
+                if end == -1:
+                    return False, "Unclosed multi-line comment /*"
+                i = end + 2
+                continue
+            elif content[i : i + 2] == "//" or content[i] == "#":
+                end = content.find("\n", i)
+                if end == -1:
+                    break
+                i = end + 1
+                continue
+            elif c == "{":
+                depth_brace += 1
+            elif c == "}":
+                depth_brace -= 1
+                if depth_brace < 0:
+                    return False, f"Unexpected closing brace '}}' at offset {i}"
+            elif c == "(":
+                depth_paren += 1
+            elif c == ")":
+                depth_paren -= 1
+                if depth_paren < 0:
+                    return False, f"Unexpected closing paren ')' at offset {i}"
+            elif c == "[":
+                depth_bracket += 1
+            elif c == "]":
+                depth_bracket -= 1
+                if depth_bracket < 0:
+                    return False, f"Unexpected closing bracket ']' at offset {i}"
+        i += 1
+
+    if in_single or in_double:
+        return False, "Unclosed string literal"
+    if depth_brace != 0:
+        return False, f"Unbalanced braces (depth {depth_brace})"
+    if depth_paren != 0:
+        return False, f"Unbalanced parentheses (depth {depth_paren})"
+    if depth_bracket != 0:
+        return False, f"Unbalanced brackets (depth {depth_bracket})"
+
+    return True, "AST tokenizer / delimiter syntax passed (PHP runtime not installed)"
+
+
+def run_regression_check(worktree_root: Path) -> int:
+    target_file = worktree_root / "apps" / "files" / "lib" / "Controller" / "ApiController.php"
+    if not target_file.exists():
+        sys.stderr.write(f"SETUP_ERROR: Target file not found: {target_file}\n")
+        return 2
+
+    # Check target file syntax
+    ok, msg = check_php_syntax(target_file)
+    if not ok:
+        sys.stderr.write(f"REGRESSION_FAILURE: {target_file.name}: {msg}\n")
+        return 1
+
+    php_bin = shutil.which("php")
+    if not php_bin:
+        print(f"REGRESSION_NOT_MEASURED: Full phpunit suite not executable. Syntax check: {msg}")
+    else:
+        print(f"PASS: Regression syntax checks passed via {msg}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    from typing import Tuple
+    root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".")
+    sys.exit(run_regression_check(root))

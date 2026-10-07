@@ -178,8 +178,11 @@ def run_context_compilation():
         print(f"Saved raw contexts to {raw_file}")
 
         # Write results/context_{split}.json
+        env.derive_run_id()
+        from provenance import build_provenance_envelope
+        envelope = build_provenance_envelope(env)
         res_payload = {
-            "run_id": env.run_id,
+            **envelope,
             "split": split,
             "token_budget": 4000,
             "critical_file_recall_at_4k": round(mean_file_recall, 4),
@@ -283,7 +286,7 @@ def run_context_compilation():
         print(f"  Budget {b:>5} tokens -> Critical Source Recall: {mean_s_rec*100:.1f}%, Mean Tokens: {mean_tok:.0f}, Violations: {b_violations}")
 
     saturation_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "split": "test",
         "saturation_curve": curve_results,
     }

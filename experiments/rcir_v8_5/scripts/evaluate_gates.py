@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 """
-RCIR v8.5 — Formal Gate & Contract Evaluator (PHASES 79-86).
+RCIR v8.5.1 — Formal Gate, Contract, and Provenance Evaluator.
 
 Strictly enforces benchmark_contract.json as an executable specification:
-- Phase 86: Integrity Gate Evaluated FIRST. Any integrity failure stops execution.
-- Phase 80 & 81: Obey contract thresholds dynamically; zero hardcoded threshold constants.
-- Phase 82: Silent miss gate enforced.
-- Phase 83: Formal TEST ranking gates (P@20 excl, P@50 excl, graded nDCG, dependency MRR).
-- Phase 84: Type-flow gate (coverage, precision, wrong exact rate).
-- Phase 85: Edge gate marked ADVISORY_ONLY.
-- Evaluates Option A, Option B, and Option C formal architectural decisions.
-
-Outputs results/gate_evaluation.json.
+- Benchmark Integrity & Cryptographic Provenance Binding.
+- Clean working tree verification (fails closed on dirty release benchmarks).
+- Real canonical graph integrity evaluation (no bogus boolean flags).
+- Contract Feasibility & Theoretical Ceiling Validation (P0).
+- Option B Machine-Readable Contract Enforcement (P0).
+- Exact Coding Agent Trial Evidence Verification (P1).
+- Truthful Architecture Decision (Option A, Option B, Option C, INVALID_CONTRACT, NOT_EVALUATED).
 """
 
 from __future__ import annotations
 
 import json
+import math
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 # Add project roots
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -28,12 +27,21 @@ RCIR_V8_5_ROOT = SCRIPT_DIR.parent
 POLYFLOW_ROOT = RCIR_V8_5_ROOT.parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
+from contract_feasibility import validate_contract_feasibility
 from environment import get_default_environment
+from provenance import (
+    REQUIRED_PROVENANCE_FIELDS,
+    build_provenance_envelope,
+    collect_input_hashes,
+    compute_run_identity,
+    hash_file,
+    validate_artifact_provenance,
+)
 
 
-def evaluate_gates():
+def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
     print("=" * 80)
-    print("RCIR v8.5 — Formal Contract Gate Evaluation (PHASES 79-86)")
+    print("RCIR v8.5.1 — Formal Contract Gate Evaluation")
     print("=" * 80)
 
     env = get_default_environment()
@@ -45,36 +53,45 @@ def evaluate_gates():
         contract = json.load(f)
 
     # -------------------------------------------------------------------------
-    # STAGE 1: INTEGRITY GATE (PHASE 86 — Evaluated FIRST)
+    # STAGE 1: INTEGRITY GATE (Evaluated FIRST)
     # -------------------------------------------------------------------------
-    print("\n[STAGE 1] Evaluating Benchmark Integrity Gate (PHASE 86)...")
+    print("\n[STAGE 1] Evaluating Benchmark Integrity Gate...")
     integrity_failures = []
 
-    # 1. Manifest existence
+    # 1. Manifest existence & hash
     manifest_path = env.manifests_root / "benchmark_run_manifest.json"
+    manifest_hash = ""
     if not manifest_path.exists():
         integrity_failures.append("benchmark_run_manifest.json does not exist")
     else:
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            manifest = json.load(f)
-        if manifest.get("run_id") != env.run_id:
-            integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {env.run_id}")
+        manifest_hash = hash_file(manifest_path)
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+            if manifest.get("run_id") != env.run_id:
+                integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {env.run_id}")
+        except Exception as e:
+            integrity_failures.append(f"Manifest corrupted: {e}")
 
-    # 2. Run ID consistency across result artifacts
+    # Build expected current run envelope
+    env.derive_run_id()
+    expected_envelope = build_provenance_envelope(env, manifest_hash=manifest_hash)
+
+    # 2. Strict provenance validation across all result artifacts
     artifacts_to_check = [
-        ("ground_truth_provenance.json", "results"),
-        ("canonical_graph_integrity.json", "results"),
-        ("canonicalization_evaluation.json", "results"),
-        ("edge_evaluation.json", "results"),
-        ("type_flow_evaluation.json", "results"),
-        ("impact_test.json", "results"),
-        ("ranker_test.json", "results"),
-        ("context_test.json", "results"),
-        ("determinism_evaluation.json", "results"),
+        "ground_truth_provenance.json",
+        "canonical_graph_integrity.json",
+        "canonicalization_evaluation.json",
+        "edge_evaluation.json",
+        "type_flow_evaluation.json",
+        "impact_test.json",
+        "ranker_test.json",
+        "context_test.json",
+        "determinism_evaluation.json",
     ]
 
-    for fname, folder in artifacts_to_check:
-        fpath = (env.results_root if folder == "results" else env.raw_root) / fname
+    for fname in artifacts_to_check:
+        fpath = env.results_root / fname
         if not fpath.exists():
             integrity_failures.append(f"Required artifact missing: {fname}")
         else:
@@ -84,41 +101,75 @@ def evaluate_gates():
                 art_run_id = data.get("run_id")
                 if art_run_id != env.run_id:
                     integrity_failures.append(f"Artifact {fname} run_id mismatch: {art_run_id} != {env.run_id}")
+                # Check provenance envelope if artifact has been generated in v8.5.1 format
+                if "manifest_hash" in data or "polyflow_commit" in data:
+                    is_valid_prov, prov_errs = validate_artifact_provenance(
+                        data, expected_envelope, allow_development_dirty=allow_development_dirty
+                    )
+                    if not is_valid_prov:
+                        integrity_failures.extend([f"Artifact {fname}: {err}" for err in prov_errs])
             except Exception as e:
                 integrity_failures.append(f"Artifact {fname} corrupted: {e}")
 
     # 3. Ground truth provenance verification
     gt_prov_path = env.results_root / "ground_truth_provenance.json"
+    provenance_passed = False
     if gt_prov_path.exists():
-        with open(gt_prov_path, "r", encoding="utf-8") as f:
-            prov_data = json.load(f)
-        prov_status = prov_data.get("provenance_status") or prov_data.get("validation_status")
-        if prov_status != "PASSED" or prov_data.get("total_errors", 1) > 0:
-            integrity_failures.append("Ground truth provenance contains unverified commits or missing files")
+        try:
+            with open(gt_prov_path, "r", encoding="utf-8") as f:
+                prov_data = json.load(f)
+            prov_status = prov_data.get("provenance_status") or prov_data.get("validation_status")
+            err_count = prov_data.get("total_errors", 0)
+            provenance_passed = (prov_status == "PASSED") and (err_count == 0)
+            if not provenance_passed:
+                integrity_failures.append(f"Ground truth provenance failed: status={prov_status}, errors={err_count}")
+        except Exception as e:
+            integrity_failures.append(f"Could not load ground truth provenance: {e}")
 
     # 4. Strict token budget invariant
     ctx_test_path = env.results_root / "context_test.json"
+    token_budget_invariant_passed = False
     if ctx_test_path.exists():
-        with open(ctx_test_path, "r", encoding="utf-8") as f:
-            ctx_data = json.load(f)
-        violations = ctx_data.get("token_budget_violations", 0)
-        if violations > 0:
-            integrity_failures.append(f"Context budget violations detected: {violations}")
+        try:
+            with open(ctx_test_path, "r", encoding="utf-8") as f:
+                ctx_data = json.load(f)
+            violations = ctx_data.get("token_budget_violations", 0)
+            token_budget_invariant_passed = (violations == 0)
+            if violations > 0:
+                integrity_failures.append(f"Context budget violations detected: {violations}")
+        except Exception as e:
+            integrity_failures.append(f"Could not load context test artifact: {e}")
+
+    # 5. Graph integrity verification (Actual evaluation, no bogus boolean flag)
+    cg_integ_path = env.results_root / "canonical_graph_integrity.json"
+    unexpected_external_ratio_zero = False
+    if cg_integ_path.exists():
+        try:
+            with open(cg_integ_path, "r", encoding="utf-8") as f:
+                cg_data = json.load(f)
+            observed_ratio = cg_data.get("unexpected_external_internal_ratio", 1.0)
+            max_ratio = contract.get("canonical_graph", {}).get("max_external_ratio", 0.0)
+            unexpected_external_ratio_zero = observed_ratio <= max_ratio
+            if not unexpected_external_ratio_zero:
+                integrity_failures.append(
+                    f"Canonical graph unexpected_external_internal_ratio ({observed_ratio}) exceeds maximum allowed ({max_ratio})"
+                )
+        except Exception as e:
+            integrity_failures.append(f"Could not load canonical graph integrity artifact: {e}")
+
+    # 6. Clean source state verification (formal release benchmark requires clean tree)
+    if env.polyflow_dirty and not allow_development_dirty:
+        integrity_failures.append("PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)")
 
     manifest_valid = manifest_path.exists() and not any("manifest" in f.lower() for f in integrity_failures)
     run_id_consistent = not any("run_id mismatch" in f.lower() for f in integrity_failures)
-    provenance_passed = gt_prov_path.exists() and not any("provenance" in f.lower() for f in integrity_failures)
-    token_budget_invariant_passed = not any("budget violations" in f.lower() for f in integrity_failures)
-    unexpected_external_ratio_zero = not any("external" in f.lower() for f in integrity_failures)
-
     integrity_passed = len(integrity_failures) == 0
+
     print(f"Integrity Gate Verdict: {'PASSED' if integrity_passed else 'FAILED'}")
-    
+
     integrity_result = {
-        "run_id": env.run_id,
+        **expected_envelope,
         "status": "PASSED" if integrity_passed else "FAILED",
-        "target_commit": env.target_repo_commit,
-        "polyflow_commit": env.polyflow_commit,
         "manifest_valid": manifest_valid,
         "run_id_consistent": run_id_consistent,
         "provenance_passed": provenance_passed,
@@ -129,25 +180,33 @@ def evaluate_gates():
     }
     with open(env.results_root / "integrity_evaluation.json", "w", encoding="utf-8") as f:
         json.dump(integrity_result, f, indent=2)
-    if not integrity_passed:
-        print(f"Integrity Failures: {integrity_failures}")
-        gate_result = {
-            "run_id": env.run_id,
-            "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "run_validity": "INVALID",
-            "architecture_decision": "NOT_EVALUATED",
-            "integrity_gate": {"passed": False, "failures": integrity_failures},
-        }
-        with open(env.results_root / "gate_evaluation.json", "w", encoding="utf-8") as f:
-            json.dump(gate_result, f, indent=2)
-        return gate_result
+
+    integrity_gate = {
+        "passed": integrity_passed,
+        "failures": integrity_failures,
+    }
 
     # -------------------------------------------------------------------------
-    # STAGE 2: ARCHITECTURE CONTRACT GATES (PHASES 80-85)
+    # STAGE 2: CONTRACT FEASIBILITY VALIDATION (P0)
     # -------------------------------------------------------------------------
-    print("\n[STAGE 2] Evaluating Contract Gates against TEST split...")
+    print("\n[STAGE 2] Validating Contract Feasibility against Sparse Ground Truth Labels...")
+    gt_file = env.ground_truth_root / "ground_truth.json"
+    gt_tasks = {}
+    if gt_file.exists():
+        gt_data = json.loads(gt_file.read_text(encoding="utf-8"))
+        gt_tasks = gt_data.get("tasks", {})
 
-    # Load Impact and Ranking TEST results
+    test_gt_tasks = [t for t in gt_tasks.values() if t.get("split") == "test"]
+    is_contract_feasible, feasibility_details = validate_contract_feasibility(contract, test_gt_tasks)
+
+    if not is_contract_feasible:
+        print(f"  [CONTRACT INFEASIBILITY DETECTED] Violations: {feasibility_details['violations']}")
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: PRIMARY ARCHITECTURE CONTRACT GATES
+    # -------------------------------------------------------------------------
+    print("\n[STAGE 3] Evaluating Contract Gates against TEST split...")
+
     with open(env.results_root / "impact_test.json", "r", encoding="utf-8") as f:
         impact_test = json.load(f)
     with open(env.results_root / "ranker_test.json", "r", encoding="utf-8") as f:
@@ -206,6 +265,8 @@ def evaluate_gates():
         "dependency_mrr": dep_mrr,
         "dependency_mrr_min": cfg_rank["dependency_mrr_min"],
         "dependency_mrr_passed": dep_mrr >= cfg_rank["dependency_mrr_min"],
+        "contract_feasible": is_contract_feasible,
+        "theoretical_ceilings": feasibility_details.get("theoretical_ceilings", {}),
     }
     ranking_gate["passed"] = (
         ranking_gate["p20_passed"]
@@ -243,6 +304,7 @@ def evaluate_gates():
     tf_cov = tf_metrics.get("coverage", 0.0)
     tf_prec = tf_metrics.get("resolved_precision", 0.0)
     tf_wrong = tf_metrics.get("wrong_exact_rate", 1.0)
+    tf_invalid_gt = type_flow_res.get("confusion_matrix", {}).get("invalid_gt", 0)
 
     type_flow_gate = {
         "coverage": tf_cov,
@@ -254,13 +316,16 @@ def evaluate_gates():
         "wrong_exact_rate": tf_wrong,
         "wrong_exact_max": cfg_tf["wrong_exact_rate_max"],
         "wrong_exact_passed": tf_wrong <= cfg_tf["wrong_exact_rate_max"],
+        "invalid_gt_count": tf_invalid_gt,
+        "ground_truth_valid": tf_invalid_gt == 0,
     }
     type_flow_gate["passed"] = (
         type_flow_gate["coverage_passed"]
         and type_flow_gate["precision_passed"]
         and type_flow_gate["wrong_exact_passed"]
+        and type_flow_gate["ground_truth_valid"]
     )
-    print(f"  Type Flow Gate: {'PASSED' if type_flow_gate['passed'] else 'FAILED'} (Coverage: {tf_cov*100:.1f}%, Precision: {tf_prec*100:.1f}%, WrongExact: {tf_wrong*100:.1f}%)")
+    print(f"  Type Flow Gate: {'PASSED' if type_flow_gate['passed'] else 'FAILED'} (Coverage: {tf_cov*100:.1f}%, Precision: {tf_prec*100:.1f}%, WrongExact: {tf_wrong*100:.1f}%, InvalidGT: {tf_invalid_gt})")
 
     # 5. Canonicalization Gate
     cfg_canon = contract["canonicalization"]
@@ -278,39 +343,95 @@ def evaluate_gates():
         "rationale": "Edge precision methodology requires complete prediction adjudication before promoting to formal gate (PHASE 85).",
     }
 
-    # 7. Agent Gate (F02: validates actual trials, non-empty diffs, and test transitions)
+    # 7. Agent Gate (Exact trial evidence validation - Section 9)
     agent_ab_path = env.results_root / "agent_ab_runs.json"
     agent_live_verified = False
     agent_trials_verified = False
     agent_comp_rate = 0.0
     trials_count = 0
+    agent_validation_status = "NOT_MEASURED"
+
     if agent_ab_path.exists():
         with open(agent_ab_path, "r", encoding="utf-8") as f:
             agent_data = json.load(f)
+
+        agent_validation_status = agent_data.get("validation_status", "NOT_MEASURED")
         prov = agent_data.get("provider", {})
-        agent_live_verified = not prov.get("is_simulation", True) and agent_data.get("validation_status") == "MEASURED_AGENT_VALIDATION"
+        agent_live_verified = (not prov.get("is_simulation", True)) and (agent_validation_status == "MEASURED_AGENT_VALIDATION")
+
         cond_a = agent_data.get("condition_a_rcir", {})
-        agent_comp_rate = cond_a.get("completion_rate", 0.0)
+        reported_comp_rate = cond_a.get("completion_rate", 0.0)
+        agent_comp_rate = reported_comp_rate if isinstance(reported_comp_rate, (int, float)) else 0.0
         trials_count = cond_a.get("trials_count", 0)
 
-        # Verify actual trial manifests in raw/agent
+        # Exact trial verification against raw trial directories
         agent_raw_dir = env.raw_root / "agent"
-        valid_trials = 0
-        if agent_raw_dir.exists():
-            for task_dir in agent_raw_dir.glob("*_rcir_rep*"):
-                manifest_file = task_dir / "trial_manifest.json"
-                diff_file = task_dir / "git_diff.patch"
-                if manifest_file.exists():
-                    try:
-                        m = json.loads(manifest_file.read_text(encoding="utf-8"))
-                        has_diff = diff_file.exists() and len(diff_file.read_text(encoding="utf-8").strip()) > 0
-                        if m.get("is_valid_trial", True) and m.get("success") and has_diff:
-                            valid_trials += 1
-                    except Exception:
-                        pass
-        agent_trials_verified = (trials_count > 0) and (valid_trials > 0)
+        verified_total_trials = 0
+        verified_successful_trials = 0
+
+        if agent_raw_dir.exists() and agent_live_verified and trials_count > 0:
+            for trial in agent_data.get("trials", []):
+                t_id = trial.get("trial_id", "")
+                t_cond = trial.get("condition", "")
+                if not t_id or t_cond != "rcir":
+                    continue
+
+                t_dir = agent_raw_dir / t_id
+                if not t_dir.exists():
+                    continue
+
+                manifest_f = t_dir / "trial_manifest.json"
+                gatekeeper_f = t_dir / "gatekeeper.json"
+                diff_f = t_dir / "git_diff.patch"
+                before_log = t_dir / "acceptance_before.log"
+                after_log = t_dir / "acceptance_after.log"
+                reg_log = t_dir / "regression.log"
+                tool_calls_f = t_dir / "tool_calls.jsonl"
+                prov_log = t_dir / "provider_log.jsonl"
+
+                if not (manifest_f.exists() and gatekeeper_f.exists() and diff_f.exists() and before_log.exists() and after_log.exists()):
+                    continue
+
+                try:
+                    m = json.loads(manifest_f.read_text(encoding="utf-8"))
+                    gk = json.loads(gatekeeper_f.read_text(encoding="utf-8"))
+                    diff_text = diff_f.read_text(encoding="utf-8").strip()
+
+                    # Verify matching trial metadata
+                    m_run_id = m.get("run_id")
+                    if m_run_id != env.run_id:
+                        continue
+                    if m.get("task_id") != trial.get("task_id"):
+                        continue
+                    if m.get("replicate") != trial.get("replicate"):
+                        continue
+
+                    # Verify required artifacts
+                    before_text = before_log.read_text(encoding="utf-8")
+                    after_text = after_log.read_text(encoding="utf-8")
+                    reg_text = reg_log.read_text(encoding="utf-8") if reg_log.exists() else ""
+
+                    has_before_failure = "ReturnCode: 1" in before_text
+                    has_after_pass = "ReturnCode: 0" in after_text
+                    has_reg_pass = "ReturnCode: 0" in reg_text if reg_log.exists() else True
+                    has_diff = len(diff_text) > 0
+                    gk_approved = gk.get("verdict") == "APPROVE"
+
+                    verified_total_trials += 1
+                    if m.get("success") and has_before_failure and has_after_pass and has_reg_pass and has_diff and gk_approved:
+                        verified_successful_trials += 1
+                except Exception:
+                    pass
+
+            reported_completed = cond_a.get("completed_count", 0)
+            agent_trials_verified = (
+                (verified_total_trials == trials_count)
+                and (verified_successful_trials == reported_completed)
+                and (verified_total_trials > 0)
+            )
 
     agent_gate = {
+        "status": agent_validation_status,
         "live_inference_verified": agent_live_verified,
         "trials_evidence_verified": agent_trials_verified,
         "simulation_forbidden": True,
@@ -318,11 +439,12 @@ def evaluate_gates():
         "trials_count": trials_count,
         "passed": agent_live_verified and agent_trials_verified and (agent_comp_rate >= 0.50),
     }
-    print(f"  Agent Gate: {'PASSED' if agent_gate['passed'] else 'NOT_VERIFIED'}")
+    print(f"  Agent Gate: {'PASSED' if agent_gate['passed'] else ('NOT_MEASURED' if agent_validation_status == 'NOT_MEASURED' else 'NOT_VERIFIED')}")
 
     # -------------------------------------------------------------------------
-    # STAGE 3: FORMAL ARCHITECTURE DECISION (Option A vs Option B vs Option C)
+    # STAGE 4: FORMAL ARCHITECTURE DECISION (Option A vs Option B vs Option C vs INVALID_CONTRACT)
     # -------------------------------------------------------------------------
+    # Option A: All primary gates satisfied
     option_a_satisfied = (
         impact_gate["passed"]
         and ranking_gate["passed"]
@@ -332,31 +454,122 @@ def evaluate_gates():
         and agent_gate["passed"]
     )
 
-    # Option B: Substantial architectural progress on TEST split
-    cfg_opt_b = contract["decision_rules"]["option_b"]
-    option_b_satisfied = (
-        macro_recall >= cfg_opt_b["macro_pool_recall_min"]
-        and worst_recall >= cfg_opt_b["worst_task_pool_recall_floor"]
-        and is_det is True
-        and type_flow_gate["passed"]
-        and canon_gate["passed"]
-        and context_gate["budget_invariant_passed"]
-    )
+    # Option B: Machine-readable contract enforcement (Section 3)
+    cfg_opt_b = contract.get("decision_rules", {}).get("option_b", {})
+    macro_recall_passed = macro_recall >= cfg_opt_b.get("macro_pool_recall_min", 0.90)
+    worst_recall_passed = worst_recall >= cfg_opt_b.get("worst_task_pool_recall_floor", 0.80)
+    det_passed = (is_det is True) if cfg_opt_b.get("requires_determinism", True) else True
+    tf_passed = type_flow_gate["passed"] if cfg_opt_b.get("requires_type_flow_gate", True) else True
+    canon_passed = canon_gate["passed"] if cfg_opt_b.get("requires_canonicalization_gate", True) else True
+    budget_passed = context_gate["budget_invariant_passed"] if cfg_opt_b.get("requires_budget_invariant", True) else True
 
-    if option_a_satisfied:
+    # Option B Ranking Improvement Check
+    rank_imp_cfg = cfg_opt_b.get("ranking_improvement")
+    ranking_imp_evaluable = True
+    ranking_imp_passed = True
+    ranking_imp_details = "No ranking improvement required by contract."
+
+    if rank_imp_cfg:
+        metric_name = rank_imp_cfg.get("metric", "precision_at_50_excluding_target")
+        baseline_rel = rank_imp_cfg.get("baseline_artifact")
+        min_rel_imp = rank_imp_cfg.get("min_relative_improvement", 0.15)
+
+        baseline_path = (env.polyflow_root / baseline_rel) if baseline_rel else None
+        if not baseline_path or not baseline_path.exists():
+            ranking_imp_evaluable = False
+            ranking_imp_passed = False
+            ranking_imp_details = f"Baseline artifact missing or undefined: {baseline_rel}. Cannot evaluate Option B."
+        else:
+            try:
+                with open(baseline_path, "r", encoding="utf-8") as bf:
+                    b_data = json.load(bf)
+                b_metrics = b_data.get("metrics", b_data)
+                b_val = b_metrics.get(metric_name, 0.0)
+                curr_val = rank_metrics.get(metric_name, 0.0)
+                if b_val > 0:
+                    rel_imp = (curr_val - b_val) / float(b_val)
+                else:
+                    rel_imp = 0.0
+                ranking_imp_passed = rel_imp >= min_rel_imp
+                ranking_imp_details = (
+                    f"Current {metric_name} = {curr_val:.4f} vs Baseline = {b_val:.4f} "
+                    f"=> Relative improvement = {rel_imp*100:.2f}% (required >= {min_rel_imp*100:.1f}%)"
+                )
+            except Exception as ex:
+                ranking_imp_evaluable = False
+                ranking_imp_passed = False
+                ranking_imp_details = f"Error reading baseline artifact {baseline_path}: {ex}"
+
+    option_b_evaluation = {
+        "evaluable": ranking_imp_evaluable,
+        "passed": (
+            macro_recall_passed
+            and worst_recall_passed
+            and det_passed
+            and tf_passed
+            and canon_passed
+            and budget_passed
+            and ranking_imp_passed
+        ),
+        "requirements": {
+            "macro_recall": {
+                "passed": macro_recall_passed,
+                "observed": macro_recall,
+                "threshold": cfg_opt_b.get("macro_pool_recall_min", 0.90),
+            },
+            "worst_task_recall": {
+                "passed": worst_recall_passed,
+                "observed": worst_recall,
+                "threshold": cfg_opt_b.get("worst_task_pool_recall_floor", 0.80),
+            },
+            "determinism": {"passed": det_passed, "observed": is_det},
+            "type_flow": {"passed": tf_passed, "gate_verdict": type_flow_gate["passed"]},
+            "canonicalization": {"passed": canon_passed, "observed": wrong_canon_rate},
+            "budget_invariant": {"passed": budget_passed, "violations": violations},
+            "ranking_improvement": {
+                "evaluable": ranking_imp_evaluable,
+                "passed": ranking_imp_passed,
+                "details": ranking_imp_details,
+            },
+        },
+    }
+
+    # Final Architecture Decision Selection
+    if not integrity_passed:
+        formal_decision = "NOT_EVALUATED"
+        decision_summary = (
+            f"Benchmark integrity gate failed with {len(integrity_failures)} violation(s). "
+            f"Run is invalid."
+        )
+        run_validity = "INVALID"
+    elif not is_contract_feasible:
+        formal_decision = "INVALID_CONTRACT"
+        decision_summary = (
+            f"Contract ranking thresholds ({', '.join(feasibility_details['violations'])}) "
+            f"exceed theoretical maximum possible ceilings for sparse Nextcloud TEST ground truth labels. "
+            f"Architectural acceptance refused."
+        )
+        run_validity = "INVALID"
+    elif option_a_satisfied:
         formal_decision = "OPTION_A_ACCEPTED"
         decision_summary = "All primary impact, context, type-flow, ranking, and live agent validation gates fully passed."
-    elif option_b_satisfied:
+        run_validity = "VALID"
+    elif option_b_evaluation["passed"]:
         formal_decision = "OPTION_B_ACCEPTED"
         decision_summary = (
             f"Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split "
             f"(Macro Recall {macro_recall*100:.1f}%, Worst Task {worst_recall*100:.1f}%, Determinism: {is_det}, "
-            f"Type Flow {tf_cov*100:.1f}% cov / {tf_prec*100:.1f}% prec, 0 budget violations). "
-            f"Formal contract specifications strictly obeyed."
+            f"Type Flow {tf_cov*100:.1f}% cov / {tf_prec*100:.1f}% prec, 0 budget violations, {ranking_imp_details})."
         )
+        run_validity = "VALID"
+    elif not option_b_evaluation["evaluable"]:
+        formal_decision = "OPTION_C_REJECTED"
+        decision_summary = f"Option B cannot be evaluated: {ranking_imp_details}. Formal benchmark thresholds not met; architectural retreat required."
+        run_validity = "VALID"
     else:
         formal_decision = "OPTION_C_REJECTED"
         decision_summary = "Formal benchmark thresholds not met; architectural retreat required."
+        run_validity = "VALID"
 
     print(f"\n================================================================================")
     print(f"Formal Architecture Decision: {formal_decision}")
@@ -364,15 +577,14 @@ def evaluate_gates():
     print(f"================================================================================")
 
     gate_result = {
-        "run_id": env.run_id,
-        "polyflow_commit": env.polyflow_commit,
-        "target_repo_commit": env.target_repo_commit,
+        **expected_envelope,
         "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "run_validity": "VALID",
+        "run_validity": run_validity,
         "architecture_decision": formal_decision,
         "decision_summary": decision_summary,
         "contract_version": contract.get("contract_version", "8.5"),
-        "integrity_gate": {"passed": True, "failures": []},
+        "contract_feasibility": feasibility_details,
+        "integrity_gate": integrity_gate,
         "impact_gate": impact_gate,
         "ranking_gate": ranking_gate,
         "context_gate": context_gate,
@@ -380,6 +592,7 @@ def evaluate_gates():
         "canonicalization_gate": canon_gate,
         "edge_gate": edge_gate,
         "agent_gate": agent_gate,
+        "option_b_evaluation": option_b_evaluation,
     }
 
     out_file = env.results_root / "gate_evaluation.json"
@@ -392,5 +605,6 @@ def evaluate_gates():
 
 if __name__ == "__main__":
     res = evaluate_gates()
-    if not res or res.get("run_validity") != "VALID":
+    if not res or res.get("run_validity") != "VALID" or res.get("architecture_decision") in ("NOT_EVALUATED", "INVALID_CONTRACT"):
         sys.exit(1)
+

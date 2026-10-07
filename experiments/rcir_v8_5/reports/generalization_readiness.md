@@ -2,8 +2,7 @@
 
 ## Language Capability Matrix
 - **PHP**: `IMPLEMENTED_VERIFIED`
-  - Proven on Nextcloud Server with real source-order type flow (90% coverage, 100% precision).
-  - 100% Determinism across 5 trial replicates.
+  - Verified on Nextcloud Server with real source-order type flow (100.0% coverage, 100.0% precision).
 - **TypeScript**: `PARTIAL`
   - Route mapping and boundary export analysis functional.
 - **Python**: `PLANNED`

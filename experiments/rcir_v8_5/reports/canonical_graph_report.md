@@ -1,15 +1,15 @@
 # RCIR v8.5 — Canonical Graph Integrity Report
 
 ## Graph Topology
-- **Total Nodes**: `48611`
-- **Total Edges**: `143225`
-- **Total Endpoints**: `49208`
+- **Total Nodes**: `NOT_MEASURED`
+- **Total Edges**: `NOT_MEASURED`
+- **Total Endpoints**: `NOT_MEASURED`
 
 ## Endpoint Resolution Breakdown
-- **Internal Endpoints**: `48676` (98.92%)
-- **External Endpoints**: `457` (0.93%)
-- **Unresolved Endpoints**: `75` (0.15%)
-- **Unexpected External Ratio**: `0.0000`
+- **Internal Endpoints**: `NOT_MEASURED`
+- **External Endpoints**: `NOT_MEASURED`
+- **Unresolved Endpoints**: `NOT_MEASURED`
+- **Unexpected External Ratio**: `NOT_MEASURED`
 
 ## Legacy Normalizer Architectural Fix
 The `LegacyEndpointNormalizer` guarantees:

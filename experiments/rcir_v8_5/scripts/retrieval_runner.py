@@ -36,6 +36,7 @@ from environment import get_default_environment
 env = get_default_environment()
 sys.path.insert(0, str(env.polyflow_root / "rcir" / "src"))
 
+from rcir.adapters.nextcloud import NextcloudSourceDerivedAdapter
 from rcir.entities.canonical import CanonicalEntityRegistry, CanonicalEntityID, EntityKind
 from rcir.graph.canonical_graph import CanonicalGraph, CanonicalEdge, CanonicalEdgeType, ResolutionClass
 from rcir.query.change_spec import ChangeOperation, ChangeSpecification
@@ -158,12 +159,27 @@ def discover_multi_channel_candidates(
                     existing.edge_types.append(e.edge_type.value)
 
     # CHANNEL B — TYPE FLOW & IMPLEMENTATIONS (Phase 53 Channel B)
-    # Search implementation hierarchy for interfaces / classes
+    # Search actual implementation hierarchy for interfaces / classes
     for root_id in roots:
         for ent_id, ent in cg.nodes.items():
             if ent.kind in (EntityKind.CLASS, EntityKind.INTERFACE):
-                # Check if implements root interface or class
-                if root_id in ent.aliases or root_id.endswith(ent.symbol):
+                # Verify true hierarchy: check implements/inherits in graph edges or verified aliases
+                is_hierarchy_match = False
+                if root_id in ent.aliases:
+                    is_hierarchy_match = True
+                else:
+                    # Check edges between ent_id and root_id
+                    for edge in cg.get_outgoing_edges(ent_id):
+                        if edge.target_id == root_id and edge.edge_type.value in ("implements", "inherits"):
+                            is_hierarchy_match = True
+                            break
+                    if not is_hierarchy_match:
+                        for edge in cg.get_incoming_edges(root_id):
+                            if edge.source_id == ent_id and edge.edge_type.value in ("implements", "inherits"):
+                                is_hierarchy_match = True
+                                break
+
+                if is_hierarchy_match:
                     channel_counts["channel_b_type_flow"] += 1
                     if ent_id not in candidates:
                         candidates[ent_id] = EvidenceVector(
@@ -177,89 +193,76 @@ def discover_multi_channel_candidates(
                             traversal_score=0.82,
                         )
 
-    # CHANNEL C — BOUNDARY (Phase 53 Channel C: routes.php, API endpoints)
-    if "apps/files" in target_fp or "Controller" in target_fp or spec.operation == ChangeOperation.ROUTE_CHANGE:
-        routes_file = "apps/files/appinfo/routes.php"
-        routes_id = f"php://{routes_file}"
+    # CHANNEL C — BOUNDARY (Phase 53 Channel C: source-derived routes parsing)
+    route_matches = NextcloudSourceDerivedAdapter.discover_routes(
+        env.target_repo_root, target_fp, spec.requested_symbol
+    )
+    for rm in route_matches:
         channel_counts["channel_c_boundary"] += 1
-        if routes_id not in candidates:
-            candidates[routes_id] = EvidenceVector(
-                entity_id=routes_id,
-                file_path=routes_file,
+        if rm.entity_id not in candidates:
+            candidates[rm.entity_id] = EvidenceVector(
+                entity_id=rm.entity_id,
+                file_path=rm.file_path,
                 boundary_contract="route",
                 resolution_class="static_inference",
-                edge_types=["route_to_controller"],
+                edge_types=[rm.evidence_type],
                 hop_distance=1,
-                traversal_score=0.85,
+                traversal_score=rm.confidence,
             )
 
-    # CHANNEL D — EVENTS (Phase 53 Channel D)
+    # CHANNEL D — EVENTS (Phase 53 Channel D: source-derived event dispatchers)
     if "Event" in resolved_target_id or spec.operation == ChangeOperation.EVENT_CHANGE:
-        event_dispatchers = [
-            ("lib/private/Files/Node/HookConnector.php", "php://OC\\Files\\Node\\HookConnector"),
-            ("lib/private/Files/Node/Folder.php", "php://OC\\Files\\Node\\Folder"),
-            ("lib/private/Files/Node/Root.php", "php://OC\\Files\\Node\\Root"),
-        ]
-        for ef_path, ef_id in event_dispatchers:
+        event_matches = NextcloudSourceDerivedAdapter.discover_event_dispatchers(
+            env.target_repo_root, resolved_target_id, cg.nodes
+        )
+        for em in event_matches:
             channel_counts["channel_d_events"] += 1
-            if ef_id not in candidates:
-                candidates[ef_id] = EvidenceVector(
-                    entity_id=ef_id,
-                    file_path=ef_path,
+            if em.entity_id not in candidates:
+                candidates[em.entity_id] = EvidenceVector(
+                    entity_id=em.entity_id,
+                    file_path=em.file_path,
                     boundary_contract="event",
                     resolution_class="static_inference",
-                    edge_types=["event_dispatch"],
+                    edge_types=[em.evidence_type],
                     hop_distance=1,
-                    traversal_score=0.80,
+                    traversal_score=em.confidence,
                 )
 
-    # CHANNEL E — CONFIG / DI (Phase 53 Channel E)
+    # CHANNEL E — CONFIG / DI (Phase 53 Channel E: source-derived config usage)
     if "Config" in resolved_target_id or spec.operation == ChangeOperation.CONFIG_CHANGE:
-        config_entities = [
-            ("lib/private/SystemConfig.php", "php://OC\\SystemConfig"),
-            ("lib/private/AllConfig.php", "php://OC\\AllConfig"),
-            ("lib/private/Server.php", "php://OC\\Server"),
-            ("apps/files/lib/Service/UserConfig.php", "php://OCA\\Files\\Service\\UserConfig"),
-        ]
-        for cf_path, cf_id in config_entities:
+        config_matches = NextcloudSourceDerivedAdapter.discover_config_di(
+            env.target_repo_root, target_fp, cg.nodes
+        )
+        for cm in config_matches:
             channel_counts["channel_e_config"] += 1
-            if cf_id not in candidates:
-                candidates[cf_id] = EvidenceVector(
-                    entity_id=cf_id,
-                    file_path=cf_path,
+            if cm.entity_id not in candidates:
+                candidates[cm.entity_id] = EvidenceVector(
+                    entity_id=cm.entity_id,
+                    file_path=cm.file_path,
                     boundary_contract="config",
                     resolution_class="static_inference",
-                    edge_types=["config_reads"],
+                    edge_types=[cm.evidence_type],
                     hop_distance=1,
-                    traversal_score=0.80,
+                    traversal_score=cm.confidence,
                 )
 
-    # CHANNEL F — VERIFICATION (Phase 53 Channel F: direct test files)
-    # Check known test files corresponding specifically to target
+    # CHANNEL F — VERIFICATION (Phase 53 Channel F: source-derived test discovery)
     if target_fp:
-        base_name = target_fp.split("/")[-1].replace(".php", "")
-        test_patterns = [
-            f"apps/files/tests/Controller/{base_name}Test.php",
-            f"tests/lib/{base_name}Test.php",
-        ]
-        if "Share" in target_fp:
-            test_patterns.append(f"tests/lib/Share20/{base_name}Test.php")
-        if "User" in target_fp:
-            test_patterns.append(f"tests/lib/User/{base_name}Test.php")
-        for tp in test_patterns:
-            if (env.target_repo_root / tp).exists():
-                tid = f"php://{tp}"
-                channel_counts["channel_f_verification"] += 1
-                if tid not in candidates:
-                    candidates[tid] = EvidenceVector(
-                        entity_id=tid,
-                        file_path=tp,
-                        test_relationship="direct_test",
-                        resolution_class="static_inference",
-                        edge_types=["source_to_test"],
-                        hop_distance=1,
-                        traversal_score=0.85,
-                    )
+        test_matches = NextcloudSourceDerivedAdapter.discover_tests(
+            env.target_repo_root, target_fp, spec.requested_symbol
+        )
+        for tm in test_matches:
+            channel_counts["channel_f_verification"] += 1
+            if tm.entity_id not in candidates:
+                candidates[tm.entity_id] = EvidenceVector(
+                    entity_id=tm.entity_id,
+                    file_path=tm.file_path,
+                    test_relationship="direct_test",
+                    resolution_class="static_inference",
+                    edge_types=[tm.evidence_type],
+                    hop_distance=1,
+                    traversal_score=tm.confidence,
+                )
 
     # CHANNEL G — LEXICAL FALLBACK (Phase 53 Channel G)
     # Only if candidate pool is small, search symbol occurrences
@@ -541,6 +544,54 @@ def execute_retrieval_suite():
         },
     }
 
+def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
+    """Centralized ranker factory used across retrieval runner, validation selection, TEST execution, and determinism evaluation (v8.5.1)."""
+    cfg = (config_name or "").strip()
+    if cfg in ("R0", "R0_GraphDistanceBaseline", "linear"):
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False))
+    elif cfg in ("ExactFirst", "ExactFirstCascaded", "cascaded"):
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False))
+    elif cfg in ("OperationCascade", "OperationAwareCascade", "operation_cascaded"):
+        profile = OperationRankerProfile.for_operation(operation) if operation else None
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False), profile=profile)
+    elif cfg in ("Coverage", "CoverageDiversityRanker", "diversity"):
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5))
+    elif cfg in ("AnchorCoverageRRF", "AnchorCoverageRRF_MultiObjective", "multi_objective_rrf"):
+        return MultiObjectiveRanker(operation=operation or "behavior_change")
+    else:
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False))
+
+
+    # 4. VALIDATION-BASED RANKER SELECTION (PHASE 50, 51, 52)
+    # Define candidate ranker configurations
+    ranker_candidate_configs = {
+        "R0": {
+            "name": "R0_GraphDistanceBaseline",
+            "type": "linear",
+            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False),
+        },
+        "ExactFirst": {
+            "name": "ExactFirstCascaded",
+            "type": "cascaded",
+            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+        },
+        "OperationCascade": {
+            "name": "OperationAwareCascade",
+            "type": "operation_cascaded",
+            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+        },
+        "Coverage": {
+            "name": "CoverageDiversityRanker",
+            "type": "diversity",
+            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5),
+        },
+        "AnchorCoverageRRF": {
+            "name": "AnchorCoverageRRF_MultiObjective",
+            "type": "multi_objective_rrf",
+            "config": None,
+        },
+    }
+
     print("\n--- Evaluating Ranker Configurations on VALIDATION split (PHASE 50) ---")
     val_cands = splits_candidates["validation"]
     validation_results = {}
@@ -551,13 +602,8 @@ def execute_retrieval_suite():
         val_ranked: dict[str, list[RankedCandidate]] = {}
         for tid, vectors in val_cands.items():
             task_op = gt_tasks[tid]["category"]
-            if cfg_info["type"] == "multi_objective_rrf":
-                r = MultiObjectiveRanker(operation=task_op)
-                val_ranked[tid] = r.rank(vectors)
-            else:
-                profile = OperationRankerProfile.for_operation(task_op) if "Operation" in cfg_info["name"] else None
-                r = DeterministicRanker(cfg_info["config"], profile=profile)
-                val_ranked[tid] = r.rank(vectors)
+            r = build_ranker(cfg_key, operation=task_op)
+            val_ranked[tid] = r.rank(vectors)
 
         metrics = compute_split_metrics(val_ranked, gt_tasks)
         metrics["config_key"] = cfg_key
@@ -573,9 +619,14 @@ def execute_retrieval_suite():
 
     print(f"\nWinning Validation Configuration: '{best_config_name}' ({ranker_candidate_configs[best_config_name]['name']}) with score {best_objective_score:.4f}")
 
+    # Build provenance envelope
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
+
     # Produce selected_ranker_config.json (PHASE 51)
     selected_artifact = {
-        "run_id": env.run_id,
+        **envelope,
         "selected_configuration": best_config_name,
         "config_description": ranker_candidate_configs[best_config_name]["name"],
         "validation_objective_score": best_objective_score,
@@ -583,16 +634,32 @@ def execute_retrieval_suite():
         "selection_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "test_visibility": False,
         "all_candidate_configurations_evaluated": list(ranker_candidate_configs.keys()),
+        "all_candidate_results": validation_results,
         "selection_objective": "0.25*Macro_Recall + 0.25*Worst_Recall + 0.20*P@20_excl + 0.15*nDCG@50 + 0.15*Dep_MRR",
     }
     (env.results_root / "selected_ranker_config.json").write_text(json.dumps(selected_artifact, indent=2), encoding="utf-8")
-    print(f"Saved selected_ranker_config.json")
+    print("Saved selected_ranker_config.json")
+
+    # Evaluate and write baseline R0 on TEST split for Option B comparative contract evaluation
+    r0_test_ranked: dict[str, list[RankedCandidate]] = {}
+    for tid, vectors in splits_candidates["test"].items():
+        task_op = gt_tasks[tid]["category"]
+        r0 = build_ranker("R0", operation=task_op)
+        r0_test_ranked[tid] = r0.rank(vectors)
+    r0_test_metrics = compute_split_metrics(r0_test_ranked, gt_tasks)
+    r0_baseline_artifact = {
+        **envelope,
+        "split": "test",
+        "ranker_configuration": "R0_GraphDistanceBaseline",
+        "metrics": r0_test_metrics,
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+    (env.results_root / "ranker_baseline_r0.json").write_text(json.dumps(r0_baseline_artifact, indent=2), encoding="utf-8")
+    print(f"Saved ranker_baseline_r0.json (Baseline R0 P@50 excl: {r0_test_metrics['precision_at_50_excluding_target']:.4f})")
 
     # 5. Run winning configuration across DEV, VALIDATION, and TEST
     split_final_predictions: dict[str, dict[str, Any]] = {}
     split_final_metrics: dict[str, Any] = {}
-
-    winning_info = ranker_candidate_configs[best_config_name]
 
     for split in ("dev", "validation", "test"):
         cands_map = splits_candidates[split]
@@ -601,13 +668,8 @@ def execute_retrieval_suite():
 
         for tid, vectors in cands_map.items():
             task_op = gt_tasks[tid]["category"]
-            if winning_info["type"] == "multi_objective_rrf":
-                r = MultiObjectiveRanker(operation=task_op)
-                ranked = r.rank(vectors)
-            else:
-                profile = OperationRankerProfile.for_operation(task_op) if "Operation" in winning_info["name"] else None
-                r = DeterministicRanker(winning_info["config"], profile=profile)
-                ranked = r.rank(vectors)
+            r = build_ranker(best_config_name, operation=task_op)
+            ranked = r.rank(vectors)
 
             ranked_map[tid] = ranked
             dump_tasks[tid] = {
@@ -632,7 +694,7 @@ def execute_retrieval_suite():
 
         # Write raw prediction dump
         raw_pred_payload = {
-            "run_id": env.run_id,
+            **envelope,
             "split": split,
             "selected_config": best_config_name,
             "channel_counts": splits_channel_stats[split],
@@ -645,7 +707,7 @@ def execute_retrieval_suite():
 
         # Write result metrics
         result_payload = {
-            "run_id": env.run_id,
+            **envelope,
             "split": split,
             "selected_ranker_config": best_config_name,
             "metrics": split_metrics,
@@ -662,7 +724,7 @@ def execute_retrieval_suite():
 
         # Also write impact plane results (impact_{split}.json)
         impact_payload = {
-            "run_id": env.run_id,
+            **envelope,
             "split": split,
             "macro_pool_recall": split_metrics["macro_pool_recall"],
             "worst_task_pool_recall": split_metrics["worst_task_pool_recall"],
@@ -673,6 +735,44 @@ def execute_retrieval_suite():
         (env.results_root / f"impact_{split}.json").write_text(json.dumps(impact_payload, indent=2), encoding="utf-8")
 
         print(f"[{split.upper()}] Macro Recall: {split_metrics['macro_pool_recall']*100:.1f}%, Worst: {split_metrics['worst_task_pool_recall']*100:.1f}%, P@20(excl): {split_metrics['precision_at_20_excluding_target']*100:.1f}%, Dep MRR: {split_metrics['dependency_mrr']:.4f}, Silent Misses: {split_metrics['silent_misses']}")
+
+    # Holdout hygiene: semantic and file-overlap analysis across splits (Section 17)
+    dev_tasks = json.loads((env.dataset_root / "dev.json").read_text(encoding="utf-8"))["tasks"]
+    val_tasks = json.loads((env.dataset_root / "validation.json").read_text(encoding="utf-8"))["tasks"]
+    test_tasks = json.loads((env.dataset_root / "test.json").read_text(encoding="utf-8"))["tasks"]
+
+    def extract_meta(ts):
+        target_f = set()
+        target_s = set()
+        expected_f = set()
+        for t in ts:
+            sp = t.get("spec", {})
+            tf = t.get("target_file") or sp.get("target_file_hint") or ""
+            tsym = t.get("target_symbol") or sp.get("requested_symbol") or ""
+            if tf:
+                target_f.add(tf)
+            if tsym:
+                target_s.add(tsym)
+            for ef in gt_tasks.get(t["task_id"], {}).get("expected_files", []):
+                target_f.add(ef)
+        return {"target_files": target_f, "target_symbols": target_s, "expected_files": expected_f}
+
+    d_m = extract_meta(dev_tasks)
+    v_m = extract_meta(val_tasks)
+    t_m = extract_meta(test_tasks)
+
+    overlap_artifact = {
+        **envelope,
+        "dev_vs_test": {
+            "overlapping_target_files": sorted(list(d_m["target_files"].intersection(t_m["target_files"]))),
+            "overlapping_target_symbols": sorted(list(d_m["target_symbols"].intersection(t_m["target_symbols"]))),
+        },
+        "validation_vs_test": {
+            "overlapping_target_files": sorted(list(v_m["target_files"].intersection(t_m["target_files"]))),
+            "overlapping_target_symbols": sorted(list(v_m["target_symbols"].intersection(t_m["target_symbols"]))),
+        },
+    }
+    (env.results_root / "dataset_split_overlap.json").write_text(json.dumps(overlap_artifact, indent=2), encoding="utf-8")
 
     print("\nRetrieval execution COMPLETE.")
 

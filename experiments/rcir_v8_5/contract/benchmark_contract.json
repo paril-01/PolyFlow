@@ -36,6 +36,9 @@
     "requires_acceptance_transition": true,
     "allow_simulation": false
   },
+  "canonical_graph": {
+    "max_external_ratio": 0.0
+  },
   "decision_rules": {
     "option_a": {
       "description": "All primary impact, context, type-flow, and live agent execution gates satisfied on TEST split with zero simulation.",
@@ -46,7 +49,15 @@
       "description": "Substantial architectural progress on TEST split: macro recall >= 90%, P@50 improvement >= 15%, deterministic compiler, strictly obeying contract specifications.",
       "macro_pool_recall_min": 0.9,
       "worst_task_pool_recall_floor": 0.8,
-      "context_compiler_deterministic": true
+      "requires_determinism": true,
+      "requires_type_flow_gate": true,
+      "requires_canonicalization_gate": true,
+      "requires_budget_invariant": true,
+      "ranking_improvement": {
+        "metric": "precision_at_50_excluding_target",
+        "baseline_artifact": "experiments/rcir_v8_5/results/ranker_baseline_r0.json",
+        "min_relative_improvement": 0.15
+      }
     },
     "option_c": {
       "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required."

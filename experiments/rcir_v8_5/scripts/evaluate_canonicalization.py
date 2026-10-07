@@ -99,8 +99,11 @@ def evaluate_canonicalization():
     accuracy = (correct_exact + correct_unique_alias) / max(1, total)
     wrong_rate = wrong_resolution / max(1, total)
 
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     result_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "target_commit": env.target_repo_commit,
         "total_test_records": total,
         "correct_exact": correct_exact,

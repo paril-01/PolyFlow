@@ -300,3 +300,23 @@ Simulated database crash
 [RAW ERROR]      : 
 Simulated database crash
 ========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-07 14:40:00
+[MODULE/TAG]     : service (PYTHON)
+[SIMPLE SUMMARY] : Execution exception in @python[service] block.
+[RECOMMENDED FIX]: Review the raw stack trace below to pinpoint the failing line number.
+[DETAILS]        : In-Memory Native Execution Exception
+[RAW ERROR]      : 
+Simulated database crash
+========================================================================
+
+========================================================================
+[TIMESTAMP]      : 2026-10-07 14:40:15
+[MODULE/TAG]     : go_test (GO)
+[SIMPLE SUMMARY] : Execution timeout in @go[go_test] block.
+[RECOMMENDED FIX]: Increase timeout_ms in @contract or optimize heavy loops/external HTTP calls.
+[DETAILS]        : Go execution timed out after 15.0s
+[RAW ERROR]      : 
+
+========================================================================

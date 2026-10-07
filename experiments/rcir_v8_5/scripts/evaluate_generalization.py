@@ -43,11 +43,11 @@ def evaluate_generalization():
     php_verified = type_flow_res.exists() and cg_res.exists() and ret_res.exists()
     php_status = "IMPLEMENTED_VERIFIED" if php_verified else "IMPLEMENTED_UNVERIFIED"
 
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     generalization_data = {
-        "run_id": env.run_id,
-        "polyflow_commit": env.polyflow_commit,
-        "target_repo_commit": env.target_repo_commit,
-        "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        **envelope,
         "validation_status": "MEASURED_GENERALIZATION",
         "languages": {
             "php": {

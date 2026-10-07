@@ -7,7 +7,8 @@ This report establishes the baseline integrity and verification state for the **
 - **Target Repository**: `nextcloud/server`
 - **Verified Commit**: `da57df078d0808a7235a0177bd99d23c010b472e`
 - **Working Tree State**: `CLEAN`
-- **PolyFlow Baseline Commit**: `8a3610e8bec25de6aa545f5391967f851fa3efa7`
+- **PolyFlow Baseline Commit**: `d14daaff946b4ecdecd499add3db11f7457188a5`
+- **PolyFlow Dirty**: `True`
 - **Run ID**: `rcir-v8.5-primary`
 
 ## Sentinel File Verification
@@ -23,5 +24,5 @@ The single source root architecture enforces strict fail-fast verification on th
 - **Provenance Status**: `PASSED`
 - **Total Audited Tasks**: `16`
 - **Total Errors**: `0`
-- **Token Budget Invariant**: Satisfied (0 budget violations across all evaluated tasks)
+- **Token Budget Invariant**: Satisfied (0 budget violations)
 - **Source Availability**: 100% verified real source files; zero synthetic stubs.

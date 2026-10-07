@@ -190,11 +190,11 @@ def run_performance_benchmark():
     peak_rss = get_current_rss_mb()
     print(f"\nFinal Process RSS: {peak_rss} MB (Peak Delta: {peak_rss - start_rss:.2f} MB)")
 
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     benchmark_output = {
-        "run_id": env.run_id,
-        "polyflow_commit": env.polyflow_commit,
-        "target_repo_commit": env.target_repo_commit,
-        "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        **envelope,
         "validation_status": "MEASURED_PERFORMANCE",
         "graph_ingestion": {
             "node_count": len(cg.nodes),

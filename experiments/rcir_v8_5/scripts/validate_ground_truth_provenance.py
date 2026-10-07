@@ -144,8 +144,11 @@ def audit_provenance():
 
     # 4. Save results/ground_truth_provenance.json
     provenance_status = "PASSED" if not errors else "FAILED"
+    env.derive_run_id()
+    from provenance import build_provenance_envelope
+    envelope = build_provenance_envelope(env)
     result_payload = {
-        "run_id": env.run_id,
+        **envelope,
         "provenance_status": provenance_status,
         "target_commit": target_commit,
         "audited_commits": list(audited_commits),

@@ -1,17 +1,19 @@
 # RCIR v8.5 — Formal Architecture Decision & Final Assessment
 
 ## Formal Gate Decision
-- **Run Validity**: `VALID`
-- **Architecture Decision**: `OPTION_B_ACCEPTED`
-- **Integrity Gate**: `PASSED` (Manifest valid, git commits verified, source hashes bitwise identical, 0 budget violations)
+- **Run Validity**: `INVALID`
+- **Architecture Decision**: `NOT_EVALUATED`
+- **Contract Feasibility**: `INVALID_CONTRACT`
+- **Integrity Gate**: **FAILED**
 
 ## Decision Summary
-Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 100.0%, Worst Task 100.0%, Determinism: True, Type Flow 100.0% cov / 100.0% prec, 0 budget violations). Formal contract specifications strictly obeyed.
+Benchmark integrity gate failed with 17 violation(s). Run is invalid.
 
 ## Primary Gate Compliance
-- **Impact Gate**: **PASSED** (Macro Recall: 100.0% vs floor 90.0%, Worst Task: 100.0% vs floor 80.0%, Silent Misses: 0 vs ceiling 20)
-- **Context Gate**: **PASSED** (0 budget violations, 100% deterministic)
-- **Type Flow Gate**: **PASSED** (Coverage: 90.0%, Precision: 100.0%, Wrong Exact: 0.0%)
-- **Canonicalization Gate**: **PASSED** (0.0% wrong resolution)
-- **Edge Gate**: **ADVISORY_ONLY**
-- **Agent Gate**: **PASSED** (Live inference verified on qwen2.5-coder:1.5b)
+- **Impact Gate**: **PASSED** (Macro Recall: 100.0%, Worst Task: 100.0%, Silent Misses: 0)
+- **Ranking Gate**: **FAILED** (P@20: 8.0%, P@50: 3.6%, nDCG@50: 0.4971, MRR: 0.5428)
+- **Context Gate**: **PASSED** (Budget violations: 0, Determinism: NOT_MEASURED)
+- **Type Flow Gate**: **PASSED** (Coverage: 100.0%, Precision: 100.0%, Wrong Exact: 0.0%)
+- **Canonicalization Gate**: **PASSED**
+- **Edge Gate**: `ADVISORY_ONLY`
+- **Agent Gate**: **FAILED**

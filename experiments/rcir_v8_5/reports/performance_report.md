@@ -14,5 +14,5 @@
 
 ## Memory Footprint (RSS)
 - **Initial Process RSS**: `26.7 MB`
-- **Post-Graph RSS**: `456.99 MB`
-- **Peak RSS**: `464.07 MB`
+- **Post-Graph RSS**: `457.0 MB`
+- **Peak RSS**: `464.1 MB`

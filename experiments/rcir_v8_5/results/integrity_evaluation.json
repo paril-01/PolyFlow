@@ -1,13 +1,49 @@
 {
-  "run_id": "rcir-v8.5-primary",
-  "status": "PASSED",
-  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
-  "polyflow_commit": "8a3610e8bec25de6aa545f5391967f851fa3efa7",
-  "manifest_valid": true,
-  "run_id_consistent": true,
+  "run_id": "rcir-v8.5.1-02806e449cf86d08",
+  "manifest_hash": "82a18139e85eb009a8b185761dd395ca5895fd759f2e791b5edfd11ad9277d13",
+  "polyflow_commit": "9f934f40be021651546671ec4e009591650c61d2",
+  "polyflow_dirty": true,
+  "polyflow_worktree_diff_hash": "8c47da978f3081cc67a640cd60c563b2b2d3d69c5aec4a80da7757ad578dfc5c",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "contract_hash": "1255d0698e97bb52f3a3850de29ac03df6bfa7260dddbaa2eda4cbcd6c4666fd",
+  "dataset_hashes": {
+    "dev": "3cbf592d0f89833398987b8e2d735fe6591757333afa3ad834e0029038e98215",
+    "validation": "23e760823e664205c83f9a96111787826eab0b1e15d0d7464c20aa5de14b2db6",
+    "test": "1353982f387eefb954bcb33dd5b2074b31180c1db063240abe67950ea16cbde8"
+  },
+  "ground_truth_hash": "f17b3c00155ccef829b1bdf447aa0ac1d8da614e20f3ef99f421c5dc321d96b8",
+  "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
+  "config_hashes": {
+    "candidate_config": "6692dd665ac74988f2cfcc795f4e6ff9a60d8fcda6239920a061befdc7b33059",
+    "ranker_config": "f25c402f7f6ac96f722803693b43d64c1006301dfe65fec45c73be5dd860bd20",
+    "context_config": "c7a5949d22327050c9b6f99397f44bc08a165bdc7a56b035704fff96261ed763",
+    "typeflow_config": "9763cc63eb2c75369b4e32afd5178fbd575acfd2441d2b11c39f91b6762bd2a8"
+  },
+  "created_at": "2026-10-07T09:15:22Z",
+  "status": "FAILED",
+  "manifest_valid": false,
+  "run_id_consistent": false,
   "provenance_passed": true,
   "token_budget_invariant_passed": true,
   "unexpected_external_ratio_zero": true,
-  "failures": [],
-  "evaluated_at": "2026-10-06T19:33:20Z"
+  "failures": [
+    "Artifact ground_truth_provenance.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact canonical_graph_integrity.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact canonicalization_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact edge_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact type_flow_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact impact_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact ranker_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact context_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact determinism_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'manifest_hash'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'polyflow_dirty'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'contract_hash'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'dataset_hashes'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'graph_hash'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'config_hashes'",
+    "Artifact determinism_evaluation.json: Missing required provenance field: 'created_at'",
+    "PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)"
+  ],
+  "evaluated_at": "2026-10-07T09:15:22Z"
 }

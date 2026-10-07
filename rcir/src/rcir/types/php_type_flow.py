@@ -305,45 +305,86 @@ class PHPTypeFlowAnalyzer:
                             ctx.properties[p_name] = binding
 
             # Line-by-line forward simulation (Phase 27, 28, 29, F07)
+            # Forward simulation with normalized statements (Phase 27, 28, 29, F07, v8.5.1 CFG)
             body_lines = method_body.splitlines()
             current_env = dict(env)
             branch_stack: list[dict[str, Any]] = []
             closure_stack: list[dict[str, Any]] = []
             current_brace_depth = 0
 
+            # Decompose lines into sequential statement units
+            statement_units: list[tuple[int, str]] = []
             for line_idx, raw_line in enumerate(body_lines):
-                line_no = body_start_line + line_idx
-                stripped = raw_line.strip()
+                l_no = body_start_line + line_idx
+                stripped_line = raw_line.strip()
+                if not stripped_line:
+                    continue
 
-                # Clean comments/strings for brace counting
+                # Strip inline comments for statement normalization
+                clean = re.sub(r'//.*$', '', stripped_line)
+                clean = re.sub(r'/\*.*?\*/', '', clean).strip()
+                if not clean:
+                    continue
+
+                # 1. Normalize } else { and } elseif (...) {
+                norm = re.sub(r'}\s*(else\s*if\b|elseif\b|else\b)', r'}\n\1', clean)
+
+                # 2. Normalize one-line branch with braces: if (...) { ... }
+                ol_brace = re.match(r'^(if\s*\([^)]+\)\s*\{)(.+)(\})$', norm)
+                if ol_brace:
+                    norm = f"{ol_brace.group(1)}\n{ol_brace.group(2).strip()}\n{ol_brace.group(3)}"
+
+                # 3. Normalize one-line guard without braces: if (...) return/throw;
+                ol_guard = re.match(r'^(if\s*\([^)]+\))\s*(return\b[^;]*;|throw\b[^;]*;)$', norm)
+                if ol_guard:
+                    norm = f"{ol_guard.group(1)} {{\n{ol_guard.group(2)}\n}}"
+
+                for part in norm.splitlines():
+                    p = part.strip()
+                    if p:
+                        statement_units.append((l_no, p))
+
+            for u_idx, (line_no, stripped) in enumerate(statement_units):
                 clean_braces = re.sub(r'//.*$', '', stripped)
                 clean_braces = re.sub(r'/\*.*?\*/', '', clean_braces)
                 clean_braces = re.sub(r"'(?:\\.|[^'])*'", "''", clean_braces)
                 clean_braces = re.sub(r'"(?:\\.|[^"])*"', '""', clean_braces)
 
-                # Check if this line closes any scopes before processing new statements
-                if stripped.startswith("}") or "}" in clean_braces:
-                    closes_count = clean_braces.count("}")
-                    opens_count = clean_braces.count("{")
+                closes_count = clean_braces.count("}")
+                opens_count = clean_braces.count("{")
 
-                    # Pop closure scopes if we are closing a closure
+                # Lookahead to see if next statement is else or elseif (i.e. branch transition)
+                next_is_else_or_elseif = False
+                if u_idx + 1 < len(statement_units):
+                    next_stmt = statement_units[u_idx + 1][1]
+                    if re.match(r'^(?:else\s*if|elseif|else)\b', next_stmt):
+                        next_is_else_or_elseif = True
+
+                # Process closing braces
+                if closes_count > 0:
+                    # Pop closures if closing a closure scope
                     while closure_stack and (current_brace_depth - closes_count) < closure_stack[-1]["open_depth"]:
                         top_closure = closure_stack.pop()
-                        # Restore outer environment: closure parameters do not leak out (F07)
                         current_env = top_closure["saved_env"]
 
-                    # Pop or advance branch scopes
-                    while branch_stack and (current_brace_depth - closes_count) < branch_stack[-1]["open_depth"]:
+                    # Process branch stack
+                    while branch_stack and (current_brace_depth - closes_count) <= branch_stack[-1]["open_depth"]:
+                        # If this closing brace is immediately followed by else/elseif, transition without popping!
+                        if next_is_else_or_elseif:
+                            br = branch_stack[-1]
+                            if not br.get("has_early_return", False):
+                                br["branch_exits"].append(dict(current_env))
+                            break
+
                         br = branch_stack.pop()
                         if not br.get("has_early_return", False):
                             br["branch_exits"].append(dict(current_env))
 
-                        if br.get("has_early_return", False) and not br["branch_exits"]:
-                            # Guard clause: early return occurred in the 'if' body.
+                        if br.get("has_early_return", False) and not br.get("in_else", False) and not br["branch_exits"]:
+                            # Guard clause: early return occurred in the 'if' body with no surviving exits.
                             # Surviving path is when condition was FALSE!
                             surviving_env = dict(br["pre_branch_env"])
                             if br["is_negated"] and br["narrowed_var"] and br["narrowed_type"]:
-                                # if (!($x instanceof Foo)) { return; } -> after if, $x is Foo!
                                 surviving_env[br["narrowed_var"]] = TypeBinding(
                                     {br["narrowed_type"]},
                                     TypeResolutionConfidence.PROVEN_EXACT,
@@ -355,7 +396,7 @@ class PHPTypeFlowAnalyzer:
                         else:
                             # Join all surviving paths + pre_branch_env if if-only branch
                             all_paths = list(br["branch_exits"])
-                            if not stripped.startswith("else") and br["pre_branch_env"] not in all_paths:
+                            if not br.get("in_else", False) and br["pre_branch_env"] not in all_paths:
                                 all_paths.append(dict(br["pre_branch_env"]))
 
                             if all_paths:
@@ -385,16 +426,16 @@ class PHPTypeFlowAnalyzer:
 
                     current_brace_depth += (opens_count - closes_count)
                 else:
-                    current_brace_depth += clean_braces.count("{")
+                    current_brace_depth += opens_count
 
-                # Inline PHPDoc @var inside method body (Phase 35)
+                # Inline PHPDoc @var
                 var_doc_m = re.search(r'@var\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', stripped)
                 if var_doc_m:
                     v_type = self.resolve_type_fqn(var_doc_m.group(1), ctx)
                     v_name = var_doc_m.group(2)
                     current_env[v_name] = TypeBinding({v_type}, TypeResolutionConfidence.HEURISTIC_INFERRED, ["inline_phpdoc_var"])
 
-                # Closure parameter handling with lexical isolation (F07)
+                # Closure parameter handling with lexical isolation
                 closure_m = re.search(r'function\s*\(([^)]*)\)', stripped)
                 if closure_m:
                     saved_outer_env = dict(current_env)
@@ -414,20 +455,38 @@ class PHPTypeFlowAnalyzer:
                         "saved_env": saved_outer_env,
                     })
 
-                # Branch points: if / elseif / else with condition polarity (F07)
+                # Arrow functions: fn(...) => ...
+                arrow_saved_env = None
+                arrow_m = re.search(r'fn\s*\(([^)]*)\)\s*(?:use\s*\([^)]*\))?\s*=>', stripped)
+                if arrow_m:
+                    arrow_saved_env = dict(current_env)
+                    params_raw = arrow_m.group(1).strip()
+                    if params_raw:
+                        for ap in params_raw.split(","):
+                            a_match = re.search(r'(?:([A-Za-z0-9_\\]+)\s+)?\$([A-Za-z0-9_]+)', ap.strip())
+                            if a_match and a_match.group(2):
+                                a_name = a_match.group(2)
+                                if a_match.group(1):
+                                    a_type = self.resolve_type_fqn(a_match.group(1), ctx)
+                                    current_env[a_name] = TypeBinding({a_type}, TypeResolutionConfidence.PROVEN_EXACT, ["arrow_param"])
+                                else:
+                                    current_env[a_name] = TypeBinding(set(), TypeResolutionConfidence.UNKNOWN, ["arrow_param"])
+
+                # Branch points: if / elseif / else
                 if re.match(r'^if\s*\(', stripped):
                     pre_branch = dict(current_env)
                     neg_inst_m = re.search(r'!\s*\(?\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
                     pos_inst_m = re.search(r'(?<![!])\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
 
                     br_record: dict[str, Any] = {
-                        "open_depth": current_brace_depth,
+                        "open_depth": current_brace_depth - opens_count,
                         "pre_branch_env": pre_branch,
                         "is_negated": False,
                         "narrowed_var": None,
                         "narrowed_type": None,
                         "branch_exits": [],
                         "has_early_return": False,
+                        "in_else": False,
                     }
 
                     if neg_inst_m:
@@ -449,18 +508,20 @@ class PHPTypeFlowAnalyzer:
                 elif re.match(r'^(?:else\s*if|elseif)\s*\(', stripped):
                     if branch_stack:
                         br = branch_stack[-1]
-                        if not br.get("has_early_return", False):
-                            br["branch_exits"].append(dict(current_env))
                         current_env = dict(br["pre_branch_env"])
                         br["has_early_return"] = False
+                        pos_inst_m = re.search(r'(?<![!])\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+                        if pos_inst_m:
+                            v_name = pos_inst_m.group(1)
+                            t_name = self.resolve_type_fqn(pos_inst_m.group(2), ctx)
+                            current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
 
-                elif stripped.startswith("else"):
+                elif re.match(r'^else\b', stripped):
                     if branch_stack:
                         br = branch_stack[-1]
-                        if not br.get("has_early_return", False):
-                            br["branch_exits"].append(dict(current_env))
                         current_env = dict(br["pre_branch_env"])
                         br["has_early_return"] = False
+                        br["in_else"] = True
                         if br["is_negated"] and br["narrowed_var"] and br["narrowed_type"]:
                             current_env[br["narrowed_var"]] = TypeBinding(
                                 {br["narrowed_type"]},
@@ -548,6 +609,10 @@ class PHPTypeFlowAnalyzer:
                         confidence=conf,
                         evidence=ev,
                     ))
+
+                # If an arrow function was evaluated, restore outer environment
+                if arrow_saved_env is not None:
+                    current_env = arrow_saved_env
 
         return call_sites
 
