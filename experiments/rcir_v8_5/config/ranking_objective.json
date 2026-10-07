@@ -1,0 +1,11 @@
+{
+  "config_version": "8.5.2",
+  "objective_formula": "0.25*Macro_Recall + 0.25*Worst_Recall + 0.20*P@20_excl + 0.15*nDCG@50 + 0.15*Dep_MRR",
+  "weights": {
+    "macro_pool_recall": 0.25,
+    "worst_task_pool_recall": 0.25,
+    "precision_at_20_excluding_target": 0.2,
+    "graded_ndcg_at_50": 0.15,
+    "dependency_mrr": 0.15
+  }
+}

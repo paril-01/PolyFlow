@@ -59,10 +59,22 @@ jobs:
       run: |
         python experiments/rcir_v8_5/scripts/evaluate_determinism.py
 
+    - name: Evaluate Generalization Readiness
+      run: |
+        python experiments/rcir_v8_5/scripts/evaluate_generalization.py
+
     - name: Evaluate Machine Contract Gates
       run: |
         python experiments/rcir_v8_5/scripts/evaluate_gates.py
 
+    - name: Generate Reports
+      run: |
+        python experiments/rcir_v8_5/scripts/generate_reports.py
+
     - name: Validate Report Consistency
       run: |
         python experiments/rcir_v8_5/scripts/validate_report_consistency.py
+
+    - name: Scan Run Consistency
+      run: |
+        python experiments/rcir_v8_5/scripts/scan_run_consistency.py

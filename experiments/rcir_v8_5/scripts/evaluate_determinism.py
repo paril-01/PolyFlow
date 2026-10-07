@@ -104,6 +104,25 @@ def evaluate_determinism():
     print(f"Target Repo: {env.target_repo_root} (Commit: {env.target_repo_commit})")
     print(f"Run ID: {env.run_id}")
 
+    # Load selected ranker config first (Issue 47)
+    selected_ranker_path = env.results_root / "selected_ranker_config.json"
+    if not selected_ranker_path.exists():
+        raise FileNotFoundError(
+            f"Missing selected_ranker_config.json at {selected_ranker_path}. "
+            "Retrieval suite must execute before evaluating determinism."
+        )
+
+    sel_data = json.loads(selected_ranker_path.read_text(encoding="utf-8"))
+    selected_config_name = sel_data.get("selected_configuration")
+    if not selected_config_name:
+        raise ValueError("selected_ranker_config.json missing 'selected_configuration' field")
+
+    # Hash the full serialized configuration parameters (Issue 47)
+    selected_config_hash = hashlib.sha256(
+        json.dumps(sel_data, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    print(f"Selected Ranker Configuration: '{selected_config_name}' (Config Hash: {selected_config_hash[:16]}...)")
+
     # Load canonical graph
     print("Loading canonical graph...")
     t0 = time.time()
@@ -112,19 +131,6 @@ def evaluate_determinism():
     cg = CanonicalGraph.from_legacy_dict(raw_graph, target_repo_root=env.target_repo_root)
     total_edges = sum(len(edges) for edges in cg.outgoing_edges.values())
     print(f"Graph loaded: {len(cg.nodes)} nodes, {total_edges} edges in {time.time()-t0:.2f}s")
-
-    # Load selected ranker config
-    selected_ranker_path = env.results_root / "selected_ranker_config.json"
-    selected_config_name = "R0"
-    if selected_ranker_path.exists():
-        try:
-            sel_data = json.loads(selected_ranker_path.read_text(encoding="utf-8"))
-            selected_config_name = sel_data.get("selected_configuration", "R0")
-        except Exception:
-            pass
-
-    selected_config_hash = hashlib.sha256(selected_config_name.encode("utf-8")).hexdigest()
-    print(f"Selected Ranker Configuration: '{selected_config_name}' (Config Hash: {selected_config_hash[:12]}...)")
 
     # Select representative tasks (1 DEV, 1 VAL, 1 TEST)
     with open(env.ground_truth_root / "ground_truth.json", "r", encoding="utf-8") as f:
@@ -227,6 +233,8 @@ print("SEED_OUTPUT:" + json.dumps(out))
             print(f"  Warning: Subprocess for seed {seed} exited with code {proc.returncode}: {proc.stderr[:100]}")
 
     process_level_det = False
+    process_level_hashseed_status = "NOT_MEASURED"
+    process_level_det = False
     if len(hashseed_results) == len(seeds_to_test):
         prompt_hashes_across_seeds = [r["prompt_hash"] for r in hashseed_results.values()]
         cand_hashes_across_seeds = [r["candidate_hash"] for r in hashseed_results.values()]
@@ -236,13 +244,15 @@ print("SEED_OUTPUT:" + json.dumps(out))
             and len(set(cand_hashes_across_seeds)) == 1
             and len(set(ranked_hashes_across_seeds)) == 1
         )
+        process_level_hashseed_status = "PASSED" if process_level_det else "FAILED"
         print(f"Process-level PYTHONHASHSEED match: {process_level_det} (Tested seeds: {seeds_to_test})")
     else:
-        # If subprocess environment has permission/path constraints, evaluate in-process variance
-        process_level_det = all_tasks_deterministic
-        print("Subprocess execution constrained; in-process verified.")
+        # Issue 46: Do NOT convert subprocess failure into a silent pass
+        process_level_det = False
+        process_level_hashseed_status = "NOT_MEASURED"
+        print("Subprocess execution constrained; reporting process_level_hashseed_status = 'NOT_MEASURED'")
 
-    overall_deterministic = all_tasks_deterministic and process_level_det
+    overall_deterministic = all_tasks_deterministic and (process_level_hashseed_status == "PASSED")
 
     env.derive_run_id()
     from provenance import build_provenance_envelope
@@ -257,6 +267,7 @@ print("SEED_OUTPUT:" + json.dumps(out))
         "tasks_evaluated": len(results_per_task),
         "is_deterministic": overall_deterministic,
         "process_level_hashseed_verified": process_level_det,
+        "process_level_hashseed_status": process_level_hashseed_status,
         "pipeline_stages_verified": [
             "candidate_discovery",
             "multi_objective_ranking",

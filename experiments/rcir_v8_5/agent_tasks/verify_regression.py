@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Optional, Tuple
 
 
 def check_php_syntax(file_path: Path) -> Tuple[bool, str]:
@@ -105,14 +106,16 @@ def run_regression_check(worktree_root: Path) -> int:
 
     php_bin = shutil.which("php")
     if not php_bin:
-        print(f"REGRESSION_NOT_MEASURED: Full phpunit suite not executable. Syntax check: {msg}")
+        # Issue 16: Return code 3 = NOT_MEASURED when PHP runtime is not available
+        print(f"REGRESSION_NOT_MEASURED: PHP runtime not installed. Delimiter syntax check: {msg}")
+        return 3
     else:
+        # Check targeted controller test if phpunit is available
         print(f"PASS: Regression syntax checks passed via {msg}")
-
-    return 0
+        return 0
 
 
 if __name__ == "__main__":
-    from typing import Tuple
     root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".")
     sys.exit(run_regression_check(root))
+

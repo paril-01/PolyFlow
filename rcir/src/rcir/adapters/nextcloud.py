@@ -105,18 +105,25 @@ class NextcloudSourceDerivedAdapter:
         ctrl_match = re.search(r"([A-Za-z0-9_]+)Controller\.php$", clean_fp)
         target_ctrl = ctrl_match.group(1).lower() if ctrl_match else ""
 
-        # Check for route registration of this controller
+        # Check for route registration of this controller precisely (Issue 24 & 25)
         has_route = False
         span = "routes_declaration"
         for line_no, line in enumerate(content.splitlines(), start=1):
             line_lower = line.lower()
-            if target_ctrl and (f"'{target_ctrl}'" in line_lower or f'"{target_ctrl}"' in line_lower or target_ctrl in line_lower):
-                has_route = True
-                span = f"line {line_no}: {line.strip()}"
-                break
-            elif "routes" in line_lower and "url" in line_lower:
-                has_route = True
-                span = f"line {line_no}"
+            if target_ctrl:
+                # Precise controller route registration matching:
+                # e.g., 'name' => 'api#getThumbnail', 'controller' => 'api', 'api#', or target_ctrl
+                is_ctrl_route = (
+                    f"'{target_ctrl}#" in line_lower
+                    or f'"{target_ctrl}#' in line_lower
+                    or f"'{target_ctrl}'" in line_lower
+                    or f'"{target_ctrl}"' in line_lower
+                    or f"#{target_ctrl}" in line_lower
+                )
+                if is_ctrl_route:
+                    has_route = True
+                    span = f"line {line_no}: {line.strip()}"
+                    break
 
         if has_route:
             matches.append(
@@ -136,12 +143,12 @@ class NextcloudSourceDerivedAdapter:
         event_class_name: str,
         cg_nodes: Dict[str, Any],
     ) -> List[SourceEvidenceMatch]:
-        """Discover event dispatchers/listeners by inspecting source files for event usage."""
+        """Discover event dispatchers/listeners by inspecting source files for event usage (Issues 26 & 27)."""
         matches: List[SourceEvidenceMatch] = []
+        seen_keys: set[tuple[str, str, str]] = set()
         simple_name = event_class_name.split("\\")[-1]
 
         # Scan candidate nodes from canonical graph for event references
-        # Prioritize files in lib/private/Files/Node or matching subsystem
         for node_id, node in cg_nodes.items():
             fp = node.file.replace("\\", "/")
             if not fp.endswith(".php"):
@@ -155,26 +162,68 @@ class NextcloudSourceDerivedAdapter:
             except Exception:
                 continue
 
-            # Check if this source file constructs or dispatches the event
-            pattern = re.compile(
-                r"\b(new\s+" + re.escape(simple_name) +
-                r"|dispatchTyped\([^)]*" + re.escape(simple_name) +
-                r"|dispatch\([^)]*" + re.escape(simple_name) +
-                r"|" + re.escape(simple_name) + r"::class)\b"
+            if simple_name not in content:
+                continue
+
+            # Separate dispatch invocations from construction and listener references (Issue 26)
+            dispatch_pattern = re.compile(
+                r"\b(dispatchTyped\s*\([^)]*" + re.escape(simple_name) +
+                r"|dispatch\s*\([^)]*" + re.escape(simple_name) +
+                r"|emit\s*\([^)]*" + re.escape(simple_name) +
+                r"|trigger\s*\([^)]*" + re.escape(simple_name) +
+                r"|notify\s*\([^)]*" + re.escape(simple_name) +
+                r"|->dispatch(?:Typed)?\s*\(\s*\$" +
+                r")"
             )
-            found = pattern.search(content)
-            if found:
-                line_no = content[:found.start()].count("\n") + 1
-                span = f"line {line_no}: {found.group(0)}"
-                matches.append(
-                    SourceEvidenceMatch(
-                        file_path=fp,
-                        entity_id=node_id,
-                        source_span=span,
-                        evidence_type="event_dispatch",
-                        confidence=0.80,
+            construct_pattern = re.compile(r"\bnew\s+" + re.escape(simple_name) + r"\b")
+            class_ref_pattern = re.compile(r"\b" + re.escape(simple_name) + r"::class\b")
+
+            ev_type = None
+            conf = 0.80
+            found_span = ""
+
+            # Check if source dispatches the event
+            # Also handle $event = new Event(); $this->dispatcher->dispatchTyped($event);
+            has_dispatch_call = bool(re.search(r"->dispatch(?:Typed)?\s*\(", content))
+            has_construct = bool(construct_pattern.search(content))
+            direct_dispatch = dispatch_pattern.search(content)
+
+            if direct_dispatch or (has_construct and has_dispatch_call):
+                ev_type = "event_dispatch"
+                conf = 0.85
+                m = direct_dispatch or construct_pattern.search(content)
+                if m:
+                    line_no = content[:m.start()].count("\n") + 1
+                    found_span = f"line {line_no}: {m.group(0)}"
+            elif has_construct:
+                ev_type = "event_construct"
+                conf = 0.70
+                m = construct_pattern.search(content)
+                if m:
+                    line_no = content[:m.start()].count("\n") + 1
+                    found_span = f"line {line_no}: {m.group(0)}"
+            elif class_ref_pattern.search(content):
+                ev_type = "event_listener"
+                conf = 0.65
+                m = class_ref_pattern.search(content)
+                if m:
+                    line_no = content[:m.start()].count("\n") + 1
+                    found_span = f"line {line_no}: {m.group(0)}"
+
+            if ev_type and found_span:
+                # Deduplicate by (file, relation, source_span) (Issue 27)
+                dedup_key = (fp, ev_type, found_span)
+                if dedup_key not in seen_keys:
+                    seen_keys.add(dedup_key)
+                    matches.append(
+                        SourceEvidenceMatch(
+                            file_path=fp,
+                            entity_id=node_id,
+                            source_span=found_span,
+                            evidence_type=ev_type,
+                            confidence=conf,
+                        )
                     )
-                )
 
         return matches
 
@@ -184,7 +233,7 @@ class NextcloudSourceDerivedAdapter:
         target_fp: str,
         cg_nodes: Dict[str, Any],
     ) -> List[SourceEvidenceMatch]:
-        """Discover config/DI dependencies by inspecting target file for config usage."""
+        """Discover config/DI dependencies dynamically without static tables (Issue 28)."""
         matches: List[SourceEvidenceMatch] = []
         clean_fp = target_fp.replace("\\", "/").strip("/")
         full_p = repo_root / clean_fp
@@ -192,30 +241,64 @@ class NextcloudSourceDerivedAdapter:
             return matches
 
         content = full_p.read_text(encoding="utf-8", errors="ignore")
+        seen_files: set[str] = set()
 
-        config_signals = [
-            ("SystemConfig", "lib/private/SystemConfig.php", "php://OC\\SystemConfig"),
-            ("AllConfig", "lib/private/AllConfig.php", "php://OC\\AllConfig"),
-            ("Server", "lib/private/Server.php", "php://OC\\Server"),
-            ("UserConfig", "apps/files/lib/Service/UserConfig.php", "php://OCA\\Files\\Service\\UserConfig"),
-            ("IConfig", "lib/public/IConfig.php", "php://OCP\\IConfig"),
-        ]
-
-        for signal_name, rel_path, ent_id in config_signals:
-            if re.search(r"\b" + re.escape(signal_name) + r"\b", content):
-                f_full = repo_root / rel_path
-                if f_full.exists():
-                    matches.append(
-                        SourceEvidenceMatch(
-                            file_path=rel_path,
-                            entity_id=ent_id,
-                            source_span=f"referenced {signal_name} in {clean_fp}",
-                            evidence_type="config_reads",
-                            confidence=0.80,
+        # 1. Dynamic discovery from CanonicalGraph nodes (Issue 28)
+        if cg_nodes:
+            for node_id, node in cg_nodes.items():
+                sym = getattr(node, "symbol", "") or ""
+                fp = (getattr(node, "file", "") or "").replace("\\", "/")
+                if not fp or fp in seen_files:
+                    continue
+                # Check for config/server/settings related interfaces and classes
+                if re.search(r"(?:Config|Server|Settings)\b", sym):
+                    if re.search(r"\b" + re.escape(sym) + r"\b", content):
+                        seen_files.add(fp)
+                        matches.append(
+                            SourceEvidenceMatch(
+                                file_path=fp,
+                                entity_id=node_id,
+                                source_span=f"referenced {sym} in {clean_fp}",
+                                evidence_type="config_reads",
+                                confidence=0.80,
+                            )
                         )
-                    )
+
+        # 2. Dynamic filesystem inspection for referenced config classes
+        if not matches:
+            # Detect referenced class names ending with Config or named Server in target content
+            potential_symbols = set(re.findall(r"\b([A-Z][A-Za-z0-9]*(?:Config|Server|Settings))\b", content))
+            for sym in potential_symbols:
+                # Search dynamically for PHP files defining this symbol under repo_root
+                candidate_paths = [
+                    repo_root / "lib" / "public" / f"{sym}.php",
+                    repo_root / "lib" / "private" / f"{sym}.php",
+                    repo_root / "lib" / "private" / "Server.php" if sym == "Server" else None,
+                ]
+                # Also search in the same app if target is in an app
+                if clean_fp.startswith("apps/"):
+                    app_name = clean_fp.split("/")[1]
+                    candidate_paths.append(repo_root / "apps" / app_name / "lib" / "Service" / f"{sym}.php")
+                    candidate_paths.append(repo_root / "apps" / app_name / "lib" / f"{sym}.php")
+
+                for cand in candidate_paths:
+                    if cand and cand.exists():
+                        rel = str(cand.relative_to(repo_root)).replace("\\", "/")
+                        if rel not in seen_files:
+                            seen_files.add(rel)
+                            matches.append(
+                                SourceEvidenceMatch(
+                                    file_path=rel,
+                                    entity_id=f"php://{sym}",
+                                    source_span=f"referenced {sym} in {clean_fp}",
+                                    evidence_type="config_reads",
+                                    confidence=0.80,
+                                )
+                            )
+                            break
 
         return matches
+
 
     @staticmethod
     def discover_tests(

@@ -1,0 +1,12 @@
+{
+  "config_version": "8.5.2",
+  "relocation_window_lines": 5,
+  "confidence_thresholds": {
+    "exact": 1.0,
+    "graph_compatible": 0.9,
+    "adjudicated_compatible": 0.8,
+    "heuristic": 0.5
+  },
+  "derive_method_summaries_from_source": true,
+  "allow_manual_seeds_in_formal_eval": false
+}

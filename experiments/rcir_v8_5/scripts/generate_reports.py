@@ -457,7 +457,12 @@ Five distinct ranker configurations were evaluated on the VALIDATION split:
     # 9. agent_validation_report.md
     # -------------------------------------------------------------------------
     provider_info = agent_ab.get("provider", {})
-    provider_status = provider_info.get("status", "NOT_MEASURED")
+    provider_status = provider_info.get("status") or agent_ab.get("validation_status", "NOT_MEASURED")
+    if agent_ab.get("validation_status") == "NOT_MEASURED":
+        provider_status = "UNAVAILABLE / NOT_MEASURED"
+    elif provider_info.get("is_simulation", False):
+        provider_status = "SIMULATION_FALLBACK"
+
     model_name = provider_info.get("model", "NOT_MEASURED")
     param_size = provider_info.get("parameter_size", "NOT_MEASURED")
 
@@ -475,13 +480,15 @@ Five distinct ranker configurations were evaluated on the VALIDATION split:
     toks_a = str(ag_a.get("avg_tokens", "NOT_MEASURED"))
     toks_b = str(ag_b.get("avg_tokens", "NOT_MEASURED"))
 
-    # Turn budget breakdown if available
+    # Turn budget breakdown if available (Issue 43: extract turn_budgets sub-dict)
     turn_budget_section = ""
-    if agent_budget:
+    tb_dict = agent_budget.get("turn_budgets", agent_budget)
+    if tb_dict:
         turn_budget_section = "\n## Turn Budget Matrix Evaluation\n"
-        for budget_key, b_data in agent_budget.items():
+        for budget_key, b_data in tb_dict.items():
             if isinstance(b_data, dict):
                 turn_budget_section += f"- **Budget {budget_key} Turns**: Evaluated: `{b_data.get('trials_evaluated', 'NOT_MEASURED')}`, Completion Rate: `{b_data.get('completion_rate', 'NOT_MEASURED')}`\n"
+
 
     (target_dir / "agent_validation_report.md").write_text(f"""# RCIR v8.5 — Live Coding Agent Validation Report
 

@@ -3,7 +3,7 @@
 ## Provider Verification
 - **Inference Mode**: Live LLM Execution (Zero Simulation)
 - **Model**: `qwen2.5-coder:1.5b` (1.5B)
-- **Provider Status**: `NOT_MEASURED`
+- **Provider Status**: `MEASURED_AGENT_VALIDATION`
 - **Execution Harness**: `ReActAgentRunner` + `RepoToolEnvironment` + `ConcreteRCIRContextProvider`
 
 ## Isolated Worktree Trials
@@ -18,11 +18,12 @@ Trials were executed in isolated git worktrees with strict pre/post acceptance t
 | **Trials Evaluated** | `1` | `1` | — |
 | **Completed Count** | `0` | `0` | — |
 | **Completion Rate** | `0.0%` | `0.0%` | — |
-| **Mean Turns** | `7.0` | `8.0` | — |
-| **Mean Tokens** | `7833.0` | `13230.0` | — |
+| **Mean Turns** | `2.0` | `2.0` | — |
+| **Mean Tokens** | `2166.0` | `1976.0` | — |
 
 ## Turn Budget Matrix Evaluation
-- **Budget turn_budgets Turns**: Evaluated: `NOT_MEASURED`, Completion Rate: `NOT_MEASURED`
+- **Budget 5 Turns**: Evaluated: `2`, Completion Rate: `0.0`
+- **Budget 8 Turns**: Evaluated: `2`, Completion Rate: `0.0`
 
 ## Scientific Integrity Findings
 All trial manifests, logs, git patches, and gatekeeper decisions are verified raw without synthetic padding. If provider was unreachable or trials failed, no passing metrics are fabricated.

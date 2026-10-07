@@ -2,7 +2,7 @@
 
 ## Language Capability Matrix
 - **PHP**: `IMPLEMENTED_VERIFIED`
-  - Verified on Nextcloud Server with real source-order type flow (100.0% coverage, 100.0% precision).
+  - Verified on Nextcloud Server with real source-order type flow (90.0% coverage, 57.1% precision).
 - **TypeScript**: `PARTIAL`
   - Route mapping and boundary export analysis functional.
 - **Python**: `PLANNED`

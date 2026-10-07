@@ -1,101 +1,93 @@
 {
-  "run_id": "rcir-v8.5.1-02806e449cf86d08",
-  "manifest_hash": "82a18139e85eb009a8b185761dd395ca5895fd759f2e791b5edfd11ad9277d13",
-  "polyflow_commit": "9f934f40be021651546671ec4e009591650c61d2",
+  "run_id": "rcir-v8.5.2-3ddfcbf688cd4401",
+  "manifest_hash": "e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247",
+  "polyflow_commit": "48c6f6170891173e46582466c248e9d882b693a5",
   "polyflow_dirty": true,
-  "polyflow_worktree_diff_hash": "8c47da978f3081cc67a640cd60c563b2b2d3d69c5aec4a80da7757ad578dfc5c",
+  "polyflow_worktree_diff_hash": "735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18",
   "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
-  "contract_hash": "1255d0698e97bb52f3a3850de29ac03df6bfa7260dddbaa2eda4cbcd6c4666fd",
+  "target_repo_dirty": false,
+  "target_repo_diff_hash": "",
+  "contract_hash": "3acab3058b2a4f83cc06ab5da5c5b145a4fbf95ff33a2a3891357414607cc61e",
   "dataset_hashes": {
     "dev": "3cbf592d0f89833398987b8e2d735fe6591757333afa3ad834e0029038e98215",
     "validation": "23e760823e664205c83f9a96111787826eab0b1e15d0d7464c20aa5de14b2db6",
     "test": "1353982f387eefb954bcb33dd5b2074b31180c1db063240abe67950ea16cbde8"
   },
   "ground_truth_hash": "f17b3c00155ccef829b1bdf447aa0ac1d8da614e20f3ef99f421c5dc321d96b8",
+  "edge_ground_truth_hash": "93650deeee34499836853f34aa6f77f43c28176aaa933e81921da78e5daa548d",
+  "receiver_ground_truth_hash": "83d0440f63833741d63359931557cb6ddf661bdd11d1557aab3ab0b4914c6980",
+  "canonicalization_ground_truth_hash": "d2cd07e5d164fc6078f84c7b621a7f883ad5caaa98d2f90603e1315a4cf82eac",
   "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
   "config_hashes": {
-    "candidate_config": "6692dd665ac74988f2cfcc795f4e6ff9a60d8fcda6239920a061befdc7b33059",
-    "ranker_config": "f25c402f7f6ac96f722803693b43d64c1006301dfe65fec45c73be5dd860bd20",
-    "context_config": "c7a5949d22327050c9b6f99397f44bc08a165bdc7a56b035704fff96261ed763",
-    "typeflow_config": "9763cc63eb2c75369b4e32afd5178fbd575acfd2441d2b11c39f91b6762bd2a8"
+    "candidate_config": "d0ef69ae8d04eff1b17b280006e9a904e0e050b557b9cdcb3f27d3dcc8bf5ba3",
+    "ranker_config": "1cd7477fa3d22e383240d59b84ba9ea5e69f837d4ba3b0bdeb4c0e2148608af6",
+    "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
+    "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
+    "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
+    "retrieval_runner_code": "a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16",
+    "ranker_code": "4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4",
+    "adapter_code": "35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1",
+    "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
+    "typeflow_code": "f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716"
   },
-  "created_at": "2026-10-07T09:15:22Z",
-  "evaluated_at": "2026-10-07T09:15:22Z",
-  "run_validity": "INVALID",
-  "architecture_decision": "NOT_EVALUATED",
-  "decision_summary": "Benchmark integrity gate failed with 17 violation(s). Run is invalid.",
-  "contract_version": "8.5",
+  "created_at": "2026-10-07T20:23:01Z",
+  "evaluated_at": "2026-10-07T20:23:01Z",
+  "run_validity": "VALID",
+  "architecture_decision": "OPTION_C_REJECTED",
+  "decision_summary": "Formal benchmark thresholds not met; architectural retreat required.",
+  "contract_version": "8.5.2",
   "contract_feasibility": {
-    "status": "INVALID_CONTRACT",
+    "status": "VALID_CONTRACT",
     "theoretical_ceilings": {
       "precision_at_20_excluding_target": 0.15,
       "precision_at_50_excluding_target": 0.06
     },
     "contract_thresholds": {
-      "precision_at_20_excluding_target_min": 0.35,
-      "precision_at_50_excluding_target_min": 0.2
+      "precision_at_20_excluding_target_min": null,
+      "precision_at_50_excluding_target_min": null,
+      "blocking_metrics": {
+        "ndcg_at_50_graded_min": 0.2,
+        "dependency_mrr_min": 0.2
+      }
     },
-    "violations": [
-      "precision_at_20_excluding_target_min threshold (0.3500) exceeds theoretical maximum ceiling (0.1500)",
-      "precision_at_50_excluding_target_min threshold (0.2000) exceeds theoretical maximum ceiling (0.0600)"
-    ]
+    "violations": []
   },
   "integrity_gate": {
-    "passed": false,
-    "failures": [
-      "Artifact ground_truth_provenance.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact canonical_graph_integrity.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact canonicalization_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact edge_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact type_flow_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact impact_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact ranker_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact context_test.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact determinism_evaluation.json run_id mismatch: rcir-v8.5-primary != rcir-v8.5.1-02806e449cf86d08",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'manifest_hash'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'polyflow_dirty'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'contract_hash'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'dataset_hashes'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'graph_hash'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'config_hashes'",
-      "Artifact determinism_evaluation.json: Missing required provenance field: 'created_at'",
-      "PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)"
-    ]
+    "passed": true,
+    "failures": []
   },
   "impact_gate": {
-    "macro_recall": 1.0,
-    "macro_recall_threshold": 0.9,
+    "macro_recall": 0.8433,
+    "macro_recall_threshold": 0.65,
     "macro_passed": true,
-    "worst_task_recall": 1.0,
-    "worst_task_floor": 0.8,
+    "worst_task_recall": 0.6667,
+    "worst_task_floor": 0.3,
     "worst_task_passed": true,
-    "silent_misses": 0,
-    "max_silent_misses": 20,
+    "silent_misses": 3,
+    "max_silent_misses": 10,
     "silent_misses_passed": true,
     "passed": true
   },
   "ranking_gate": {
-    "p20_excluding_target": 0.08,
-    "p20_min": 0.35,
-    "p20_passed": false,
-    "p50_excluding_target": 0.036,
-    "p50_min": 0.2,
-    "p50_passed": false,
-    "ndcg_at_50": 0.4971,
-    "ndcg_min": 0.5,
-    "ndcg_passed": false,
-    "dependency_mrr": 0.5428,
-    "dependency_mrr_min": 0.7,
-    "dependency_mrr_passed": false,
-    "contract_feasible": false,
+    "p20_excluding_target": 0.05,
+    "p20_passed": true,
+    "p50_excluding_target": 0.02,
+    "p50_passed": true,
+    "ndcg_at_50": 0.3911,
+    "ndcg_min": 0.2,
+    "ndcg_passed": true,
+    "dependency_mrr": 0.4728,
+    "dependency_mrr_min": 0.2,
+    "dependency_mrr_passed": true,
+    "contract_feasible": true,
     "theoretical_ceilings": {
       "precision_at_20_excluding_target": 0.15,
       "precision_at_50_excluding_target": 0.06
     },
-    "passed": false
+    "passed": true
   },
   "context_gate": {
-    "critical_source_recall_at_4k": 0.6667,
+    "critical_source_recall_at_4k": 0.7333,
     "critical_source_recall_min": 0.6,
     "source_recall_passed": true,
     "budget_violations": 0,
@@ -105,18 +97,18 @@
     "passed": true
   },
   "type_flow_gate": {
-    "coverage": 1.0,
+    "coverage": 0.9,
     "coverage_min": 0.6,
     "coverage_passed": true,
-    "resolved_precision": 1.0,
-    "resolved_precision_min": 0.9,
-    "precision_passed": true,
-    "wrong_exact_rate": 0.0,
+    "resolved_precision": 0.5714,
+    "resolved_precision_min": 0.85,
+    "precision_passed": false,
+    "wrong_exact_rate": 0.4286,
     "wrong_exact_max": 0.05,
-    "wrong_exact_passed": true,
+    "wrong_exact_passed": false,
     "invalid_gt_count": 0,
     "ground_truth_valid": true,
-    "passed": true
+    "passed": false
   },
   "canonicalization_gate": {
     "wrong_canonical_rate": 0.0,
@@ -132,31 +124,31 @@
     "live_inference_verified": true,
     "trials_evidence_verified": false,
     "simulation_forbidden": true,
-    "rcir_completion_rate": 1.0,
-    "trials_count": 0,
+    "rcir_completion_rate": 0.0,
+    "trials_count": 1,
     "passed": false
   },
   "option_b_evaluation": {
-    "evaluable": false,
+    "evaluable": true,
     "passed": false,
     "requirements": {
       "macro_recall": {
         "passed": true,
-        "observed": 1.0,
-        "threshold": 0.9
+        "observed": 0.8433,
+        "threshold": 0.65
       },
       "worst_task_recall": {
         "passed": true,
-        "observed": 1.0,
-        "threshold": 0.8
+        "observed": 0.6667,
+        "threshold": 0.3
       },
       "determinism": {
         "passed": true,
         "observed": true
       },
       "type_flow": {
-        "passed": true,
-        "gate_verdict": true
+        "passed": false,
+        "gate_verdict": false
       },
       "canonicalization": {
         "passed": true,
@@ -167,9 +159,9 @@
         "violations": 0
       },
       "ranking_improvement": {
-        "evaluable": false,
+        "evaluable": true,
         "passed": false,
-        "details": "Baseline artifact missing or undefined: experiments/rcir_v8_5/results/ranker_baseline_r0.json. Cannot evaluate Option B."
+        "details": "Current dependency_mrr = 0.4728 vs Baseline = 0.4728 => Relative improvement = 0.00% (required >= 5.0%)"
       }
     }
   }

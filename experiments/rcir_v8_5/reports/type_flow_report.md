@@ -4,10 +4,10 @@
 The PHP Type-Flow Analyzer (`PHPTypeFlowAnalyzer`) was audited, repaired, and evaluated against real Nextcloud call sites with exact call-site fingerprint binding and hierarchy compatibility verification.
 
 ## Gate Performance Metrics
-- **Receiver Coverage**: `100.0%` (Contract Floor: 60.0%) -> **PASSED**
-- **Resolved Precision**: `100.0%` (Contract Floor: 90.0%) -> **PASSED**
-- **Wrong Exact Rate**: `0.0%` (Contract Ceiling: 5.0%) -> **PASSED**
-- **Type Flow Gate Verdict**: `PASSED`
+- **Receiver Coverage**: `90.0%` (Contract Floor: 60.0%) -> **PASSED**
+- **Resolved Precision**: `57.1%` (Contract Floor: 90.0%) -> **FAILED**
+- **Wrong Exact Rate**: `42.9%` (Contract Ceiling: 5.0%) -> **FAILED**
+- **Type Flow Gate Verdict**: `FAILED`
 
 ## Architectural Enhancements
 1. **PHP 8 Constructor Promotion**: Parses `public function __construct(private IUserSession $userSession)` and binds properties to the class environment.

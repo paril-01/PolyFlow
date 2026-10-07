@@ -90,6 +90,12 @@ def validate_contract_feasibility(
             f"theoretical maximum ceiling ({ceil_p50:.4f})"
         )
 
+    # Check blocking metrics ceilings (<= 1.0)
+    blocking_cfg = ranking_cfg.get("blocking_metrics", {})
+    for metric_name, thresh in blocking_cfg.items():
+        if thresh is not None and thresh > 1.0:
+            violations.append(f"{metric_name} threshold ({thresh}) exceeds theoretical maximum ceiling (1.0)")
+
     is_feasible = len(violations) == 0
     return is_feasible, {
         "status": "VALID_CONTRACT" if is_feasible else "INVALID_CONTRACT",
@@ -97,6 +103,8 @@ def validate_contract_feasibility(
         "contract_thresholds": {
             "precision_at_20_excluding_target_min": threshold_p20,
             "precision_at_50_excluding_target_min": threshold_p50,
+            "blocking_metrics": blocking_cfg,
         },
         "violations": violations,
     }
+

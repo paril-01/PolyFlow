@@ -35,13 +35,44 @@ def evaluate_generalization():
 
     env = get_default_environment()
 
-    # Verify that PHP evaluations actually ran and produced results
+    # Verify that PHP evaluations actually ran and produced passing results (Issues 37 & 38)
     type_flow_res = env.results_root / "type_flow_evaluation.json"
     cg_res = env.results_root / "canonical_graph_integrity.json"
     ret_res = env.results_root / "impact_test.json"
 
-    php_verified = type_flow_res.exists() and cg_res.exists() and ret_res.exists()
+    tf_data = {}
+    tf_passed = False
+    if type_flow_res.exists():
+        try:
+            tf_data = json.loads(type_flow_res.read_text(encoding="utf-8"))
+            tf_passed = (tf_data.get("validation_status") == "PASSED") or (tf_data.get("contract_gate_satisfied") is True)
+        except Exception:
+            pass
+
+    cg_passed = False
+    if cg_res.exists():
+        try:
+            cg_data = json.loads(cg_res.read_text(encoding="utf-8"))
+            cg_passed = cg_data.get("validation_status") == "PASSED"
+        except Exception:
+            pass
+
+    ret_passed = False
+    if ret_res.exists():
+        try:
+            ret_data = json.loads(ret_res.read_text(encoding="utf-8"))
+            ret_passed = (ret_data.get("validation_status") == "PASSED") or ("test_metrics" in ret_data)
+        except Exception:
+            pass
+
+    php_verified = tf_passed and cg_passed and ret_passed
     php_status = "IMPLEMENTED_VERIFIED" if php_verified else "IMPLEMENTED_UNVERIFIED"
+
+    tf_metrics = tf_data.get("metrics", {})
+    cov_val = tf_metrics.get("coverage")
+    prec_val = tf_metrics.get("resolved_precision")
+    coverage_str = f"{cov_val*100:.1f}%" if cov_val is not None else "NOT_MEASURED"
+    precision_str = f"{prec_val*100:.1f}%" if prec_val is not None else "NOT_MEASURED"
 
     env.derive_run_id()
     from provenance import build_provenance_envelope
@@ -55,9 +86,11 @@ def evaluate_generalization():
                 "analyzer": "rcir.types.php_type_flow.PHPTypeFlowAnalyzer",
                 "test_repository": "nextcloud/server",
                 "evidence": {
-                    "type_flow_coverage": "90.0%",
-                    "type_flow_precision": "100.0%",
-                    "unexpected_external_ratio": "0.0000",
+                    "type_flow_coverage": coverage_str,
+                    "type_flow_precision": precision_str,
+                    "type_flow_gate_passed": tf_passed,
+                    "graph_integrity_passed": cg_passed,
+                    "retrieval_impact_passed": ret_passed,
                     "real_source_tested": True,
                 },
                 "supported_features": [
@@ -145,7 +178,11 @@ def evaluate_generalization():
                 "rationale": "High-fanout Go interfaces, controllers, and CRD schemas.",
             },
         ],
-        "readiness_summary": "PHP achieved IMPLEMENTED_VERIFIED status following real Nextcloud Server type-flow and multi-channel validation. TypeScript is PARTIAL for boundary routes. External generalization targets (OpenTelemetry, Odoo, Frappe, K8s) are systematically queued.",
+        "readiness_summary": (
+            "PHP achieved IMPLEMENTED_VERIFIED status with passing type-flow and graph verification on Nextcloud Server."
+            if php_status == "IMPLEMENTED_VERIFIED"
+            else f"PHP status is {php_status}: one or more prerequisite gates failed or were not measured. External generalization targets queued."
+        ),
     }
 
     out_file = env.results_root / "generalization_readiness.json"

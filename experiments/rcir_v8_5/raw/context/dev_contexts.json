@@ -1,14 +1,14 @@
 {
-  "run_id": "rcir-v8.5-primary",
+  "run_id": "rcir-v8.5.2-primary",
   "split": "dev",
   "token_budget": 4000,
   "total_tasks": 6,
   "tasks": {
     "TASK-DEV-01": {
       "task_id": "TASK-DEV-01",
-      "total_tokens": 3898,
+      "total_tokens": 3964,
       "token_budget": 4000,
-      "entries_count": 9,
+      "entries_count": 10,
       "critical_file_recall": 1.0,
       "critical_source_recall": 1.0,
       "entries": [
@@ -69,8 +69,66 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
-          "entity_id": "php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file}",
+          "entity_id": "php://apps/files/tests/Controller/ConversionApiControllerTest.php",
           "rank": 3,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "apps/files/tests/Controller/ConversionApiControllerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 163,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\OCS\\OCSException;\nuse OCP\\AppFramework\\OCS\\OCSNotFoundException;\nuse OCP\\Files\\Conversion\\IConversionManager;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\IL10N;\nuse OCP\\IRequest;\nuse PHPUnit\\Framework\\MockObject\\MockObject;\nuse Test\\TestCase;\n\n/**\n * Class ConversionApiController",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files/tests/Controller/ConversionApiControllerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6a02a5ffaef3572b140631bd8d3073b588a2ce67a01d29f226c2c42dcca02e64",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/AppFramework/Controller/ApiControllerTest.php",
+          "rank": 4,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "source_to_test"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/AppFramework/Controller/ApiControllerTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 155,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\AppFramework\\Controller;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OCP\\AppFramework\\ApiController;\nuse OCP\\IConfig;\nuse OCP\\IRequestId;\n\nclass ChildApiController extends ApiController {\n};\n\nclass ApiControllerTest extends \\Test\\TestCase {\n\tprotected ChildApiController $controller;\n\n\tpublic function testCors(): void {\n\t\t$request = new Request(",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/AppFramework/Controller/ApiControllerTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "4da201f07915af0198d0c8e430ae0e9af0fec44d75bbf1d62c8accdc80db23a9",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file}",
+          "rank": 5,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "route_to_controller"
@@ -106,7 +164,7 @@
         },
         {
           "entity_id": "php://apps/files/appinfo/routes.php",
-          "rank": 4,
+          "rank": 6,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "route_to_controller"
@@ -135,7 +193,7 @@
         },
         {
           "entity_id": "external://Psr\\Log\\LoggerInterface",
-          "rank": 5,
+          "rank": 7,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "imports"
@@ -164,7 +222,7 @@
         },
         {
           "entity_id": "php://OCP\\AppFramework\\Controller",
-          "rank": 12,
+          "rank": 14,
           "reason": "Direct contract / implementation",
           "evidence": [
             "inherits",
@@ -194,7 +252,7 @@
         },
         {
           "entity_id": "php://OCA\\Appstore\\Controller\\PageController",
-          "rank": 50,
+          "rank": 46,
           "reason": "Direct contract / implementation",
           "evidence": [
             "inherits"
@@ -222,37 +280,8 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
-          "entity_id": "php://OCA\\Appstore\\Tests\\Controller\\ApiControllerTest::setUp",
-          "rank": 51,
-          "reason": "Direct regression verification test suite",
-          "evidence": [
-            "calls"
-          ],
-          "granularity": "test_fragment",
-          "source_file": "apps/appstore/tests/Controller/ApiControllerTest.php",
-          "source_lines": [
-            60,
-            92
-          ],
-          "estimated_tokens": 330,
-          "content_snippet": "\tprotected function setUp(): void {\n\t\tparent::setUp();\n\n\t\t$this->request = $this->createMock(IRequest::class);\n\t\t$this->config = $this->createMock(IConfig::class);\n\t\t$this->appConfig = $this->createMock(IAppConfig::class);\n\t\t$this->appManager = $this->createMock(AppManager::class);\n\t\t$this->dependencyAnalyzer = $this->createMock(DependencyAnalyzer::class);\n\t\t$this->categoryFetcher = $this->createMock(CategoryFetcher::class);\n\t\t$this->appFetcher = $this->createMock(AppFetcher::class);\n\t\t$this->l10nFactory = $this->createMock(IFactory::class);\n\t\t$this->bundleFetcher = $this->createMock(BundleFetcher::class);\n\t\t$this->installer = $this->createMock(Installer::class);\n\t\t$this->subscriptionRegistry = $this->createMock(IRegistry::class);\n\t\t$this->logger = $this->createMock(LoggerInterface::class);\n\t\t$this->urlGenerator = $this->createMock(IURLGenerator::class);\n\n\t\t$this->apiController = new ApiController(\n\t\t\t$this->request,\n\t\t\t$this->config,\n\t\t\t$this->appConfig,\n\t\t\t$this->appManager,\n\t\t\t$this->dependencyAnalyzer,\n\t\t\t$this->categoryFetcher,\n\t\t\t$this->appFetcher,\n\t\t\t$this->l10nFactory,\n\t\t\t$this->bundleFetcher,\n\t\t\t$this->installer,\n\t\t\t$this->subscriptionRegistry,\n\t\t\t$this->logger,\n\t\t\t$this->urlGenerator,\n\t\t);\n\t}",
-          "span_metadata": {
-            "start_line": 60,
-            "end_line": 92,
-            "span_source": "adapter",
-            "span_confidence_class": "inferred",
-            "fallback_used": false,
-            "symbol_name": "setUp"
-          },
-          "merged_entity_ids": [],
-          "source_exists": true,
-          "span_resolved": true,
-          "content_hash": "24de1d3c208461d4416117fd5174cebd21fb24c2b3a09f3f888090c6dac9ff13",
-          "representation_type": "SOURCE_SPAN"
-        },
-        {
           "entity_id": "php://OCA\\CloudFederationAPI\\Controller\\OCMRequestController",
-          "rank": 52,
+          "rank": 47,
           "reason": "Direct contract / implementation",
           "evidence": [
             "inherits"
@@ -280,15 +309,15 @@
           "representation_type": "SOURCE_SPAN"
         }
       ],
-      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3898 / 4000 tokens | **Included Context Units:** 9 (merged 7)\n\n## [1] php://OCA\\Files\\Controller\\ApiController::getThumbnail (full_implementation)\n- **File:** `apps/files/lib/Controller/ApiController.php` (lines 99-132)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\npublic function getThumbnail($x, $y, $file) {\n\t\tif ($x < 1 || $y < 1) {\n\t\t\treturn new DataResponse(['message' => 'Requested size must be numeric and a positive value.'], Http::STATUS_BAD_REQUEST);\n\t\t}\n\n\t\ttry {\n\t\t\t$file = $this->userFolder?->get($file);\n\t\t\tif ($file === null\n\t\t\t\t|| !($file instanceof File)\n\t\t\t\t|| ($file->getId() <= 0)\n\t\t\t) {\n\t\t\t\tthrow new NotFoundException();\n\t\t\t}\n\n\t\t\t// Validate the user is allowed to download the file (preview is some kind of download)\n\t\t\t/** @var ISharedStorage $storage */\n\t\t\t$storage = $file->getStorage();\n\t\t\tif ($storage->instanceOfStorage(ISharedStorage::class)) {\n\t\t\t\t/** @var IShare $share */\n\t\t\t\t$share = $storage->getShare();\n\t\t\t\tif (!$share->canSeeContent()) {\n\t\t\t\t\tthrow new NotFoundException();\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$preview = $this->previewManager->getPreview($file, $x, $y, true);\n\n\t\t\treturn new FileDisplayResponse($preview, Http::STATUS_OK, ['Content-Type' => $preview->getMimeType()]);\n\t\t} catch (NotFoundException|NotPermittedException|InvalidPathException) {\n\t\t\treturn new DataResponse(['message' => 'File not found.'], Http::STATUS_NOT_FOUND);\n\t\t} catch (\\Exception $e) {\n\t\t\treturn new DataResponse([], Http::STATUS_BAD_REQUEST);\n\t\t}\n\t}\n```\n\n## [2] php://apps/files/tests/Controller/ApiControllerTest.php (test_fragment)\n- **File:** `apps/files/tests/Controller/ApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;\n```\n\n## [3] php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file} (signature)\n- **File:** `route` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Merged Related Entities:** php://GET::/apps/files/, php://GET::/apps/files/api/v1/configs, php://GET::/apps/files/api/v1/recent/, php://GET::/apps/files/api/v1/stats, php://GET::/apps/files/api/v1/views, php://GET::/apps/files/f/{fileid}\n- **Evidence:** route_to_controller\n```\n// SOURCE_UNAVAILABLE: route\n```\n\n## [4] php://apps/files/appinfo/routes.php (signature)\n- **File:** `apps/files/appinfo/routes.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** route_to_controller\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\AppInfo;\n\nreturn [\n\t'routes' => [\n\t\t[\n\t\t\t'name' => 'view#index',\n\t\t\t'url' => '/',\n\t\t\t'verb' => 'GET',\n\t\t],\n\t\t[\n\t\t\t'name' => 'View#showFile',\n\t\t\t'url' => '/f/{fileid}',\n\t\t\t'verb' => 'GET',\n\t\t\t'root' => '',\n\t\t],\n```\n\n## [5] external://Psr\\Log\\LoggerInterface (signature)\n- **File:** `Psr\\Log\\LoggerInterface` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n// SOURCE_UNAVAILABLE: Psr\\Log\\LoggerInterface\n```\n\n## [12] php://OCP\\AppFramework\\Controller (signature)\n- **File:** `lib/public/AppFramework/Controller.php` (lines 17-148)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits, imports\n```\n/**\n * Base class to inherit your controllers from\n * @since 6.0.0\n */\nabstract class Controller {\n\t/**\n\t * app name\n\t * @var string\n\t * @since 7.0.0\n\t */\n\tprotected $appName;\n\n\t/**\n\t * current request\n\t * @var \\OCP\\IRequest\n\t * @since 6.0.0\n\t */\n\tprotected $request;\n\n\t/**\n\t * @var array<string, Closure>\n\t * @since 7.0.0\n\t */\n\tprivate $responders;\n\n\t/**\n\t * constructor of the controller\n\t * @param string $appName the name of the app\n\t * @param IRequest $request an instance of the request\n\t * @since 6.0.0 - parameter $appName was added in 7.0.0 - parameter $app was removed in 7.0.0\n\t */\n\tpublic function __construct($appName,\n\t\tIRequest $request) {\n\t\t$this->appName = $appName;\n\t\t$this->request = $request;\n\n\t\t// default responders\n\t\t$this->responders = [\n\t\t\t'json' => function ($data) {\n\t\t\t\tif ($data instanceof DataResponse) {\n\t\t\t\t\t$response = new JSONResponse(\n\t\t\t\t\t\t$data->getData(),\n\t\t\t\t\t\t$data->getStatus()\n\t\t\t\t\t);\n\t\t\t\t\t$dataHeaders = $data->getHeaders();\n\t\t\t\t\t$headers = $response->getHeaders();\n\t\t\t\t\t// do not overwrite Content-Type if it already exists\n\t\t\t\t\tif (isset($dataHeaders['Content-Type'])) {\n\t\t\t\t\t\tunset($headers['Content-Type']);\n\t\t\t\t\t}\n\t\t\t\t\t$response->setHeaders(array_merge($dataHeaders, $headers));\n\n\t\t\t\t\tif ($data->getETag() !== null) {\n\t\t\t\t\t\t$response->setETag($data->getETag());\n\t\t\t\t\t}\n\t\t\t\t\tif ($data->getLastModified() !== null) {\n\t\t\t\t\t\t$response->setLastModified($data->getLastModified());\n\t\t\t\t\t}\n\t\t\t\t\tif ($data->isThrottled()) {\n\t\t\t\t\t\t$response->throttle($data->getThrottleMetadata());\n\t\t\t\t\t}\n\n\t\t\t\t\treturn $response;\n\t\t\t\t}\n\t\t\t\treturn new JSONResponse($data);\n\t\t\t}\n\t\t];\n\t}\n\n\t/**\n\t * Parses an HTTP accept header and returns the supported responder type\n\t * @param string $acceptHeader\n\t * @param string $default\n\t * @return string the responder type\n\t * @since 7.0.0\n\t * @since 9.1.0 Added default parameter\n\t * @deprecated 33.0.0 Use {@see \\OCP\\IRequest::getFormat} instead\n\t */\n\tpublic function getResponderByHTTPHeader($acceptHeader, $default = 'json') {\n\t\t$headers = explode(',', $acceptHeader);\n\n\t\t// return the first matching responder\n\t\tforeach ($headers as $header) {\n\t\t\t$header = strtolower(trim($header));\n\n\t\t\t$responder = str_replace('application/', '', $header);\n\n\t\t\tif (array_key_exists($responder, $this->responders)) {\n\t\t\t\treturn $responder;\n\t\t\t}\n\t\t}\n\n\t\t// no matching header return default\n\t\treturn $default;\n\t}\n\n\t/**\n\t * Registers a formatter for a type\n\t * @param string $format\n\t * @param Closure $responder\n\t * @since 7.0.0\n\t */\n\tprotected function registerResponder($format, Closure $responder) {\n\t\t$this->responders[$format] = $responder;\n\t}\n\n\t/**\n\t * Serializes and formats a response\n\t * @param mixed $response the value that was returned from a controller and\n\t *                        is not a Response instance\n\t * @param string $format the format for which a formatter has been registered\n\t * @throws \\DomainException if format does not match a registered formatter\n\t * @return Response\n\t * @since 7.0.0\n\t */\n\tpublic function buildResponse($response, $format = 'json') {\n\t\tif (array_key_exists($format, $this->responders)) {\n\t\t\t$responder = $this->responders[$format];\n\n\t\t\treturn $responder($response);\n\t\t}\n\t\tthrow new \\DomainException('No responder registered for format '\n\t\t\t. $format . '!');\n\t}\n\n\t/**\n\t * @since 33.0.0\n\t */\n\tpublic function isResponderRegistered(string $responder): bool {\n\t\treturn isset($this->responders[$responder]);\n\t}\n}\n```\n\n## [50] php://OCA\\Appstore\\Controller\\PageController (signature)\n- **File:** `apps/appstore/lib/Controller/PageController.php` (lines 32-101)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nfinal class PageController extends Controller {\n\n\tpublic function __construct(\n\t\tIRequest $request,\n\t\tprivate readonly IL10N $l10n,\n\t\tprivate readonly IConfig $config,\n\t\tprivate readonly Installer $installer,\n\t\tprivate readonly IAppManager $appManager,\n\t\tprivate readonly IURLGenerator $urlGenerator,\n\t\tprivate readonly IInitialState $initialState,\n\t\tprivate readonly BundleFetcher $bundleFetcher,\n\t) {\n\t\tparent::__construct(Application::APP_ID, $request);\n\t}\n\n\t#[NoCSRFRequired]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps', root: '')]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps/{category}', defaults: ['category' => ''], root: '')]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps/{category}/{id}', defaults: ['category' => '', 'id' => ''], root: '')]\n\tpublic function viewApps(): TemplateResponse {\n\t\t$this->initialState->provideInitialState('appstoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));\n\t\t$this->initialState->provideInitialState('appstoreBundles', $this->getBundles());\n\t\t$this->initialState->provideInitialState('appstoreDeveloperDocs', $this->urlGenerator->linkToDocs('developer-manual'));\n\t\t$this->initialState->provideInitialState('appstoreUpdateCount', $this->getUpdatesCount());\n\n\t\tif ($this->appManager->isEnabledForAnyone('app_api')) {\n\t\t\ttry {\n\t\t\t\t/**\n\t\t\t\t * @psalm-suppress UndefinedClass AppAPI is shipped since 30.0.1\n\t\t\t\t */\n\t\t\t\tServer::get(ExAppsPageService::class)->provideAppApiState($this->initialState);\n\t\t\t} catch (\\Psr\\Container\\NotFoundExceptionInterface|\\Psr\\Container\\ContainerExceptionInterface) {\n\t\t\t\t// nop\n\t\t\t}\n\t\t}\n\n\t\t$policy = new ContentSecurityPolicy();\n\t\t$policy->addAllowedImageDomain('https://usercontent.apps.nextcloud.com');\n\n\t\t$templateResponse = new TemplateResponse(Application::APP_ID, 'empty', ['pageTitle' => $this->l10n->t('App store')]);\n\t\t$templateResponse->setContentSecurityPolicy($policy);\n\n\t\tUtil::addStyle(Application::APP_ID, 'main');\n\t\tUtil::addScript(Application::APP_ID, 'main');\n\n\t\treturn $templateResponse;\n\t}\n\n\tprivate function getUpdatesCount(): int {\n\t\t$apps = $this->appManager->getEnabledApps();\n\t\treturn array_reduce($apps, fn (int $carry, string $app): int => $carry + ($this->installer->isUpdateAvailable($app) !== false ? 1 : 0), 0);\n\t}\n\n\t/**\n\t * @return list<array{name: string, id: string, appIdentifiers: list<string>}>\n\t */\n\tprivate function getBundles(): array {\n\t\t$result = [];\n\t\t$bundles = $this->bundleFetcher->getBundles();\n\t\tforeach ($bundles as $bundle) {\n\t\t\t$result[] = [\n\t\t\t\t'name' => $bundle->getName(),\n\t\t\t\t'id' => $bundle->getIdentifier(),\n\t\t\t\t'appIdentifiers' => $bundle->getAppIdentifiers()\n\t\t\t];\n\t\t}\n\n\t\treturn $result;\n\t}\n}\n```\n\n## [51] php://OCA\\Appstore\\Tests\\Controller\\ApiControllerTest::setUp (test_fragment)\n- **File:** `apps/appstore/tests/Controller/ApiControllerTest.php` (lines 60-92)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** calls\n```\nprotected function setUp(): void {\n\t\tparent::setUp();\n\n\t\t$this->request = $this->createMock(IRequest::class);\n\t\t$this->config = $this->createMock(IConfig::class);\n\t\t$this->appConfig = $this->createMock(IAppConfig::class);\n\t\t$this->appManager = $this->createMock(AppManager::class);\n\t\t$this->dependencyAnalyzer = $this->createMock(DependencyAnalyzer::class);\n\t\t$this->categoryFetcher = $this->createMock(CategoryFetcher::class);\n\t\t$this->appFetcher = $this->createMock(AppFetcher::class);\n\t\t$this->l10nFactory = $this->createMock(IFactory::class);\n\t\t$this->bundleFetcher = $this->createMock(BundleFetcher::class);\n\t\t$this->installer = $this->createMock(Installer::class);\n\t\t$this->subscriptionRegistry = $this->createMock(IRegistry::class);\n\t\t$this->logger = $this->createMock(LoggerInterface::class);\n\t\t$this->urlGenerator = $this->createMock(IURLGenerator::class);\n\n\t\t$this->apiController = new ApiController(\n\t\t\t$this->request,\n\t\t\t$this->config,\n\t\t\t$this->appConfig,\n\t\t\t$this->appManager,\n\t\t\t$this->dependencyAnalyzer,\n\t\t\t$this->categoryFetcher,\n\t\t\t$this->appFetcher,\n\t\t\t$this->l10nFactory,\n\t\t\t$this->bundleFetcher,\n\t\t\t$this->installer,\n\t\t\t$this->subscriptionRegistry,\n\t\t\t$this->logger,\n\t\t\t$this->urlGenerator,\n\t\t);\n\t}\n```\n\n## [52] php://OCA\\CloudFederationAPI\\Controller\\OCMRequestController (signature)\n- **File:** `apps/cloud_federation_api/lib/Controller/OCMRequestController.php` (lines 28-96)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nclass OCMRequestController extends Controller {\n\tpublic function __construct(\n\t\tstring $appName,\n\t\tIRequest $request,\n\t\tprivate readonly IEventDispatcher $eventDispatcher,\n\t\tprivate readonly IOCMDiscoveryService $ocmDiscoveryService,\n\t\tprivate readonly LoggerInterface $logger,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n\n\t/**\n\t * Method will catch any request done to /ocm/[...] and will broadcast an event.\n\t * The first parameter of the remaining subpath (post-/ocm/) is defined as\n\t * capability and should be used by listeners to filter incoming requests.\n\t *\n\t * @see OCMEndpointRequestEvent\n\t * @see OCMEndpointRequestEvent::getArgs\n\t *\n\t * @param string $ocmPath\n\t * @return Response\n\t * @throws OCMArgumentException\n\t */\n\t#[NoCSRFRequired]\n\t#[PublicPage]\n\t#[BruteForceProtection(action: 'receiveOcmRequest')]\n\tpublic function manageOCMRequests(string $ocmPath): Response {\n\t\tif (!mb_check_encoding($ocmPath, 'UTF-8')) {\n\t\t\tthrow new OCMArgumentException('path is not UTF-8');\n\t\t}\n\n\t\t$ocmAddress = null;\n\t\t$params = $this->request->getParams();\n\t\tforeach (['owner', 'sender', 'sharedBy'] as $field) {\n\t\t\tif (is_string($params[$field] ?? null) && $params[$field] !== '') {\n\t\t\t\t$ocmAddress = $params[$field];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\ttry {\n\t\t\t$signedRequest = $this->ocmDiscoveryService->getIncomingSignedRequest($ocmAddress);\n\t\t} catch (IncomingRequestException $e) {\n\t\t\t$this->logger->warning('incoming ocm request exception', ['exception' => $e]);\n\t\t\t$response = new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []], Http::STATUS_BAD_REQUEST);\n\t\t\t$response->throttle();\n\t\t\treturn $response;\n\t\t}\n\n\t\t// assuming that ocm request contains a json array\n\t\t$payload = $signedRequest?->getBody() ?? file_get_contents('php://input');\n\t\ttry {\n\t\t\t$payload = ($payload) ? json_decode($payload, true, 512, JSON_THROW_ON_ERROR) : null;\n\t\t} catch (JsonException $e) {\n\t\t\t$this->logger->debug('json decode error', ['exception' => $e]);\n\t\t\t$payload = null;\n\t\t}\n\n\t\t$event = new OCMEndpointRequestEvent(\n\t\t\t$this->request->getMethod(),\n\t\t\tpreg_replace('@/+@', '/', $ocmPath),\n\t\t\t$payload,\n\t\t\t$signedRequest?->getOrigin()\n\t\t);\n\t\t$this->eventDispatcher->dispatchTyped($event);\n\n\t\treturn $event->getResponse() ?? new Response(Http::STATUS_NOT_FOUND);\n\t}\n}\n```\n"
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3964 / 4000 tokens | **Included Context Units:** 10 (merged 7)\n\n## [1] php://OCA\\Files\\Controller\\ApiController::getThumbnail (full_implementation)\n- **File:** `apps/files/lib/Controller/ApiController.php` (lines 99-132)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\npublic function getThumbnail($x, $y, $file) {\n\t\tif ($x < 1 || $y < 1) {\n\t\t\treturn new DataResponse(['message' => 'Requested size must be numeric and a positive value.'], Http::STATUS_BAD_REQUEST);\n\t\t}\n\n\t\ttry {\n\t\t\t$file = $this->userFolder?->get($file);\n\t\t\tif ($file === null\n\t\t\t\t|| !($file instanceof File)\n\t\t\t\t|| ($file->getId() <= 0)\n\t\t\t) {\n\t\t\t\tthrow new NotFoundException();\n\t\t\t}\n\n\t\t\t// Validate the user is allowed to download the file (preview is some kind of download)\n\t\t\t/** @var ISharedStorage $storage */\n\t\t\t$storage = $file->getStorage();\n\t\t\tif ($storage->instanceOfStorage(ISharedStorage::class)) {\n\t\t\t\t/** @var IShare $share */\n\t\t\t\t$share = $storage->getShare();\n\t\t\t\tif (!$share->canSeeContent()) {\n\t\t\t\t\tthrow new NotFoundException();\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t$preview = $this->previewManager->getPreview($file, $x, $y, true);\n\n\t\t\treturn new FileDisplayResponse($preview, Http::STATUS_OK, ['Content-Type' => $preview->getMimeType()]);\n\t\t} catch (NotFoundException|NotPermittedException|InvalidPathException) {\n\t\t\treturn new DataResponse(['message' => 'File not found.'], Http::STATUS_NOT_FOUND);\n\t\t} catch (\\Exception $e) {\n\t\t\treturn new DataResponse([], Http::STATUS_BAD_REQUEST);\n\t\t}\n\t}\n```\n\n## [2] php://apps/files/tests/Controller/ApiControllerTest.php (test_fragment)\n- **File:** `apps/files/tests/Controller/ApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCA\\Files\\Service\\TagService;\nuse OCA\\Files\\Service\\UserConfig;\nuse OCA\\Files\\Service\\ViewConfig;\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\Http\\FileDisplayResponse;\nuse OCP\\AppFramework\\Http\\Response;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\Files\\NotFoundException;\nuse OCP\\Files\\SimpleFS\\ISimpleFile;\nuse OCP\\Files\\Storage\\ISharedStorage;\nuse OCP\\Files\\Storage\\IStorage;\n```\n\n## [3] php://apps/files/tests/Controller/ConversionApiControllerTest.php (test_fragment)\n- **File:** `apps/files/tests/Controller/ConversionApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n/**\n * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\Files\\Controller;\n\nuse OCP\\AppFramework\\Http;\nuse OCP\\AppFramework\\Http\\DataResponse;\nuse OCP\\AppFramework\\OCS\\OCSException;\nuse OCP\\AppFramework\\OCS\\OCSNotFoundException;\nuse OCP\\Files\\Conversion\\IConversionManager;\nuse OCP\\Files\\File;\nuse OCP\\Files\\IRootFolder;\nuse OCP\\Files\\IUserFolder;\nuse OCP\\IL10N;\nuse OCP\\IRequest;\nuse PHPUnit\\Framework\\MockObject\\MockObject;\nuse Test\\TestCase;\n\n/**\n * Class ConversionApiController\n```\n\n## [4] php://tests/lib/AppFramework/Controller/ApiControllerTest.php (test_fragment)\n- **File:** `tests/lib/AppFramework/Controller/ApiControllerTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** source_to_test\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\AppFramework\\Controller;\n\nuse OC\\AppFramework\\Http\\Request;\nuse OCP\\AppFramework\\ApiController;\nuse OCP\\IConfig;\nuse OCP\\IRequestId;\n\nclass ChildApiController extends ApiController {\n};\n\nclass ApiControllerTest extends \\Test\\TestCase {\n\tprotected ChildApiController $controller;\n\n\tpublic function testCors(): void {\n\t\t$request = new Request(\n```\n\n## [5] php://GET::/apps/files/api/v1/thumbnail/{x}/{y}/{file} (signature)\n- **File:** `route` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Merged Related Entities:** php://GET::/apps/files/, php://GET::/apps/files/api/v1/configs, php://GET::/apps/files/api/v1/recent/, php://GET::/apps/files/api/v1/stats, php://GET::/apps/files/api/v1/views, php://GET::/apps/files/f/{fileid}\n- **Evidence:** route_to_controller\n```\n// SOURCE_UNAVAILABLE: route\n```\n\n## [6] php://apps/files/appinfo/routes.php (signature)\n- **File:** `apps/files/appinfo/routes.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** route_to_controller\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-only\n */\n\nnamespace OCA\\Files\\AppInfo;\n\nreturn [\n\t'routes' => [\n\t\t[\n\t\t\t'name' => 'view#index',\n\t\t\t'url' => '/',\n\t\t\t'verb' => 'GET',\n\t\t],\n\t\t[\n\t\t\t'name' => 'View#showFile',\n\t\t\t'url' => '/f/{fileid}',\n\t\t\t'verb' => 'GET',\n\t\t\t'root' => '',\n\t\t],\n```\n\n## [7] external://Psr\\Log\\LoggerInterface (signature)\n- **File:** `Psr\\Log\\LoggerInterface` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n// SOURCE_UNAVAILABLE: Psr\\Log\\LoggerInterface\n```\n\n## [14] php://OCP\\AppFramework\\Controller (signature)\n- **File:** `lib/public/AppFramework/Controller.php` (lines 17-148)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits, imports\n```\n/**\n * Base class to inherit your controllers from\n * @since 6.0.0\n */\nabstract class Controller {\n\t/**\n\t * app name\n\t * @var string\n\t * @since 7.0.0\n\t */\n\tprotected $appName;\n\n\t/**\n\t * current request\n\t * @var \\OCP\\IRequest\n\t * @since 6.0.0\n\t */\n\tprotected $request;\n\n\t/**\n\t * @var array<string, Closure>\n\t * @since 7.0.0\n\t */\n\tprivate $responders;\n\n\t/**\n\t * constructor of the controller\n\t * @param string $appName the name of the app\n\t * @param IRequest $request an instance of the request\n\t * @since 6.0.0 - parameter $appName was added in 7.0.0 - parameter $app was removed in 7.0.0\n\t */\n\tpublic function __construct($appName,\n\t\tIRequest $request) {\n\t\t$this->appName = $appName;\n\t\t$this->request = $request;\n\n\t\t// default responders\n\t\t$this->responders = [\n\t\t\t'json' => function ($data) {\n\t\t\t\tif ($data instanceof DataResponse) {\n\t\t\t\t\t$response = new JSONResponse(\n\t\t\t\t\t\t$data->getData(),\n\t\t\t\t\t\t$data->getStatus()\n\t\t\t\t\t);\n\t\t\t\t\t$dataHeaders = $data->getHeaders();\n\t\t\t\t\t$headers = $response->getHeaders();\n\t\t\t\t\t// do not overwrite Content-Type if it already exists\n\t\t\t\t\tif (isset($dataHeaders['Content-Type'])) {\n\t\t\t\t\t\tunset($headers['Content-Type']);\n\t\t\t\t\t}\n\t\t\t\t\t$response->setHeaders(array_merge($dataHeaders, $headers));\n\n\t\t\t\t\tif ($data->getETag() !== null) {\n\t\t\t\t\t\t$response->setETag($data->getETag());\n\t\t\t\t\t}\n\t\t\t\t\tif ($data->getLastModified() !== null) {\n\t\t\t\t\t\t$response->setLastModified($data->getLastModified());\n\t\t\t\t\t}\n\t\t\t\t\tif ($data->isThrottled()) {\n\t\t\t\t\t\t$response->throttle($data->getThrottleMetadata());\n\t\t\t\t\t}\n\n\t\t\t\t\treturn $response;\n\t\t\t\t}\n\t\t\t\treturn new JSONResponse($data);\n\t\t\t}\n\t\t];\n\t}\n\n\t/**\n\t * Parses an HTTP accept header and returns the supported responder type\n\t * @param string $acceptHeader\n\t * @param string $default\n\t * @return string the responder type\n\t * @since 7.0.0\n\t * @since 9.1.0 Added default parameter\n\t * @deprecated 33.0.0 Use {@see \\OCP\\IRequest::getFormat} instead\n\t */\n\tpublic function getResponderByHTTPHeader($acceptHeader, $default = 'json') {\n\t\t$headers = explode(',', $acceptHeader);\n\n\t\t// return the first matching responder\n\t\tforeach ($headers as $header) {\n\t\t\t$header = strtolower(trim($header));\n\n\t\t\t$responder = str_replace('application/', '', $header);\n\n\t\t\tif (array_key_exists($responder, $this->responders)) {\n\t\t\t\treturn $responder;\n\t\t\t}\n\t\t}\n\n\t\t// no matching header return default\n\t\treturn $default;\n\t}\n\n\t/**\n\t * Registers a formatter for a type\n\t * @param string $format\n\t * @param Closure $responder\n\t * @since 7.0.0\n\t */\n\tprotected function registerResponder($format, Closure $responder) {\n\t\t$this->responders[$format] = $responder;\n\t}\n\n\t/**\n\t * Serializes and formats a response\n\t * @param mixed $response the value that was returned from a controller and\n\t *                        is not a Response instance\n\t * @param string $format the format for which a formatter has been registered\n\t * @throws \\DomainException if format does not match a registered formatter\n\t * @return Response\n\t * @since 7.0.0\n\t */\n\tpublic function buildResponse($response, $format = 'json') {\n\t\tif (array_key_exists($format, $this->responders)) {\n\t\t\t$responder = $this->responders[$format];\n\n\t\t\treturn $responder($response);\n\t\t}\n\t\tthrow new \\DomainException('No responder registered for format '\n\t\t\t. $format . '!');\n\t}\n\n\t/**\n\t * @since 33.0.0\n\t */\n\tpublic function isResponderRegistered(string $responder): bool {\n\t\treturn isset($this->responders[$responder]);\n\t}\n}\n```\n\n## [46] php://OCA\\Appstore\\Controller\\PageController (signature)\n- **File:** `apps/appstore/lib/Controller/PageController.php` (lines 32-101)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nfinal class PageController extends Controller {\n\n\tpublic function __construct(\n\t\tIRequest $request,\n\t\tprivate readonly IL10N $l10n,\n\t\tprivate readonly IConfig $config,\n\t\tprivate readonly Installer $installer,\n\t\tprivate readonly IAppManager $appManager,\n\t\tprivate readonly IURLGenerator $urlGenerator,\n\t\tprivate readonly IInitialState $initialState,\n\t\tprivate readonly BundleFetcher $bundleFetcher,\n\t) {\n\t\tparent::__construct(Application::APP_ID, $request);\n\t}\n\n\t#[NoCSRFRequired]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps', root: '')]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps/{category}', defaults: ['category' => ''], root: '')]\n\t#[FrontpageRoute(verb: 'GET', url: '/settings/apps/{category}/{id}', defaults: ['category' => '', 'id' => ''], root: '')]\n\tpublic function viewApps(): TemplateResponse {\n\t\t$this->initialState->provideInitialState('appstoreEnabled', $this->config->getSystemValueBool('appstoreenabled', true));\n\t\t$this->initialState->provideInitialState('appstoreBundles', $this->getBundles());\n\t\t$this->initialState->provideInitialState('appstoreDeveloperDocs', $this->urlGenerator->linkToDocs('developer-manual'));\n\t\t$this->initialState->provideInitialState('appstoreUpdateCount', $this->getUpdatesCount());\n\n\t\tif ($this->appManager->isEnabledForAnyone('app_api')) {\n\t\t\ttry {\n\t\t\t\t/**\n\t\t\t\t * @psalm-suppress UndefinedClass AppAPI is shipped since 30.0.1\n\t\t\t\t */\n\t\t\t\tServer::get(ExAppsPageService::class)->provideAppApiState($this->initialState);\n\t\t\t} catch (\\Psr\\Container\\NotFoundExceptionInterface|\\Psr\\Container\\ContainerExceptionInterface) {\n\t\t\t\t// nop\n\t\t\t}\n\t\t}\n\n\t\t$policy = new ContentSecurityPolicy();\n\t\t$policy->addAllowedImageDomain('https://usercontent.apps.nextcloud.com');\n\n\t\t$templateResponse = new TemplateResponse(Application::APP_ID, 'empty', ['pageTitle' => $this->l10n->t('App store')]);\n\t\t$templateResponse->setContentSecurityPolicy($policy);\n\n\t\tUtil::addStyle(Application::APP_ID, 'main');\n\t\tUtil::addScript(Application::APP_ID, 'main');\n\n\t\treturn $templateResponse;\n\t}\n\n\tprivate function getUpdatesCount(): int {\n\t\t$apps = $this->appManager->getEnabledApps();\n\t\treturn array_reduce($apps, fn (int $carry, string $app): int => $carry + ($this->installer->isUpdateAvailable($app) !== false ? 1 : 0), 0);\n\t}\n\n\t/**\n\t * @return list<array{name: string, id: string, appIdentifiers: list<string>}>\n\t */\n\tprivate function getBundles(): array {\n\t\t$result = [];\n\t\t$bundles = $this->bundleFetcher->getBundles();\n\t\tforeach ($bundles as $bundle) {\n\t\t\t$result[] = [\n\t\t\t\t'name' => $bundle->getName(),\n\t\t\t\t'id' => $bundle->getIdentifier(),\n\t\t\t\t'appIdentifiers' => $bundle->getAppIdentifiers()\n\t\t\t];\n\t\t}\n\n\t\treturn $result;\n\t}\n}\n```\n\n## [47] php://OCA\\CloudFederationAPI\\Controller\\OCMRequestController (signature)\n- **File:** `apps/cloud_federation_api/lib/Controller/OCMRequestController.php` (lines 28-96)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nclass OCMRequestController extends Controller {\n\tpublic function __construct(\n\t\tstring $appName,\n\t\tIRequest $request,\n\t\tprivate readonly IEventDispatcher $eventDispatcher,\n\t\tprivate readonly IOCMDiscoveryService $ocmDiscoveryService,\n\t\tprivate readonly LoggerInterface $logger,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n\n\t/**\n\t * Method will catch any request done to /ocm/[...] and will broadcast an event.\n\t * The first parameter of the remaining subpath (post-/ocm/) is defined as\n\t * capability and should be used by listeners to filter incoming requests.\n\t *\n\t * @see OCMEndpointRequestEvent\n\t * @see OCMEndpointRequestEvent::getArgs\n\t *\n\t * @param string $ocmPath\n\t * @return Response\n\t * @throws OCMArgumentException\n\t */\n\t#[NoCSRFRequired]\n\t#[PublicPage]\n\t#[BruteForceProtection(action: 'receiveOcmRequest')]\n\tpublic function manageOCMRequests(string $ocmPath): Response {\n\t\tif (!mb_check_encoding($ocmPath, 'UTF-8')) {\n\t\t\tthrow new OCMArgumentException('path is not UTF-8');\n\t\t}\n\n\t\t$ocmAddress = null;\n\t\t$params = $this->request->getParams();\n\t\tforeach (['owner', 'sender', 'sharedBy'] as $field) {\n\t\t\tif (is_string($params[$field] ?? null) && $params[$field] !== '') {\n\t\t\t\t$ocmAddress = $params[$field];\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\ttry {\n\t\t\t$signedRequest = $this->ocmDiscoveryService->getIncomingSignedRequest($ocmAddress);\n\t\t} catch (IncomingRequestException $e) {\n\t\t\t$this->logger->warning('incoming ocm request exception', ['exception' => $e]);\n\t\t\t$response = new JSONResponse(['message' => $e->getMessage(), 'validationErrors' => []], Http::STATUS_BAD_REQUEST);\n\t\t\t$response->throttle();\n\t\t\treturn $response;\n\t\t}\n\n\t\t// assuming that ocm request contains a json array\n\t\t$payload = $signedRequest?->getBody() ?? file_get_contents('php://input');\n\t\ttry {\n\t\t\t$payload = ($payload) ? json_decode($payload, true, 512, JSON_THROW_ON_ERROR) : null;\n\t\t} catch (JsonException $e) {\n\t\t\t$this->logger->debug('json decode error', ['exception' => $e]);\n\t\t\t$payload = null;\n\t\t}\n\n\t\t$event = new OCMEndpointRequestEvent(\n\t\t\t$this->request->getMethod(),\n\t\t\tpreg_replace('@/+@', '/', $ocmPath),\n\t\t\t$payload,\n\t\t\t$signedRequest?->getOrigin()\n\t\t);\n\t\t$this->eventDispatcher->dispatchTyped($event);\n\n\t\treturn $event->getResponse() ?? new Response(Http::STATUS_NOT_FOUND);\n\t}\n}\n```\n"
     },
     "TASK-DEV-02": {
       "task_id": "TASK-DEV-02",
-      "total_tokens": 201,
+      "total_tokens": 2633,
       "token_budget": 4000,
-      "entries_count": 2,
+      "entries_count": 14,
       "critical_file_recall": 0.6667,
-      "critical_source_recall": 0.3333,
+      "critical_source_recall": 0.6667,
       "entries": [
         {
           "entity_id": "php://OCP\\Files\\Events\\Node\\NodeDeletedEvent",
@@ -318,40 +347,390 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
-          "entity_id": "php://OC\\Files\\Node\\Folder",
-          "rank": 2,
+          "entity_id": "php://OC\\Files\\Node\\HookConnector::postDelete",
+          "rank": 3,
           "reason": "Direct contract / direct_caller",
           "evidence": [
-            "event_dispatch"
+            "calls"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/private/Files/Node/HookConnector.php",
+          "source_lines": [
+            120,
+            128
+          ],
+          "estimated_tokens": 101,
+          "content_snippet": "\tpublic function postDelete($arguments) {\n\t\t$node = $this->getNodeForPath($arguments['path']);\n\t\tunset($this->deleteMetaCache[$node->getPath()]);\n\t\t$this->root->emit('\\OC\\Files', 'postDelete', [$node]);\n\t\t$this->dispatcher->dispatch('\\OCP\\Files::postDelete', new GenericEvent($node));\n\n\t\t$event = new NodeDeletedEvent($node);\n\t\t$this->dispatcher->dispatchTyped($event);\n\t}",
+          "span_metadata": {
+            "start_line": 120,
+            "end_line": 128,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "postDelete"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "6cc03a82152f3af48abfe5eead168d77e0a6b41b31bb8cc060000ae6cd0d596a",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://Test\\Files\\Node\\HookConnectorTest::testPostDeleteMeta",
+          "rank": 4,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "calls"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Files/Node/HookConnectorTest.php",
+          "source_lines": [
+            286,
+            330
+          ],
+          "estimated_tokens": 436,
+          "content_snippet": "\tpublic function testPostDeleteMeta(): void {\n\t\t$connector = new HookConnector($this->root, $this->view, $this->eventDispatcher, $this->logger);\n\t\t$connector->viewToNode();\n\t\t$hookCalled = false;\n\t\t/** @var Node $hookNode */\n\t\t$hookNode = null;\n\n\t\t$this->root->listen('\\OC\\Files', 'postDelete', function ($node) use (&$hookNode, &$hookCalled): void {\n\t\t\t$hookCalled = true;\n\t\t\t$hookNode = $node;\n\t\t});\n\n\t\t$dispatcherCalled = false;\n\t\t/** @var Node $dispatcherNode */\n\t\t$dispatcherNode = null;\n\t\t$this->eventDispatcher->addListener('\\OCP\\Files::postDelete', function ($event) use (&$dispatcherCalled, &$dispatcherNode): void {\n\t\t\t/** @var GenericEvent|APIGenericEvent $event */\n\t\t\t$dispatcherCalled = true;\n\t\t\t$dispatcherNode = $event->getSubject();\n\t\t});\n\n\t\t$newDispatcherCalled = false;\n\t\t/** @var Node $dispatcherNode */\n\t\t$newDispatcherNode = null;\n\t\t$this->eventDispatcher->addListener(NodeDeletedEvent::class, function ($event) use (&$newDispatcherCalled, &$newDispatcherNode): void {\n\t\t\tif ($event instanceof NodeDeletedEvent) {\n\t\t\t\t/** @var AbstractNodeEvent $event */\n\t\t\t\t$newDispatcherCalled = true;\n\t\t\t\t$newDispatcherNode = $event->getNode();\n\t\t\t}\n\t\t});\n\n\t\tFilesystem::file_put_contents('test.txt', 'asd');\n\t\t$info = Filesystem::getFileInfo('test.txt');\n\t\tFilesystem::unlink('test.txt');\n\n\t\t$this->assertTrue($hookCalled);\n\t\t$this->assertEquals($hookNode->getId(), $info->getId());\n\n\t\t$this->assertTrue($dispatcherCalled);\n\t\t$this->assertEquals($dispatcherNode->getId(), $info->getId());\n\n\t\t$this->assertTrue($newDispatcherCalled);\n\t\t$this->assertEquals($newDispatcherNode->getId(), $info->getId());\n\t}",
+          "span_metadata": {
+            "start_line": 286,
+            "end_line": 330,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "testPostDeleteMeta"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "7989e53f756e3de6dcc75c5860abeeec473669fd61c4ca8cad4769e43ec94b7b",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files/lib/Sharing/Source/NodeShareSourceType.php",
+          "rank": 5,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files/lib/Sharing/Source/NodeShareSourceType.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 192,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\ndeclare(strict_types=1);\n\nnamespace OCA\\Files\\Sharing\\Source;\n\nuse Exception;\nuse NCU\\Sharing\\ISharingManager;\nuse NCU\\Sharing\\ShareAccessContext;\nuse NCU\\Sharing\\Source\\IShareSourceMetadata;\nuse NCU\\Sharing\\Source\\IShareSourceType;\nuse NCU\\Sharing\\Source\\ShareSource;\nuse OCA\\Files\\AppInfo\\Application;\nuse OCA\\Files_Trashbin\\Events\\MoveToTrashEvent;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;\nuse OCP\\EventDispatcher\\IEventListener;\nuse OCP\\Files\\Cache\\ICacheEntry;\nuse OCP\\Files\\Cache\\IFileAccess;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files/lib/Sharing/Source/NodeShareSourceType.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "842fa83233ee9ddf3e66bacf514e23f7468091671add252857714881adbd1a6c",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files_reminders/lib/AppInfo/Application.php",
+          "rank": 6,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_reminders/lib/AppInfo/Application.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 234,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\FilesReminders\\AppInfo;\n\nuse OCA\\DAV\\Events\\SabrePluginAddEvent;\nuse OCA\\Files\\Event\\LoadAdditionalScriptsEvent;\nuse OCA\\FilesReminders\\Listener\\LoadAdditionalScriptsListener;\nuse OCA\\FilesReminders\\Listener\\NodeDeletedListener;\nuse OCA\\FilesReminders\\Listener\\SabrePluginAddListener;\nuse OCA\\FilesReminders\\Listener\\UserDeletedListener;\nuse OCA\\FilesReminders\\Notification\\Notifier;\nuse OCA\\FilesReminders\\SetupChecks\\NeedNotificationsApp;\nuse OCP\\AppFramework\\App;\nuse OCP\\AppFramework\\Bootstrap\\IBootContext;\nuse OCP\\AppFramework\\Bootstrap\\IBootstrap;\nuse OCP\\AppFramework\\Bootstrap\\IRegistrationContext;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;\nuse OCP\\User\\Events\\UserDeletedEvent;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files_reminders/lib/AppInfo/Application.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "f8592d2858ca83b81cacf345bdcb48d53832283a04f3d65c6ea782a27cee804e",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://apps/files_reminders/lib/Listener/NodeDeletedListener.php",
+          "rank": 7,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "signature",
+          "source_file": "apps/files_reminders/lib/Listener/NodeDeletedListener.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 169,
+          "content_snippet": "<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\FilesReminders\\Listener;\n\nuse OCA\\FilesReminders\\Service\\ReminderService;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventListener;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;\n\n/** @template-implements IEventListener<NodeDeletedEvent> */\nclass NodeDeletedListener implements IEventListener {\n\tpublic function __construct(\n\t\tprivate ReminderService $reminderService,\n\t) {\n\t}\n\n\t#[\\Override]\n\tpublic function handle(Event $event): void {",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://apps/files_reminders/lib/Listener/NodeDeletedListener.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "761d30618ede3e816062c81dbfbcaacaf6658bb0d55adbcd4b17485f7852c06b",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://tests/lib/Files/Node/HookConnectorTest.php",
+          "rank": 12,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Files/Node/HookConnectorTest.php",
+          "source_lines": [
+            1,
+            25
+          ],
+          "estimated_tokens": 218,
+          "content_snippet": "<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\Files\\Node;\n\nuse OC\\Files\\Filesystem;\nuse OC\\Files\\Node\\HookConnector;\nuse OC\\Files\\Node\\Root;\nuse OC\\Files\\Storage\\Temporary;\nuse OC\\Files\\View;\nuse OC\\Memcache\\ArrayCache;\nuse OCP\\EventDispatcher\\GenericEvent as APIGenericEvent;\nuse OCP\\EventDispatcher\\IEventDispatcher;\nuse OCP\\Files\\Config\\IUserMountCache;\nuse OCP\\Files\\Events\\Node\\AbstractNodeEvent;\nuse OCP\\Files\\Events\\Node\\AbstractNodesEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeCopiedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeCreatedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeDeletedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeRenamedEvent;",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 25,
+            "span_source": "heuristic",
+            "span_confidence_class": "heuristic_fallback",
+            "fallback_used": true,
+            "symbol_name": "php://tests/lib/Files/Node/HookConnectorTest.php"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "da03de0fa1c29e8070779e0d59d622d97a8baadd19b72f47420dfdfad902f1ff",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException",
+          "rank": 13,
+          "reason": "Transitive dependency in blast radius",
+          "evidence": [
+            "imports"
           ],
           "granularity": "summary",
-          "source_file": "lib/private/Files/Node/Folder.php",
+          "source_file": "external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException",
           "source_lines": [
             1,
             1
           ],
-          "estimated_tokens": 35,
-          "content_snippet": "// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius",
+          "estimated_tokens": 56,
+          "content_snippet": "// [SUMMARY] external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException :: external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException | Rank context reference in dependency blast radius",
           "span_metadata": {
             "start_line": 1,
             "end_line": 1,
             "span_source": "adapter",
             "span_confidence_class": "inferred",
             "fallback_used": false,
-            "symbol_name": "php://OC\\Files\\Node\\Folder"
+            "symbol_name": "external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException"
+          },
+          "merged_entity_ids": [],
+          "source_exists": false,
+          "span_resolved": true,
+          "content_hash": "ca631446a47f320ce8ef9927f4025395c0410524570e0f14918099e180a4663b",
+          "representation_type": "STRUCTURAL_SUMMARY"
+        },
+        {
+          "entity_id": "external://Exception",
+          "rank": 14,
+          "reason": "Transitive dependency in blast radius",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "summary",
+          "source_file": "external://Exception",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 30,
+          "content_snippet": "// [SUMMARY] external://Exception :: external://Exception | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "external://Exception"
+          },
+          "merged_entity_ids": [],
+          "source_exists": false,
+          "span_resolved": true,
+          "content_hash": "d58fb9757758a2dfd9b734e1709e448be6f83b78b90df4b2170ef8183a7c70e7",
+          "representation_type": "STRUCTURAL_SUMMARY"
+        },
+        {
+          "entity_id": "php://OCP\\Files\\Config\\IUserMountCache",
+          "rank": 62,
+          "reason": "Transitive dependency in blast radius",
+          "evidence": [
+            "imports"
+          ],
+          "granularity": "summary",
+          "source_file": "lib/public/Files/Config/IUserMountCache.php",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 41,
+          "content_snippet": "// [SUMMARY] lib/public/Files/Config/IUserMountCache.php :: php://OCP\\Files\\Config\\IUserMountCache | Rank context reference in dependency blast radius",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "php://OCP\\Files\\Config\\IUserMountCache"
           },
           "merged_entity_ids": [],
           "source_exists": true,
           "span_resolved": true,
-          "content_hash": "3779d05ef4b85f9623d608d6239fbfbb2fa409596f9a82bf4def069fbe5c74f3",
+          "content_hash": "8f186d8a84f1725979bbdef5f022d5177f0fa7a42dfe353afd36abdaeb1258ef",
           "representation_type": "STRUCTURAL_SUMMARY"
+        },
+        {
+          "entity_id": "php://OCP\\Files\\Events\\Node\\AbstractNodeEvent",
+          "rank": 91,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "inherits"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/public/Files/Events/Node/AbstractNodeEvent.php",
+          "source_lines": [
+            17,
+            45
+          ],
+          "estimated_tokens": 125,
+          "content_snippet": "/**\n * @since 20.0.0\n */\nabstract class AbstractNodeEvent extends Event implements IWebhookCompatibleEvent {\n\t/**\n\t * @since 20.0.0\n\t */\n\tpublic function __construct(\n\t\tprivate Node $node,\n\t) {\n\t}\n\n\t/**\n\t * @since 20.0.0\n\t */\n\tpublic function getNode(): Node {\n\t\treturn $this->node;\n\t}\n\n\t/**\n\t * @since 30.0.0\n\t */\n\t#[\\Override]\n\tpublic function getWebhookSerializable(): array {\n\t\treturn [\n\t\t\t'node' => JsonSerializer::serializeFileInfo($this->node),\n\t\t];\n\t}\n}",
+          "span_metadata": {
+            "start_line": 17,
+            "end_line": 45,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "AbstractNodeEvent"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "93b88996f608c549ee7f75ec466a586c223c4052b99f6e04a8d2658f54b9b03f",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCP\\Files\\Events\\Node\\BeforeNodeCreatedEvent",
+          "rank": 96,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "inherits"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/public/Files/Events/Node/BeforeNodeCreatedEvent.php",
+          "source_lines": [
+            12,
+            16
+          ],
+          "estimated_tokens": 23,
+          "content_snippet": "/**\n * @since 20.0.0\n */\nclass BeforeNodeCreatedEvent extends AbstractNodeEvent {\n}",
+          "span_metadata": {
+            "start_line": 12,
+            "end_line": 16,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "BeforeNodeCreatedEvent"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "626e205fc586fd1576e31c7157bdbfda915190e127e2bd24351794ed8352f536",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://OCP\\Files\\Events\\Node\\BeforeNodeReadEvent",
+          "rank": 97,
+          "reason": "Direct contract / implementation",
+          "evidence": [
+            "inherits"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/public/Files/Events/Node/BeforeNodeReadEvent.php",
+          "source_lines": [
+            12,
+            16
+          ],
+          "estimated_tokens": 22,
+          "content_snippet": "/**\n * @since 20.0.0\n */\nclass BeforeNodeReadEvent extends AbstractNodeEvent {\n}",
+          "span_metadata": {
+            "start_line": 12,
+            "end_line": 16,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "BeforeNodeReadEvent"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "69290ca26beeab298ba9d1a0dded27630119872ac40bd329bae770e54ae79a80",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://Test\\Files\\Node\\HookConnectorTest::assertEquals",
+          "rank": 105,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "calls"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "Test\\Files\\Node\\HookConnectorTest",
+          "source_lines": [
+            1,
+            1
+          ],
+          "estimated_tokens": 16,
+          "content_snippet": "// SOURCE_UNAVAILABLE: Test\\Files\\Node\\HookConnectorTest",
+          "span_metadata": {
+            "start_line": 1,
+            "end_line": 1,
+            "span_source": "source_unavailable",
+            "span_confidence_class": "unresolved",
+            "fallback_used": true,
+            "symbol_name": "php://Test\\Files\\Node\\HookConnectorTest::assertEquals"
+          },
+          "merged_entity_ids": [
+            "php://Test\\Files\\Node\\HookConnectorTest::assertTrue"
+          ],
+          "source_exists": false,
+          "span_resolved": false,
+          "content_hash": "20355e5c3d7e8a2ee791a6f6c7ae4d86b81082f33686dbf769062ddbc07e3482",
+          "representation_type": "UNRESOLVED"
         }
       ],
-      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 201 / 4000 tokens | **Included Context Units:** 2 (merged 0)\n\n## [1] php://OCP\\Files\\Events\\Node\\NodeDeletedEvent (full_implementation)\n- **File:** `lib/public/Files/Events/Node/NodeDeletedEvent.php` (lines 12-16)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n * @since 20.0.0\n */\nclass NodeDeletedEvent extends AbstractNodeEvent {\n}\n```\n\n## [2] php://OC\\Files\\Node\\Folder (summary)\n- **File:** `lib/private/Files/Node/Folder.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** event_dispatch\n```\n// [SUMMARY] lib/private/Files/Node/Folder.php :: php://OC\\Files\\Node\\Folder | Rank context reference in dependency blast radius\n```\n"
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2633 / 4000 tokens | **Included Context Units:** 14 (merged 1)\n\n## [1] php://OCP\\Files\\Events\\Node\\NodeDeletedEvent (full_implementation)\n- **File:** `lib/public/Files/Events/Node/NodeDeletedEvent.php` (lines 12-16)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n * @since 20.0.0\n */\nclass NodeDeletedEvent extends AbstractNodeEvent {\n}\n```\n\n## [3] php://OC\\Files\\Node\\HookConnector::postDelete (signature)\n- **File:** `lib/private/Files/Node/HookConnector.php` (lines 120-128)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** calls\n```\npublic function postDelete($arguments) {\n\t\t$node = $this->getNodeForPath($arguments['path']);\n\t\tunset($this->deleteMetaCache[$node->getPath()]);\n\t\t$this->root->emit('\\OC\\Files', 'postDelete', [$node]);\n\t\t$this->dispatcher->dispatch('\\OCP\\Files::postDelete', new GenericEvent($node));\n\n\t\t$event = new NodeDeletedEvent($node);\n\t\t$this->dispatcher->dispatchTyped($event);\n\t}\n```\n\n## [4] php://Test\\Files\\Node\\HookConnectorTest::testPostDeleteMeta (test_fragment)\n- **File:** `tests/lib/Files/Node/HookConnectorTest.php` (lines 286-330)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** calls\n```\npublic function testPostDeleteMeta(): void {\n\t\t$connector = new HookConnector($this->root, $this->view, $this->eventDispatcher, $this->logger);\n\t\t$connector->viewToNode();\n\t\t$hookCalled = false;\n\t\t/** @var Node $hookNode */\n\t\t$hookNode = null;\n\n\t\t$this->root->listen('\\OC\\Files', 'postDelete', function ($node) use (&$hookNode, &$hookCalled): void {\n\t\t\t$hookCalled = true;\n\t\t\t$hookNode = $node;\n\t\t});\n\n\t\t$dispatcherCalled = false;\n\t\t/** @var Node $dispatcherNode */\n\t\t$dispatcherNode = null;\n\t\t$this->eventDispatcher->addListener('\\OCP\\Files::postDelete', function ($event) use (&$dispatcherCalled, &$dispatcherNode): void {\n\t\t\t/** @var GenericEvent|APIGenericEvent $event */\n\t\t\t$dispatcherCalled = true;\n\t\t\t$dispatcherNode = $event->getSubject();\n\t\t});\n\n\t\t$newDispatcherCalled = false;\n\t\t/** @var Node $dispatcherNode */\n\t\t$newDispatcherNode = null;\n\t\t$this->eventDispatcher->addListener(NodeDeletedEvent::class, function ($event) use (&$newDispatcherCalled, &$newDispatcherNode): void {\n\t\t\tif ($event instanceof NodeDeletedEvent) {\n\t\t\t\t/** @var AbstractNodeEvent $event */\n\t\t\t\t$newDispatcherCalled = true;\n\t\t\t\t$newDispatcherNode = $event->getNode();\n\t\t\t}\n\t\t});\n\n\t\tFilesystem::file_put_contents('test.txt', 'asd');\n\t\t$info = Filesystem::getFileInfo('test.txt');\n\t\tFilesystem::unlink('test.txt');\n\n\t\t$this->assertTrue($hookCalled);\n\t\t$this->assertEquals($hookNode->getId(), $info->getId());\n\n\t\t$this->assertTrue($dispatcherCalled);\n\t\t$this->assertEquals($dispatcherNode->getId(), $info->getId());\n\n\t\t$this->assertTrue($newDispatcherCalled);\n\t\t$this->assertEquals($newDispatcherNode->getId(), $info->getId());\n\t}\n```\n\n## [5] php://apps/files/lib/Sharing/Source/NodeShareSourceType.php (signature)\n- **File:** `apps/files/lib/Sharing/Source/NodeShareSourceType.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\ndeclare(strict_types=1);\n\nnamespace OCA\\Files\\Sharing\\Source;\n\nuse Exception;\nuse NCU\\Sharing\\ISharingManager;\nuse NCU\\Sharing\\ShareAccessContext;\nuse NCU\\Sharing\\Source\\IShareSourceMetadata;\nuse NCU\\Sharing\\Source\\IShareSourceType;\nuse NCU\\Sharing\\Source\\ShareSource;\nuse OCA\\Files\\AppInfo\\Application;\nuse OCA\\Files_Trashbin\\Events\\MoveToTrashEvent;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventDispatcher;\nuse OCP\\EventDispatcher\\IEventListener;\nuse OCP\\Files\\Cache\\ICacheEntry;\nuse OCP\\Files\\Cache\\IFileAccess;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;\n```\n\n## [6] php://apps/files_reminders/lib/AppInfo/Application.php (signature)\n- **File:** `apps/files_reminders/lib/AppInfo/Application.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\FilesReminders\\AppInfo;\n\nuse OCA\\DAV\\Events\\SabrePluginAddEvent;\nuse OCA\\Files\\Event\\LoadAdditionalScriptsEvent;\nuse OCA\\FilesReminders\\Listener\\LoadAdditionalScriptsListener;\nuse OCA\\FilesReminders\\Listener\\NodeDeletedListener;\nuse OCA\\FilesReminders\\Listener\\SabrePluginAddListener;\nuse OCA\\FilesReminders\\Listener\\UserDeletedListener;\nuse OCA\\FilesReminders\\Notification\\Notifier;\nuse OCA\\FilesReminders\\SetupChecks\\NeedNotificationsApp;\nuse OCP\\AppFramework\\App;\nuse OCP\\AppFramework\\Bootstrap\\IBootContext;\nuse OCP\\AppFramework\\Bootstrap\\IBootstrap;\nuse OCP\\AppFramework\\Bootstrap\\IRegistrationContext;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;\nuse OCP\\User\\Events\\UserDeletedEvent;\n```\n\n## [7] php://apps/files_reminders/lib/Listener/NodeDeletedListener.php (signature)\n- **File:** `apps/files_reminders/lib/Listener/NodeDeletedListener.php` (lines 1-25)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n<?php\n\ndeclare(strict_types=1);\n\n/**\n * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace OCA\\FilesReminders\\Listener;\n\nuse OCA\\FilesReminders\\Service\\ReminderService;\nuse OCP\\EventDispatcher\\Event;\nuse OCP\\EventDispatcher\\IEventListener;\nuse OCP\\Files\\Events\\Node\\NodeDeletedEvent;\n\n/** @template-implements IEventListener<NodeDeletedEvent> */\nclass NodeDeletedListener implements IEventListener {\n\tpublic function __construct(\n\t\tprivate ReminderService $reminderService,\n\t) {\n\t}\n\n\t#[\\Override]\n\tpublic function handle(Event $event): void {\n```\n\n## [12] php://tests/lib/Files/Node/HookConnectorTest.php (test_fragment)\n- **File:** `tests/lib/Files/Node/HookConnectorTest.php` (lines 1-25)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n<?php\n\n/**\n * SPDX-FileCopyrightText: 2016-2024 Nextcloud GmbH and Nextcloud contributors\n * SPDX-FileCopyrightText: 2016 ownCloud, Inc.\n * SPDX-License-Identifier: AGPL-3.0-or-later\n */\n\nnamespace Test\\Files\\Node;\n\nuse OC\\Files\\Filesystem;\nuse OC\\Files\\Node\\HookConnector;\nuse OC\\Files\\Node\\Root;\nuse OC\\Files\\Storage\\Temporary;\nuse OC\\Files\\View;\nuse OC\\Memcache\\ArrayCache;\nuse OCP\\EventDispatcher\\GenericEvent as APIGenericEvent;\nuse OCP\\EventDispatcher\\IEventDispatcher;\nuse OCP\\Files\\Config\\IUserMountCache;\nuse OCP\\Files\\Events\\Node\\AbstractNodeEvent;\nuse OCP\\Files\\Events\\Node\\AbstractNodesEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeCopiedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeCreatedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeDeletedEvent;\nuse OCP\\Files\\Events\\Node\\BeforeNodeRenamedEvent;\n```\n\n## [13] external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException (summary)\n- **File:** `external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException` (lines 1-1)\n- **Inclusion Reason:** Transitive dependency in blast radius\n- **Evidence:** imports\n```\n// [SUMMARY] external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException :: external://Doctrine\\DBAL\\Exception\\UniqueConstraintViolationException | Rank context reference in dependency blast radius\n```\n\n## [14] external://Exception (summary)\n- **File:** `external://Exception` (lines 1-1)\n- **Inclusion Reason:** Transitive dependency in blast radius\n- **Evidence:** imports\n```\n// [SUMMARY] external://Exception :: external://Exception | Rank context reference in dependency blast radius\n```\n\n## [62] php://OCP\\Files\\Config\\IUserMountCache (summary)\n- **File:** `lib/public/Files/Config/IUserMountCache.php` (lines 1-1)\n- **Inclusion Reason:** Transitive dependency in blast radius\n- **Evidence:** imports\n```\n// [SUMMARY] lib/public/Files/Config/IUserMountCache.php :: php://OCP\\Files\\Config\\IUserMountCache | Rank context reference in dependency blast radius\n```\n\n## [91] php://OCP\\Files\\Events\\Node\\AbstractNodeEvent (signature)\n- **File:** `lib/public/Files/Events/Node/AbstractNodeEvent.php` (lines 17-45)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n/**\n * @since 20.0.0\n */\nabstract class AbstractNodeEvent extends Event implements IWebhookCompatibleEvent {\n\t/**\n\t * @since 20.0.0\n\t */\n\tpublic function __construct(\n\t\tprivate Node $node,\n\t) {\n\t}\n\n\t/**\n\t * @since 20.0.0\n\t */\n\tpublic function getNode(): Node {\n\t\treturn $this->node;\n\t}\n\n\t/**\n\t * @since 30.0.0\n\t */\n\t#[\\Override]\n\tpublic function getWebhookSerializable(): array {\n\t\treturn [\n\t\t\t'node' => JsonSerializer::serializeFileInfo($this->node),\n\t\t];\n\t}\n}\n```\n\n## [96] php://OCP\\Files\\Events\\Node\\BeforeNodeCreatedEvent (signature)\n- **File:** `lib/public/Files/Events/Node/BeforeNodeCreatedEvent.php` (lines 12-16)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n/**\n * @since 20.0.0\n */\nclass BeforeNodeCreatedEvent extends AbstractNodeEvent {\n}\n```\n\n## [97] php://OCP\\Files\\Events\\Node\\BeforeNodeReadEvent (signature)\n- **File:** `lib/public/Files/Events/Node/BeforeNodeReadEvent.php` (lines 12-16)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n/**\n * @since 20.0.0\n */\nclass BeforeNodeReadEvent extends AbstractNodeEvent {\n}\n```\n\n## [105] php://Test\\Files\\Node\\HookConnectorTest::assertEquals (test_fragment)\n- **File:** `Test\\Files\\Node\\HookConnectorTest` (lines 1-1)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Merged Related Entities:** php://Test\\Files\\Node\\HookConnectorTest::assertTrue\n- **Evidence:** calls\n```\n// SOURCE_UNAVAILABLE: Test\\Files\\Node\\HookConnectorTest\n```\n"
     },
     "TASK-DEV-03": {
       "task_id": "TASK-DEV-03",
-      "total_tokens": 3449,
+      "total_tokens": 3435,
       "token_budget": 4000,
       "entries_count": 11,
       "critical_file_recall": 0.6667,
@@ -378,9 +757,7 @@
             "fallback_used": false,
             "symbol_name": "getId"
           },
-          "merged_entity_ids": [
-            "php://OCP\\Share\\IShare"
-          ],
+          "merged_entity_ids": [],
           "source_exists": true,
           "span_resolved": true,
           "content_hash": "65246f1462838b56495632a1ceab050032393b9a6969547c9444a0cb40f511d5",
@@ -679,11 +1056,11 @@
           "representation_type": "STRUCTURAL_SUMMARY"
         }
       ],
-      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3449 / 4000 tokens | **Included Context Units:** 11 (merged 2)\n\n## [1] php://OCP\\Share\\IShare::getId (full_implementation)\n- **File:** `lib/public/Share/IShare.php` (lines 132-458)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\Share\\IShare\n```\n/**\n\t * Get the internal id of the share.\n\t *\n\t * @since 9.0.0\n\t */\n\tpublic function getId(): string;\n\n\t/**\n\t * Get the full share id. This is the <providerid>:<internalid>.\n\t * The full id is unique in the system.\n\t *\n\t * @since 9.0.0\n\t * @throws \\UnexpectedValueException If the fullId could not be constructed\n\t */\n\tpublic function getFullId(): string;\n\n\t/**\n\t * Set the provider id of the share\n\t * It is only allowed to set the provider id of a share once.\n\t * Attempts to override the provider id will result in an IllegalIDChangeException\n\t *\n\t * @throws IllegalIDChangeException\n\t * @since 9.1.0\n\t */\n\tpublic function setProviderId(string $id): self;\n\n\t/**\n\t * Set the node of the file/folder that is shared\n\t *\n\t * @param Node $node\n\t * @since 9.0.0\n\t */\n\tpublic function setNode(Node $node): self;\n\n\t/**\n\t * Get the node of the file/folder that is shared\n\t *\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNode(): Node;\n\n\t/**\n\t * Set file id for lazy evaluation of the node\n\t * @param int $fileId\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeId($fileId);\n\n\t/**\n\t * Get the fileid of the node of this share\n\t * @return int\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeId(): int;\n\n\t/**\n\t * Set the type of node (file/folder)\n\t *\n\t * @param string $type\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeType($type);\n\n\t/**\n\t * Get the type of node (file/folder)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeType();\n\n\t/**\n\t * Set the shareType\n\t *\n\t * @param self::TYPE_* $shareType\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareType($shareType);\n\n\t/**\n\t * Get the shareType\n\t *\n\t * @return self::TYPE_*\n\t * @since 9.0.0\n\t */\n\tpublic function getShareType();\n\n\t/**\n\t * Set the receiver of this share.\n\t *\n\t * @param string $sharedWith\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedWith($sharedWith);\n\n\t/**\n\t * Get the receiver of this share.\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedWith();\n\n\t/**\n\t * Set the display name of the receiver of this share.\n\t *\n\t * @param string $displayName\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithDisplayName($displayName);\n\n\t/**\n\t * Get the display name of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithDisplayName();\n\n\t/**\n\t * Set the avatar of the receiver of this share.\n\t *\n\t * @param string $src\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithAvatar($src);\n\n\t/**\n\t * Get the avatar of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithAvatar();\n\n\t/**\n\t * Set the permissions.\n\t *\n\t * @param int-mask-of<Constants::PERMISSION_*> $permissions\n\t * @return IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPermissions($permissions);\n\n\t/**\n\t * Get the share permissions\n\t *\n\t * @return int-mask-of<Constants::PERMISSION_*>\n\t * @since 9.0.0\n\t */\n\tpublic function getPermissions();\n\n\t/**\n\t * Create share attributes object\n\t *\n\t * @since 25.0.0\n\t * @return IAttributes\n\t */\n\tpublic function newAttributes(): IAttributes;\n\n\t/**\n\t * Set share attributes\n\t *\n\t * @param ?IAttributes $attributes\n\t * @since 25.0.0\n\t * @return IShare The modified object\n\t */\n\tpublic function setAttributes(?IAttributes $attributes);\n\n\t/**\n\t * Get share attributes\n\t *\n\t * @since 25.0.0\n\t * @return ?IAttributes\n\t */\n\tpublic function getAttributes(): ?IAttributes;\n\n\t/**\n\t * Set the accepted status\n\t *\n\t * @param self::STATUS_* $status\n\t * @return IShare The modified object\n\t * @since 18.0.0\n\t */\n\tpublic function setStatus(int $status): IShare;\n\n\t/**\n\t * Get the accepted status\n\t *\n\t * @return ?self::STATUS_*\n\t * @since 18.0.0\n\t */\n\tpublic function getStatus(): ?int;\n\n\t/**\n\t * Attach a note to a share\n\t *\n\t * @param string $note\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setNote($note);\n\n\t/**\n\t * Get note attached to a share\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getNote();\n\n\t/**\n\t * Set the expiration date\n\t *\n\t * @param \\DateTime|null $expireDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setExpirationDate(?\\DateTime $expireDate);\n\n\t/**\n\t * Get the expiration date\n\t *\n\t * @return \\DateTime|null\n\t * @since 9.0.0\n\t */\n\tpublic function getExpirationDate();\n\n\t/**\n\t * Set overwrite flag for falsy expiry date values\n\t *\n\t * @param bool $noExpirationDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 30.0.0\n\t */\n\tpublic function setNoExpirationDate(bool $noExpirationDate);\n\n\t/**\n\t * Get value of overwrite falsy expiry date flag\n\t *\n\t * @return bool\n\t * @since 30.0.0\n\t */\n\tpublic function getNoExpirationDate();\n\n\t/**\n\t * Is the share expired ?\n\t *\n\t * @return boolean\n\t * @since 18.0.0\n\t */\n\tpublic function isExpired();\n\n\t/**\n\t * set a label for a share, some shares, e.g. public links can have a label\n\t *\n\t * @param string $label\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 15.0.0\n\t */\n\tpublic function setLabel($label);\n\n\t/**\n\t * get label for the share, some shares, e.g. public links can have a label\n\t *\n\t * @return string\n\t * @since 15.0.0\n\t */\n\tpublic function getLabel();\n\n\t/**\n\t * Set the sharer of the path.\n\t *\n\t * @param string $sharedBy\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedBy($sharedBy);\n\n\t/**\n\t * Get share sharer\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedBy();\n\n\t/**\n\t * Set the original share owner (who owns the path that is shared)\n\t *\n\t * @param string $shareOwner\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareOwner($shareOwner);\n\n\t/**\n\t * Get the original share owner (who owns the path that is shared)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getShareOwner();\n\n\t/**\n\t * Set the password for this share.\n\t * When the share is passed to the share manager to be created\n\t * or updated the password will be hashed.\n\t *\n\t * @param string|null $password\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPassword($password);\n\n\t/**\n\t * Sets the password for the shared, but in it's already hashed form.\n\t * Use {@see isPasswordHashed} to check if the return value of {@see getPassword} is already hashed.\n```\n\n## [2] php://OCA\\CloudFederationAPI\\Tests\\Controller\\TokenControllerTest::configureHappyPath (test_fragment)\n- **File:** `apps/cloud_federation_api/tests/Controller/TokenControllerTest.php` (lines 149-163)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Merged Related Entities:** php://OCA\\CloudFederationAPI\\Tests\\Controller\\TokenControllerTest::mockShare\n- **Evidence:** imports\n```\n/**\n\t * Configure the collaborators so that exchanging $refreshToken issues a JWT\n\t * access token. Returns the share mock for further expectations.\n\t */\n\tprivate function configureHappyPath(\n\t\tstring $refreshToken,\n\t\tstring $shareOwner,\n\t\tstring $sharedWith,\n\t\tstring $jti,\n\t\tint $shareType = IShare::TYPE_REMOTE,\n\t): IShare&MockObject {\n\t\t$this->mockSignatory($jti);\n\n\t\treturn $this->mockShare($refreshToken, $refreshToken, $shareType, $shareOwner, $sharedWith);\n\t}\n```\n\n## [4] php://OCA\\DAV\\Connector\\LegacyPublicAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/LegacyPublicAuth.php` (lines 100-102)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getShare(): ?IShare {\n\t\treturn $this->share;\n\t}\n```\n\n## [5] php://OCA\\DAV\\Connector\\Sabre\\BearerAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/BearerAuth.php` (lines 130-134)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getShare(): IShare {\n\t\t$shareManager = $this->shareManager ?? Server::get(IManager::class);\n\t\t$share = $shareManager->getShareByToken($this->token);\n\t\treturn $share;\n\t}\n```\n\n## [6] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::addShareToSession (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 187-193)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n$this->addShareToSession($share);\n\t\t\t\t\t}\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t\t// We are already authenticated for this share in the session\n\t\t\t\tif ($this->isShareInSession($share)) {\n```\n\n## [7] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 66-68)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nif (count($_COOKIE) > 0 && !$this->request->passesStrictCookieCheck() && $this->getShare()->isPasswordProtected()) {\n\t\t\t\tthrow new PreconditionFailed('Strict cookie check failed');\n\t\t\t}\n```\n\n## [8] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::isShareInSession (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 139-142)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n// If already authenticated\n\t\tif ($this->isShareInSession($share)) {\n\t\t\treturn [true, $this->principalPrefix . $token];\n\t\t}\n```\n\n## [9] php://OCA\\DAV\\Files\\Sharing\\FilesDropPlugin::setShare (signature)\n- **File:** `apps/dav/lib/Files/Sharing/FilesDropPlugin.php` (lines 27-29)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function setShare(IShare $share): void {\n\t\t$this->share = $share;\n\t}\n```\n\n## [11] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\BearerAuthTest::mockFederatedShare (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/BearerAuthTest.php` (lines 115-151)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n/**\n\t * Make the share the access token points at resolvable, both by its id and\n\t * by its shared secret.\n\t *\n\t * @param string|null $secretHolderFullId full id of the share the shared secret\n\t *                                        itself resolves to, when that is not the\n\t *                                        share the access token names\n\t */\n\tprivate function mockFederatedShare(\n\t\tstring $sharedSecret = 'shared-secret',\n\t\tint $shareType = IShare::TYPE_REMOTE,\n\t\tstring $shareOwner = 'shareOwner',\n\t\tstring $sharedWith = 'sharee@remote.example.com',\n\t\t?string $secretHolderFullId = null,\n\t): IShare&MockObject {\n\t\t$share = $this->createMock(IShare::class);\n\t\t$share->method('getShareType')->willReturn($shareType);\n\t\t$share->method('getShareOwner')->willReturn($shareOwner);\n\t\t$share->method('getSharedWith')->willReturn($sharedWith);\n\t\t$share->method('getToken')->willReturn($sharedSecret);\n\t\t$share->method('getFullId')->willReturn('ocFederatedSharing:42');\n\n\t\t$secretHolder = $share;\n\t\tif ($secretHolderFullId !== null) {\n\t\t\t$secretHolder = $this->createMock(IShare::class);\n\t\t\t$secretHolder->method('getFullId')->willReturn($secretHolderFullId);\n\t\t}\n\n\t\t$this->shareManager->method('getShareById')\n\t\t\t->willReturnCallback(static fn (string $id): IShare\n\t\t\t\t=> $id === 'ocFederatedSharing:42' ? $share : throw new ShareNotFound());\n\t\t$this->shareManager->method('getShareByToken')\n\t\t\t->willReturnCallback(static fn (string $token): IShare\n\t\t\t\t=> $token === $sharedSecret ? $secretHolder : throw new ShareNotFound());\n\n\t\treturn $share;\n\t}\n```\n\n## [12] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockShare (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php` (lines 302-308)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\nprivate function mockShare(string $id): IShare&MockObject {\n\t\t$share = $this->createMock(IShare::class);\n\t\t$share->method('getId')\n\t\t\t->willReturn($id);\n\n\t\treturn $share;\n\t}\n```\n\n## [144] php://OC\\Share20\\Share (summary)\n- **File:** `lib/private/Share20/Share.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/Share20/Share.php :: php://OC\\Share20\\Share | Rank context reference in dependency blast radius\n```\n"
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 3435 / 4000 tokens | **Included Context Units:** 11 (merged 1)\n\n## [1] php://OCP\\Share\\IShare::getId (full_implementation)\n- **File:** `lib/public/Share/IShare.php` (lines 132-458)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n\t * Get the internal id of the share.\n\t *\n\t * @since 9.0.0\n\t */\n\tpublic function getId(): string;\n\n\t/**\n\t * Get the full share id. This is the <providerid>:<internalid>.\n\t * The full id is unique in the system.\n\t *\n\t * @since 9.0.0\n\t * @throws \\UnexpectedValueException If the fullId could not be constructed\n\t */\n\tpublic function getFullId(): string;\n\n\t/**\n\t * Set the provider id of the share\n\t * It is only allowed to set the provider id of a share once.\n\t * Attempts to override the provider id will result in an IllegalIDChangeException\n\t *\n\t * @throws IllegalIDChangeException\n\t * @since 9.1.0\n\t */\n\tpublic function setProviderId(string $id): self;\n\n\t/**\n\t * Set the node of the file/folder that is shared\n\t *\n\t * @param Node $node\n\t * @since 9.0.0\n\t */\n\tpublic function setNode(Node $node): self;\n\n\t/**\n\t * Get the node of the file/folder that is shared\n\t *\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNode(): Node;\n\n\t/**\n\t * Set file id for lazy evaluation of the node\n\t * @param int $fileId\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeId($fileId);\n\n\t/**\n\t * Get the fileid of the node of this share\n\t * @return int\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeId(): int;\n\n\t/**\n\t * Set the type of node (file/folder)\n\t *\n\t * @param string $type\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setNodeType($type);\n\n\t/**\n\t * Get the type of node (file/folder)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t * @throws NotFoundException\n\t */\n\tpublic function getNodeType();\n\n\t/**\n\t * Set the shareType\n\t *\n\t * @param self::TYPE_* $shareType\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareType($shareType);\n\n\t/**\n\t * Get the shareType\n\t *\n\t * @return self::TYPE_*\n\t * @since 9.0.0\n\t */\n\tpublic function getShareType();\n\n\t/**\n\t * Set the receiver of this share.\n\t *\n\t * @param string $sharedWith\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedWith($sharedWith);\n\n\t/**\n\t * Get the receiver of this share.\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedWith();\n\n\t/**\n\t * Set the display name of the receiver of this share.\n\t *\n\t * @param string $displayName\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithDisplayName($displayName);\n\n\t/**\n\t * Get the display name of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithDisplayName();\n\n\t/**\n\t * Set the avatar of the receiver of this share.\n\t *\n\t * @param string $src\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setSharedWithAvatar($src);\n\n\t/**\n\t * Get the avatar of the receiver of this share.\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getSharedWithAvatar();\n\n\t/**\n\t * Set the permissions.\n\t *\n\t * @param int-mask-of<Constants::PERMISSION_*> $permissions\n\t * @return IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPermissions($permissions);\n\n\t/**\n\t * Get the share permissions\n\t *\n\t * @return int-mask-of<Constants::PERMISSION_*>\n\t * @since 9.0.0\n\t */\n\tpublic function getPermissions();\n\n\t/**\n\t * Create share attributes object\n\t *\n\t * @since 25.0.0\n\t * @return IAttributes\n\t */\n\tpublic function newAttributes(): IAttributes;\n\n\t/**\n\t * Set share attributes\n\t *\n\t * @param ?IAttributes $attributes\n\t * @since 25.0.0\n\t * @return IShare The modified object\n\t */\n\tpublic function setAttributes(?IAttributes $attributes);\n\n\t/**\n\t * Get share attributes\n\t *\n\t * @since 25.0.0\n\t * @return ?IAttributes\n\t */\n\tpublic function getAttributes(): ?IAttributes;\n\n\t/**\n\t * Set the accepted status\n\t *\n\t * @param self::STATUS_* $status\n\t * @return IShare The modified object\n\t * @since 18.0.0\n\t */\n\tpublic function setStatus(int $status): IShare;\n\n\t/**\n\t * Get the accepted status\n\t *\n\t * @return ?self::STATUS_*\n\t * @since 18.0.0\n\t */\n\tpublic function getStatus(): ?int;\n\n\t/**\n\t * Attach a note to a share\n\t *\n\t * @param string $note\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 14.0.0\n\t */\n\tpublic function setNote($note);\n\n\t/**\n\t * Get note attached to a share\n\t *\n\t * @return string\n\t * @since 14.0.0\n\t */\n\tpublic function getNote();\n\n\t/**\n\t * Set the expiration date\n\t *\n\t * @param \\DateTime|null $expireDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setExpirationDate(?\\DateTime $expireDate);\n\n\t/**\n\t * Get the expiration date\n\t *\n\t * @return \\DateTime|null\n\t * @since 9.0.0\n\t */\n\tpublic function getExpirationDate();\n\n\t/**\n\t * Set overwrite flag for falsy expiry date values\n\t *\n\t * @param bool $noExpirationDate\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 30.0.0\n\t */\n\tpublic function setNoExpirationDate(bool $noExpirationDate);\n\n\t/**\n\t * Get value of overwrite falsy expiry date flag\n\t *\n\t * @return bool\n\t * @since 30.0.0\n\t */\n\tpublic function getNoExpirationDate();\n\n\t/**\n\t * Is the share expired ?\n\t *\n\t * @return boolean\n\t * @since 18.0.0\n\t */\n\tpublic function isExpired();\n\n\t/**\n\t * set a label for a share, some shares, e.g. public links can have a label\n\t *\n\t * @param string $label\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 15.0.0\n\t */\n\tpublic function setLabel($label);\n\n\t/**\n\t * get label for the share, some shares, e.g. public links can have a label\n\t *\n\t * @return string\n\t * @since 15.0.0\n\t */\n\tpublic function getLabel();\n\n\t/**\n\t * Set the sharer of the path.\n\t *\n\t * @param string $sharedBy\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setSharedBy($sharedBy);\n\n\t/**\n\t * Get share sharer\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getSharedBy();\n\n\t/**\n\t * Set the original share owner (who owns the path that is shared)\n\t *\n\t * @param string $shareOwner\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setShareOwner($shareOwner);\n\n\t/**\n\t * Get the original share owner (who owns the path that is shared)\n\t *\n\t * @return string\n\t * @since 9.0.0\n\t */\n\tpublic function getShareOwner();\n\n\t/**\n\t * Set the password for this share.\n\t * When the share is passed to the share manager to be created\n\t * or updated the password will be hashed.\n\t *\n\t * @param string|null $password\n\t * @return \\OCP\\Share\\IShare The modified object\n\t * @since 9.0.0\n\t */\n\tpublic function setPassword($password);\n\n\t/**\n\t * Sets the password for the shared, but in it's already hashed form.\n\t * Use {@see isPasswordHashed} to check if the return value of {@see getPassword} is already hashed.\n```\n\n## [2] php://OCA\\CloudFederationAPI\\Tests\\Controller\\TokenControllerTest::configureHappyPath (test_fragment)\n- **File:** `apps/cloud_federation_api/tests/Controller/TokenControllerTest.php` (lines 149-163)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Merged Related Entities:** php://OCA\\CloudFederationAPI\\Tests\\Controller\\TokenControllerTest::mockShare\n- **Evidence:** imports\n```\n/**\n\t * Configure the collaborators so that exchanging $refreshToken issues a JWT\n\t * access token. Returns the share mock for further expectations.\n\t */\n\tprivate function configureHappyPath(\n\t\tstring $refreshToken,\n\t\tstring $shareOwner,\n\t\tstring $sharedWith,\n\t\tstring $jti,\n\t\tint $shareType = IShare::TYPE_REMOTE,\n\t): IShare&MockObject {\n\t\t$this->mockSignatory($jti);\n\n\t\treturn $this->mockShare($refreshToken, $refreshToken, $shareType, $shareOwner, $sharedWith);\n\t}\n```\n\n## [4] php://OCA\\DAV\\Connector\\LegacyPublicAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/LegacyPublicAuth.php` (lines 100-102)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getShare(): ?IShare {\n\t\treturn $this->share;\n\t}\n```\n\n## [5] php://OCA\\DAV\\Connector\\Sabre\\BearerAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/BearerAuth.php` (lines 130-134)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getShare(): IShare {\n\t\t$shareManager = $this->shareManager ?? Server::get(IManager::class);\n\t\t$share = $shareManager->getShareByToken($this->token);\n\t\treturn $share;\n\t}\n```\n\n## [6] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::addShareToSession (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 187-193)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n$this->addShareToSession($share);\n\t\t\t\t\t}\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t\t// We are already authenticated for this share in the session\n\t\t\t\tif ($this->isShareInSession($share)) {\n```\n\n## [7] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::getShare (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 66-68)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nif (count($_COOKIE) > 0 && !$this->request->passesStrictCookieCheck() && $this->getShare()->isPasswordProtected()) {\n\t\t\t\tthrow new PreconditionFailed('Strict cookie check failed');\n\t\t\t}\n```\n\n## [8] php://OCA\\DAV\\Connector\\Sabre\\PublicAuth::isShareInSession (signature)\n- **File:** `apps/dav/lib/Connector/Sabre/PublicAuth.php` (lines 139-142)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\n// If already authenticated\n\t\tif ($this->isShareInSession($share)) {\n\t\t\treturn [true, $this->principalPrefix . $token];\n\t\t}\n```\n\n## [9] php://OCA\\DAV\\Files\\Sharing\\FilesDropPlugin::setShare (signature)\n- **File:** `apps/dav/lib/Files/Sharing/FilesDropPlugin.php` (lines 27-29)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function setShare(IShare $share): void {\n\t\t$this->share = $share;\n\t}\n```\n\n## [11] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\BearerAuthTest::mockFederatedShare (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/BearerAuthTest.php` (lines 115-151)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n/**\n\t * Make the share the access token points at resolvable, both by its id and\n\t * by its shared secret.\n\t *\n\t * @param string|null $secretHolderFullId full id of the share the shared secret\n\t *                                        itself resolves to, when that is not the\n\t *                                        share the access token names\n\t */\n\tprivate function mockFederatedShare(\n\t\tstring $sharedSecret = 'shared-secret',\n\t\tint $shareType = IShare::TYPE_REMOTE,\n\t\tstring $shareOwner = 'shareOwner',\n\t\tstring $sharedWith = 'sharee@remote.example.com',\n\t\t?string $secretHolderFullId = null,\n\t): IShare&MockObject {\n\t\t$share = $this->createMock(IShare::class);\n\t\t$share->method('getShareType')->willReturn($shareType);\n\t\t$share->method('getShareOwner')->willReturn($shareOwner);\n\t\t$share->method('getSharedWith')->willReturn($sharedWith);\n\t\t$share->method('getToken')->willReturn($sharedSecret);\n\t\t$share->method('getFullId')->willReturn('ocFederatedSharing:42');\n\n\t\t$secretHolder = $share;\n\t\tif ($secretHolderFullId !== null) {\n\t\t\t$secretHolder = $this->createMock(IShare::class);\n\t\t\t$secretHolder->method('getFullId')->willReturn($secretHolderFullId);\n\t\t}\n\n\t\t$this->shareManager->method('getShareById')\n\t\t\t->willReturnCallback(static fn (string $id): IShare\n\t\t\t\t=> $id === 'ocFederatedSharing:42' ? $share : throw new ShareNotFound());\n\t\t$this->shareManager->method('getShareByToken')\n\t\t\t->willReturnCallback(static fn (string $token): IShare\n\t\t\t\t=> $token === $sharedSecret ? $secretHolder : throw new ShareNotFound());\n\n\t\treturn $share;\n\t}\n```\n\n## [12] php://OCA\\DAV\\Tests\\unit\\Connector\\Sabre\\SharesPluginTest::mockShare (test_fragment)\n- **File:** `apps/dav/tests/unit/Connector/Sabre/SharesPluginTest.php` (lines 302-308)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\nprivate function mockShare(string $id): IShare&MockObject {\n\t\t$share = $this->createMock(IShare::class);\n\t\t$share->method('getId')\n\t\t\t->willReturn($id);\n\n\t\treturn $share;\n\t}\n```\n\n## [144] php://OC\\Share20\\Share (summary)\n- **File:** `lib/private/Share20/Share.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/Share20/Share.php :: php://OC\\Share20\\Share | Rank context reference in dependency blast radius\n```\n"
     },
     "TASK-DEV-04": {
       "task_id": "TASK-DEV-04",
-      "total_tokens": 2765,
+      "total_tokens": 2624,
       "token_budget": 4000,
       "entries_count": 10,
       "critical_file_recall": 0.6667,
@@ -717,8 +1094,66 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
+          "entity_id": "php://OC\\Config\\UserConfig::deleteUserConfig",
+          "rank": 2,
+          "reason": "Direct contract / direct_caller",
+          "evidence": [
+            "config_reads"
+          ],
+          "granularity": "signature",
+          "source_file": "lib/private/Config/UserConfig.php",
+          "source_lines": [
+            1655,
+            1668
+          ],
+          "estimated_tokens": 167,
+          "content_snippet": "\tpublic function deleteUserConfig(string $userId, string $app, string $key): void {\n\t\t$this->assertParams($userId, $app, $key);\n\t\t$this->matchAndApplyLexiconDefinition($userId, $app, $key);\n\n\t\t$qb = $this->connection->getQueryBuilder();\n\t\t$qb->delete('preferences')\n\t\t\t->where($qb->expr()->eq('userid', $qb->createNamedParameter($userId)))\n\t\t\t->andWhere($qb->expr()->eq('appid', $qb->createNamedParameter($app)))\n\t\t\t->andWhere($qb->expr()->eq('configkey', $qb->createNamedParameter($key)));\n\t\t$qb->executeStatement();\n\n\t\tunset($this->lazyCache[$userId][$app][$key]);\n\t\tunset($this->fastCache[$userId][$app][$key]);\n\t}",
+          "span_metadata": {
+            "start_line": 1655,
+            "end_line": 1668,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "deleteUserConfig"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "b52d29132f25b6a11f40483d5131ef09c165e87c1e0d422c17584dd389835621",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
+          "entity_id": "php://Test\\Mock\\Config\\MockUserConfig::deleteUserConfig",
+          "rank": 3,
+          "reason": "Direct regression verification test suite",
+          "evidence": [
+            "config_reads"
+          ],
+          "granularity": "test_fragment",
+          "source_file": "tests/lib/Mock/Config/MockUserConfig.php",
+          "source_lines": [
+            221,
+            223
+          ],
+          "estimated_tokens": 36,
+          "content_snippet": "\tpublic function deleteUserConfig(string $userId, string $app, string $key): void {\n\t\tunset($this->config[$userId][$app][$key]);\n\t}",
+          "span_metadata": {
+            "start_line": 221,
+            "end_line": 223,
+            "span_source": "adapter",
+            "span_confidence_class": "inferred",
+            "fallback_used": false,
+            "symbol_name": "deleteUserConfig"
+          },
+          "merged_entity_ids": [],
+          "source_exists": true,
+          "span_resolved": true,
+          "content_hash": "477d6c7b7972fa4da9dae5767b0c7840c6e5b6432dabf086db50716136705095",
+          "representation_type": "SOURCE_SPAN"
+        },
+        {
           "entity_id": "php://OC::performSameSiteCookieProtection",
-          "rank": 4,
+          "rank": 10,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "imports",
@@ -748,7 +1183,7 @@
         },
         {
           "entity_id": "php://OCA\\AdminAudit\\AuditLogger::__construct",
-          "rank": 5,
+          "rank": 11,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "imports"
@@ -777,7 +1212,7 @@
         },
         {
           "entity_id": "php://OCA\\AdminAudit\\BackgroundJobs\\Rotate::__construct",
-          "rank": 6,
+          "rank": 12,
           "reason": "Direct contract / direct_caller",
           "evidence": [
             "imports"
@@ -805,37 +1240,8 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
-          "entity_id": "php://OCA\\Appstore\\Controller\\ApiController::__construct",
-          "rank": 7,
-          "reason": "Direct contract / direct_caller",
-          "evidence": [
-            "imports"
-          ],
-          "granularity": "signature",
-          "source_file": "apps/appstore/lib/Controller/ApiController.php",
-          "source_lines": [
-            49,
-            65
-          ],
-          "estimated_tokens": 180,
-          "content_snippet": "\tpublic function __construct(\n\t\tIRequest $request,\n\t\tprivate readonly IConfig $config,\n\t\tprivate readonly IAppConfig $appConfig,\n\t\tprivate readonly AppManager $appManager,\n\t\tprivate readonly DependencyAnalyzer $dependencyAnalyzer,\n\t\tprivate readonly CategoryFetcher $categoryFetcher,\n\t\tprivate readonly AppFetcher $appFetcher,\n\t\tprivate readonly IFactory $l10nFactory,\n\t\tprivate readonly BundleFetcher $bundleFetcher,\n\t\tprivate readonly Installer $installer,\n\t\tprivate readonly IRegistry $subscriptionRegistry,\n\t\tprivate readonly LoggerInterface $logger,\n\t\tprivate readonly IURLGenerator $urlGenerator,\n\t) {\n\t\tparent::__construct(Application::APP_ID, $request);\n\t}",
-          "span_metadata": {
-            "start_line": 49,
-            "end_line": 65,
-            "span_source": "adapter",
-            "span_confidence_class": "inferred",
-            "fallback_used": false,
-            "symbol_name": "__construct"
-          },
-          "merged_entity_ids": [],
-          "source_exists": true,
-          "span_resolved": true,
-          "content_hash": "35806c3c9fdc067ac01e18e7359ebe997fa48455429cecb3c69a99194a0a5955",
-          "representation_type": "SOURCE_SPAN"
-        },
-        {
           "entity_id": "php://OCA\\Files_Versions\\Tests\\ExpirationTest::getMockedConfig",
-          "rank": 124,
+          "rank": 130,
           "reason": "Direct regression verification test suite",
           "evidence": [
             "imports"
@@ -864,7 +1270,7 @@
         },
         {
           "entity_id": "php://OCA\\Settings\\SetupChecks\\EmailTestSuccessful::__construct",
-          "rank": 158,
+          "rank": 164,
           "reason": "Direct regression verification test suite",
           "evidence": [
             "imports"
@@ -893,7 +1299,7 @@
         },
         {
           "entity_id": "php://OCA\\Testing\\Controller\\ConfigController::__construct",
-          "rank": 182,
+          "rank": 188,
           "reason": "Direct regression verification test suite",
           "evidence": [
             "imports"
@@ -921,37 +1327,8 @@
           "representation_type": "SOURCE_SPAN"
         },
         {
-          "entity_id": "php://OCA\\Testing\\Controller\\LockingController::__construct",
-          "rank": 183,
-          "reason": "Direct regression verification test suite",
-          "evidence": [
-            "imports"
-          ],
-          "granularity": "test_fragment",
-          "source_file": "apps/testing/lib/Controller/LockingController.php",
-          "source_lines": [
-            29,
-            47
-          ],
-          "estimated_tokens": 158,
-          "content_snippet": "\t * @param string $appName\n\t * @param IRequest $request\n\t * @param ILockingProvider $lockingProvider\n\t * @param FakeDBLockingProvider $fakeDBLockingProvider\n\t * @param IDBConnection $connection\n\t * @param IConfig $config\n\t * @param IRootFolder $rootFolder\n\t */\n\tpublic function __construct(\n\t\t$appName,\n\t\tIRequest $request,\n\t\tprotected ILockingProvider $lockingProvider,\n\t\tprotected FakeDBLockingProvider $fakeDBLockingProvider,\n\t\tprotected IDBConnection $connection,\n\t\tprotected IConfig $config,\n\t\tprotected IRootFolder $rootFolder,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}",
-          "span_metadata": {
-            "start_line": 29,
-            "end_line": 47,
-            "span_source": "adapter",
-            "span_confidence_class": "inferred",
-            "fallback_used": false,
-            "symbol_name": "__construct"
-          },
-          "merged_entity_ids": [],
-          "source_exists": true,
-          "span_resolved": true,
-          "content_hash": "75dbe6051623e212e1f6bae3d3becb919ada26739dc25f096d2eaa70ef72f437",
-          "representation_type": "SOURCE_SPAN"
-        },
-        {
           "entity_id": "php://OC\\AllConfig",
-          "rank": 222,
+          "rank": 228,
           "reason": "Direct contract / implementation",
           "evidence": [
             "inherits"
@@ -979,11 +1356,11 @@
           "representation_type": "STRUCTURAL_SUMMARY"
         }
       ],
-      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2765 / 4000 tokens | **Included Context Units:** 10 (merged 0)\n\n## [1] php://OCP\\IConfig::getSystemValue (full_implementation)\n- **File:** `lib/public/IConfig.php` (lines 43-107)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 6.0.0 - parameter $default was added in 7.0.0\n\t */\n\tpublic function getSystemValue($key, $default = '');\n\n\t/**\n\t * Looks up a boolean system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param bool $default the default value to be returned if the value isn't set\n\t * @return bool the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueBool(string $key, bool $default = false): bool;\n\n\t/**\n\t * Looks up an integer system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param int $default the default value to be returned if the value isn't set\n\t * @return int the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueInt(string $key, int $default = 0): int;\n\n\t/**\n\t * Looks up a string system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param string $default the default value to be returned if the value isn't set\n\t * @return string the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueString(string $key, string $default = ''): string;\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 8.2.0\n\t */\n\tpublic function getFilteredSystemValue($key, $default = '');\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @since 8.0.0\n\t */\n\tpublic function deleteSystemValue($key);\n\n\t/**\n\t * Get all keys stored for an app\n\t *\n\t * @param string $appName the appName that we stored the value under\n\t * @return string[] the keys stored for the app\n\t * @since 8.0.0\n\t * @deprecated 29.0.0 Use {@see IAppConfig} directly\n```\n\n## [4] php://OC::performSameSiteCookieProtection (signature)\n- **File:** `lib/OC.php` (lines 576-635)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports, calls\n```\n* Same Site cookie to further mitigate CSRF attacks. This cookie has to\n\t * be set in every request if cookies are sent to add a second level of\n\t * defense against CSRF.\n\t *\n\t * If the cookie is not sent this will set the cookie and reload the page.\n\t * We use an additional cookie since we want to protect logout CSRF and\n\t * also we can't directly interfere with PHP's session mechanism.\n\t */\n\tprivate static function performSameSiteCookieProtection(IConfig $config): void {\n\t\t$request = Server::get(IRequest::class);\n\n\t\t// Some user agents are notorious and don't really properly follow HTTP\n\t\t// specifications. For those, have an automated opt-out. Since the protection\n\t\t// for remote.php is applied in base.php as starting point we need to opt out\n\t\t// here.\n\t\t$incompatibleUserAgents = $config->getSystemValue('csrf.optout');\n\n\t\t// Fallback, if csrf.optout is unset\n\t\tif (!is_array($incompatibleUserAgents)) {\n\t\t\t$incompatibleUserAgents = [\n\t\t\t\t// OS X Finder\n\t\t\t\t'/^WebDAVFS/',\n\t\t\t\t// Windows webdav drive\n\t\t\t\t'/^Microsoft-WebDAV-MiniRedir/',\n\t\t\t];\n\t\t}\n\n\t\tif ($request->isUserAgent($incompatibleUserAgents)) {\n\t\t\treturn;\n\t\t}\n\n\t\tif (count($_COOKIE) > 0) {\n\t\t\t$requestUri = $request->getScriptName();\n\t\t\t$processingScript = explode('/', $requestUri);\n\t\t\t$processingScript = $processingScript[count($processingScript) - 1];\n\n\t\t\tif ($processingScript === 'index.php' // index.php routes are handled in the middleware\n\t\t\t\t|| $processingScript === 'cron.php' // and cron.php does not need any authentication at all\n\t\t\t\t|| $processingScript === 'public.php' // For public.php, auth for password protected shares is done in the PublicAuth plugin\n\t\t\t) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\t// All other endpoints require the lax and the strict cookie\n\t\t\tif (!$request->passesStrictCookieCheck()) {\n\t\t\t\tlogger('core')->warning('Request does not pass strict cookie check');\n\t\t\t\tself::sendSameSiteCookies();\n\t\t\t\t// Debug mode gets access to the resources without strict cookie\n\t\t\t\t// due to the fact that the SabreDAV browser also lives there.\n\t\t\t\tif (!$config->getSystemValueBool('debug', false)) {\n\t\t\t\t\thttp_response_code(\\OCP\\AppFramework\\Http::STATUS_PRECONDITION_FAILED);\n\t\t\t\t\theader('Content-Type: application/json');\n\t\t\t\t\techo json_encode(['error' => 'Strict Cookie has not been found in request']);\n\t\t\t\t\texit();\n\t\t\t\t}\n\t\t\t}\n\t\t} elseif (!isset($_COOKIE['nc_sameSiteCookielax']) || !isset($_COOKIE['nc_sameSiteCookiestrict'])) {\n\t\t\tself::sendSameSiteCookies();\n\t\t}\n\t}\n```\n\n## [5] php://OCA\\AdminAudit\\AuditLogger::__construct (signature)\n- **File:** `apps/admin_audit/lib/AuditLogger.php` (lines 24-41)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tILogFactory $logFactory,\n\t\tIAppConfig $appConfig,\n\t\tIConfig $config,\n\t) {\n\t\t$auditType = $config->getSystemValueString('log_type_audit', 'file');\n\t\t$defaultTag = $config->getSystemValueString('syslog_tag', 'Nextcloud');\n\t\t$auditTag = $config->getSystemValueString('syslog_tag_audit', $defaultTag);\n\t\t$logFile = $config->getSystemValueString('logfile_audit', '');\n\n\t\tif ($auditType === 'file' && !$logFile) {\n\t\t\t$default = $config->getSystemValue('datadirectory', \\OC::$SERVERROOT . '/data') . '/audit.log';\n\t\t\t// Legacy way was appconfig, now it's paralleled with the normal log config\n\t\t\t$logFile = $appConfig->getAppValueString('logfile', $default);\n\t\t}\n\n\t\t$this->parentLogger = $logFactory->getCustomPsrLogger($logFile, $auditType, $auditTag);\n\t}\n```\n\n## [6] php://OCA\\AdminAudit\\BackgroundJobs\\Rotate::__construct (signature)\n- **File:** `apps/admin_audit/lib/BackgroundJobs/Rotate.php` (lines 20-28)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tITimeFactory $time,\n\t\tprivate IAppConfig $appConfig,\n\t\tprivate IConfig $config,\n\t) {\n\t\tparent::__construct($time);\n\n\t\t$this->setInterval(60 * 60 * 3);\n\t}\n```\n\n## [7] php://OCA\\Appstore\\Controller\\ApiController::__construct (signature)\n- **File:** `apps/appstore/lib/Controller/ApiController.php` (lines 49-65)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tIRequest $request,\n\t\tprivate readonly IConfig $config,\n\t\tprivate readonly IAppConfig $appConfig,\n\t\tprivate readonly AppManager $appManager,\n\t\tprivate readonly DependencyAnalyzer $dependencyAnalyzer,\n\t\tprivate readonly CategoryFetcher $categoryFetcher,\n\t\tprivate readonly AppFetcher $appFetcher,\n\t\tprivate readonly IFactory $l10nFactory,\n\t\tprivate readonly BundleFetcher $bundleFetcher,\n\t\tprivate readonly Installer $installer,\n\t\tprivate readonly IRegistry $subscriptionRegistry,\n\t\tprivate readonly LoggerInterface $logger,\n\t\tprivate readonly IURLGenerator $urlGenerator,\n\t) {\n\t\tparent::__construct(Application::APP_ID, $request);\n\t}\n```\n\n## [124] php://OCA\\Files_Versions\\Tests\\ExpirationTest::getMockedConfig (test_fragment)\n- **File:** `apps/files_versions/tests/ExpirationTest.php` (lines 87-97)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n$mockedConfig = $this->getMockedConfig($retentionObligation);\n\t\t$mockedTimeFactory = $this->getMockedTimeFactory($timeNow);\n\t\t$mockedLogger = $this->createMock(LoggerInterface::class);\n\n\t\t$expiration = new Expiration($mockedConfig, $mockedTimeFactory, $mockedLogger);\n\t\t$actualResult = $expiration->isExpired($timestamp, $quotaExceeded);\n\n\t\t$this->assertEquals($expectedResult, $actualResult);\n\t}\n\n\tprivate function getMockedTimeFactory(int $time): ITimeFactory&MockObject {\n```\n\n## [158] php://OCA\\Settings\\SetupChecks\\EmailTestSuccessful::__construct (test_fragment)\n- **File:** `apps/settings/lib/SetupChecks/EmailTestSuccessful.php` (lines 19-24)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprivate IL10N $l10n,\n\t\tprivate IConfig $config,\n\t\tprivate IURLGenerator $urlGenerator,\n\t) {\n\t}\n```\n\n## [182] php://OCA\\Testing\\Controller\\ConfigController::__construct (test_fragment)\n- **File:** `apps/testing/lib/Controller/ConfigController.php` (lines 18-29)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n/**\n\t * @param string $appName\n\t * @param IRequest $request\n\t * @param IConfig $config\n\t */\n\tpublic function __construct(\n\t\t$appName,\n\t\tIRequest $request,\n\t\tprivate IConfig $config,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n```\n\n## [183] php://OCA\\Testing\\Controller\\LockingController::__construct (test_fragment)\n- **File:** `apps/testing/lib/Controller/LockingController.php` (lines 29-47)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n* @param string $appName\n\t * @param IRequest $request\n\t * @param ILockingProvider $lockingProvider\n\t * @param FakeDBLockingProvider $fakeDBLockingProvider\n\t * @param IDBConnection $connection\n\t * @param IConfig $config\n\t * @param IRootFolder $rootFolder\n\t */\n\tpublic function __construct(\n\t\t$appName,\n\t\tIRequest $request,\n\t\tprotected ILockingProvider $lockingProvider,\n\t\tprotected FakeDBLockingProvider $fakeDBLockingProvider,\n\t\tprotected IDBConnection $connection,\n\t\tprotected IConfig $config,\n\t\tprotected IRootFolder $rootFolder,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n```\n\n## [222] php://OC\\AllConfig (summary)\n- **File:** `lib/private/AllConfig.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/AllConfig.php :: php://OC\\AllConfig | Rank context reference in dependency blast radius\n```\n"
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2624 / 4000 tokens | **Included Context Units:** 10 (merged 0)\n\n## [1] php://OCP\\IConfig::getSystemValue (full_implementation)\n- **File:** `lib/public/IConfig.php` (lines 43-107)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n\t * Looks up a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 6.0.0 - parameter $default was added in 7.0.0\n\t */\n\tpublic function getSystemValue($key, $default = '');\n\n\t/**\n\t * Looks up a boolean system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param bool $default the default value to be returned if the value isn't set\n\t * @return bool the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueBool(string $key, bool $default = false): bool;\n\n\t/**\n\t * Looks up an integer system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param int $default the default value to be returned if the value isn't set\n\t * @return int the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueInt(string $key, int $default = 0): int;\n\n\t/**\n\t * Looks up a string system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param string $default the default value to be returned if the value isn't set\n\t * @return string the value or $default\n\t * @since 16.0.0\n\t */\n\tpublic function getSystemValueString(string $key, string $default = ''): string;\n\n\t/**\n\t * Looks up a system wide defined value and filters out sensitive data\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @param mixed $default the default value to be returned if the value isn't set\n\t * @return mixed the value or $default\n\t * @since 8.2.0\n\t */\n\tpublic function getFilteredSystemValue($key, $default = '');\n\n\t/**\n\t * Delete a system wide defined value\n\t *\n\t * @param string $key the key of the value, under which it was saved\n\t * @since 8.0.0\n\t */\n\tpublic function deleteSystemValue($key);\n\n\t/**\n\t * Get all keys stored for an app\n\t *\n\t * @param string $appName the appName that we stored the value under\n\t * @return string[] the keys stored for the app\n\t * @since 8.0.0\n\t * @deprecated 29.0.0 Use {@see IAppConfig} directly\n```\n\n## [2] php://OC\\Config\\UserConfig::deleteUserConfig (signature)\n- **File:** `lib/private/Config/UserConfig.php` (lines 1655-1668)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** config_reads\n```\npublic function deleteUserConfig(string $userId, string $app, string $key): void {\n\t\t$this->assertParams($userId, $app, $key);\n\t\t$this->matchAndApplyLexiconDefinition($userId, $app, $key);\n\n\t\t$qb = $this->connection->getQueryBuilder();\n\t\t$qb->delete('preferences')\n\t\t\t->where($qb->expr()->eq('userid', $qb->createNamedParameter($userId)))\n\t\t\t->andWhere($qb->expr()->eq('appid', $qb->createNamedParameter($app)))\n\t\t\t->andWhere($qb->expr()->eq('configkey', $qb->createNamedParameter($key)));\n\t\t$qb->executeStatement();\n\n\t\tunset($this->lazyCache[$userId][$app][$key]);\n\t\tunset($this->fastCache[$userId][$app][$key]);\n\t}\n```\n\n## [3] php://Test\\Mock\\Config\\MockUserConfig::deleteUserConfig (test_fragment)\n- **File:** `tests/lib/Mock/Config/MockUserConfig.php` (lines 221-223)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** config_reads\n```\npublic function deleteUserConfig(string $userId, string $app, string $key): void {\n\t\tunset($this->config[$userId][$app][$key]);\n\t}\n```\n\n## [10] php://OC::performSameSiteCookieProtection (signature)\n- **File:** `lib/OC.php` (lines 576-635)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports, calls\n```\n* Same Site cookie to further mitigate CSRF attacks. This cookie has to\n\t * be set in every request if cookies are sent to add a second level of\n\t * defense against CSRF.\n\t *\n\t * If the cookie is not sent this will set the cookie and reload the page.\n\t * We use an additional cookie since we want to protect logout CSRF and\n\t * also we can't directly interfere with PHP's session mechanism.\n\t */\n\tprivate static function performSameSiteCookieProtection(IConfig $config): void {\n\t\t$request = Server::get(IRequest::class);\n\n\t\t// Some user agents are notorious and don't really properly follow HTTP\n\t\t// specifications. For those, have an automated opt-out. Since the protection\n\t\t// for remote.php is applied in base.php as starting point we need to opt out\n\t\t// here.\n\t\t$incompatibleUserAgents = $config->getSystemValue('csrf.optout');\n\n\t\t// Fallback, if csrf.optout is unset\n\t\tif (!is_array($incompatibleUserAgents)) {\n\t\t\t$incompatibleUserAgents = [\n\t\t\t\t// OS X Finder\n\t\t\t\t'/^WebDAVFS/',\n\t\t\t\t// Windows webdav drive\n\t\t\t\t'/^Microsoft-WebDAV-MiniRedir/',\n\t\t\t];\n\t\t}\n\n\t\tif ($request->isUserAgent($incompatibleUserAgents)) {\n\t\t\treturn;\n\t\t}\n\n\t\tif (count($_COOKIE) > 0) {\n\t\t\t$requestUri = $request->getScriptName();\n\t\t\t$processingScript = explode('/', $requestUri);\n\t\t\t$processingScript = $processingScript[count($processingScript) - 1];\n\n\t\t\tif ($processingScript === 'index.php' // index.php routes are handled in the middleware\n\t\t\t\t|| $processingScript === 'cron.php' // and cron.php does not need any authentication at all\n\t\t\t\t|| $processingScript === 'public.php' // For public.php, auth for password protected shares is done in the PublicAuth plugin\n\t\t\t) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\t// All other endpoints require the lax and the strict cookie\n\t\t\tif (!$request->passesStrictCookieCheck()) {\n\t\t\t\tlogger('core')->warning('Request does not pass strict cookie check');\n\t\t\t\tself::sendSameSiteCookies();\n\t\t\t\t// Debug mode gets access to the resources without strict cookie\n\t\t\t\t// due to the fact that the SabreDAV browser also lives there.\n\t\t\t\tif (!$config->getSystemValueBool('debug', false)) {\n\t\t\t\t\thttp_response_code(\\OCP\\AppFramework\\Http::STATUS_PRECONDITION_FAILED);\n\t\t\t\t\theader('Content-Type: application/json');\n\t\t\t\t\techo json_encode(['error' => 'Strict Cookie has not been found in request']);\n\t\t\t\t\texit();\n\t\t\t\t}\n\t\t\t}\n\t\t} elseif (!isset($_COOKIE['nc_sameSiteCookielax']) || !isset($_COOKIE['nc_sameSiteCookiestrict'])) {\n\t\t\tself::sendSameSiteCookies();\n\t\t}\n\t}\n```\n\n## [11] php://OCA\\AdminAudit\\AuditLogger::__construct (signature)\n- **File:** `apps/admin_audit/lib/AuditLogger.php` (lines 24-41)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tILogFactory $logFactory,\n\t\tIAppConfig $appConfig,\n\t\tIConfig $config,\n\t) {\n\t\t$auditType = $config->getSystemValueString('log_type_audit', 'file');\n\t\t$defaultTag = $config->getSystemValueString('syslog_tag', 'Nextcloud');\n\t\t$auditTag = $config->getSystemValueString('syslog_tag_audit', $defaultTag);\n\t\t$logFile = $config->getSystemValueString('logfile_audit', '');\n\n\t\tif ($auditType === 'file' && !$logFile) {\n\t\t\t$default = $config->getSystemValue('datadirectory', \\OC::$SERVERROOT . '/data') . '/audit.log';\n\t\t\t// Legacy way was appconfig, now it's paralleled with the normal log config\n\t\t\t$logFile = $appConfig->getAppValueString('logfile', $default);\n\t\t}\n\n\t\t$this->parentLogger = $logFactory->getCustomPsrLogger($logFile, $auditType, $auditTag);\n\t}\n```\n\n## [12] php://OCA\\AdminAudit\\BackgroundJobs\\Rotate::__construct (signature)\n- **File:** `apps/admin_audit/lib/BackgroundJobs/Rotate.php` (lines 20-28)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tITimeFactory $time,\n\t\tprivate IAppConfig $appConfig,\n\t\tprivate IConfig $config,\n\t) {\n\t\tparent::__construct($time);\n\n\t\t$this->setInterval(60 * 60 * 3);\n\t}\n```\n\n## [130] php://OCA\\Files_Versions\\Tests\\ExpirationTest::getMockedConfig (test_fragment)\n- **File:** `apps/files_versions/tests/ExpirationTest.php` (lines 87-97)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n$mockedConfig = $this->getMockedConfig($retentionObligation);\n\t\t$mockedTimeFactory = $this->getMockedTimeFactory($timeNow);\n\t\t$mockedLogger = $this->createMock(LoggerInterface::class);\n\n\t\t$expiration = new Expiration($mockedConfig, $mockedTimeFactory, $mockedLogger);\n\t\t$actualResult = $expiration->isExpired($timestamp, $quotaExceeded);\n\n\t\t$this->assertEquals($expectedResult, $actualResult);\n\t}\n\n\tprivate function getMockedTimeFactory(int $time): ITimeFactory&MockObject {\n```\n\n## [164] php://OCA\\Settings\\SetupChecks\\EmailTestSuccessful::__construct (test_fragment)\n- **File:** `apps/settings/lib/SetupChecks/EmailTestSuccessful.php` (lines 19-24)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprivate IL10N $l10n,\n\t\tprivate IConfig $config,\n\t\tprivate IURLGenerator $urlGenerator,\n\t) {\n\t}\n```\n\n## [188] php://OCA\\Testing\\Controller\\ConfigController::__construct (test_fragment)\n- **File:** `apps/testing/lib/Controller/ConfigController.php` (lines 18-29)\n- **Inclusion Reason:** Direct regression verification test suite\n- **Evidence:** imports\n```\n/**\n\t * @param string $appName\n\t * @param IRequest $request\n\t * @param IConfig $config\n\t */\n\tpublic function __construct(\n\t\t$appName,\n\t\tIRequest $request,\n\t\tprivate IConfig $config,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n```\n\n## [228] php://OC\\AllConfig (summary)\n- **File:** `lib/private/AllConfig.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/AllConfig.php :: php://OC\\AllConfig | Rank context reference in dependency blast radius\n```\n"
     },
     "TASK-DEV-05": {
       "task_id": "TASK-DEV-05",
-      "total_tokens": 2352,
+      "total_tokens": 2338,
       "token_budget": 4000,
       "entries_count": 9,
       "critical_file_recall": 0.6667,
@@ -1010,9 +1387,7 @@
             "fallback_used": false,
             "symbol_name": "getUser"
           },
-          "merged_entity_ids": [
-            "php://OCP\\IUserSession"
-          ],
+          "merged_entity_ids": [],
           "source_exists": true,
           "span_resolved": true,
           "content_hash": "c0369dc53a11596c72e54a32b755c5dc78c948c52c272ddadbb47acd3f2fa9e1",
@@ -1251,7 +1626,7 @@
           "representation_type": "STRUCTURAL_SUMMARY"
         }
       ],
-      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2352 / 4000 tokens | **Included Context Units:** 9 (merged 1)\n\n## [1] php://OCP\\IUserSession::getUser (full_implementation)\n- **File:** `lib/public/IUserSession.php` (lines 62-99)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n- **Merged Related Entities:** php://OCP\\IUserSession\n```\n/**\n\t * Returns the currently authenticated user for this session, or null if the session has no active user.\n\t *\n\t * @return \\OCP\\IUser|null The active user, or null if the session is anonymous, expired, or in incognito mode.\n\t * @since 8.0.0\n\t */\n\tpublic function getUser();\n\n\t/**\n\t * Checks whether a user is currently logged in for this session.\n\t *\n\t * @return bool True if a user is authenticated and enabled, false otherwise.\n\t * @since 8.0.0\n\t */\n\tpublic function isLoggedIn();\n\n\t/**\n\t * Returns the user ID of the impersonator if another user is being impersonated.\n\t *\n\t * @return string|null The impersonating user's ID, or null if not impersonating.\n\t * @since 18.0.0\n\t */\n\tpublic function getImpersonatingUserID(): ?string;\n\n\t/**\n\t * Sets or clears the impersonator's user ID in the current session.\n\t *\n\t * Note: This does not initiate impersonation, but only records the identity of the impersonator in the session.\n\t *\n\t * If $useCurrentUser is true (default), records the current user's ID as the impersonator.\n\t * If false, removes any impersonator information from the session.\n\t *\n\t * @param bool $useCurrentUser Whether to assign the current user as the impersonator or to clear it.\n\t * @throws UserNotFoundException When the user is not found\n\t * @since 18.0.0\n\t */\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void;\n}\n```\n\n## [2] php://NCU\\Sharing\\Recipient\\AShareRecipientTypeSearchCollaborator::getUserSession (signature)\n- **File:** `lib/unstable/Sharing/Recipient/AShareRecipientTypeSearchCollaborator.php` (lines 30-32)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nprivate function getUserSession(): IUserSession {\n\t\treturn $this->userSession ??= Server::get(IUserSession::class);\n\t}\n```\n\n## [3] php://OCA\\Appstore\\Controller\\DiscoverController::getAppDiscoverMedia (signature)\n- **File:** `apps/appstore/lib/Controller/DiscoverController.php` (lines 83-149)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getAppDiscoverMedia(string $fileName, ILimiter $limiter, IUserSession $session): FileDisplayResponse {\n\t\t$getEtag = $this->discoverFetcher->getETag() ?? date('Y-m');\n\t\t$etag = trim($getEtag, '\"');\n\n\t\ttry {\n\t\t\t$folder = $this->appData->getFolder('app-discover-cache');\n\t\t\t$this->cleanUpImageCache($folder, $etag);\n\t\t} catch (\\Throwable) {\n\t\t\t$folder = $this->appData->newFolder('app-discover-cache');\n\t\t}\n\n\t\t// Get the current cache folder\n\t\ttry {\n\t\t\t$folder = $folder->getFolder($etag);\n\t\t} catch (NotFoundException) {\n\t\t\t$folder = $folder->newFolder($etag);\n\t\t}\n\n\t\t$info = pathinfo($fileName);\n\t\t$hashName = md5($fileName);\n\t\t$allFiles = $folder->getDirectoryListing();\n\t\t// Try to find the file\n\t\t$file = array_filter($allFiles, fn (ISimpleFile $file): bool => str_starts_with($file->getName(), $hashName));\n\t\t// Get the first entry\n\t\t$file = reset($file);\n\t\t// If not found request from Web\n\t\tif ($file === false) {\n\t\t\t$user = $session->getUser();\n\t\t\t// this route is not public thus we can assume a user is logged-in\n\t\t\tassert($user !== null);\n\t\t\t// Register a user request to throttle fetching external data\n\t\t\t// this will prevent using the server for DoS of other systems.\n\t\t\t$limiter->registerUserRequest(\n\t\t\t\t'settings-discover-media',\n\t\t\t\t// allow up to 24 media requests per hour\n\t\t\t\t// this should be a sane default when a completely new section is loaded\n\t\t\t\t// keep in mind browsers request all files from a source-set\n\t\t\t\t24,\n\t\t\t\t60 * 60,\n\t\t\t\t$user,\n\t\t\t);\n\n\t\t\tif (!$this->checkCanDownloadMedia($fileName)) {\n\t\t\t\t$this->logger->warning('Tried to load media files for app discover section from untrusted source');\n\t\t\t\tthrow new OCSBadRequestException('Untrusted media source');\n\t\t\t}\n\n\t\t\ttry {\n\t\t\t\t$client = $this->clientService->newClient();\n\t\t\t\t$fileResponse = $client->get($fileName);\n\t\t\t\t$contentType = $fileResponse->getHeader('Content-Type');\n\t\t\t\t$extension = $info['extension'] ?? '';\n\t\t\t\t$file = $folder->newFile($hashName . '.' . base64_encode($contentType) . '.' . $extension, $fileResponse->getBody());\n\t\t\t} catch (\\Throwable $e) {\n\t\t\t\t$this->logger->warning('Could not load media file for app discover section', ['media_src' => $fileName, 'exception' => $e]);\n\t\t\t\tthrow new OCSNotFoundException('Media file not found');\n\t\t\t}\n\t\t} else {\n\t\t\t// File was found so we can get the content type from the file name\n\t\t\t$contentType = base64_decode(explode('.', $file->getName())[1] ?? '');\n\t\t}\n\n\t\t$response = new FileDisplayResponse($file, Http::STATUS_OK, ['Content-Type' => $contentType]);\n\t\t// cache for 7 days\n\t\t$response->cacheFor(604800, false, true);\n\t\treturn $response;\n\t}\n```\n\n## [4] php://OCA\\Comments\\Activity\\Listener::__construct (signature)\n- **File:** `apps/comments/lib/Activity/Listener.php` (lines 21-29)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprotected IManager $activityManager,\n\t\tprotected IUserSession $session,\n\t\tprotected IAppManager $appManager,\n\t\tprotected IMountProviderCollection $mountCollection,\n\t\tprotected IRootFolder $rootFolder,\n\t\tprotected IShareHelper $shareHelper,\n\t) {\n\t}\n```\n\n## [5] php://OCA\\Comments\\Controller\\NotificationsController::__construct (signature)\n- **File:** `apps/comments/lib/Controller/NotificationsController.php` (lines 31-41)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tstring $appName,\n\t\tIRequest $request,\n\t\tprotected ICommentsManager $commentsManager,\n\t\tprotected IRootFolder $rootFolder,\n\t\tprotected IURLGenerator $urlGenerator,\n\t\tprotected IManager $notificationManager,\n\t\tprotected IUserSession $userSession,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n```\n\n## [6] php://OCA\\DAV\\CalDAV\\Activity\\Backend::__construct (signature)\n- **File:** `apps/dav/lib/CalDAV/Activity/Backend.php` (lines 30-37)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprotected IActivityManager $activityManager,\n\t\tprotected IGroupManager $groupManager,\n\t\tprotected IUserSession $userSession,\n\t\tprotected IAppManager $appManager,\n\t\tprotected IUserManager $userManager,\n\t) {\n\t}\n```\n\n## [7] php://OCA\\DAV\\CalDAV\\ResourceBooking\\AbstractPrincipalBackend::__construct (signature)\n- **File:** `apps/dav/lib/CalDAV/ResourceBooking/AbstractPrincipalBackend.php` (lines 39-52)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprivate IDBConnection $db,\n\t\tprivate IUserSession $userSession,\n\t\tprivate IGroupManager $groupManager,\n\t\tprivate LoggerInterface $logger,\n\t\tprivate ProxyMapper $proxyMapper,\n\t\tprivate string $principalPrefix,\n\t\tstring $dbPrefix,\n\t\tprivate string $cuType,\n\t) {\n\t\t$this->dbTableName = 'calendar_' . $dbPrefix . 's';\n\t\t$this->dbMetaDataTableName = $this->dbTableName . '_md';\n\t\t$this->dbForeignKeyName = $dbPrefix . '_id';\n\t}\n```\n\n## [74] php://OCA\\Files_External\\Migration\\DummyUserSession (signature)\n- **File:** `apps/files_external/lib/Migration/DummyUserSession.php` (lines 14-66)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nclass DummyUserSession implements IUserSession {\n\n\tprivate ?IUser $user = null;\n\n\t#[\\Override]\n\tpublic function login($uid, $password) {\n\t}\n\n\t#[\\Override]\n\tpublic function logout() {\n\t}\n\n\t#[\\Override]\n\tpublic function setUser($user) {\n\t\t$this->user = $user;\n\t}\n\n\t#[\\Override]\n\tpublic function setVolatileActiveUser(?IUser $user): void {\n\t\t$this->user = $user;\n\t}\n\n\t#[\\Override]\n\tpublic function getUser() {\n\t\treturn $this->user;\n\t}\n\n\t#[\\Override]\n\tpublic function isLoggedIn() {\n\t\treturn !is_null($this->user);\n\t}\n\n\t/**\n\t * get getImpersonatingUserID\n\t *\n\t * @return string|null\n\t * @since 17.0.0\n\t */\n\t#[\\Override]\n\tpublic function getImpersonatingUserID() : ?string {\n\t\treturn null;\n\t}\n\n\t/**\n\t * set setImpersonatingUserID\n\t *\n\t * @since 17.0.0\n\t */\n\t#[\\Override]\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void {\n\t\t//no OP\n\t}\n}\n```\n\n## [194] php://OC\\User\\Session (summary)\n- **File:** `lib/private/User/Session.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/User/Session.php :: php://OC\\User\\Session | Rank context reference in dependency blast radius\n```\n"
+      "rendered_prompt_markdown": "# RCIR v8.2 \u2014 Curated Engineering Context\n**Budget:** 2338 / 4000 tokens | **Included Context Units:** 9 (merged 0)\n\n## [1] php://OCP\\IUserSession::getUser (full_implementation)\n- **File:** `lib/public/IUserSession.php` (lines 62-99)\n- **Inclusion Reason:** Primary change target entity (PINNED)\n```\n/**\n\t * Returns the currently authenticated user for this session, or null if the session has no active user.\n\t *\n\t * @return \\OCP\\IUser|null The active user, or null if the session is anonymous, expired, or in incognito mode.\n\t * @since 8.0.0\n\t */\n\tpublic function getUser();\n\n\t/**\n\t * Checks whether a user is currently logged in for this session.\n\t *\n\t * @return bool True if a user is authenticated and enabled, false otherwise.\n\t * @since 8.0.0\n\t */\n\tpublic function isLoggedIn();\n\n\t/**\n\t * Returns the user ID of the impersonator if another user is being impersonated.\n\t *\n\t * @return string|null The impersonating user's ID, or null if not impersonating.\n\t * @since 18.0.0\n\t */\n\tpublic function getImpersonatingUserID(): ?string;\n\n\t/**\n\t * Sets or clears the impersonator's user ID in the current session.\n\t *\n\t * Note: This does not initiate impersonation, but only records the identity of the impersonator in the session.\n\t *\n\t * If $useCurrentUser is true (default), records the current user's ID as the impersonator.\n\t * If false, removes any impersonator information from the session.\n\t *\n\t * @param bool $useCurrentUser Whether to assign the current user as the impersonator or to clear it.\n\t * @throws UserNotFoundException When the user is not found\n\t * @since 18.0.0\n\t */\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void;\n}\n```\n\n## [2] php://NCU\\Sharing\\Recipient\\AShareRecipientTypeSearchCollaborator::getUserSession (signature)\n- **File:** `lib/unstable/Sharing/Recipient/AShareRecipientTypeSearchCollaborator.php` (lines 30-32)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\nprivate function getUserSession(): IUserSession {\n\t\treturn $this->userSession ??= Server::get(IUserSession::class);\n\t}\n```\n\n## [3] php://OCA\\Appstore\\Controller\\DiscoverController::getAppDiscoverMedia (signature)\n- **File:** `apps/appstore/lib/Controller/DiscoverController.php` (lines 83-149)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function getAppDiscoverMedia(string $fileName, ILimiter $limiter, IUserSession $session): FileDisplayResponse {\n\t\t$getEtag = $this->discoverFetcher->getETag() ?? date('Y-m');\n\t\t$etag = trim($getEtag, '\"');\n\n\t\ttry {\n\t\t\t$folder = $this->appData->getFolder('app-discover-cache');\n\t\t\t$this->cleanUpImageCache($folder, $etag);\n\t\t} catch (\\Throwable) {\n\t\t\t$folder = $this->appData->newFolder('app-discover-cache');\n\t\t}\n\n\t\t// Get the current cache folder\n\t\ttry {\n\t\t\t$folder = $folder->getFolder($etag);\n\t\t} catch (NotFoundException) {\n\t\t\t$folder = $folder->newFolder($etag);\n\t\t}\n\n\t\t$info = pathinfo($fileName);\n\t\t$hashName = md5($fileName);\n\t\t$allFiles = $folder->getDirectoryListing();\n\t\t// Try to find the file\n\t\t$file = array_filter($allFiles, fn (ISimpleFile $file): bool => str_starts_with($file->getName(), $hashName));\n\t\t// Get the first entry\n\t\t$file = reset($file);\n\t\t// If not found request from Web\n\t\tif ($file === false) {\n\t\t\t$user = $session->getUser();\n\t\t\t// this route is not public thus we can assume a user is logged-in\n\t\t\tassert($user !== null);\n\t\t\t// Register a user request to throttle fetching external data\n\t\t\t// this will prevent using the server for DoS of other systems.\n\t\t\t$limiter->registerUserRequest(\n\t\t\t\t'settings-discover-media',\n\t\t\t\t// allow up to 24 media requests per hour\n\t\t\t\t// this should be a sane default when a completely new section is loaded\n\t\t\t\t// keep in mind browsers request all files from a source-set\n\t\t\t\t24,\n\t\t\t\t60 * 60,\n\t\t\t\t$user,\n\t\t\t);\n\n\t\t\tif (!$this->checkCanDownloadMedia($fileName)) {\n\t\t\t\t$this->logger->warning('Tried to load media files for app discover section from untrusted source');\n\t\t\t\tthrow new OCSBadRequestException('Untrusted media source');\n\t\t\t}\n\n\t\t\ttry {\n\t\t\t\t$client = $this->clientService->newClient();\n\t\t\t\t$fileResponse = $client->get($fileName);\n\t\t\t\t$contentType = $fileResponse->getHeader('Content-Type');\n\t\t\t\t$extension = $info['extension'] ?? '';\n\t\t\t\t$file = $folder->newFile($hashName . '.' . base64_encode($contentType) . '.' . $extension, $fileResponse->getBody());\n\t\t\t} catch (\\Throwable $e) {\n\t\t\t\t$this->logger->warning('Could not load media file for app discover section', ['media_src' => $fileName, 'exception' => $e]);\n\t\t\t\tthrow new OCSNotFoundException('Media file not found');\n\t\t\t}\n\t\t} else {\n\t\t\t// File was found so we can get the content type from the file name\n\t\t\t$contentType = base64_decode(explode('.', $file->getName())[1] ?? '');\n\t\t}\n\n\t\t$response = new FileDisplayResponse($file, Http::STATUS_OK, ['Content-Type' => $contentType]);\n\t\t// cache for 7 days\n\t\t$response->cacheFor(604800, false, true);\n\t\treturn $response;\n\t}\n```\n\n## [4] php://OCA\\Comments\\Activity\\Listener::__construct (signature)\n- **File:** `apps/comments/lib/Activity/Listener.php` (lines 21-29)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprotected IManager $activityManager,\n\t\tprotected IUserSession $session,\n\t\tprotected IAppManager $appManager,\n\t\tprotected IMountProviderCollection $mountCollection,\n\t\tprotected IRootFolder $rootFolder,\n\t\tprotected IShareHelper $shareHelper,\n\t) {\n\t}\n```\n\n## [5] php://OCA\\Comments\\Controller\\NotificationsController::__construct (signature)\n- **File:** `apps/comments/lib/Controller/NotificationsController.php` (lines 31-41)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tstring $appName,\n\t\tIRequest $request,\n\t\tprotected ICommentsManager $commentsManager,\n\t\tprotected IRootFolder $rootFolder,\n\t\tprotected IURLGenerator $urlGenerator,\n\t\tprotected IManager $notificationManager,\n\t\tprotected IUserSession $userSession,\n\t) {\n\t\tparent::__construct($appName, $request);\n\t}\n```\n\n## [6] php://OCA\\DAV\\CalDAV\\Activity\\Backend::__construct (signature)\n- **File:** `apps/dav/lib/CalDAV/Activity/Backend.php` (lines 30-37)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprotected IActivityManager $activityManager,\n\t\tprotected IGroupManager $groupManager,\n\t\tprotected IUserSession $userSession,\n\t\tprotected IAppManager $appManager,\n\t\tprotected IUserManager $userManager,\n\t) {\n\t}\n```\n\n## [7] php://OCA\\DAV\\CalDAV\\ResourceBooking\\AbstractPrincipalBackend::__construct (signature)\n- **File:** `apps/dav/lib/CalDAV/ResourceBooking/AbstractPrincipalBackend.php` (lines 39-52)\n- **Inclusion Reason:** Direct contract / direct_caller\n- **Evidence:** imports\n```\npublic function __construct(\n\t\tprivate IDBConnection $db,\n\t\tprivate IUserSession $userSession,\n\t\tprivate IGroupManager $groupManager,\n\t\tprivate LoggerInterface $logger,\n\t\tprivate ProxyMapper $proxyMapper,\n\t\tprivate string $principalPrefix,\n\t\tstring $dbPrefix,\n\t\tprivate string $cuType,\n\t) {\n\t\t$this->dbTableName = 'calendar_' . $dbPrefix . 's';\n\t\t$this->dbMetaDataTableName = $this->dbTableName . '_md';\n\t\t$this->dbForeignKeyName = $dbPrefix . '_id';\n\t}\n```\n\n## [74] php://OCA\\Files_External\\Migration\\DummyUserSession (signature)\n- **File:** `apps/files_external/lib/Migration/DummyUserSession.php` (lines 14-66)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\nclass DummyUserSession implements IUserSession {\n\n\tprivate ?IUser $user = null;\n\n\t#[\\Override]\n\tpublic function login($uid, $password) {\n\t}\n\n\t#[\\Override]\n\tpublic function logout() {\n\t}\n\n\t#[\\Override]\n\tpublic function setUser($user) {\n\t\t$this->user = $user;\n\t}\n\n\t#[\\Override]\n\tpublic function setVolatileActiveUser(?IUser $user): void {\n\t\t$this->user = $user;\n\t}\n\n\t#[\\Override]\n\tpublic function getUser() {\n\t\treturn $this->user;\n\t}\n\n\t#[\\Override]\n\tpublic function isLoggedIn() {\n\t\treturn !is_null($this->user);\n\t}\n\n\t/**\n\t * get getImpersonatingUserID\n\t *\n\t * @return string|null\n\t * @since 17.0.0\n\t */\n\t#[\\Override]\n\tpublic function getImpersonatingUserID() : ?string {\n\t\treturn null;\n\t}\n\n\t/**\n\t * set setImpersonatingUserID\n\t *\n\t * @since 17.0.0\n\t */\n\t#[\\Override]\n\tpublic function setImpersonatingUserID(bool $useCurrentUser = true): void {\n\t\t//no OP\n\t}\n}\n```\n\n## [194] php://OC\\User\\Session (summary)\n- **File:** `lib/private/User/Session.php` (lines 1-1)\n- **Inclusion Reason:** Direct contract / implementation\n- **Evidence:** inherits\n```\n// [SUMMARY] lib/private/User/Session.php :: php://OC\\User\\Session | Rank context reference in dependency blast radius\n```\n"
     },
     "TASK-DEV-06": {
       "task_id": "TASK-DEV-06",

@@ -1,0 +1,12 @@
+{
+  "config_version": "8.5.2",
+  "token_budgets": [1000, 2000, 4000, 8000, 16000],
+  "default_token_budget": 4000,
+  "strict_budget_invariant": true,
+  "role_allocations": {
+    "PRIMARY_TARGET": 0.4,
+    "DIRECT_DEPENDENCY": 0.35,
+    "CONTEXT_BOUNDARY": 0.15,
+    "STRUCTURAL_INDEX": 0.1
+  }
+}

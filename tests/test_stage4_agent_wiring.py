@@ -49,11 +49,11 @@ def test_f04_prompt_and_context_provider_wiring():
     assert len(already_seen) == len(res1["entries"])
 
     # Query 2: subsequent query with already_seen must not re-return already_seen entities
-    seen_count_before = len(already_seen)
+    seen_before_second = set(already_seen)
     res2 = provider.retrieve(symbol="getThumbnail", already_seen=already_seen, token_budget=1000)
     # Any new entries must have unique IDs
     for e in res2["entries"]:
-        assert e["entity_id"] not in already_seen
+        assert e["entity_id"] not in seen_before_second
 
 
 def test_f05_harness_command_windows_space_safety():

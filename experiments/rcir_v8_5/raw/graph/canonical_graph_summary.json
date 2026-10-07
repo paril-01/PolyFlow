@@ -1,5 +1,5 @@
 {
-  "run_id": "rcir-v8.5-primary",
+  "run_id": "rcir-v8.5.2-primary",
   "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "total_nodes": 48611,
   "total_edges": 143225,
@@ -38,5 +38,5 @@
   "internal_endpoints_count": 48676,
   "external_endpoints_count": 457,
   "unresolved_endpoints_count": 75,
-  "build_latency_seconds": 6.115
+  "build_latency_seconds": 3.609
 }

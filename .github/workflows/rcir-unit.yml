@@ -33,6 +33,23 @@ jobs:
       run: |
         python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py
 
-    - name: Run RCIR v8.5 Regression and Unit Tests
+    - name: Run RCIR Stages 1-14 and Core Unit Tests
       run: |
-        PYTHONPATH=rcir/src:experiments/rcir_v8_5/scripts pytest tests/test_rcir_v8_5.py -v
+        PYTHONPATH=rcir/src:experiments/rcir_v8_5/scripts:experiments/rcir_v8_5 pytest \
+          tests/test_stage1_core_correctness.py \
+          tests/test_stage2_submodules.py \
+          tests/test_stage3_ranking.py \
+          tests/test_stage4_agent_wiring.py \
+          tests/test_stage5_contract_and_gates.py \
+          tests/test_stage6_provenance_binding.py \
+          tests/test_stage7_contract_feasibility.py \
+          tests/test_stage8_report_truthfulness.py \
+          tests/test_stage9_discovery_no_answer_injection.py \
+          tests/test_stage10_retrieval_execution.py \
+          tests/test_stage11_run_lifecycle.py \
+          tests/test_stage12_agent_evidence.py \
+          tests/test_stage13_generalization_truthfulness.py \
+          tests/test_stage14_report_run_consistency.py \
+          tests/test_agent_loop.py \
+          tests/test_repo_tools.py \
+          -v

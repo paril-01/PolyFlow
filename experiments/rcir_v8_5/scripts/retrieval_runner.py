@@ -31,7 +31,15 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
-from environment import get_default_environment
+try:
+    from environment import get_default_environment
+except ImportError:
+    from experiments.rcir_v8_5.scripts.environment import get_default_environment
+
+try:
+    from provenance import build_provenance_envelope
+except ImportError:
+    from experiments.rcir_v8_5.scripts.provenance import build_provenance_envelope
 
 env = get_default_environment()
 sys.path.insert(0, str(env.polyflow_root / "rcir" / "src"))
@@ -275,7 +283,7 @@ def discover_multi_channel_candidates(
                     candidates[ent_id] = EvidenceVector(
                         entity_id=ent_id,
                         file_path=ent.file,
-                        bm25_score=3.5,
+                        lexical_score=3.5,
                         resolution_class="not_analyzed",
                         edge_types=["lexical_match"],
                         hop_distance=2,
@@ -515,37 +523,102 @@ def execute_retrieval_suite():
         splits_channel_stats[split] = split_stats
 
     # 4. VALIDATION-BASED RANKER SELECTION (PHASE 50, 51, 52)
-    # Define candidate ranker configurations
-    ranker_candidate_configs = {
-        "R0": {
-            "name": "R0_GraphDistanceBaseline",
-            "type": "linear",
-            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False),
-        },
-        "ExactFirst": {
-            "name": "ExactFirstCascaded",
-            "type": "cascaded",
-            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
-        },
-        "OperationCascade": {
-            "name": "OperationAwareCascade",
-            "type": "operation_cascaded",
-            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
-        },
-        "Coverage": {
-            "name": "CoverageDiversityRanker",
-            "type": "diversity",
-            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5),
-        },
-        "AnchorCoverageRRF": {
-            "name": "AnchorCoverageRRF_MultiObjective",
-            "type": "multi_objective_rrf",
-            "config": None,
-        },
-    }
+    envelope = build_provenance_envelope(env)
+    
+    best_config_name, validation_results, best_objective_score = select_ranker_on_validation(
+        splits_candidates=splits_candidates,
+        gt_tasks=gt_tasks,
+        env=env,
+        envelope=envelope,
+    )
+
+    # 5. Baseline generation on TEST split for Option B comparative contract evaluation
+    build_baseline(
+        splits_candidates=splits_candidates,
+        gt_tasks=gt_tasks,
+        env=env,
+        envelope=envelope,
+    )
+
+    # 6. Run winning configuration across DEV, VALIDATION, and TEST
+    for split in ("dev", "validation", "test"):
+        evaluate_frozen_ranker_on_split(
+            split=split,
+            best_config_name=best_config_name,
+            splits_candidates=splits_candidates,
+            splits_channel_stats=splits_channel_stats,
+            gt_tasks=gt_tasks,
+            env=env,
+            envelope=envelope,
+        )
+
+    # 7. Holdout hygiene: semantic and file-overlap analysis across splits (Section 17 & Issue 35)
+    dev_tasks = json.loads((env.dataset_root / "dev.json").read_text(encoding="utf-8"))["tasks"]
+    val_tasks = json.loads((env.dataset_root / "validation.json").read_text(encoding="utf-8"))["tasks"]
+    test_tasks = json.loads((env.dataset_root / "test.json").read_text(encoding="utf-8"))["tasks"]
+
+    evaluate_split_overlap(
+        dev_tasks=dev_tasks,
+        val_tasks=val_tasks,
+        test_tasks=test_tasks,
+        gt_tasks=gt_tasks,
+        env=env,
+        envelope=envelope,
+    )
+
+    # Verify all mandatory outputs exist
+    mandatory_outputs = [
+        env.results_root / "selected_ranker_config.json",
+        env.results_root / "ranker_baseline_r0.json",
+        env.results_root / "ranker_dev.json",
+        env.results_root / "ranker_validation.json",
+        env.results_root / "ranker_test.json",
+        env.results_root / "impact_dev.json",
+        env.results_root / "impact_validation.json",
+        env.results_root / "impact_test.json",
+        env.results_root / "dataset_split_overlap.json",
+        env.raw_root / "retrieval" / "dev_predictions.json",
+        env.raw_root / "retrieval" / "validation_predictions.json",
+        env.raw_root / "retrieval" / "test_predictions.json",
+    ]
+    missing = [str(p) for p in mandatory_outputs if not p.exists()]
+    if missing:
+        raise RuntimeError(f"Retrieval suite execution completed but mandatory outputs are missing:\n  " + "\n  ".join(missing))
+
+    print("\nRetrieval execution COMPLETE. All mandatory outputs verified.")
+
+
+RANKER_CANDIDATE_CONFIGS: dict[str, dict[str, Any]] = {
+    "R0": {
+        "name": "R0_GraphDistanceBaseline",
+        "type": "linear",
+        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False),
+    },
+    "ExactFirst": {
+        "name": "ExactFirstCascaded",
+        "type": "cascaded",
+        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+    },
+    "OperationCascade": {
+        "name": "OperationAwareCascade",
+        "type": "operation_cascaded",
+        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+    },
+    "Coverage": {
+        "name": "CoverageDiversityRanker",
+        "type": "diversity",
+        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5),
+    },
+    "AnchorCoverageRRF": {
+        "name": "AnchorCoverageRRF_MultiObjective",
+        "type": "multi_objective_rrf",
+        "config": None,
+    },
+}
+
 
 def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
-    """Centralized ranker factory used across retrieval runner, validation selection, TEST execution, and determinism evaluation (v8.5.1)."""
+    """Centralized ranker factory used across retrieval runner, validation selection, TEST execution, and determinism evaluation (v8.5.2)."""
     cfg = (config_name or "").strip()
     if cfg in ("R0", "R0_GraphDistanceBaseline", "linear"):
         return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False))
@@ -559,46 +632,25 @@ def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
     elif cfg in ("AnchorCoverageRRF", "AnchorCoverageRRF_MultiObjective", "multi_objective_rrf"):
         return MultiObjectiveRanker(operation=operation or "behavior_change")
     else:
-        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False))
+        raise ValueError(
+            f"Unknown ranker configuration '{config_name}'. Permitted configurations: {list(RANKER_CANDIDATE_CONFIGS.keys())}"
+        )
 
 
-    # 4. VALIDATION-BASED RANKER SELECTION (PHASE 50, 51, 52)
-    # Define candidate ranker configurations
-    ranker_candidate_configs = {
-        "R0": {
-            "name": "R0_GraphDistanceBaseline",
-            "type": "linear",
-            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False),
-        },
-        "ExactFirst": {
-            "name": "ExactFirstCascaded",
-            "type": "cascaded",
-            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
-        },
-        "OperationCascade": {
-            "name": "OperationAwareCascade",
-            "type": "operation_cascaded",
-            "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
-        },
-        "Coverage": {
-            "name": "CoverageDiversityRanker",
-            "type": "diversity",
-            "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5),
-        },
-        "AnchorCoverageRRF": {
-            "name": "AnchorCoverageRRF_MultiObjective",
-            "type": "multi_objective_rrf",
-            "config": None,
-        },
-    }
-
+def select_ranker_on_validation(
+    splits_candidates: dict[str, dict[str, list[EvidenceVector]]],
+    gt_tasks: dict[str, Any],
+    env: Any,
+    envelope: dict[str, Any],
+) -> tuple[str, dict[str, Any], float]:
+    """Evaluate candidate rankers on VALIDATION split and select the winner (PHASE 50, 51, 52)."""
     print("\n--- Evaluating Ranker Configurations on VALIDATION split (PHASE 50) ---")
     val_cands = splits_candidates["validation"]
     validation_results = {}
     best_config_name = None
     best_objective_score = -1.0
 
-    for cfg_key, cfg_info in ranker_candidate_configs.items():
+    for cfg_key, cfg_info in RANKER_CANDIDATE_CONFIGS.items():
         val_ranked: dict[str, list[RankedCandidate]] = {}
         for tid, vectors in val_cands.items():
             task_op = gt_tasks[tid]["category"]
@@ -611,36 +663,47 @@ def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
         validation_results[cfg_key] = metrics
 
         obj = metrics["multi_objective_score"]
-        print(f"  [{cfg_key}] {cfg_info['name']} -> Macro Recall: {metrics['macro_pool_recall']*100:.1f}%, Worst: {metrics['worst_task_pool_recall']*100:.1f}%, P@20: {metrics['precision_at_20_excluding_target']*100:.1f}%, MRR: {metrics['dependency_mrr']:.4f} => Objective Score: {obj:.4f}")
+        print(
+            f"  [{cfg_key}] {cfg_info['name']} -> Macro Recall: {metrics['macro_pool_recall']*100:.1f}%, "
+            f"Worst: {metrics['worst_task_pool_recall']*100:.1f}%, P@20: {metrics['precision_at_20_excluding_target']*100:.1f}%, "
+            f"MRR: {metrics['dependency_mrr']:.4f} => Objective Score: {obj:.4f}"
+        )
 
         if obj > best_objective_score:
             best_objective_score = obj
             best_config_name = cfg_key
 
-    print(f"\nWinning Validation Configuration: '{best_config_name}' ({ranker_candidate_configs[best_config_name]['name']}) with score {best_objective_score:.4f}")
-
-    # Build provenance envelope
-    env.derive_run_id()
-    from provenance import build_provenance_envelope
-    envelope = build_provenance_envelope(env)
+    print(
+        f"\nWinning Validation Configuration: '{best_config_name}' "
+        f"({RANKER_CANDIDATE_CONFIGS[best_config_name]['name']}) with score {best_objective_score:.4f}"
+    )
 
     # Produce selected_ranker_config.json (PHASE 51)
     selected_artifact = {
         **envelope,
         "selected_configuration": best_config_name,
-        "config_description": ranker_candidate_configs[best_config_name]["name"],
+        "config_description": RANKER_CANDIDATE_CONFIGS[best_config_name]["name"],
         "validation_objective_score": best_objective_score,
         "validation_metrics": validation_results[best_config_name],
         "selection_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "test_visibility": False,
-        "all_candidate_configurations_evaluated": list(ranker_candidate_configs.keys()),
+        "all_candidate_configurations_evaluated": list(RANKER_CANDIDATE_CONFIGS.keys()),
         "all_candidate_results": validation_results,
         "selection_objective": "0.25*Macro_Recall + 0.25*Worst_Recall + 0.20*P@20_excl + 0.15*nDCG@50 + 0.15*Dep_MRR",
     }
     (env.results_root / "selected_ranker_config.json").write_text(json.dumps(selected_artifact, indent=2), encoding="utf-8")
     print("Saved selected_ranker_config.json")
 
-    # Evaluate and write baseline R0 on TEST split for Option B comparative contract evaluation
+    return best_config_name, validation_results, best_objective_score
+
+
+def build_baseline(
+    splits_candidates: dict[str, dict[str, list[EvidenceVector]]],
+    gt_tasks: dict[str, Any],
+    env: Any,
+    envelope: dict[str, Any],
+) -> dict[str, Any]:
+    """Evaluate and serialize baseline R0 on TEST split for Option B comparative contract evaluation."""
     r0_test_ranked: dict[str, list[RankedCandidate]] = {}
     for tid, vectors in splits_candidates["test"].items():
         task_op = gt_tasks[tid]["category"]
@@ -656,106 +719,147 @@ def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
     }
     (env.results_root / "ranker_baseline_r0.json").write_text(json.dumps(r0_baseline_artifact, indent=2), encoding="utf-8")
     print(f"Saved ranker_baseline_r0.json (Baseline R0 P@50 excl: {r0_test_metrics['precision_at_50_excluding_target']:.4f})")
+    return r0_baseline_artifact
 
-    # 5. Run winning configuration across DEV, VALIDATION, and TEST
-    split_final_predictions: dict[str, dict[str, Any]] = {}
-    split_final_metrics: dict[str, Any] = {}
 
-    for split in ("dev", "validation", "test"):
-        cands_map = splits_candidates[split]
-        ranked_map: dict[str, list[RankedCandidate]] = {}
-        dump_tasks: dict[str, Any] = {}
+def evaluate_frozen_ranker_on_split(
+    split: str,
+    best_config_name: str,
+    splits_candidates: dict[str, dict[str, list[EvidenceVector]]],
+    splits_channel_stats: dict[str, dict[str, int]],
+    gt_tasks: dict[str, Any],
+    env: Any,
+    envelope: dict[str, Any],
+) -> dict[str, Any]:
+    """Run winning configuration on a specific split, dumping raw predictions and metric results."""
+    cands_map = splits_candidates[split]
+    ranked_map: dict[str, list[RankedCandidate]] = {}
+    dump_tasks: dict[str, Any] = {}
 
-        for tid, vectors in cands_map.items():
-            task_op = gt_tasks[tid]["category"]
-            r = build_ranker(best_config_name, operation=task_op)
-            ranked = r.rank(vectors)
+    for tid, vectors in cands_map.items():
+        task_op = gt_tasks[tid]["category"]
+        r = build_ranker(best_config_name, operation=task_op)
+        ranked = r.rank(vectors)
 
-            ranked_map[tid] = ranked
-            dump_tasks[tid] = {
-                "task_id": tid,
-                "total_candidates": len(ranked),
-                "ranked_candidates": [
-                    {
-                        "rank": c.rank,
-                        "entity_id": c.entity_id,
-                        "file_path": c.file_path,
-                        "score": round(c.total_score, 4),
-                        "hop_distance": c.evidence.hop_distance,
-                        "edge_types": c.evidence.edge_types,
-                        "resolution_class": c.evidence.resolution_class,
-                    }
-                    for c in ranked
-                ],
-            }
-
-        split_metrics = compute_split_metrics(ranked_map, gt_tasks)
-        split_final_metrics[split] = split_metrics
-
-        # Write raw prediction dump
-        raw_pred_payload = {
-            **envelope,
-            "split": split,
-            "selected_config": best_config_name,
-            "channel_counts": splits_channel_stats[split],
-            "total_tasks": len(ranked_map),
-            "tasks": dump_tasks,
+        ranked_map[tid] = ranked
+        dump_tasks[tid] = {
+            "task_id": tid,
+            "total_candidates": len(ranked),
+            "ranked_candidates": [
+                {
+                    "rank": c.rank,
+                    "entity_id": c.entity_id,
+                    "file_path": c.file_path,
+                    "score": round(c.total_score, 4),
+                    "hop_distance": c.evidence.hop_distance,
+                    "edge_types": c.evidence.edge_types,
+                    "resolution_class": c.evidence.resolution_class,
+                }
+                for c in ranked
+            ],
         }
-        raw_pred_file = env.raw_root / "retrieval" / f"{split}_predictions.json"
-        raw_pred_file.write_text(json.dumps(raw_pred_payload, indent=2), encoding="utf-8")
-        print(f"Saved raw predictions to {raw_pred_file}")
 
-        # Write result metrics
-        result_payload = {
-            **envelope,
-            "split": split,
-            "selected_ranker_config": best_config_name,
-            "metrics": split_metrics,
-            "channel_discovery_stats": splits_channel_stats[split],
-            "gate_compliance": {
-                "macro_recall_passed": split_metrics["macro_pool_recall"] >= 0.90,
-                "worst_task_recall_passed": split_metrics["worst_task_pool_recall"] >= 0.80,
-                "silent_misses_passed": split_metrics["silent_misses"] <= 20,
-            }
-        }
-        res_file = env.results_root / f"ranker_{split}.json"
-        res_file.write_text(json.dumps(result_payload, indent=2), encoding="utf-8")
-        print(f"Saved ranker metrics to {res_file}")
+    split_metrics = compute_split_metrics(ranked_map, gt_tasks)
 
-        # Also write impact plane results (impact_{split}.json)
-        impact_payload = {
-            **envelope,
-            "split": split,
-            "macro_pool_recall": split_metrics["macro_pool_recall"],
-            "worst_task_pool_recall": split_metrics["worst_task_pool_recall"],
-            "silent_misses": split_metrics["silent_misses"],
-            "total_candidates_pooled": sum(len(c) for c in cands_map.values()),
-            "channel_discovery_stats": splits_channel_stats[split],
-        }
-        (env.results_root / f"impact_{split}.json").write_text(json.dumps(impact_payload, indent=2), encoding="utf-8")
+    # Write raw prediction dump
+    raw_pred_payload = {
+        **envelope,
+        "split": split,
+        "selected_config": best_config_name,
+        "channel_counts": splits_channel_stats[split],
+        "total_tasks": len(ranked_map),
+        "tasks": dump_tasks,
+    }
+    raw_pred_file = env.raw_root / "retrieval" / f"{split}_predictions.json"
+    raw_pred_file.parent.mkdir(parents=True, exist_ok=True)
+    raw_pred_file.write_text(json.dumps(raw_pred_payload, indent=2), encoding="utf-8")
+    print(f"Saved raw predictions to {raw_pred_file}")
 
-        print(f"[{split.upper()}] Macro Recall: {split_metrics['macro_pool_recall']*100:.1f}%, Worst: {split_metrics['worst_task_pool_recall']*100:.1f}%, P@20(excl): {split_metrics['precision_at_20_excluding_target']*100:.1f}%, Dep MRR: {split_metrics['dependency_mrr']:.4f}, Silent Misses: {split_metrics['silent_misses']}")
+    # Write result metrics
+    result_payload = {
+        **envelope,
+        "split": split,
+        "selected_ranker_config": best_config_name,
+        "metrics": split_metrics,
+        "channel_discovery_stats": splits_channel_stats[split],
+        "gate_compliance": {
+            "macro_recall_passed": split_metrics["macro_pool_recall"] >= 0.90,
+            "worst_task_recall_passed": split_metrics["worst_task_pool_recall"] >= 0.80,
+            "silent_misses_passed": split_metrics["silent_misses"] <= 20,
+        },
+    }
+    res_file = env.results_root / f"ranker_{split}.json"
+    res_file.write_text(json.dumps(result_payload, indent=2), encoding="utf-8")
+    print(f"Saved ranker metrics to {res_file}")
 
-    # Holdout hygiene: semantic and file-overlap analysis across splits (Section 17)
-    dev_tasks = json.loads((env.dataset_root / "dev.json").read_text(encoding="utf-8"))["tasks"]
-    val_tasks = json.loads((env.dataset_root / "validation.json").read_text(encoding="utf-8"))["tasks"]
-    test_tasks = json.loads((env.dataset_root / "test.json").read_text(encoding="utf-8"))["tasks"]
+    # Also write impact plane results (impact_{split}.json)
+    impact_payload = {
+        **envelope,
+        "split": split,
+        "macro_pool_recall": split_metrics["macro_pool_recall"],
+        "worst_task_pool_recall": split_metrics["worst_task_pool_recall"],
+        "silent_misses": split_metrics["silent_misses"],
+        "total_candidates_pooled": sum(len(c) for c in cands_map.values()),
+        "channel_discovery_stats": splits_channel_stats[split],
+    }
+    (env.results_root / f"impact_{split}.json").write_text(json.dumps(impact_payload, indent=2), encoding="utf-8")
 
+    print(
+        f"[{split.upper()}] Macro Recall: {split_metrics['macro_pool_recall']*100:.1f}%, "
+        f"Worst: {split_metrics['worst_task_pool_recall']*100:.1f}%, P@20(excl): {split_metrics['precision_at_20_excluding_target']*100:.1f}%, "
+        f"Dep MRR: {split_metrics['dependency_mrr']:.4f}, Silent Misses: {split_metrics['silent_misses']}"
+    )
+
+    return split_metrics
+
+
+def evaluate_split_overlap(
+    dev_tasks: list[dict[str, Any]],
+    val_tasks: list[dict[str, Any]],
+    test_tasks: list[dict[str, Any]],
+    gt_tasks: dict[str, Any],
+    env: Any,
+    envelope: dict[str, Any],
+) -> dict[str, Any]:
+    """Holdout hygiene: semantic and file-overlap analysis across splits (Section 17 & Issue 35)."""
     def extract_meta(ts):
         target_f = set()
         target_s = set()
         expected_f = set()
+        critical_f = set()
+        must_change_f = set()
+        dep_families = set()
+
         for t in ts:
+            tid = t.get("task_id", "")
             sp = t.get("spec", {})
             tf = t.get("target_file") or sp.get("target_file_hint") or ""
             tsym = t.get("target_symbol") or sp.get("requested_symbol") or ""
             if tf:
                 target_f.add(tf)
+                fam = tf.split("/")[0] if "/" in tf else tf
+                dep_families.add(fam)
             if tsym:
                 target_s.add(tsym)
-            for ef in gt_tasks.get(t["task_id"], {}).get("expected_files", []):
-                target_f.add(ef)
-        return {"target_files": target_f, "target_symbols": target_s, "expected_files": expected_f}
+            
+            task_gt = gt_tasks.get(tid, {})
+            for ef in task_gt.get("expected_files", []):
+                expected_f.add(ef)
+                fam = ef.split("/")[0] if "/" in ef else ef
+                dep_families.add(fam)
+            for cf in task_gt.get("critical_files", []):
+                critical_f.add(cf)
+            for mf in task_gt.get("must_change", []):
+                must_change_f.add(mf)
+
+        return {
+            "target_files": target_f,
+            "target_symbols": target_s,
+            "expected_files": expected_f,
+            "critical_files": critical_f,
+            "must_change_files": must_change_f,
+            "dependency_families": dep_families,
+        }
 
     d_m = extract_meta(dev_tasks)
     v_m = extract_meta(val_tasks)
@@ -766,16 +870,24 @@ def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
         "dev_vs_test": {
             "overlapping_target_files": sorted(list(d_m["target_files"].intersection(t_m["target_files"]))),
             "overlapping_target_symbols": sorted(list(d_m["target_symbols"].intersection(t_m["target_symbols"]))),
+            "overlapping_expected_files": sorted(list(d_m["expected_files"].intersection(t_m["expected_files"]))),
+            "overlapping_critical_files": sorted(list(d_m["critical_files"].intersection(t_m["critical_files"]))),
+            "overlapping_must_change_files": sorted(list(d_m["must_change_files"].intersection(t_m["must_change_files"]))),
+            "overlapping_dependency_families": sorted(list(d_m["dependency_families"].intersection(t_m["dependency_families"]))),
         },
         "validation_vs_test": {
             "overlapping_target_files": sorted(list(v_m["target_files"].intersection(t_m["target_files"]))),
             "overlapping_target_symbols": sorted(list(v_m["target_symbols"].intersection(t_m["target_symbols"]))),
+            "overlapping_expected_files": sorted(list(v_m["expected_files"].intersection(t_m["expected_files"]))),
+            "overlapping_critical_files": sorted(list(v_m["critical_files"].intersection(t_m["critical_files"]))),
+            "overlapping_must_change_files": sorted(list(v_m["must_change_files"].intersection(t_m["must_change_files"]))),
+            "overlapping_dependency_families": sorted(list(v_m["dependency_families"].intersection(t_m["dependency_families"]))),
         },
     }
     (env.results_root / "dataset_split_overlap.json").write_text(json.dumps(overlap_artifact, indent=2), encoding="utf-8")
-
-    print("\nRetrieval execution COMPLETE.")
+    return overlap_artifact
 
 
 if __name__ == "__main__":
     execute_retrieval_suite()
+

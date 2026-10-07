@@ -55,27 +55,29 @@ def evaluate_type_flow():
         raw_graph = json.load(f)
     cg = CanonicalGraph.from_legacy_dict(raw_graph, target_repo_root=env.target_repo_root)
 
-    def is_type_compatible(pred_t: Optional[str], exp_t: str, acc_interfaces: Set[str]) -> bool:
-        if not pred_t:
-            return False
+    def classify_type_prediction(pred_t: Optional[str], exp_t: str, acc_interfaces: Set[str]) -> str:
+        """Strict four-way classification (Issue 32)."""
+        if not pred_t or pred_t == "UNKNOWN":
+            return "UNRESOLVED"
         if pred_t == exp_t:
-            return True
-        if pred_t in acc_interfaces:
-            return True
+            return "EXACT"
         pred_res = cg.registry.resolve(pred_t)
         exp_res = cg.registry.resolve(exp_t)
         if pred_res.canonical_id and exp_res.canonical_id:
             for edge in cg.get_outgoing_edges(pred_res.canonical_id):
                 if edge.target_id == exp_res.canonical_id and edge.edge_type.value in ("implements", "inherits"):
-                    return True
+                    return "GRAPH_COMPATIBLE"
             for edge in cg.get_incoming_edges(exp_res.canonical_id):
                 if edge.source_id == pred_res.canonical_id and edge.edge_type.value in ("implements", "inherits"):
-                    return True
-        return False
+                    return "GRAPH_COMPATIBLE"
+        if pred_t in acc_interfaces:
+            return "ADJUDICATED_COMPATIBLE"
+        return "WRONG"
 
-    # Confusion matrix buckets
+    # Confusion matrix buckets (Issue 32)
     correct_exact = 0
-    correct_compatible = 0
+    correct_graph_compatible = 0
+    correct_adjudicated_compatible = 0
     wrong_exact = 0
     wrong_compatible = 0
     correct_abstention = 0
@@ -97,6 +99,7 @@ def evaluate_type_flow():
         acceptable_interfaces = set(cs.get("acceptable_interfaces", []))
         is_abstention_gt = cs.get("is_abstention", False)
         fingerprint = cs.get("source_fingerprint", "")
+        expected_method = cs.get("enclosing_method", "")
 
         # 1. Verify GT record file existence & hash
         target_path = env.target_repo_root / rel_file
@@ -126,7 +129,7 @@ def evaluate_type_flow():
 
         analyzed_sites = file_cache[rel_file]
 
-        # 2. Exact Call-Site Identity Matching with normalized fingerprint
+        # 2. Exact Call-Site Identity Matching with normalized fingerprint & context (Issue 33)
         matched_call = None
 
         # Check exact line match first
@@ -138,11 +141,13 @@ def evaluate_type_flow():
                         matched_call = site
                         break
 
-        # Relocation window (+/- 5 lines): search ONLY for exact normalized fingerprint
+        # Relocation window (+/- 5 lines): search ONLY for exact normalized fingerprint + context
         if matched_call is None and norm_expected_fp:
             candidate_matches = []
             for site in analyzed_sites:
                 if abs(site.line_number - line_no) <= 5 and site.method_name == called_method and site.receiver_expr == receiver_expr:
+                    if expected_method and getattr(site, "enclosing_method", "") and site.enclosing_method != expected_method:
+                        continue
                     s_idx = site.line_number - 1
                     if 0 <= s_idx < len(target_lines):
                         s_line_norm = re.sub(r"\s+", " ", target_lines[s_idx].strip())
@@ -202,15 +207,21 @@ def evaluate_type_flow():
             elif pred_conf == TypeResolutionConfidence.AMBIGUOUS.value:
                 ambiguous += 1
                 status = "AMBIGUOUS"
-            elif pred_type == expected_type:
-                correct_exact += 1
-                status = "CORRECT_EXACT"
-            elif is_type_compatible(pred_type, expected_type, acceptable_interfaces):
-                correct_compatible += 1
-                status = f"CORRECT_COMPATIBLE ({pred_type})"
             else:
-                wrong_exact += 1
-                status = f"WRONG_EXACT (pred: {pred_type} vs exp: {expected_type})"
+                cls_res = classify_type_prediction(pred_type, expected_type, acceptable_interfaces)
+                if cls_res == "EXACT":
+                    correct_exact += 1
+                    status = "CORRECT_EXACT"
+                elif cls_res == "GRAPH_COMPATIBLE":
+                    correct_graph_compatible += 1
+                    status = f"CORRECT_GRAPH_COMPATIBLE ({pred_type})"
+                elif cls_res == "ADJUDICATED_COMPATIBLE":
+                    correct_adjudicated_compatible += 1
+                    status = f"CORRECT_ADJUDICATED_COMPATIBLE ({pred_type})"
+                else:
+                    wrong_exact += 1
+                    status = f"WRONG (pred: {pred_type} vs exp: {expected_type})"
+
 
         eval_records.append({
             "call_id": cid,
@@ -229,7 +240,8 @@ def evaluate_type_flow():
     resolvable_cases = sum(1 for cs in call_sites if not cs.get("is_abstention", False))
     abstention_cases = sum(1 for cs in call_sites if cs.get("is_abstention", False))
 
-    resolvable_resolved = sum(1 for r in eval_records if not r.get("is_abstention", False) and r["status"].startswith(("CORRECT_EXACT", "CORRECT_COMPATIBLE", "WRONG_EXACT")))
+    correct_compatible = correct_graph_compatible + correct_adjudicated_compatible
+    resolvable_resolved = sum(1 for r in eval_records if not r.get("is_abstention", False) and (r["status"].startswith("CORRECT_") or r["status"].startswith("WRONG")))
     total_non_abstaining_preds = correct_exact + correct_compatible + wrong_exact + wrong_compatible
 
     coverage = min(1.0, max(0.0, resolvable_resolved / max(1, resolvable_cases)))
@@ -267,6 +279,8 @@ def evaluate_type_flow():
         "target_commit": env.target_repo_commit,
         "confusion_matrix": {
             "correct_exact": correct_exact,
+            "correct_graph_compatible": correct_graph_compatible,
+            "correct_adjudicated_compatible": correct_adjudicated_compatible,
             "correct_compatible": correct_compatible,
             "wrong_exact": wrong_exact,
             "wrong_compatible": wrong_compatible,

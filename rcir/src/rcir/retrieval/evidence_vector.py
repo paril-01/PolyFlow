@@ -40,6 +40,7 @@ class EvidenceVector:
     runtime_evidence: bool = False
     hub_degree: int = 0
     contradictions: list[str] = field(default_factory=list)
+    source_evidence_records: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -57,6 +58,7 @@ class EvidenceVector:
             "test_relationship": self.test_relationship,
             "runtime_evidence": self.runtime_evidence,
             "contradictions": list(self.contradictions),
+            "source_evidence_records": list(self.source_evidence_records),
         }
 
 
@@ -82,6 +84,7 @@ class EvidenceVectorBuilder:
             edge_types=list(candidate.edge_types_seen),
             lexical_score=candidate.raw_lexical_score,
             traversal_score=candidate.best_traversal_score,
+            source_evidence_records=list(getattr(candidate, "source_evidence_records", [])),
         )
 
         # 1. Entity Match (Identity only)

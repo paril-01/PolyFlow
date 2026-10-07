@@ -1,0 +1,5 @@
+ReturnCode: 3
+STDOUT:
+REGRESSION_NOT_MEASURED: PHP runtime not installed. Delimiter syntax check: AST tokenizer / delimiter syntax passed (PHP runtime not installed)
+
+STDERR:

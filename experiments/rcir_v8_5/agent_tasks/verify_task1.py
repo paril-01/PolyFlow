@@ -38,10 +38,10 @@ def strip_php_comments_and_strings(content: str) -> str:
             i += 1
             while i < n and content[i] != quote:
                 if content[i] == "\\" and i + 1 < n:
-                    res.append(content[i : i + 2])
+                    res.append("  ")
                     i += 2
                 else:
-                    res.append(content[i])
+                    res.append(" ")
                     i += 1
             if i < n:
                 res.append(content[i])
@@ -51,6 +51,7 @@ def strip_php_comments_and_strings(content: str) -> str:
             res.append(content[i])
             i += 1
     return "".join(res)
+
 
 
 def extract_balanced_block(text: str, start_pos: int, open_char: str = "{", close_char: str = "}") -> Optional[Tuple[str, int, int]]:
@@ -203,20 +204,31 @@ def test_api_controller(repo_root: Path) -> int:
     args_str, _, _ = preview_args_block
     args = parse_call_args(args_str)
 
-    if len(args) < 4:
-        sys.stderr.write(f"ASSERTION_FAIL: getPreview call has fewer than 4 arguments: {args}\n")
+    if len(args) != 4:
+        sys.stderr.write(f"ASSERTION_FAIL: getPreview call must have exactly 4 arguments: {args}\n")
         return 1
 
-    # 4. Strict check: 4th argument must be exact variable $crop
+    arg1 = args[0].strip()
+    arg2 = args[1].strip()
+    arg3 = args[2].strip()
     arg4 = args[3].strip()
+
+    if arg1 != "$file":
+        sys.stderr.write(f"ASSERTION_FAIL: 1st argument to getPreview must strictly be '$file'. Found: '{arg1}'\n")
+        return 1
+    if arg2 != "$x":
+        sys.stderr.write(f"ASSERTION_FAIL: 2nd argument to getPreview must strictly be '$x'. Found: '{arg2}'\n")
+        return 1
+    if arg3 != "$y":
+        sys.stderr.write(f"ASSERTION_FAIL: 3rd argument to getPreview must strictly be '$y'. Found: '{arg3}'\n")
+        return 1
     if arg4 != "$crop":
-        sys.stderr.write(
-            f"ASSERTION_FAIL: 4th argument to getPreview must strictly be '$crop'. Found: '{arg4}' (all args: {args})\n"
-        )
+        sys.stderr.write(f"ASSERTION_FAIL: 4th argument to getPreview must strictly be '$crop'. Found: '{arg4}'\n")
         return 1
 
-    print("PASS: ApiController::getThumbnail correctly defines $crop = true and propagates to getPreview as 4th argument")
+    print("PASS: ApiController::getThumbnail correctly defines $crop = true and propagates to getPreview($file, $x, $y, $crop)")
     return 0
+
 
 
 if __name__ == "__main__":

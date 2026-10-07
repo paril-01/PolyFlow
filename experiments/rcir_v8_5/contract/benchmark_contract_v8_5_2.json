@@ -1,0 +1,102 @@
+{
+  "contract_version": "8.5.2",
+  "run_id": "rcir-v8.5.2-primary",
+  "target_repository": "nextcloud/server",
+  "target_repository_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "metric_feasibility": {
+    "theoretical_ceilings": {
+      "dev": {
+        "precision_at_20_excluding_target": 0.1917,
+        "precision_at_50_excluding_target": 0.0767
+      },
+      "validation": {
+        "precision_at_20_excluding_target": 0.12,
+        "precision_at_50_excluding_target": 0.048
+      },
+      "test": {
+        "precision_at_20_excluding_target": 0.15,
+        "precision_at_50_excluding_target": 0.06
+      }
+    },
+    "label_sparsity_rationale": "Sparse file-level relevance (|R| avg ~ 3 files) bounds fixed-denominator P@20 <= 0.15 and P@50 <= 0.06. Blocking gates use Dependency MRR, graded nDCG@50, and Macro Recall. Fixed-denominator P@K are retained as diagnostic metrics."
+  },
+  "impact_plane": {
+    "macro_pool_recall_min": 0.65,
+    "worst_task_pool_recall_floor": 0.3,
+    "max_silent_misses": 10
+  },
+  "ranking_plane": {
+    "blocking_metrics": {
+      "ndcg_at_50_graded_min": 0.2,
+      "dependency_mrr_min": 0.2
+    },
+    "diagnostic_metrics": {
+      "precision_at_20_excluding_target": {
+        "status": "ADVISORY_DIAGNOSTIC",
+        "theoretical_ceiling": 0.15
+      },
+      "precision_at_50_excluding_target": {
+        "status": "ADVISORY_DIAGNOSTIC",
+        "theoretical_ceiling": 0.06
+      }
+    }
+  },
+  "context_plane": {
+    "critical_source_recall_at_4k_min": 0.6,
+    "strict_token_budget_invariant": true,
+    "context_compiler_deterministic": true
+  },
+  "type_flow": {
+    "coverage_min": 0.6,
+    "resolved_precision_min": 0.85,
+    "wrong_exact_rate_max": 0.05
+  },
+  "canonicalization": {
+    "wrong_canonical_resolution_max": 0.01
+  },
+  "edge_evaluation": {
+    "status": "ADVISORY_ONLY"
+  },
+  "agent": {
+    "requires_real_provider": true,
+    "requires_non_empty_diff": true,
+    "requires_acceptance_transition": true,
+    "requires_tool_calls_executed": true,
+    "allow_simulation": false
+  },
+  "canonical_graph": {
+    "max_external_ratio": 0.0
+  },
+  "decision_rules": {
+    "option_a": {
+      "description": "All primary impact, context, type-flow, and live agent execution gates satisfied on TEST split with zero simulation.",
+      "requires_all_primary_gates": true,
+      "allow_simulation": false
+    },
+    "option_b": {
+      "description": "Substantial ranking or architectural progress on TEST split: macro recall >= 65%, determinism verified, type flow verified, strictly obeying contract specifications.",
+      "macro_pool_recall_min": 0.65,
+      "worst_task_pool_recall_floor": 0.3,
+      "requires_determinism": true,
+      "requires_type_flow_gate": true,
+      "requires_canonicalization_gate": true,
+      "requires_budget_invariant": true,
+      "ranking_improvement": {
+        "interpretation": "ranking_layer_improvement",
+        "metric": "dependency_mrr",
+        "baseline_artifact": "experiments/rcir_v8_5/results/ranker_baseline_r0.json",
+        "min_relative_improvement": 0.05,
+        "zero_baseline_handling": "mark_undefined_require_absolute_delta",
+        "min_absolute_delta": 0.02,
+        "baseline_provenance_validation": {
+          "require_same_target_commit": true,
+          "require_same_dataset_hash": true,
+          "require_same_ground_truth_hash": true
+        }
+      }
+    },
+    "option_c": {
+      "description": "Failed to meet minimum recall or precision thresholds; architectural retreat required."
+    }
+  }
+}

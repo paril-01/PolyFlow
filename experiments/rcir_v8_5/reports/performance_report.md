@@ -3,16 +3,16 @@
 ## Graph Ingestion
 - **Nodes**: `48611`
 - **Edges**: `143225`
-- **Graph Construction Time**: `13.80s`
+- **Graph Construction Time**: `4.63s`
 
 ## Latency & Throughput
-- **Retrieval Mean Latency**: `191.79 ms/task`
-- **Retrieval P95 Latency**: `923.19 ms/task`
-- **Retrieval Throughput**: `5.21 tasks/sec`
-- **Context Compilation Mean Latency**: `68.73 ms/task`
-- **Context Compilation Throughput**: `14.55 tasks/sec`
+- **Retrieval Mean Latency**: `1993.61 ms/task`
+- **Retrieval P95 Latency**: `10594.43 ms/task`
+- **Retrieval Throughput**: `0.50 tasks/sec`
+- **Context Compilation Mean Latency**: `21.06 ms/task`
+- **Context Compilation Throughput**: `47.49 tasks/sec`
 
 ## Memory Footprint (RSS)
-- **Initial Process RSS**: `26.7 MB`
-- **Post-Graph RSS**: `457.0 MB`
-- **Peak RSS**: `464.1 MB`
+- **Initial Process RSS**: `26.9 MB`
+- **Post-Graph RSS**: `457.1 MB`
+- **Peak RSS**: `469.3 MB`

@@ -1,24 +1,57 @@
 {
-  "run_id": "rcir-v8.5-primary",
-  "validation_status": "PASSED",
+  "run_id": "rcir-v8.5.2-3ddfcbf688cd4401",
+  "manifest_hash": "e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247",
+  "polyflow_commit": "48c6f6170891173e46582466c248e9d882b693a5",
+  "polyflow_dirty": true,
+  "polyflow_worktree_diff_hash": "735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "target_repo_dirty": false,
+  "target_repo_diff_hash": "",
+  "contract_hash": "3acab3058b2a4f83cc06ab5da5c5b145a4fbf95ff33a2a3891357414607cc61e",
+  "dataset_hashes": {
+    "dev": "3cbf592d0f89833398987b8e2d735fe6591757333afa3ad834e0029038e98215",
+    "validation": "23e760823e664205c83f9a96111787826eab0b1e15d0d7464c20aa5de14b2db6",
+    "test": "1353982f387eefb954bcb33dd5b2074b31180c1db063240abe67950ea16cbde8"
+  },
+  "ground_truth_hash": "f17b3c00155ccef829b1bdf447aa0ac1d8da614e20f3ef99f421c5dc321d96b8",
+  "edge_ground_truth_hash": "93650deeee34499836853f34aa6f77f43c28176aaa933e81921da78e5daa548d",
+  "receiver_ground_truth_hash": "83d0440f63833741d63359931557cb6ddf661bdd11d1557aab3ab0b4914c6980",
+  "canonicalization_ground_truth_hash": "d2cd07e5d164fc6078f84c7b621a7f883ad5caaa98d2f90603e1315a4cf82eac",
+  "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
+  "config_hashes": {
+    "candidate_config": "d0ef69ae8d04eff1b17b280006e9a904e0e050b557b9cdcb3f27d3dcc8bf5ba3",
+    "ranker_config": "1cd7477fa3d22e383240d59b84ba9ea5e69f837d4ba3b0bdeb4c0e2148608af6",
+    "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
+    "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
+    "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
+    "retrieval_runner_code": "a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16",
+    "ranker_code": "4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4",
+    "adapter_code": "35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1",
+    "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
+    "typeflow_code": "f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716"
+  },
+  "created_at": "2026-10-07T20:20:58Z",
+  "validation_status": "FAILED",
   "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "confusion_matrix": {
-    "correct_exact": 5,
-    "correct_compatible": 5,
-    "wrong_exact": 0,
+    "correct_exact": 1,
+    "correct_graph_compatible": 3,
+    "correct_adjudicated_compatible": 0,
+    "correct_compatible": 3,
+    "wrong_exact": 3,
     "wrong_compatible": 0,
     "correct_abstention": 2,
-    "false_abstention": 0,
+    "false_abstention": 3,
     "ambiguous": 0,
     "invalid_gt": 0
   },
   "metrics": {
     "resolvable_ground_truth_cases": 10,
     "abstention_ground_truth_cases": 2,
-    "coverage": 1.0,
-    "exact_precision": 1.0,
-    "resolved_precision": 1.0,
-    "wrong_exact_rate": 0.0,
+    "coverage": 0.9,
+    "exact_precision": 0.25,
+    "resolved_precision": 0.5714,
+    "wrong_exact_rate": 0.4286,
     "abstention_accuracy": 1.0,
     "ambiguity_rate": 0.0
   },
@@ -27,7 +60,7 @@
     "resolved_precision_min": 0.9,
     "wrong_exact_rate_max": 0.05
   },
-  "contract_gate_satisfied": true,
+  "contract_gate_satisfied": false,
   "eval_records": [
     {
       "call_id": "tf_001",
@@ -36,9 +69,9 @@
       "receiver": "$user",
       "method": "getUID",
       "expected_type": "OCP\\IUser",
-      "predicted_type": "OCP\\IUser",
+      "predicted_type": "bool",
       "confidence": "proven_exact",
-      "status": "CORRECT_EXACT"
+      "status": "WRONG (pred: bool vs exp: OCP\\IUser)"
     },
     {
       "call_id": "tf_002",
@@ -47,9 +80,9 @@
       "receiver": "$file",
       "method": "getId",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "OCP\\Files\\Node",
+      "predicted_type": "string",
       "confidence": "proven_exact",
-      "status": "CORRECT_COMPATIBLE (OCP\\Files\\Node)"
+      "status": "WRONG (pred: string vs exp: OCP\\Files\\File)"
     },
     {
       "call_id": "tf_003",
@@ -58,9 +91,9 @@
       "receiver": "$file",
       "method": "getStorage",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "OCP\\Files\\Node",
+      "predicted_type": "string",
       "confidence": "proven_exact",
-      "status": "CORRECT_COMPATIBLE (OCP\\Files\\Node)"
+      "status": "WRONG (pred: string vs exp: OCP\\Files\\File)"
     },
     {
       "call_id": "tf_004",
@@ -69,9 +102,9 @@
       "receiver": "$storage",
       "method": "getShare",
       "expected_type": "OCP\\Files\\Storage\\ISharedStorage",
-      "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
-      "confidence": "heuristic_inferred",
-      "status": "CORRECT_EXACT"
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "FALSE_ABSTENTION"
     },
     {
       "call_id": "tf_005",
@@ -80,9 +113,9 @@
       "receiver": "$share",
       "method": "canSeeContent",
       "expected_type": "OCP\\Share\\IShare",
-      "predicted_type": "OCP\\Share\\IShare",
-      "confidence": "proven_exact",
-      "status": "CORRECT_EXACT"
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "FALSE_ABSTENTION"
     },
     {
       "call_id": "tf_006",
@@ -93,7 +126,7 @@
       "expected_type": "OCP\\Files\\Node",
       "predicted_type": "OC\\Files\\Node\\Node",
       "confidence": "proven_exact",
-      "status": "CORRECT_COMPATIBLE (OC\\Files\\Node\\Node)"
+      "status": "CORRECT_GRAPH_COMPATIBLE (OC\\Files\\Node\\Node)"
     },
     {
       "call_id": "tf_007",
@@ -104,7 +137,7 @@
       "expected_type": "OCP\\Files\\Node",
       "predicted_type": "OC\\Files\\Node\\Node",
       "confidence": "proven_exact",
-      "status": "CORRECT_COMPATIBLE (OC\\Files\\Node\\Node)"
+      "status": "CORRECT_GRAPH_COMPATIBLE (OC\\Files\\Node\\Node)"
     },
     {
       "call_id": "tf_008",
@@ -124,9 +157,9 @@
       "receiver": "$parentFolder",
       "method": "getDirectoryListing",
       "expected_type": "OCP\\Files\\Folder",
-      "predicted_type": "OCP\\Files\\Folder",
-      "confidence": "proven_exact",
-      "status": "CORRECT_EXACT"
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "FALSE_ABSTENTION"
     },
     {
       "call_id": "tf_010",
@@ -137,7 +170,7 @@
       "expected_type": "OCP\\AppFramework\\Http\\Response",
       "predicted_type": "OCP\\AppFramework\\Http\\StreamResponse",
       "confidence": "proven_exact",
-      "status": "CORRECT_COMPATIBLE (OCP\\AppFramework\\Http\\StreamResponse)"
+      "status": "CORRECT_GRAPH_COMPATIBLE (OCP\\AppFramework\\Http\\StreamResponse)"
     },
     {
       "call_id": "tf_011_abstain",

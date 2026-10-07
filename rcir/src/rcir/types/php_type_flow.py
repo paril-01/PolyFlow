@@ -54,6 +54,8 @@ class CallSiteInfo:
     candidate_types: list[str] = field(default_factory=list)
     confidence: TypeResolutionConfidence = TypeResolutionConfidence.UNKNOWN
     evidence: list[str] = field(default_factory=list)
+    enclosing_class: str = ""
+    enclosing_method: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -66,6 +68,8 @@ class CallSiteInfo:
             "candidate_types": self.candidate_types,
             "confidence": self.confidence.value,
             "evidence": list(self.evidence),
+            "enclosing_class": self.enclosing_class,
+            "enclosing_method": self.enclosing_method,
         }
 
 
@@ -98,43 +102,100 @@ class PHPTypeFlowAnalyzer:
         self._seed_standard_summaries()
 
     def _seed_standard_summaries(self) -> None:
-        """Seed known core Nextcloud framework method return types."""
-        self.method_summaries[("OCP\\Files\\Folder", "get")] = TypeBinding(
-            {"OCP\\Files\\Node"}, TypeResolutionConfidence.PROVEN_EXACT, ["framework_contract"]
+        """Derive standard method return types dynamically from source when repo_root is available (Issue 31)."""
+        # When running without repository, fallback to empty dictionary (no hardcoded contracts)
+        self.method_summaries.clear()
+
+    def _find_class_file(self, class_fqn: str) -> Optional[Path]:
+        """Locate the PHP source file declaring class_fqn under repo_root."""
+        if not self.repo_root:
+            return None
+        clean = class_fqn.strip().lstrip("\\")
+        simple_name = clean.rsplit("\\", 1)[-1]
+
+        # PSR-4 Nextcloud mappings
+        candidates: list[Path] = []
+        if clean.startswith("OCP\\"):
+            rel_part = clean[4:].replace("\\", "/") + ".php"
+            candidates.append(self.repo_root / "lib" / "public" / rel_part)
+        elif clean.startswith("OC\\"):
+            rel_part = clean[3:].replace("\\", "/") + ".php"
+            candidates.append(self.repo_root / "lib" / "private" / rel_part)
+        elif clean.startswith("OCA\\"):
+            parts = clean[4:].split("\\")
+            if len(parts) > 1:
+                app_name = parts[0].lower()
+                rel_part = "/".join(parts[1:]) + ".php"
+                candidates.append(self.repo_root / "apps" / app_name / "lib" / rel_part)
+
+        for c in candidates:
+            if c.exists():
+                return c
+
+        # Fallback shallow/targeted search for simple_name.php
+        try:
+            for p in self.repo_root.glob(f"**/{simple_name}.php"):
+                p_str = str(p).replace("\\", "/")
+                if "/tests/" not in p_str and "/vendor/" not in p_str:
+                    return p
+        except Exception:
+            pass
+        return None
+
+    def _derive_method_summary_from_source(self, class_fqn: str, method_name: str) -> Optional[TypeBinding]:
+        """Derive method summary dynamically from source declarations and PHPDoc (Issue 31)."""
+        if not self.repo_root:
+            return None
+        summary_key = (class_fqn, method_name)
+        if summary_key in self.method_summaries:
+            return self.method_summaries[summary_key]
+
+        class_file = self._find_class_file(class_fqn)
+        if not class_file or not class_file.exists():
+            return None
+
+        try:
+            content = class_file.read_text(encoding="utf-8", errors="ignore")
+        except Exception:
+            return None
+
+        # Build class context for FQN resolution
+        ctx = ClassContext()
+        ctx.use_map = self.parse_use_statements(content)
+        ns_m = re.search(r'^\s*namespace\s+([A-Za-z0-9_\\]+)\s*;', content, re.MULTILINE)
+        if ns_m:
+            ctx.namespace = ns_m.group(1).strip().lstrip("\\")
+
+        # Search for method signature return type hint: function method(...) : ?Type
+        pattern = re.compile(
+            r'function\s+' + re.escape(method_name) + r'\s*\([^)]*\)\s*:\s*([A-Za-z0-9_\\?|&\[\]]+)',
+            re.MULTILINE,
         )
-        self.method_summaries[("OCP\\Files\\IRootFolder", "get")] = TypeBinding(
-            {"OCP\\Files\\Node"}, TypeResolutionConfidence.PROVEN_EXACT, ["framework_contract"]
+        m = pattern.search(content)
+        if m:
+            ret_type_str = m.group(1).strip()
+            parsed_types = self.parse_type_expression(ret_type_str, ctx)
+            if parsed_types:
+                binding = TypeBinding(parsed_types, TypeResolutionConfidence.PROVEN_EXACT, [f"source_return_type:{class_file.name}"])
+                self.method_summaries[summary_key] = binding
+                return binding
+
+        # Search for PHPDoc @return preceding method
+        doc_pattern = re.compile(
+            r'/\*\*[\s\S]*?@return\s+([A-Za-z0-9_\\?|&\[\]]+)[\s\S]*?\*/\s*(?:(?:public|protected|private|static)\s+)*function\s+' + re.escape(method_name) + r'\b',
+            re.MULTILINE,
         )
-        self.method_summaries[("OCP\\Files\\Events\\Node\\NodeEvent", "getNode")] = TypeBinding(
-            {"OCP\\Files\\Node"}, TypeResolutionConfidence.PROVEN_EXACT, ["event_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Events\\Node\\NodeDeletedEvent", "getNode")] = TypeBinding(
-            {"OCP\\Files\\Node"}, TypeResolutionConfidence.PROVEN_EXACT, ["event_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Events\\Node\\NodeCreatedEvent", "getNode")] = TypeBinding(
-            {"OCP\\Files\\Node"}, TypeResolutionConfidence.PROVEN_EXACT, ["event_contract"]
-        )
-        self.method_summaries[("OCP\\IUserSession", "getUser")] = TypeBinding(
-            {"OCP\\IUser"}, TypeResolutionConfidence.PROVEN_EXACT, ["session_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\IRootFolder", "getUserFolder")] = TypeBinding(
-            {"OCP\\Files\\Folder"}, TypeResolutionConfidence.PROVEN_EXACT, ["framework_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\File", "getStorage")] = TypeBinding(
-            {"OCP\\Files\\Storage\\ISharedStorage"}, TypeResolutionConfidence.PROVEN_EXACT, ["storage_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Storage\\ISharedStorage", "getShare")] = TypeBinding(
-            {"OCP\\Share\\IShare"}, TypeResolutionConfidence.PROVEN_EXACT, ["share_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Folder", "getParent")] = TypeBinding(
-            {"OCP\\Files\\Folder"}, TypeResolutionConfidence.PROVEN_EXACT, ["folder_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Folder", "getDirectoryListing")] = TypeBinding(
-            {"OCP\\Files\\Node[]"}, TypeResolutionConfidence.PROVEN_EXACT, ["folder_contract"]
-        )
-        self.method_summaries[("OCP\\Files\\Node", "getFileInfo")] = TypeBinding(
-            {"OCP\\Files\\FileInfo"}, TypeResolutionConfidence.PROVEN_EXACT, ["node_contract"]
-        )
+        doc_m = doc_pattern.search(content)
+        if doc_m:
+            ret_type_str = doc_m.group(1).strip()
+            parsed_types = self.parse_type_expression(ret_type_str, ctx)
+            if parsed_types:
+                binding = TypeBinding(parsed_types, TypeResolutionConfidence.PROVEN_EXACT, [f"phpdoc_return_type:{class_file.name}"])
+                self.method_summaries[summary_key] = binding
+                return binding
+
+        return None
+
 
     def parse_use_statements(self, content: str) -> dict[str, str]:
         """Resolve PHP `use` declarations into an alias -> FQN mapping (Phase 31)."""
@@ -238,7 +299,8 @@ class PHPTypeFlowAnalyzer:
         )
 
         for m in method_pattern.finditer(content):
-            method_name = m.group(1)
+            enclosing_method_name = m.group(1)
+            method_name = enclosing_method_name
             params_str = m.group(2)
             ret_type_str = m.group(3) or ""
 
@@ -583,7 +645,7 @@ class PHPTypeFlowAnalyzer:
                 # 3. Detect method invocations: $receiver->method(...)
                 for call_match in re.finditer(r'(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+(?:\([^)]*\))?)*))\s*->\s*([A-Za-z0-9_]+)\s*\(', stripped):
                     raw_recv = call_match.group(1).strip()
-                    method_name = call_match.group(2).strip()
+                    called_m = call_match.group(2).strip()
 
                     # Resolve receiver type
                     recv_binding = self._resolve_receiver_chain(raw_recv, current_env, ctx)
@@ -603,11 +665,13 @@ class PHPTypeFlowAnalyzer:
                         line_number=line_no,
                         raw_statement=stripped,
                         receiver_expr=raw_recv,
-                        method_name=method_name,
+                        method_name=called_m,
                         inferred_type=primary,
                         candidate_types=cand_list,
                         confidence=conf,
                         evidence=ev,
+                        enclosing_class=ctx.class_name,
+                        enclosing_method=enclosing_method_name,
                     ))
 
                 # If an arrow function was evaluated, restore outer environment
@@ -668,6 +732,9 @@ class PHPTypeFlowAnalyzer:
                     summary_key = (head_t, called_m)
                     if summary_key in self.method_summaries:
                         return self.method_summaries[summary_key]
+                    derived = self._derive_method_summary_from_source(head_t, called_m)
+                    if derived:
+                        return derived
         return None
 
     def analyze_file(self, rel_path: str) -> list[CallSiteInfo]:

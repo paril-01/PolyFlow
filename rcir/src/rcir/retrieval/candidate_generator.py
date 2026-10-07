@@ -51,6 +51,7 @@ class CandidateRecord:
     resolution_classes: list[str] = field(default_factory=list)
     edge_types_seen: list[str] = field(default_factory=list)
     raw_lexical_score: float = 0.0
+    source_evidence_records: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def hop_distance(self) -> int:

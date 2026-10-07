@@ -1,19 +1,19 @@
 # RCIR v8.5 — Formal Architecture Decision & Final Assessment
 
 ## Formal Gate Decision
-- **Run Validity**: `INVALID`
-- **Architecture Decision**: `NOT_EVALUATED`
-- **Contract Feasibility**: `INVALID_CONTRACT`
-- **Integrity Gate**: **FAILED**
+- **Run Validity**: `VALID`
+- **Architecture Decision**: `OPTION_C_REJECTED`
+- **Contract Feasibility**: `VALID_CONTRACT`
+- **Integrity Gate**: **PASSED**
 
 ## Decision Summary
-Benchmark integrity gate failed with 17 violation(s). Run is invalid.
+Formal benchmark thresholds not met; architectural retreat required.
 
 ## Primary Gate Compliance
-- **Impact Gate**: **PASSED** (Macro Recall: 100.0%, Worst Task: 100.0%, Silent Misses: 0)
-- **Ranking Gate**: **FAILED** (P@20: 8.0%, P@50: 3.6%, nDCG@50: 0.4971, MRR: 0.5428)
+- **Impact Gate**: **PASSED** (Macro Recall: 84.3%, Worst Task: 66.7%, Silent Misses: 3)
+- **Ranking Gate**: **PASSED** (P@20: 5.0%, P@50: 2.0%, nDCG@50: 0.3911, MRR: 0.4728)
 - **Context Gate**: **PASSED** (Budget violations: 0, Determinism: NOT_MEASURED)
-- **Type Flow Gate**: **PASSED** (Coverage: 100.0%, Precision: 100.0%, Wrong Exact: 0.0%)
+- **Type Flow Gate**: **FAILED** (Coverage: 90.0%, Precision: 57.1%, Wrong Exact: 42.9%)
 - **Canonicalization Gate**: **PASSED**
 - **Edge Gate**: `ADVISORY_ONLY`
 - **Agent Gate**: **FAILED**

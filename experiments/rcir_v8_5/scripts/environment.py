@@ -72,7 +72,11 @@ class BenchmarkEnvironment:
         self.results_root = self.v8_5_root / "results"
         self.raw_root = self.v8_5_root / "raw"
         self.reports_root = self.v8_5_root / "reports"
-        self.contract_path = self.v8_5_root / "contract" / "benchmark_contract.json"
+        v8_5_2_contract = self.v8_5_root / "contract" / "benchmark_contract_v8_5_2.json"
+        if v8_5_2_contract.exists():
+            self.contract_path = v8_5_2_contract
+        else:
+            self.contract_path = self.v8_5_root / "contract" / "benchmark_contract.json"
 
         # Verify fail-fast sentinels
         self.verify_sentinels()
@@ -155,15 +159,21 @@ class BenchmarkEnvironment:
             )
 
         try:
-            # Check status of PolyFlow repository
+            # Check status of PolyFlow repository excluding generated benchmark run outputs
+            output_excludes = [
+                ":!experiments/rcir_v8_5/results",
+                ":!experiments/rcir_v8_5/raw",
+                ":!experiments/rcir_v8_5/reports",
+                ":!experiments/rcir_v8_5/manifests",
+            ]
             status = subprocess.check_output(
-                ["git", "-C", str(self.polyflow_root), "status", "--porcelain", "--ignore-submodules=dirty"],
+                ["git", "-C", str(self.polyflow_root), "status", "--porcelain", "--ignore-submodules=dirty", "--", "."] + output_excludes,
                 text=True, stderr=subprocess.DEVNULL
             ).strip()
             self.polyflow_dirty = bool(status)
             if self.polyflow_dirty:
                 diff = subprocess.check_output(
-                    ["git", "-C", str(self.polyflow_root), "diff", "--ignore-submodules=dirty"],
+                    ["git", "-C", str(self.polyflow_root), "diff", "--ignore-submodules=dirty", "--", "."] + output_excludes,
                     text=True, stderr=subprocess.DEVNULL
                 )
                 self.polyflow_worktree_diff_hash = hashlib.sha256(diff.encode("utf-8")).hexdigest()
@@ -215,6 +225,33 @@ class BenchmarkEnvironment:
         full = self.target_repo_root / clean
         return full
 
+    def set_run_directory(self, run_dir: Path | str) -> None:
+        """Configure isolated per-run directories to prevent cross-run pollution (Issue 2)."""
+        r_dir = Path(run_dir).resolve()
+        self.manifests_root = r_dir / "manifests"
+        self.results_root = r_dir / "results"
+        self.raw_root = r_dir / "raw"
+        self.reports_root = r_dir / "reports"
+        self.ensure_directories()
+
+    def capture_source_state(self) -> dict[str, Any]:
+        """Capture immutable source checkout state for release benchmarking (Issue 3)."""
+        self._capture_target_repo_git()
+        self._capture_polyflow_git()
+        return {
+            "polyflow_commit": self.polyflow_commit,
+            "polyflow_dirty": self.polyflow_dirty,
+            "polyflow_worktree_diff_hash": self.polyflow_worktree_diff_hash,
+            "target_repo_commit": self.target_repo_commit,
+            "target_repo_dirty": self.target_repo_dirty,
+            "target_repo_diff_hash": self.working_tree_diff_hash,
+        }
+
+    def verify_source_cleanliness(self, initial_state: dict[str, Any]) -> bool:
+        """Verify repository source state remained untouched during benchmark execution."""
+        current_state = self.capture_source_state()
+        return current_state == initial_state
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "run_id": self.run_id,
@@ -231,18 +268,21 @@ class BenchmarkEnvironment:
         }
 
 
-def get_default_environment(run_id: Optional[str] = None) -> BenchmarkEnvironment:
+def get_default_environment(run_id: Optional[str] = None, run_dir: Optional[Path | str] = None) -> BenchmarkEnvironment:
     """Convenience factory locating the polyflow root from this file."""
     # This file is at PolyFlow/experiments/rcir_v8_5/scripts/environment.py
     polyflow_root = Path(__file__).resolve().parents[3]
     target_repo_root = polyflow_root / "experiments" / "nextcloud_validation" / "nextcloud-server"
-    env_run_id = run_id or os.environ.get("RCIR_RUN_ID", "rcir-v8.5-primary")
+    env_run_id = run_id or os.environ.get("RCIR_RUN_ID", "rcir-v8.5.2-primary")
     env = BenchmarkEnvironment(
         polyflow_root=polyflow_root,
         target_repo_root=target_repo_root,
         run_id=env_run_id,
     )
-    env.ensure_directories()
+    if run_dir:
+        env.set_run_directory(run_dir)
+    else:
+        env.ensure_directories()
     return env
 
 

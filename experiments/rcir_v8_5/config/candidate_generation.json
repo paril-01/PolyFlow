@@ -1,0 +1,15 @@
+{
+  "config_version": "8.5.2",
+  "channels": [
+    "channel_a_exact_graph",
+    "channel_b_type_flow",
+    "channel_c_boundary",
+    "channel_d_events",
+    "channel_e_config",
+    "channel_f_verification",
+    "channel_g_lexical"
+  ],
+  "traversal_hops": 2,
+  "confidence_threshold": 0.5,
+  "max_channel_candidates": 2000
+}

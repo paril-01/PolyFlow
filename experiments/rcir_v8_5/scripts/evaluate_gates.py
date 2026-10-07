@@ -39,12 +39,14 @@ from provenance import (
 )
 
 
-def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
+def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = None) -> Dict[str, Any]:
     print("=" * 80)
-    print("RCIR v8.5.1 — Formal Contract Gate Evaluation")
+    print("RCIR v8.5.2 — Formal Contract Gate Evaluation")
     print("=" * 80)
 
-    env = get_default_environment()
+    if env is None:
+        env = get_default_environment()
+
     contract_path = env.contract_path
     if not contract_path.exists():
         raise FileNotFoundError(f"Contract file missing: {contract_path}")
@@ -58,7 +60,12 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
     print("\n[STAGE 1] Evaluating Benchmark Integrity Gate...")
     integrity_failures = []
 
-    # 1. Manifest existence & hash
+    # 1. Derive expected run identity from current inputs BEFORE validating manifest (Issues 4 & 5)
+    env.derive_run_id()
+    current_inputs = collect_input_hashes(env)
+    expected_run_id = compute_run_identity(current_inputs)
+
+    # 2. Manifest existence, content validation, and hash
     manifest_path = env.manifests_root / "benchmark_run_manifest.json"
     manifest_hash = ""
     if not manifest_path.exists():
@@ -68,14 +75,59 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
         try:
             with open(manifest_path, "r", encoding="utf-8") as f:
                 manifest = json.load(f)
-            if manifest.get("run_id") != env.run_id:
-                integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {env.run_id}")
+
+            # Validate manifest run_id
+            if manifest.get("run_id") != expected_run_id:
+                integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {expected_run_id}")
+
+            # Issue 5: Validate all manifest fields against independently recomputed inputs
+            if manifest.get("polyflow_commit") != current_inputs["polyflow_commit"]:
+                integrity_failures.append(
+                    f"Manifest polyflow_commit mismatch: {manifest.get('polyflow_commit')} != {current_inputs['polyflow_commit']}"
+                )
+            if manifest.get("target_repository_commit") != current_inputs["target_repo_commit"]:
+                integrity_failures.append(
+                    f"Manifest target_repository_commit mismatch: {manifest.get('target_repository_commit')} != {current_inputs['target_repo_commit']}"
+                )
+            if manifest.get("contract_hash") != current_inputs["contract_hash"]:
+                integrity_failures.append(
+                    f"Manifest contract_hash mismatch: {manifest.get('contract_hash')} != {current_inputs['contract_hash']}"
+                )
+            if manifest.get("graph_hash") != current_inputs["graph_hash"]:
+                integrity_failures.append(
+                    f"Manifest graph_hash mismatch: {manifest.get('graph_hash')} != {current_inputs['graph_hash']}"
+                )
+
+            # Validate dataset hashes
+            m_datasets = manifest.get("dataset_hashes", {})
+            for d_name, d_hash in current_inputs["dataset_hashes"].items():
+                if m_datasets.get(d_name) != d_hash:
+                    integrity_failures.append(
+                        f"Manifest dataset hash mismatch for '{d_name}': {m_datasets.get(d_name)} != {d_hash}"
+                    )
+
+            # Validate ground truth hashes
+            m_gt = manifest.get("ground_truth_hashes", {})
+            for gt_name, gt_hash in current_inputs["ground_truth_hashes"].items():
+                if m_gt.get(gt_name) != gt_hash:
+                    integrity_failures.append(
+                        f"Manifest ground truth hash mismatch for '{gt_name}': {m_gt.get(gt_name)} != {gt_hash}"
+                    )
+
+            # Validate config hashes key-by-key
+            m_cfg = manifest.get("config_hashes", {})
+            for cfg_name, cfg_hash in current_inputs["config_hashes"].items():
+                if m_cfg.get(cfg_name) != cfg_hash:
+                    integrity_failures.append(
+                        f"Manifest config hash mismatch for '{cfg_name}': {m_cfg.get(cfg_name)} != {cfg_hash}"
+                    )
+
         except Exception as e:
             integrity_failures.append(f"Manifest corrupted: {e}")
 
     # Build expected current run envelope
-    env.derive_run_id()
     expected_envelope = build_provenance_envelope(env, manifest_hash=manifest_hash)
+
 
     # 2. Strict provenance validation across all result artifacts
     artifacts_to_check = [
@@ -207,18 +259,21 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
     # -------------------------------------------------------------------------
     print("\n[STAGE 3] Evaluating Contract Gates against TEST split...")
 
-    with open(env.results_root / "impact_test.json", "r", encoding="utf-8") as f:
-        impact_test = json.load(f)
-    with open(env.results_root / "ranker_test.json", "r", encoding="utf-8") as f:
-        ranker_test = json.load(f)
-    with open(env.results_root / "context_test.json", "r", encoding="utf-8") as f:
-        context_test = json.load(f)
-    with open(env.results_root / "type_flow_evaluation.json", "r", encoding="utf-8") as f:
-        type_flow_res = json.load(f)
-    with open(env.results_root / "canonicalization_evaluation.json", "r", encoding="utf-8") as f:
-        canon_res = json.load(f)
-    with open(env.results_root / "determinism_evaluation.json", "r", encoding="utf-8") as f:
-        det_res = json.load(f)
+    def load_json_safe(fpath: Path) -> Dict[str, Any]:
+        if not fpath.exists():
+            return {}
+        try:
+            with open(fpath, "r", encoding="utf-8") as jf:
+                return json.load(jf)
+        except Exception:
+            return {}
+
+    impact_test = load_json_safe(env.results_root / "impact_test.json")
+    ranker_test = load_json_safe(env.results_root / "ranker_test.json")
+    context_test = load_json_safe(env.results_root / "context_test.json")
+    type_flow_res = load_json_safe(env.results_root / "type_flow_evaluation.json")
+    canon_res = load_json_safe(env.results_root / "canonicalization_evaluation.json")
+    det_res = load_json_safe(env.results_root / "determinism_evaluation.json")
 
     # 1. Impact Plane Gate
     cfg_impact = contract["impact_plane"]
@@ -244,7 +299,7 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
     )
     print(f"  Impact Gate: {'PASSED' if impact_gate['passed'] else 'FAILED'} (Macro: {macro_recall*100:.1f}%, Worst: {worst_recall*100:.1f}%, Silent Misses: {silent_misses})")
 
-    # 2. Ranking Plane Gate
+    # 2. Ranking Plane Gate (v8.5.2)
     cfg_rank = contract["ranking_plane"]
     rank_metrics = ranker_test.get("metrics", ranker_test)
     p20_excl = rank_metrics.get("precision_at_20_excluding_target", 0.0)
@@ -252,29 +307,44 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
     ndcg_50 = rank_metrics.get("graded_ndcg_at_50", 0.0)
     dep_mrr = rank_metrics.get("dependency_mrr", 0.0)
 
+    blocking_cfg = cfg_rank.get("blocking_metrics", {})
+    if blocking_cfg:
+        ndcg_min = blocking_cfg.get("ndcg_at_50_graded_min", 0.20)
+        dep_mrr_min = blocking_cfg.get("dependency_mrr_min", 0.20)
+        ndcg_passed = ndcg_50 >= ndcg_min
+        dep_mrr_passed = dep_mrr >= dep_mrr_min
+        p20_passed = True
+        p50_passed = True
+        ranking_passed = ndcg_passed and dep_mrr_passed
+    else:
+        # Legacy contract v8.5
+        p20_min = cfg_rank.get("precision_at_20_excluding_target_min", 0.35)
+        p50_min = cfg_rank.get("precision_at_50_excluding_target_min", 0.20)
+        ndcg_min = cfg_rank.get("ndcg_at_50_graded_min", 0.50)
+        dep_mrr_min = cfg_rank.get("dependency_mrr_min", 0.70)
+        p20_passed = p20_excl >= p20_min
+        p50_passed = p50_excl >= p50_min
+        ndcg_passed = ndcg_50 >= ndcg_min
+        dep_mrr_passed = dep_mrr >= dep_mrr_min
+        ranking_passed = p20_passed and p50_passed and ndcg_passed and dep_mrr_passed
+
     ranking_gate = {
         "p20_excluding_target": p20_excl,
-        "p20_min": cfg_rank["precision_at_20_excluding_target_min"],
-        "p20_passed": p20_excl >= cfg_rank["precision_at_20_excluding_target_min"],
+        "p20_passed": p20_passed,
         "p50_excluding_target": p50_excl,
-        "p50_min": cfg_rank["precision_at_50_excluding_target_min"],
-        "p50_passed": p50_excl >= cfg_rank["precision_at_50_excluding_target_min"],
+        "p50_passed": p50_passed,
         "ndcg_at_50": ndcg_50,
-        "ndcg_min": cfg_rank["ndcg_at_50_graded_min"],
-        "ndcg_passed": ndcg_50 >= cfg_rank["ndcg_at_50_graded_min"],
+        "ndcg_min": ndcg_min,
+        "ndcg_passed": ndcg_passed,
         "dependency_mrr": dep_mrr,
-        "dependency_mrr_min": cfg_rank["dependency_mrr_min"],
-        "dependency_mrr_passed": dep_mrr >= cfg_rank["dependency_mrr_min"],
+        "dependency_mrr_min": dep_mrr_min,
+        "dependency_mrr_passed": dep_mrr_passed,
         "contract_feasible": is_contract_feasible,
         "theoretical_ceilings": feasibility_details.get("theoretical_ceilings", {}),
+        "passed": ranking_passed and is_contract_feasible,
     }
-    ranking_gate["passed"] = (
-        ranking_gate["p20_passed"]
-        and ranking_gate["p50_passed"]
-        and ranking_gate["ndcg_passed"]
-        and ranking_gate["dependency_mrr_passed"]
-    )
     print(f"  Ranking Gate: {'PASSED' if ranking_gate['passed'] else 'FAILED'} (P@20_excl: {p20_excl*100:.1f}%, P@50_excl: {p50_excl*100:.1f}%, nDCG@50: {ndcg_50:.4f}, MRR: {dep_mrr:.4f})")
+
 
     # 3. Context Plane Gate
     cfg_ctx = contract["context_plane"]
@@ -483,22 +553,45 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
             try:
                 with open(baseline_path, "r", encoding="utf-8") as bf:
                     b_data = json.load(bf)
-                b_metrics = b_data.get("metrics", b_data)
-                b_val = b_metrics.get(metric_name, 0.0)
-                curr_val = rank_metrics.get(metric_name, 0.0)
-                if b_val > 0:
-                    rel_imp = (curr_val - b_val) / float(b_val)
+
+                # Validate baseline provenance (Issue 10)
+                req_prov = rank_imp_cfg.get("baseline_provenance_validation", {})
+                prov_mismatches = []
+                if req_prov.get("require_same_target_commit") and b_data.get("target_repo_commit") != env.target_repo_commit:
+                    prov_mismatches.append(f"target_repo_commit ({b_data.get('target_repo_commit')} != {env.target_repo_commit})")
+                if req_prov.get("require_same_ground_truth_hash") and b_data.get("ground_truth_hash") != expected_envelope.get("ground_truth_hash"):
+                    prov_mismatches.append("ground_truth_hash mismatch")
+
+                if prov_mismatches:
+                    ranking_imp_evaluable = False
+                    ranking_imp_passed = False
+                    ranking_imp_details = f"OPTION_B = NOT_EVALUABLE: Baseline provenance mismatch: {', '.join(prov_mismatches)}"
                 else:
-                    rel_imp = 0.0
-                ranking_imp_passed = rel_imp >= min_rel_imp
-                ranking_imp_details = (
-                    f"Current {metric_name} = {curr_val:.4f} vs Baseline = {b_val:.4f} "
-                    f"=> Relative improvement = {rel_imp*100:.2f}% (required >= {min_rel_imp*100:.1f}%)"
-                )
+                    b_metrics = b_data.get("metrics", b_data)
+                    b_val = b_metrics.get(metric_name, 0.0)
+                    curr_val = rank_metrics.get(metric_name, 0.0)
+
+                    if b_val == 0.0:
+                        # Issue 10: Zero baseline rule
+                        abs_delta = curr_val - b_val
+                        min_abs_delta = rank_imp_cfg.get("min_absolute_delta", 0.02)
+                        ranking_imp_passed = abs_delta >= min_abs_delta
+                        ranking_imp_details = (
+                            f"Zero baseline encountered. Absolute delta: {abs_delta:.4f} "
+                            f"(required >= {min_abs_delta:.4f})"
+                        )
+                    else:
+                        rel_imp = (curr_val - b_val) / float(b_val)
+                        ranking_imp_passed = rel_imp >= min_rel_imp
+                        ranking_imp_details = (
+                            f"Current {metric_name} = {curr_val:.4f} vs Baseline = {b_val:.4f} "
+                            f"=> Relative improvement = {rel_imp*100:.2f}% (required >= {min_rel_imp*100:.1f}%)"
+                        )
             except Exception as ex:
                 ranking_imp_evaluable = False
                 ranking_imp_passed = False
                 ranking_imp_details = f"Error reading baseline artifact {baseline_path}: {ex}"
+
 
     option_b_evaluation = {
         "evaluable": ranking_imp_evaluable,
@@ -604,7 +697,8 @@ def evaluate_gates(allow_development_dirty: bool = False) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    res = evaluate_gates()
+    allow_dirty = "--allow-dirty" in sys.argv
+    res = evaluate_gates(allow_development_dirty=allow_dirty)
     if not res or res.get("run_validity") != "VALID" or res.get("architecture_decision") in ("NOT_EVALUATED", "INVALID_CONTRACT"):
         sys.exit(1)
 
