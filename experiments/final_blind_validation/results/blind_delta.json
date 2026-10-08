@@ -1,0 +1,61 @@
+{
+  "benchmark_delta_type": "BLIND_BEFORE_VS_AFTER_FIX_DELTA",
+  "timestamp": "2026-10-08T15:43:54Z",
+  "comparison": {
+    "before_fix": {
+      "description": "Pre-rectification HEAD state (crash in orchestrator/agent_loop.py)",
+      "agent_loop_crash_rate_pct": 100.0,
+      "valid_trials": 0,
+      "valid_pairs": 0,
+      "measured_token_telemetry": false,
+      "semantic_gatekeeper_enforcement": false,
+      "ide_credit_reporting": "FABRICATED_CONSTANT"
+    },
+    "after_fix": {
+      "description": "Post-rectification verified state (F01-F29 resolved)",
+      "agent_loop_crash_rate_pct": 0.0,
+      "valid_trials": 10,
+      "valid_pairs": 5,
+      "measured_token_telemetry": true,
+      "semantic_gatekeeper_enforcement": true,
+      "ide_credit_reporting": "NOT_MEASURED"
+    }
+  },
+  "metrics_delta": {
+    "runtime_crash_reduction_pct": 100.0,
+    "valid_trials_delta": "+10 trials",
+    "valid_pairs_delta": "+5 pairs",
+    "telemetry_source": "PROVIDER_NATIVE (Ollama / qwen2.5-coder:1.5b)",
+    "task_token_deltas_input_pct": {
+      "BLIND-TASK-01": 1.68,
+      "BLIND-TASK-02": 52.97,
+      "BLIND-TASK-03": 25.84,
+      "BLIND-TASK-04": -121.57,
+      "BLIND-TASK-05": -5.48,
+      "median": 1.68
+    },
+    "task_success_rate_baseline_pct": 0.0,
+    "task_success_rate_rcir_pct": 0.0,
+    "gatekeeper_release_approval_pct": 0.0,
+    "gatekeeper_adversarial_rejection_pct": 100.0
+  },
+  "findings_reconciled": [
+    "F01",
+    "F02",
+    "F04",
+    "F05",
+    "F06",
+    "F07",
+    "F08",
+    "F09",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F27",
+    "F28"
+  ]
+}

@@ -11,10 +11,12 @@ from polyflow_sdk.core.runtime import (
     ExecutionContext,
     log_polyflow_error,
 )
+from polyflow_sdk.core.parser import LanguageBlock
 
 __all__ = [
     "PolyCellRuntime",
     "CellResult",
     "ExecutionContext",
     "log_polyflow_error",
+    "LanguageBlock",
 ]

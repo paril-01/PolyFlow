@@ -5,6 +5,7 @@ apply edits, run compilers/test suites, observe results, and repair code.
 """
 
 import json
+import os
 import re
 import time
 from dataclasses import dataclass, field

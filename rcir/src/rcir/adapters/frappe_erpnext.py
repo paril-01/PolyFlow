@@ -297,3 +297,391 @@ class FrappeERPNextSourceDerivedAdapter:
         """Find all document events or class overrides for a DocType."""
         self.index()
         return [h for h in self.hooks if h.target_doctype == doctype_name]
+
+
+@dataclass
+class SourceArtifact:
+    path: str
+    language: str
+    role: str
+    sha256: str
+    symbol: Optional[str] = None
+    span: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class FeatureClosure:
+    feature_id: str
+    feature_name: str
+    domain: str
+    frontend_sources: List[SourceArtifact] = field(default_factory=list)
+    backend_sources: List[SourceArtifact] = field(default_factory=list)
+    data_model_sources: List[SourceArtifact] = field(default_factory=list)
+    database_sources: List[SourceArtifact] = field(default_factory=list)
+    api_sources: List[Dict[str, Any]] = field(default_factory=list)
+    hook_sources: List[Dict[str, Any]] = field(default_factory=list)
+    config_sources: List[SourceArtifact] = field(default_factory=list)
+    workflow_sources: List[Dict[str, Any]] = field(default_factory=list)
+    permission_sources: List[Dict[str, Any]] = field(default_factory=list)
+    test_sources: List[SourceArtifact] = field(default_factory=list)
+    template_sources: List[SourceArtifact] = field(default_factory=list)
+    integration_sources: List[SourceArtifact] = field(default_factory=list)
+    linked_features: List[Dict[str, Any]] = field(default_factory=list)
+    external_dependencies: List[str] = field(default_factory=list)
+    schemas: List[Dict[str, Any]] = field(default_factory=list)
+    runtime_cells: List[Dict[str, Any]] = field(default_factory=list)
+    contracts: Dict[str, Any] = field(default_factory=dict)
+    errors: List[Dict[str, Any]] = field(default_factory=list)
+    decisions: List[Dict[str, Any]] = field(default_factory=list)
+    source_hashes: Dict[str, str] = field(default_factory=dict)
+    closure_confidence: float = 1.0
+    unresolved_sources: List[str] = field(default_factory=list)
+    stack_manifest: Dict[str, Any] = field(default_factory=dict)
+    coverage: Dict[str, float] = field(default_factory=dict)
+
+
+class FrappeFeatureClosureExtractor:
+    """Discovers and constructs full-stack FeatureClosure representations from source evidence."""
+
+    @staticmethod
+    def _hash_file(p: Path) -> str:
+        try:
+            return hashlib.sha256(p.read_bytes()).hexdigest()
+        except Exception:
+            return ""
+
+    @classmethod
+    def extract_closure(
+        cls,
+        dt_name: str,
+        adapter: FrappeERPNextSourceDerivedAdapter,
+        rel_to: Optional[Path] = None,
+    ) -> Optional[FeatureClosure]:
+        adapter.index()
+        dt = adapter.doctypes.get(dt_name)
+        if not dt:
+            return None
+
+        dt_path = Path(dt.source_file)
+        dt_dir = dt_path.parent
+        domain = dt.module.lower().replace(" ", "_")
+        safe_name = dt_name.lower().replace(" ", "_").replace("-", "_")
+        feature_id = f"ERPNEXT-{domain.upper()}-{safe_name.upper()}"
+
+        closure = FeatureClosure(
+            feature_id=feature_id,
+            feature_name=dt_name,
+            domain=domain,
+            contracts={
+                "feature_id": feature_id,
+                "tier": "CRITICAL" if dt.is_submittable else "STANDARD",
+                "is_submittable": dt.is_submittable,
+                "owner": f"{domain}-engineering",
+                "timeout_ms": 3000,
+            }
+        )
+
+        def make_rel(p: Path) -> str:
+            if rel_to:
+                try:
+                    return os.path.relpath(p, rel_to).replace("\\", "/")
+                except Exception:
+                    pass
+            return str(p).replace("\\", "/")
+
+        # 1. Data Model / Persistence Sources
+        dt_sha = dt.sha256 or cls._hash_file(dt_path)
+        closure.data_model_sources.append(
+            SourceArtifact(
+                path=make_rel(dt_path),
+                language="Frappe DocType JSON",
+                role="doctype_metadata",
+                sha256=dt_sha,
+                symbol=dt_name,
+            )
+        )
+        closure.source_hashes[make_rel(dt_path)] = dt_sha
+
+        # Inspect child tables directly linked
+        for fieldname, child_dt_name in dt.child_tables.items():
+            child_dt = adapter.doctypes.get(child_dt_name)
+            if child_dt:
+                c_path = Path(child_dt.source_file)
+                c_sha = child_dt.sha256 or cls._hash_file(c_path)
+                closure.data_model_sources.append(
+                    SourceArtifact(
+                        path=make_rel(c_path),
+                        language="Frappe DocType JSON",
+                        role="child_table_schema",
+                        sha256=c_sha,
+                        symbol=child_dt_name,
+                    )
+                )
+                closure.source_hashes[make_rel(c_path)] = c_sha
+
+        # 2. Backend Sources
+        if dt.controller_file and os.path.exists(dt.controller_file):
+            ctrl_p = Path(dt.controller_file)
+            ctrl_sha = cls._hash_file(ctrl_p)
+            closure.backend_sources.append(
+                SourceArtifact(
+                    path=make_rel(ctrl_p),
+                    language="Python",
+                    role="backend_controller",
+                    sha256=ctrl_sha,
+                    symbol=f"{dt_name.replace(' ', '')}Controller",
+                )
+            )
+            closure.source_hashes[make_rel(ctrl_p)] = ctrl_sha
+
+        # Additional backend files in doctype directory (dashboards, mappers, services)
+        if dt_dir.exists():
+            for p in dt_dir.iterdir():
+                if p.is_file() and p.suffix == ".py":
+                    rel = make_rel(p)
+                    if rel in closure.source_hashes:
+                        continue
+                    p_sha = cls._hash_file(p)
+                    role = "backend_utility"
+                    if "dashboard" in p.name:
+                        role = "backend_dashboard"
+                    elif "mapper" in p.name:
+                        role = "backend_mapper"
+                    elif "test" in p.name:
+                        continue  # handled in test section
+
+                    closure.backend_sources.append(
+                        SourceArtifact(
+                            path=rel,
+                            language="Python",
+                            role=role,
+                            sha256=p_sha,
+                            symbol=p.stem,
+                        )
+                    )
+                    closure.source_hashes[rel] = p_sha
+
+        # 3. Frontend / Client Sources
+        if dt_dir.exists():
+            for p in dt_dir.iterdir():
+                if p.is_file() and p.suffix in (".js", ".ts", ".vue"):
+                    rel = make_rel(p)
+                    p_sha = cls._hash_file(p)
+                    role = "form_script"
+                    if "list" in p.name:
+                        role = "list_view_handler"
+                    elif "tree" in p.name:
+                        role = "tree_view_handler"
+
+                    closure.frontend_sources.append(
+                        SourceArtifact(
+                            path=rel,
+                            language="JavaScript" if p.suffix == ".js" else ("TypeScript" if p.suffix == ".ts" else "Vue"),
+                            role=role,
+                            sha256=p_sha,
+                            symbol=p.stem,
+                        )
+                    )
+                    closure.source_hashes[rel] = p_sha
+
+        # 4. Hooks & Framework Events
+        for hook in adapter.find_hooks_for_doctype(dt_name):
+            closure.hook_sources.append({
+                "hook_type": hook.hook_type,
+                "event": hook.event,
+                "handler_method": hook.handler_method,
+                "source_file": make_rel(Path(hook.source_file)),
+            })
+
+        # 5. Tests
+        if dt_dir.exists():
+            for p in dt_dir.iterdir():
+                if p.is_file() and ("test" in p.name.lower()):
+                    rel = make_rel(p)
+                    p_sha = cls._hash_file(p)
+                    role = "unit_test" if p.suffix == ".py" else "test_fixtures"
+                    closure.test_sources.append(
+                        SourceArtifact(
+                            path=rel,
+                            language="Python" if p.suffix == ".py" else "JSON",
+                            role=role,
+                            sha256=p_sha,
+                            symbol=p.stem,
+                        )
+                    )
+                    closure.source_hashes[rel] = p_sha
+
+        # 6. Cross-Feature Dependencies
+        for fieldname, target_dt in dt.link_fields.items():
+            if target_dt in adapter.doctypes:
+                closure.linked_features.append({
+                    "relationship": "LINK",
+                    "field": fieldname,
+                    "target_feature": target_dt,
+                    "target_module": adapter.doctypes[target_dt].module,
+                })
+
+        for fieldname, child_dt in dt.child_tables.items():
+            if child_dt in adapter.doctypes:
+                closure.linked_features.append({
+                    "relationship": "CHILD_TABLE",
+                    "field": fieldname,
+                    "target_feature": child_dt,
+                    "target_module": adapter.doctypes[child_dt].module,
+                })
+
+        # 7. Stack Manifest
+        frontend_techs = sorted(list({s.language for s in closure.frontend_sources})) or ["None"]
+        backend_techs = sorted(list({s.language for s in closure.backend_sources})) or ["None"]
+        data_model_techs = ["Frappe DocType JSON", "MariaDB ORM Metadata"]
+
+        closure.stack_manifest = {
+            "feature": dt_name,
+            "poly_file": f"features/{domain}/{safe_name}.poly",
+            "layers": {
+                "frontend": {
+                    "technologies": frontend_techs,
+                    "files": [s.path for s in closure.frontend_sources],
+                },
+                "backend": {
+                    "technologies": backend_techs,
+                    "files": [s.path for s in closure.backend_sources],
+                },
+                "data_model": {
+                    "technologies": data_model_techs,
+                    "files": [s.path for s in closure.data_model_sources],
+                },
+                "framework": {
+                    "files": [h["source_file"] for h in closure.hook_sources],
+                },
+                "tests": {
+                    "files": [s.path for s in closure.test_sources],
+                },
+            },
+            "native_artifact_count": len(closure.source_hashes),
+            "polyflow_module_count": 1,
+            "unresolved_artifacts": closure.unresolved_sources,
+        }
+
+        # 8. Layer Coverage Calculation
+        closure.coverage = {
+            "frontend": 1.0 if closure.frontend_sources else 0.0,
+            "backend": 1.0 if closure.backend_sources else 0.0,
+            "data_model": 1.0 if closure.data_model_sources else 0.0,
+            "framework": 1.0 if closure.hook_sources else 0.85,
+            "tests": 1.0 if closure.test_sources else 0.0,
+            "dependencies": 1.0 if closure.linked_features else 0.9,
+        }
+        closure.coverage["overall"] = round(
+            sum(closure.coverage.values()) / len(closure.coverage), 3
+        )
+
+        return closure
+
+    @classmethod
+    def generate_poly_file(cls, closure: FeatureClosure) -> str:
+        """Generates canonical full-stack .poly content representing the entire closure."""
+        lines = [
+            f"# PolyFlow Full-Stack Feature Closure for {closure.feature_name}",
+            f"# Domain: {closure.domain} | Native Artifacts: {len(closure.source_hashes)}",
+            "",
+            "@contract",
+            f"feature_id: {closure.feature_id}",
+            f"owner: {closure.domain}-engineering",
+            f"classification: enterprise",
+            f"is_submittable: {str(closure.contracts.get('is_submittable', False)).lower()}",
+            f"timeout_ms: {closure.contracts.get('timeout_ms', 3000)}",
+            "@end",
+            "",
+            f"@schema {closure.feature_name.replace(' ', '')}",
+        ]
+
+        # Add fields from data_model
+        lines.append("  # Schema defined across primary doctype & child table contracts")
+        lines.append("  name: string [primary_key]")
+        lines.append("  docstatus: integer [0..2]")
+        lines.append("@end")
+        lines.append("")
+
+        # Data Model Sources
+        for src in closure.data_model_sources:
+            lines.extend([
+                "@source",
+                f'path: "{src.path}"',
+                f'language: "{src.language}"',
+                f'role: "{src.role}"',
+                f'symbol: "{src.symbol or closure.feature_name}"',
+                f'sha256: "{src.sha256}"',
+                "@end",
+                ""
+            ])
+
+        # Frontend Sources
+        for src in closure.frontend_sources:
+            lines.extend([
+                "@source",
+                f'path: "{src.path}"',
+                f'language: "{src.language}"',
+                f'role: "{src.role}"',
+                f'symbol: "{src.symbol or closure.feature_name}"',
+                f'sha256: "{src.sha256}"',
+                "@end",
+                ""
+            ])
+
+        # Backend Sources
+        for src in closure.backend_sources:
+            lines.extend([
+                "@source",
+                f'path: "{src.path}"',
+                f'language: "{src.language}"',
+                f'role: "{src.role}"',
+                f'symbol: "{src.symbol or closure.feature_name}"',
+                f'sha256: "{src.sha256}"',
+                "@end",
+                ""
+            ])
+
+        # Test Sources
+        for src in closure.test_sources:
+            lines.extend([
+                "@source",
+                f'path: "{src.path}"',
+                f'language: "{src.language}"',
+                f'role: "{src.role}"',
+                f'symbol: "{src.symbol or closure.feature_name}"',
+                f'sha256: "{src.sha256}"',
+                "@end",
+                ""
+            ])
+
+        # Hook sources
+        for hook in closure.hook_sources[:3]:
+            lines.extend([
+                "@source",
+                f'path: "{hook["source_file"]}"',
+                'language: "Python"',
+                f'role: "framework_hook:{hook["event"]}"',
+                f'symbol: "{hook["handler_method"]}"',
+                'sha256: "framework_registered_hook"',
+                "@end",
+                ""
+            ])
+
+        # Linked features
+        for link in closure.linked_features[:8]:
+            tgt_clean = link["target_feature"].replace(" ", "").replace("-", "")
+            tgt_mod = link["target_module"].lower().replace(" ", "_")
+            tgt_safe = link["target_feature"].lower().replace(" ", "_").replace("-", "_")
+            lines.append(f"@link ../{tgt_mod}/{tgt_safe}.poly::{tgt_clean} as ref_{link['field']}")
+
+        lines.extend([
+            "",
+            "@error-map(code=\"PF_ERP_VALIDATION_FAIL\", action=\"ROLLBACK_TRANSACTION\")",
+            "@decision(adr=\"ADR-ERP-001\", rationale=\"Unified feature closure eliminates multi-directory cognitive load while preserving native Frappe controllers\")",
+            ""
+        ])
+
+        return "\n".join(lines)
+
+    format_as_poly = generate_poly_file

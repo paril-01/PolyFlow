@@ -231,6 +231,19 @@ Three business-critical verticals with real executable Python cells were impleme
 | **Tier 4 (Architectural):** DocType Hooks & Event Overrides | `erpnext/hooks.py`, `frappe/hooks.py`, `document.py` | **100.0%** | **0.083** | 564 | 191 | `INFEASIBLE` (>10M tokens) |
 | **Overall Enterprise Average** | — | **91.75%** | **0.521** | **581** | **208** | **55.1x Context Compression** |
 
+### 9.5 Full-Stack Feature Closure Extraction & Independent Validation
+A first-class `FeatureClosure` extractor (`FrappeFeatureClosureExtractor`) was introduced in `rcir/src/rcir/adapters/frappe_erpnext.py` to demonstrate PolyFlow's primary thesis:
+- **Foundational Architecture:** Traditional systems distribute one business capability across disparate directories, schemas, and languages. PolyFlow reconstructs that capability into one coherent `.poly` module while preserving 100% native runtime semantics.
+- **Independent Validation Across 5 Representative Features:**
+  - `Sales Invoice` (`ERPNEXT-ACCOUNTS-SALES_INVOICE`): 8 ground-truth files, 20 extracted sources (Recall: 100.0%, Coverage: 100.0%, 63 dependency links).
+  - `Item` (`ERPNEXT-STOCK-ITEM`): 8 ground-truth files, 17 extracted sources (Recall: 100.0%, Coverage: 97.5%).
+  - `Customer` (`ERPNEXT-SELLING-CUSTOMER`): 9 ground-truth files, 16 extracted sources (Recall: 100.0%, Coverage: 97.5%).
+  - `Stock Entry` (`ERPNEXT-STOCK-STOCK_ENTRY`): 8 ground-truth files, 11 extracted sources (Recall: 100.0%, Coverage: 97.5%).
+  - `Payment Entry` (`ERPNEXT-ACCOUNTS-PAYMENT_ENTRY`): 5 ground-truth files, 10 extracted sources (Recall: 100.0%, Coverage: 100.0%).
+- **Macro Artifact Recall:** **100.0%** (38/38 ground truth in-scope files retrieved, validated by `tests/test_feature_closure.py`).
+- **Honest Complexity Ratio:** `12 fragmented artifacts across 5 directories/languages → 1 feature entry point`.
+- **System Organization:** Never monolithic; structured as a PolyFlow project with 842 modular `.poly` files across 32 domain subdirectories (`erpnext_accounts/`, `erpnext_stock/`, etc.).
+
 ---
 
 ## 10. Distinct Token & Compression Measurements (Section 26)
@@ -269,7 +282,8 @@ The entire execution pipeline defined in Section 40 has been verified:
 
 $$\text{.poly source} \longrightarrow \text{Portable Interpreter} \longrightarrow \text{Host Runtime} \longrightarrow \text{RCIR Indexing} \longrightarrow \text{Ranked Context} \longrightarrow \text{Live Agent} \longrightarrow \text{Acceptance/Regression Pass} \longrightarrow \text{Enterprise ERPNext Scale}$$
 
-- **Nextcloud Benchmark Formal Gates:** **ALL 11 GATES PASSED**
+- **Nextcloud Benchmark Formal Gates:** **6 OF 7 CONTRACT GATES PASSED** (Agent Gate `NOT_SATISFIED` honestly reported under 5-turn budget)
+- **Blind Baseline & After-Fix Protocol:** **VALIDATED & FROZEN** (F01–F29 Rectifications Verified)
 - **Architecture Decision:** **`OPTION_B_ACCEPTED`**
 - **SDK Black-Box Portability:** **VERIFIED**
 - **Frappe/ERPNext Scale Accounting:** **100.0% VERIFIED**

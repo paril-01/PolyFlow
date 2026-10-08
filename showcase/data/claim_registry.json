@@ -1,0 +1,12 @@
+[
+  {
+    "id": "rcir.token.median_input_delta",
+    "value": 1.68,
+    "unit": "%",
+    "status": "MEASURED",
+    "source_artifact": "experiments/final_blind_validation/results/blind_baseline.json",
+    "source_json_path": "median_input_token_delta_pct",
+    "source_sha256": "df5184ae651df8a3242a6958136a48b60788c7af23fb40aaf528fd824b4537c4",
+    "run_id": "blind_baseline_run"
+  }
+]

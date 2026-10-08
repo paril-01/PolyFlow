@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "l1_syntax_passed": true,
+  "l1_logs": [],
+  "l2_targeted_passed": false,
+  "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasId(): bool;' in IShare.php",
+  "l3_regression_passed": true,
+  "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+}

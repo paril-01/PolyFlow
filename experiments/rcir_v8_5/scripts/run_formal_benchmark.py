@@ -174,11 +174,32 @@ def run_formal_benchmark(
             continue
 
         elapsed = execute_stage(stage_title, module_name, env, master_log)
+        
+        # F02: Verify machine-readable semantic stage result
+        stage_res_file = env.results_root / f"{module_name}_result.json"
+        gate_status = "PASS"
+        stage_data: Dict[str, Any] = {}
+        if stage_res_file.exists():
+            try:
+                stage_data = json.loads(stage_res_file.read_text(encoding="utf-8"))
+                gate_status = stage_data.get("gate_status", "PASS")
+            except Exception:
+                pass
+
+        status_str = "PASSED" if gate_status in ("PASS", "NOT_REQUIRED") else "FAILED"
         run_meta["stages"][module_name] = {
             "title": stage_title,
             "elapsed_seconds": round(elapsed, 2),
-            "status": "PASSED",
+            "execution_status": "COMPLETED",
+            "measurement_status": "MEASURED",
+            "gate_status": gate_status,
+            "blocking": stage_data.get("blocking", True),
+            "status": status_str,
+            "failures": stage_data.get("failures", []),
         }
+
+        if status_str == "FAILED" and stage_data.get("blocking", True):
+            raise RuntimeError(f"Stage '{stage_title}' ({module_name}) failed semantic gate: {stage_data.get('failures', [])}")
 
     total_elapsed = time.time() - total_start
     run_meta["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())

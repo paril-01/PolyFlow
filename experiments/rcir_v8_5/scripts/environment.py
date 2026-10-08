@@ -170,13 +170,13 @@ class BenchmarkEnvironment:
             ]
             status = subprocess.check_output(
                 ["git", "-C", str(self.polyflow_root), "status", "--porcelain", "--ignore-submodules=dirty", "--", "."] + output_excludes,
-                text=True, stderr=subprocess.DEVNULL
+                text=True, encoding="utf-8", errors="replace", stderr=subprocess.DEVNULL
             ).strip()
             self.polyflow_dirty = bool(status)
             if self.polyflow_dirty:
                 diff = subprocess.check_output(
                     ["git", "-C", str(self.polyflow_root), "diff", "--ignore-submodules=dirty", "--", "."] + output_excludes,
-                    text=True, stderr=subprocess.DEVNULL
+                    text=True, encoding="utf-8", errors="replace", stderr=subprocess.DEVNULL
                 )
                 self.polyflow_worktree_diff_hash = hashlib.sha256(diff.encode("utf-8")).hexdigest()
             else:

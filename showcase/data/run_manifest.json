@@ -1,0 +1,31 @@
+{
+  "run_id": "final_blind_validation",
+  "timestamp": "2026-10-08T16:03:31Z",
+  "evidence_status": "VALIDATED",
+  "environment": {
+    "os": "Windows",
+    "python_version": "3.12.3",
+    "provider": "ollama",
+    "model": "qwen2.5-coder:1.5b",
+    "php_version": "8.3.33"
+  },
+  "pinned_commits": {
+    "polyflow": {
+      "commit": "d5be98cafaf652e9d6242906b6dc3d054933fccb",
+      "dirty": true
+    },
+    "nextcloud_server": {
+      "path": "experiments/nextcloud_validation/nextcloud-server",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "dirty": false
+    },
+    "frappe": {
+      "commit": "8f8a59ebe58607bc714c232777b9d835311f2229"
+    },
+    "erpnext": {
+      "commit": "6369f7fd5ab8d869b8d21c9c74f4ad8feb73255a"
+    }
+  },
+  "frozen_test_design_sha256": "6143ff80a7d854b6cee749deb09bea8c88d5b6a29ee70da0b561cbfe4116b265",
+  "manifest_file_sha256": "4d7618b9cefebb96c661a675235b3abc5cbd65a0c229640ad6d44e0cc113b22d"
+}

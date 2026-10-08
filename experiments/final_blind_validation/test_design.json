@@ -1,0 +1,91 @@
+{
+  "test_design_version": "1.1.0",
+  "created_at": "2026-10-08T15:00:00Z",
+  "description": "Frozen blind benchmark task design for PolyFlow/RCIR agent validation under Rule 0.3.",
+  "tasks": [
+    {
+      "task_id": "BLIND-TASK-01",
+      "tier": "route_and_service",
+      "title": "Add Optional Crop Parameter to Preview Thumbnail",
+      "instructions": "Update ApiController getThumbnail to accept an optional $crop parameter with default true: public function getThumbnail($x, $y, $file, $crop = true), and pass $crop to $this->previewManager->getPreview($file, $x, $y, $crop).",
+      "hidden_evaluator": {
+        "hidden_critical_files": [
+          "apps/files/lib/Controller/ApiController.php"
+        ],
+        "hidden_dependencies": [
+          "lib/public/Preview/IPreviewManager.php"
+        ],
+        "verification_script": "experiments/rcir_v8_5/agent_tasks/verify_task1.py",
+        "verification_levels": ["L1_SYNTAX", "L2_TARGETED_TEST", "L3_RELEVANT_REGRESSION"]
+      }
+    },
+    {
+      "task_id": "BLIND-TASK-02",
+      "tier": "event_contract",
+      "title": "Add Permanent Deletion Flag to NodeDeletedEvent",
+      "instructions": "Update NodeDeletedEvent to declare a protected boolean property $permanent = false, and a public getter method: public function isPermanent(): bool { return $this->permanent; }",
+      "hidden_evaluator": {
+        "hidden_critical_files": [
+          "lib/public/Files/Events/Node/NodeDeletedEvent.php"
+        ],
+        "hidden_dependencies": [
+          "lib/public/EventDispatcher/Event.php"
+        ],
+        "verification_script": "experiments/rcir_v8_5/agent_tasks/verify_task2.py",
+        "verification_levels": ["L1_SYNTAX", "L2_TARGETED_TEST", "L3_RELEVANT_REGRESSION"]
+      }
+    },
+    {
+      "task_id": "BLIND-TASK-03",
+      "tier": "interface_contract",
+      "title": "Add ID Verification Method to IShare Contract",
+      "instructions": "Update IShare interface to declare a method hasId(): public function hasId(): bool; for checking if the share instance has an assigned internal id.",
+      "hidden_evaluator": {
+        "hidden_critical_files": [
+          "lib/public/Share/IShare.php"
+        ],
+        "hidden_dependencies": [
+          "lib/public/Share/IManager.php"
+        ],
+        "verification_script": "experiments/rcir_v8_5/agent_tasks/verify_task3.py",
+        "verification_levels": ["L1_SYNTAX", "L2_TARGETED_TEST", "L3_RELEVANT_REGRESSION"]
+      }
+    },
+    {
+      "task_id": "BLIND-TASK-04",
+      "tier": "config_di",
+      "title": "Add Existence Check Method to IConfig Contract",
+      "instructions": "Update IConfig interface to declare a method hasSystemValue(): public function hasSystemValue(string $key): bool; for checking if a system configuration key exists.",
+      "hidden_evaluator": {
+        "hidden_critical_files": [
+          "lib/public/IConfig.php"
+        ],
+        "hidden_dependencies": [
+          "lib/private/Config.php"
+        ],
+        "verification_script": "experiments/rcir_v8_5/agent_tasks/verify_task4.py",
+        "verification_levels": ["L1_SYNTAX", "L2_TARGETED_TEST", "L3_RELEVANT_REGRESSION"]
+      }
+    },
+    {
+      "task_id": "BLIND-TASK-05",
+      "tier": "session_contract",
+      "title": "Add Active Session Status Check to IUserSession Contract",
+      "instructions": "Update IUserSession interface to declare a method hasActiveSession(): public function hasActiveSession(): bool; to query whether an authenticated user session is active.",
+      "hidden_evaluator": {
+        "hidden_critical_files": [
+          "lib/public/IUserSession.php"
+        ],
+        "hidden_dependencies": [
+          "lib/private/User/Session.php"
+        ],
+        "verification_script": "experiments/rcir_v8_5/agent_tasks/verify_task5.py",
+        "verification_levels": ["L1_SYNTAX", "L2_TARGETED_TEST", "L3_RELEVANT_REGRESSION"]
+      }
+    }
+  ],
+  "regression_evaluator": {
+    "script": "experiments/rcir_v8_5/agent_tasks/verify_regression.py",
+    "verification_level": "L3_RELEVANT_REGRESSION"
+  }
+}

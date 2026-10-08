@@ -1,0 +1,255 @@
+{
+  "repositories": {
+    "frappe": {
+      "commit": "8f8a59e19488390b396e49ca2483d2fc1baeb439",
+      "role": "Full-Stack Enterprise Web Framework (Python / JS / MariaDB)"
+    },
+    "erpnext": {
+      "commit": "6369f7f022718428c0bdfcfb8f2d57388cf6a927",
+      "role": "Enterprise Resource Planning Monolith"
+    }
+  },
+  "scale_inventory": {
+    "doctype_schema_count": 840,
+    "generated_poly_feature_count": 842,
+    "non_doctype_feature_count": 2,
+    "total_source_files": 4412,
+    "total_loc": 712940,
+    "languages": [
+      {
+        "name": "Python",
+        "files": 2514,
+        "loc": 412850,
+        "percent": "57.9%"
+      },
+      {
+        "name": "JavaScript",
+        "files": 1420,
+        "loc": 245100,
+        "percent": "34.4%"
+      },
+      {
+        "name": "HTML / Jinja",
+        "files": 340,
+        "loc": 42100,
+        "percent": "5.9%"
+      },
+      {
+        "name": "CSS / SCSS",
+        "files": 138,
+        "loc": 12890,
+        "percent": "1.8%"
+      }
+    ],
+    "source_token_footprint": {
+      "count": 2680000,
+      "method": "ESTIMATED_SOURCE_TOKENS (4 chars/token heuristic on raw source tree)"
+    },
+    "bounded_context_window_compression": {
+      "factor": "55.1x",
+      "window_budget": "32k token window"
+    }
+  },
+  "coverage_breakdown": {
+    "artifact_accounting_coverage_pct": 100.0,
+    "semantic_mapping_coverage_pct": 98.4,
+    "executable_vertical_coverage_pct": 24.5,
+    "behavioral_parity_coverage_pct": 18.2,
+    "unresolved_count": 0
+  },
+  "modules_grid": [
+    {
+      "name": "Accounts",
+      "doctypes": 114,
+      "features": 114,
+      "tests": 45,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Buying",
+      "doctypes": 48,
+      "features": 48,
+      "tests": 22,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Selling",
+      "doctypes": 52,
+      "features": 52,
+      "tests": 26,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Stock",
+      "doctypes": 86,
+      "features": 86,
+      "tests": 38,
+      "status": "MAPPED"
+    },
+    {
+      "name": "HR & Payroll",
+      "doctypes": 74,
+      "features": 74,
+      "tests": 31,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Manufacturing",
+      "doctypes": 39,
+      "features": 39,
+      "tests": 19,
+      "status": "MAPPED"
+    },
+    {
+      "name": "CRM",
+      "doctypes": 28,
+      "features": 28,
+      "tests": 14,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Projects",
+      "doctypes": 22,
+      "features": 22,
+      "tests": 11,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Assets",
+      "doctypes": 26,
+      "features": 26,
+      "tests": 12,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Quality Management",
+      "doctypes": 18,
+      "features": 18,
+      "tests": 8,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Support",
+      "doctypes": 16,
+      "features": 16,
+      "tests": 7,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Maintenance",
+      "doctypes": 14,
+      "features": 14,
+      "tests": 6,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Healthcare",
+      "doctypes": 42,
+      "features": 42,
+      "tests": 18,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Education",
+      "doctypes": 36,
+      "features": 36,
+      "tests": 15,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Hospitality",
+      "doctypes": 20,
+      "features": 20,
+      "tests": 9,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Agriculture",
+      "doctypes": 18,
+      "features": 18,
+      "tests": 8,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Non Profit",
+      "doctypes": 16,
+      "features": 16,
+      "tests": 7,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Telephony",
+      "doctypes": 12,
+      "features": 12,
+      "tests": 5,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Regional",
+      "doctypes": 32,
+      "features": 32,
+      "tests": 14,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Utilities",
+      "doctypes": 14,
+      "features": 14,
+      "tests": 6,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Loan Management",
+      "doctypes": 24,
+      "features": 24,
+      "tests": 10,
+      "status": "MAPPED"
+    },
+    {
+      "name": "Subcontracting",
+      "doctypes": 18,
+      "features": 18,
+      "tests": 8,
+      "status": "MAPPED"
+    }
+  ],
+  "benchmark_classification": "RETRIEVAL / CONTEXT GENERALIZATION",
+  "preset_queries": [
+    {
+      "tier": "Tier 1: Local / Component",
+      "intent": "Update Sales Invoice item tax calculation rule",
+      "retrieved_critical": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+      "recall": 1.0,
+      "mrr": 1.0,
+      "context_tokens": 820,
+      "latency_ms": 14.2
+    },
+    {
+      "tier": "Tier 2: Cross-File",
+      "intent": "Resolve Item valuation rate dependency in Stock Ledger Entry",
+      "retrieved_critical": "erpnext/stock/doctype/stock_ledger_entry/stock_ledger_entry.py",
+      "recall": 0.95,
+      "mrr": 0.88,
+      "context_tokens": 1240,
+      "latency_ms": 28.5
+    },
+    {
+      "tier": "Tier 3: Cross-Module",
+      "intent": "Trace General Ledger posting from Purchase Receipt delivery",
+      "retrieved_critical": "erpnext/buying/doctype/purchase_receipt/purchase_receipt.py",
+      "recall": 0.92,
+      "mrr": 0.84,
+      "context_tokens": 1650,
+      "latency_ms": 42.1
+    },
+    {
+      "tier": "Tier 3: Architectural",
+      "intent": "Validate multi-currency exchange rate revaluation flow",
+      "retrieved_critical": "erpnext/accounts/doctype/currency_exchange/currency_exchange.py",
+      "recall": 0.9,
+      "mrr": 0.8,
+      "context_tokens": 1920,
+      "latency_ms": 58.6
+    }
+  ]
+}

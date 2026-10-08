@@ -1,0 +1,277 @@
+{
+  "evaluation_mode": "BLIND",
+  "rule_0_enforced": true,
+  "total_trials": 10,
+  "trials": [
+    {
+      "trial_id": "BLIND-TASK-01_baseline_turn5",
+      "task_id": "BLIND-TASK-01",
+      "condition": "baseline",
+      "turns_used": 5,
+      "tool_calls_executed": 4,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ASSERTION_FAIL: getThumbnail signature does not include $crop. Signature: ($x, $y, $file)",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 77.54,
+      "usage": {
+        "prompt_tokens": 5061,
+        "completion_tokens": 589,
+        "total_tokens": 5650
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-01_baseline_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-01_rcir_turn5",
+      "task_id": "BLIND-TASK-01",
+      "condition": "rcir",
+      "turns_used": 5,
+      "tool_calls_executed": 2,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ASSERTION_FAIL: getThumbnail signature does not include $crop. Signature: ($x, $y, $file)",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 61.78,
+      "usage": {
+        "prompt_tokens": 4976,
+        "completion_tokens": 489,
+        "total_tokens": 5465
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-01_rcir_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-02_baseline_turn5",
+      "task_id": "BLIND-TASK-02",
+      "condition": "baseline",
+      "turns_used": 3,
+      "tool_calls_executed": 1,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing property $permanent, method isPermanent(): bool in NodeDeletedEvent.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 147.92,
+      "usage": {
+        "prompt_tokens": 1431,
+        "completion_tokens": 283,
+        "total_tokens": 1714
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-02_baseline_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-02_rcir_turn5",
+      "task_id": "BLIND-TASK-02",
+      "condition": "rcir",
+      "turns_used": 2,
+      "tool_calls_executed": 1,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing property $permanent, method isPermanent(): bool in NodeDeletedEvent.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 126.54,
+      "usage": {
+        "prompt_tokens": 673,
+        "completion_tokens": 50,
+        "total_tokens": 723
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-02_rcir_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-03_baseline_turn5",
+      "task_id": "BLIND-TASK-03",
+      "condition": "baseline",
+      "turns_used": 5,
+      "tool_calls_executed": 5,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasId(): bool;' in IShare.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 68.88,
+      "usage": {
+        "prompt_tokens": 6084,
+        "completion_tokens": 369,
+        "total_tokens": 6453
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-03_baseline_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-03_rcir_turn5",
+      "task_id": "BLIND-TASK-03",
+      "condition": "rcir",
+      "turns_used": 5,
+      "tool_calls_executed": 4,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasId(): bool;' in IShare.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 47.12,
+      "usage": {
+        "prompt_tokens": 4512,
+        "completion_tokens": 295,
+        "total_tokens": 4807
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-03_rcir_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-04_baseline_turn5",
+      "task_id": "BLIND-TASK-04",
+      "condition": "baseline",
+      "turns_used": 4,
+      "tool_calls_executed": 3,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasSystemValue(string $key): bool;' in IConfig.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 147.55,
+      "usage": {
+        "prompt_tokens": 2652,
+        "completion_tokens": 116,
+        "total_tokens": 2768
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-04_baseline_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-04_rcir_turn5",
+      "task_id": "BLIND-TASK-04",
+      "condition": "rcir",
+      "turns_used": 5,
+      "tool_calls_executed": 4,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasSystemValue(string $key): bool;' in IConfig.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 129.65,
+      "usage": {
+        "prompt_tokens": 5876,
+        "completion_tokens": 1019,
+        "total_tokens": 6895
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-04_rcir_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-05_baseline_turn5",
+      "task_id": "BLIND-TASK-05",
+      "condition": "baseline",
+      "turns_used": 5,
+      "tool_calls_executed": 2,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasActiveSession(): bool;' in IUserSession.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 70.19,
+      "usage": {
+        "prompt_tokens": 4634,
+        "completion_tokens": 504,
+        "total_tokens": 5138
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-05_baseline_turn5.json"
+    },
+    {
+      "trial_id": "BLIND-TASK-05_rcir_turn5",
+      "task_id": "BLIND-TASK-05",
+      "condition": "rcir",
+      "turns_used": 5,
+      "tool_calls_executed": 5,
+      "files_modified": [],
+      "diff_length": 0,
+      "git_diff": "",
+      "verification": {
+        "accepted": false,
+        "l1_syntax_passed": true,
+        "l1_logs": [],
+        "l2_targeted_passed": false,
+        "l2_log": "ACCEPTANCE_FAILURE: Missing method declaration 'public function hasActiveSession(): bool;' in IUserSession.php",
+        "l3_regression_passed": true,
+        "l3_log": "PASS: Regression syntax checks passed for 5 files via PHP."
+      },
+      "gatekeeper_verdict": "REJECT",
+      "duration_seconds": 78.55,
+      "usage": {
+        "prompt_tokens": 4888,
+        "completion_tokens": 619,
+        "total_tokens": 5507
+      },
+      "source_artifact": "experiments/final_blind_validation/raw/BLIND-TASK-05_rcir_turn5.json"
+    }
+  ]
+}

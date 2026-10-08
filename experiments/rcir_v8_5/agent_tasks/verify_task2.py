@@ -36,5 +36,10 @@ def run_verification(worktree_root: Path) -> int:
 
 
 if __name__ == "__main__":
-    root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".")
+    if len(sys.argv) > 2 and sys.argv[1] == "--worktree":
+        root = Path(sys.argv[2]).resolve()
+    elif len(sys.argv) > 1 and sys.argv[1] != "--worktree":
+        root = Path(sys.argv[1]).resolve()
+    else:
+        root = Path(".").resolve()
     sys.exit(run_verification(root))

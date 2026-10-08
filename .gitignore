@@ -23,6 +23,7 @@ dist/
 node_modules/
 experiments/rcir_runs/
 experiments/erpnext_validation/
+experiments/final_blind_validation/raw/worktrees/
 scratch/
 *.egg-info/
 *.egg

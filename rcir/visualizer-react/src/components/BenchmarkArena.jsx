@@ -264,7 +264,7 @@ export function BenchmarkArena() {
                 </h3>
                 <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>
                   {activeProject === 'nextcloud'
-                    ? "Evaluates 2-hop candidate expansion trade-offs: high candidate recall (96.7%) paired with candidate false-positive noise (5.6% precision)."
+                    ? "Evaluates 2-hop candidate expansion trade-offs: high candidate recall paired with candidate false-positive noise."
                     : "Committed empirical results from rcir/artifacts/opentelemetry_demo_eval.md (160 files, 14 polyglot services)."}
                 </p>
               </div>

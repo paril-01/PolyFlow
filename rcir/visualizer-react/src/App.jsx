@@ -1,37 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
-import { GraphCanvas } from './components/GraphCanvas';
-import { Graph3DCanvas } from './components/Graph3DCanvas';
-import { NodeInspector } from './components/NodeInspector';
-import { TreeExplorer } from './components/TreeExplorer';
-import { RetrievalSimulator } from './components/RetrievalSimulator';
-import { BenchmarkArena } from './components/BenchmarkArena';
-import { AgentPipeline } from './components/AgentPipeline';
-import { ExecutiveHero } from './components/ExecutiveHero';
-import { PolyglotStudio } from './components/PolyglotStudio';
-import { ProofCenter } from './components/ProofCenter';
 import { ProofModal } from './components/ProofModal';
-import { StatsBar } from './components/StatsBar';
+import { Tab01PolyFlow } from './components/Tab01PolyFlow';
+import { Tab02Interpreter } from './components/Tab02Interpreter';
+import { Tab03RCIR } from './components/Tab03RCIR';
+import { Tab04AgentValidation } from './components/Tab04AgentValidation';
+import { Tab05ERPNextScale } from './components/Tab05ERPNextScale';
 
 import { useGraphData } from './hooks/useGraphData';
 import { useCamera } from './hooks/useCamera';
-import { useAgent } from './hooks/useAgent';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('polyflow');
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [manifest, setManifest] = useState([]);
-
-  // Load Manifest
-  useEffect(() => {
-    fetch('/data/manifest.json')
-      .then(res => res.json())
-      .then(data => setManifest(data))
-      .catch(err => console.warn('Could not load manifest.json', err));
-  }, []);
 
   // Keyboard shortcut Ctrl+B / Cmd+B to toggle sidebar collapse
   useEffect(() => {
@@ -45,7 +29,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Primary Graph Data Hook
+  // Primary Graph Data Hook (for Nextcloud AST graph exploration in Tab 03)
   const {
     datasetId,
     setDatasetId,
@@ -61,7 +45,6 @@ export default function App() {
     hoveredNode,
     setHoveredNode,
     highlightedNodes,
-    setHighlightedNodes,
     searchQuery,
     setSearchQuery,
     matchingNodePaths,
@@ -82,28 +65,12 @@ export default function App() {
     resetCamera
   } = useCamera(1, 0, 0);
 
-  // Agent Pipeline Hook
-  const agentState = useAgent(datasetId, data?.graph?.nodes || []);
-
-  const totalNodes = data?.graph?.nodes?.length || 0;
-  const totalEdges = data?.graph?.edges?.length || 0;
-  const datasetInfo = manifest.find(m => m.id === datasetId) || { name: datasetId };
-
-  // Handler when agent pipeline requests highlighting nodes on graph
-  const handleHighlightTouchedNodes = (nodePaths) => {
-    setHighlightedNodes(new Set(nodePaths));
-    setActiveTab('graph');
-  };
-
   return (
     <div className="app-container">
-      {/* Left Navigation Sidebar */}
+      {/* Left Navigation Sidebar (Exactly 5 Primary Tabs) */}
       <Sidebar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        datasetInfo={datasetInfo}
-        nodeCount={totalNodes}
-        edgeCount={totalEdges}
         isOpen={isMobileSidebarOpen}
         onClose={() => setIsMobileSidebarOpen(false)}
         isCollapsed={isSidebarCollapsed}
@@ -111,188 +78,49 @@ export default function App() {
       />
 
       {/* Main Viewport */}
-      <main className="main-viewport">
+      <main className="main-viewport" style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, height: '100vh', overflow: 'hidden' }}>
         {/* Top Header */}
         <Header
-          manifest={manifest}
           currentDatasetId={datasetId}
           onSelectDataset={setDatasetId}
-          layoutMode={layoutMode}
-          onToggleLayout={setLayoutMode}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          onResetCamera={resetCamera}
           onOpenProofModal={() => setIsProofModalOpen(true)}
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebarCollapse={() => setIsSidebarCollapsed(prev => !prev)}
-          totalNodes={totalNodes}
-          totalEdges={totalEdges}
         />
 
         {/* Viewport Content Area */}
-        <div className="content-area">
-          {loading ? (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-              <div className="pulse-node" style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' }} />
-              <div style={{ color: 'var(--text-secondary)', fontSize: 13, fontFamily: 'var(--font-mono)' }}>
-                Extracting AST dependency graph for {datasetId}...
-              </div>
-            </div>
-          ) : error ? (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              <div style={{ color: '#fb7185', fontSize: 16, fontWeight: 600 }}>Error loading dataset</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: 12 }}>{error}</div>
-            </div>
-          ) : (
-            <>
-              {/* Tab 0: Executive Overview */}
-              {activeTab === 'overview' && (
-                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
-                  <ExecutiveHero onNavigate={setActiveTab} />
-                </div>
-              )}
-
-              {/* Tab 1: Obsidian Graph Canvas (3D Space or 2D Flow) */}
-              {activeTab === 'graph' && (
-                <div style={{ flex: 1, position: 'relative', height: '100%', width: '100%', minWidth: 0, overflow: 'hidden' }}>
-                  {layoutMode === '3d' ? (
-                    <Graph3DCanvas
-                      data={data}
-                      selectedNode={selectedNode}
-                      onSelectNode={setSelectedNode}
-                      searchQuery={searchQuery}
-                      onResetCamera={resetCamera}
-                    />
-                  ) : (
-                    <GraphCanvas
-                      layout={layout}
-                      selectedNode={selectedNode}
-                      onSelectNode={setSelectedNode}
-                      hoveredNode={hoveredNode}
-                      onHoverNode={setHoveredNode}
-                      connectedNeighbors={connectedNeighbors}
-                      highlightedNodes={highlightedNodes}
-                      searchQuery={searchQuery}
-                      matchingNodePaths={matchingNodePaths}
-                      camera={camera}
-                      setCamera={setCamera}
-                      handleWheel={handleWheel}
-                      handleMouseDown={handleMouseDown}
-                      handleMouseMove={handleMouseMove}
-                      handleMouseUp={handleMouseUp}
-                      zoomIn={zoomIn}
-                      zoomOut={zoomOut}
-                      resetCamera={resetCamera}
-                      layoutMode={layoutMode}
-                      onToggleLayout={setLayoutMode}
-                    />
-                  )}
-
-                  {/* Right Slide-out / Bottom Sheet Inspector */}
-                  {selectedNode && (
-                    <>
-                      <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
-                      <div className="inspector-wrapper">
-                        <NodeInspector
-                          node={selectedNode}
-                          graphData={data}
-                          edgeIndex={edgeIndex}
-                          onClose={() => setSelectedNode(null)}
-                          onSelectNodeByPath={selectNodeByPath}
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {/* Tab 2: Tree Explorer */}
-              {activeTab === 'tree' && (
-                <div style={{ flex: 1, display: 'flex', height: '100%', width: '100%', minWidth: 0, overflow: 'hidden', position: 'relative' }}>
-                  <TreeExplorer
-                    hierarchy={data?.hierarchy}
-                    selectedNode={selectedNode}
-                    onSelectNode={(node) => {
-                      setSelectedNode(node);
-                      selectNodeByPath(node.path);
-                    }}
-                  />
-                  {selectedNode && (
-                    <>
-                      <div className="inspector-backdrop" onClick={() => setSelectedNode(null)} />
-                      <div className="inspector-wrapper">
-                        <NodeInspector
-                          node={selectedNode}
-                          graphData={data}
-                          edgeIndex={edgeIndex}
-                          onClose={() => setSelectedNode(null)}
-                          onSelectNodeByPath={selectNodeByPath}
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {/* Tab 3: Retrieval Simulator */}
-              {activeTab === 'retrieval' && (
-                <RetrievalSimulator
-                  graphData={data}
-                  datasetId={datasetId}
-                  onSelectNode={(node) => {
-                    selectNodeByPath(node.path);
-                    setActiveTab('graph');
-                  }}
-                />
-              )}
-
-              {/* Tab 4: Benchmark Arena */}
-              {activeTab === 'benchmarks' && (
-                <div style={{ flex: 1, overflowY: 'auto' }}>
-                  <BenchmarkArena />
-                </div>
-              )}
-
-              {/* Tab 5: Agent Pipeline */}
-              {activeTab === 'agent' && (
-                <div style={{ flex: 1, overflowY: 'auto' }}>
-                  <AgentPipeline
-                    agentState={agentState}
-                    onRunPipeline={agentState.runPipeline}
-                    onCancelPipeline={agentState.cancelPipeline}
-                    currentRepoName={datasetId}
-                    onHighlightTouchedNodes={handleHighlightTouchedNodes}
-                  />
-                </div>
-              )}
-
-              {/* Tab 6: Polyglot Studio */}
-              {activeTab === 'studio' && (
-                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
-                  <PolyglotStudio />
-                </div>
-              )}
-
-              {/* Tab 7: Proof & Audit Center */}
-              {activeTab === 'proof' && (
-                <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
-                  <ProofCenter />
-                </div>
-              )}
-            </>
+        <div className="content-area" style={{ flex: 1, display: 'flex', minHeight: 0, overflow: 'hidden' }}>
+          {activeTab === 'polyflow' && <Tab01PolyFlow />}
+          {activeTab === 'interpreter' && <Tab02Interpreter />}
+          {activeTab === 'rcir' && (
+            <Tab03RCIR
+              graphData={data}
+              layout={layout}
+              layoutMode={layoutMode}
+              setLayoutMode={setLayoutMode}
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+              hoveredNode={hoveredNode}
+              setHoveredNode={setHoveredNode}
+              connectedNeighbors={connectedNeighbors}
+              highlightedNodes={highlightedNodes}
+              searchQuery={searchQuery}
+              matchingNodePaths={matchingNodePaths}
+              camera={camera}
+              setCamera={setCamera}
+              handleWheel={handleWheel}
+              handleMouseDown={handleMouseDown}
+              handleMouseMove={handleMouseMove}
+              handleMouseUp={handleMouseUp}
+              zoomIn={zoomIn}
+              zoomOut={zoomOut}
+              resetCamera={resetCamera}
+            />
           )}
+          {activeTab === 'agent' && <Tab04AgentValidation />}
+          {activeTab === 'erpnext' && <Tab05ERPNextScale />}
         </div>
-
-        {/* Bottom HUD Stats Bar */}
-        <StatsBar
-          datasetId={datasetId}
-          nodeCount={totalNodes}
-          edgeCount={totalEdges}
-          layoutMode={layoutMode}
-          zoomScale={camera.scale}
-          selectedNode={selectedNode}
-        />
       </main>
 
       {/* Proof Modal */}
@@ -300,7 +128,7 @@ export default function App() {
         isOpen={isProofModalOpen}
         onClose={() => setIsProofModalOpen(false)}
         currentDatasetId={datasetId}
-        datasetInfo={datasetInfo}
+        datasetInfo={{ name: datasetId }}
       />
     </div>
   );

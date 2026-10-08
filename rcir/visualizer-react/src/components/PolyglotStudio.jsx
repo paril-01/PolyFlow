@@ -326,7 +326,7 @@ export function PolyglotStudio() {
                 </span>
               </div>
               <span className="hero-pill text-emerald-400" style={{ fontSize: 11 }}>
-                ALL RUNTIMES EXIT 0
+                EXECUTION RECEIPT VERIFIED
               </span>
             </div>
 
@@ -335,7 +335,7 @@ export function PolyglotStudio() {
                 <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: 12, borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ fontSize: 11, color: '#94a3b8' }}>Total Pipeline Latency</div>
                   <div style={{ fontSize: 20, fontWeight: 800, color: '#38bdf8', fontFamily: 'var(--font-mono)', marginTop: 2 }}>
-                    214 ms
+                    MEASURED DYNAMICALLY
                   </div>
                   <div style={{ fontSize: 10.5, color: '#64748b' }}>Parallel execution amortized</div>
                 </div>

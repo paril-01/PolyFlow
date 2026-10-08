@@ -704,10 +704,24 @@ def run_agent_validation(env: Optional[Any] = None):
     with open(out_tb, "w", encoding="utf-8") as f:
         json.dump(turn_budget_result, f, indent=2)
 
+    # F02: Emit machine-readable semantic stage result
+    valid_pairs_count = ab_result.get("valid_pairs", 0)
+    stage_res = {
+        "stage": "agent_validation",
+        "execution_status": "COMPLETED",
+        "measurement_status": "MEASURED",
+        "gate_status": "PASS" if valid_pairs_count > 0 else "FAIL",
+        "blocking": False,
+        "failures": [] if valid_pairs_count > 0 else ["No valid completed agent pairs"],
+    }
+    out_sr = env.results_root / "run_agent_validation_result.json"
+    with open(out_sr, "w", encoding="utf-8") as f:
+        json.dump(stage_res, f, indent=2)
+
     print(f"\n================================================================================")
     print(f"Agent A/B Validation COMPLETE (Measured on Live Model '{model_name}')")
     print(f"Reductions: Context {stats_ab['context_compression']['relative_percentage']}%, Model {stats_ab['live_model_reduction']['relative_percentage']}%")
-    print(f"Saved to: {out_ab} and {out_tb}")
+    print(f"Saved to: {out_ab}, {out_tb}, and {out_sr}")
     print(f"================================================================================")
 
 

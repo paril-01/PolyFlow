@@ -1,0 +1,24 @@
+[
+  {
+    "run_id": "default_run",
+    "trial_id": "BLIND-TASK-02_rcir",
+    "task_id": "BLIND-TASK-02",
+    "condition": "rcir",
+    "provider": "ollama",
+    "model": "qwen2.5-coder:1.5b",
+    "turn": 1,
+    "measurement_source": "PROVIDER_NATIVE",
+    "input_tokens": 673,
+    "output_tokens": 50,
+    "total_tokens": 723,
+    "context_tokens": 0,
+    "tool_result_tokens": 75,
+    "latency": 6.532,
+    "cached_input_tokens": null,
+    "provider_cost_usd": null,
+    "cost_method": "NONE",
+    "ide_credits": null,
+    "credit_method": "NOT_MEASURED",
+    "timestamp": 1791472242.6723344
+  }
+]

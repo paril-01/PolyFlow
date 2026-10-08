@@ -1,0 +1,52 @@
+{
+  "evidence_state": "VALIDATED",
+  "evidence_run_id": "final_blind_validation",
+  "architecture_decision": "OPTION_B_ACCEPTED",
+  "agent_gate_status": "NOT_SATISFIED",
+  "benchmark_status": "COMPLETED",
+  "active_repository": "nextcloud-server",
+  "total_contract_gates": 7,
+  "gates_passed": 6,
+  "gates": [
+    {
+      "name": "integrity_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "impact_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "ranking_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "context_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "type_flow_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "canonicalization_gate",
+      "status": "PASSED",
+      "passed": true
+    },
+    {
+      "name": "agent_gate",
+      "status": "NOT_SATISFIED",
+      "passed": false
+    }
+  ],
+  "rule_0_verification": {
+    "deny_list_enforced": true,
+    "prior_reports_blocked": true,
+    "zero_fabricated_constants": true
+  }
+}

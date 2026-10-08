@@ -1,0 +1,103 @@
+{
+  "pipeline_stages": [
+    {
+      "id": "repo",
+      "name": "Repository",
+      "metric": "11,793 files",
+      "description": "Monolithic repository source tree"
+    },
+    {
+      "id": "parsers",
+      "name": "Parsers + Adapters",
+      "metric": "5 language adapters",
+      "description": "AST extraction & symbol resolution"
+    },
+    {
+      "id": "graph",
+      "name": "Canonical Graph",
+      "metric": "50,346 nodes / 143,225 edges",
+      "description": "Typed multi-relational code graph"
+    },
+    {
+      "id": "intent",
+      "name": "Change Intent",
+      "metric": "ChangeSpec query",
+      "description": "Target entity & operation resolution"
+    },
+    {
+      "id": "channels",
+      "name": "Candidate Channels",
+      "metric": "4 multi-channel lanes",
+      "description": "AST, CallGraph, TypeFlow, SymbolMatch"
+    },
+    {
+      "id": "ranker",
+      "name": "Evidence Fusion / Ranker",
+      "metric": "Cascaded Ranker",
+      "description": "Deterministic ranking with tie-breaking"
+    },
+    {
+      "id": "compiler",
+      "name": "Context Compiler",
+      "metric": "Bounded Knapsack",
+      "description": "Optimal token packing with AST spans"
+    },
+    {
+      "id": "agent",
+      "name": "Coding Agent",
+      "metric": "ReAct Tool Loop",
+      "description": "Interactive file editing and verification"
+    }
+  ],
+  "graph_summary": {
+    "nodes_count": 50346,
+    "edges_count": 143225,
+    "languages": {
+      "PHP": 5736,
+      "JavaScript": 1918,
+      "TypeScript": 655,
+      "Vue": 373,
+      "CSS": 42
+    },
+    "impact_query_latency_ms": 38.2,
+    "peak_ram_mb": 140.1
+  },
+  "sample_ranked_candidates": [
+    {
+      "rank": 1,
+      "path": "apps/files/lib/Controller/ApiController.php",
+      "symbol": "ApiController::getThumbnail",
+      "score": 0.985,
+      "reason": "Direct modified target and AST route controller handler",
+      "channel": "AST_TARGET",
+      "span": [
+        120,
+        165
+      ]
+    },
+    {
+      "rank": 2,
+      "path": "lib/public/Preview/IPreviewManager.php",
+      "symbol": "IPreviewManager::getPreview",
+      "score": 0.892,
+      "reason": "Direct 1-hop outbound call dependency from getThumbnail",
+      "channel": "CALL_GRAPH",
+      "span": [
+        45,
+        78
+      ]
+    },
+    {
+      "rank": 3,
+      "path": "lib/private/Preview/Manager.php",
+      "symbol": "PreviewManager::getPreview",
+      "score": 0.824,
+      "reason": "Interface implementer for IPreviewManager",
+      "channel": "TYPE_FLOW",
+      "span": [
+        150,
+        210
+      ]
+    }
+  ]
+}

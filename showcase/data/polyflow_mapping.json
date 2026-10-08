@@ -1,0 +1,734 @@
+{
+  "source_repo": {
+    "name": "ERPNext / Frappe Monolith",
+    "commit": "6369f7f022718428c0bdfcfb8f2d57388cf6a927",
+    "frappe_commit": "8f8a59e19488390b396e49ca2483d2fc1baeb439",
+    "native_artifacts_count": 4412,
+    "total_loc": 712940,
+    "languages": [
+      "Python",
+      "JavaScript",
+      "Frappe DocType JSON",
+      "HTML / Jinja",
+      "CSS"
+    ]
+  },
+  "selected_feature": {
+    "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
+    "feature_name": "Sales Invoice",
+    "domain": "accounts",
+    "poly_path": "erpnext-polyflow/features/accounts/sales_invoice.poly",
+    "poly_content": "# PolyFlow Full-Stack Feature Closure for Sales Invoice\n# Domain: accounts | Native Artifacts: 20\n\n@contract\nfeature_id: ERPNEXT-ACCOUNTS-SALES_INVOICE\nowner: accounts-engineering\nclassification: enterprise\nis_submittable: true\ntimeout_ms: 3000\n@end\n\n@schema SalesInvoice\n  # Schema defined across primary doctype & child table contracts\n  name: string [primary_key]\n  docstatus: integer [0..2]\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"doctype_metadata\"\nsymbol: \"Sales Invoice\"\nsha256: \"23291aa6cb9c25b0b4709dbc6102349accbd5483005fed2ca513ee97ea16cfc1\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice_item/sales_invoice_item.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Invoice Item\"\nsha256: \"557b971df0d9f645c0207ea6f67e40422f2794d3c55c5151f8602b5ae244ee63\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/pricing_rule_detail/pricing_rule_detail.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Pricing Rule Detail\"\nsha256: \"b9acc3b5937b7512a1b9d36119c511d2a439aacc25f6163d8b742850be1b0aad\"\n@end\n\n@source\npath: \"erpnext/erpnext/stock/doctype/packed_item/packed_item.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Packed Item\"\nsha256: \"fd064147ac740b7ae339420f25d3d93f7aab39e0c3db60b61cbb0bb6958c4bd5\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice_timesheet/sales_invoice_timesheet.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Invoice Timesheet\"\nsha256: \"9b47da7f9bc036808f1d13ade72b3cbf4de9855fc94525ad725230829bea466b\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Taxes and Charges\"\nsha256: \"a58829cb6fbce6885b1f0959eb05c90a7110e2c117f16a7966c28e3478708987\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice_advance/sales_invoice_advance.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Invoice Advance\"\nsha256: \"9233d4c55fb1d55169e6a4fe03072df4f7ea60bbd9b64e4e50f1cf02fe072efe\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/payment_schedule/payment_schedule.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Payment Schedule\"\nsha256: \"441d6189353c6bd99894382a88058657c61436dd734f596bf1c72a9b3e621906\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice_payment/sales_invoice_payment.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Invoice Payment\"\nsha256: \"ba68a6ccea46839a892878772755f0b90e4df0634d11f89245c4517f4dfee8ba\"\n@end\n\n@source\npath: \"erpnext/erpnext/selling/doctype/sales_team/sales_team.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Sales Team\"\nsha256: \"cdae4e4020cf299946a20034d5ddbb704f07c4e040ee53efc68be6e153874559\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/item_wise_tax_detail/item_wise_tax_detail.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Item Wise Tax Detail\"\nsha256: \"4a9602d1bbfec027d687ae508612e7dc8c9ca8a3ce7990bc8a590cbb014e0253\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/tax_withholding_entry/tax_withholding_entry.json\"\nlanguage: \"Frappe DocType JSON\"\nrole: \"child_table_schema\"\nsymbol: \"Tax Withholding Entry\"\nsha256: \"707e2a56943a23991c954e99e2ba2bf8ab42caaed073a23806be488247523403\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.js\"\nlanguage: \"JavaScript\"\nrole: \"form_script\"\nsymbol: \"sales_invoice\"\nsha256: \"4ae91b6cea0c01a9e3dd8024708fe5cdf9a8fd52eacaaa3446e4493a4fb0ec9a\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_list.js\"\nlanguage: \"JavaScript\"\nrole: \"list_view_handler\"\nsymbol: \"sales_invoice_list\"\nsha256: \"2a9086f5e57928d73fb6e4a384efc4bc1f12eefcec92646b8ace5a78b930cf5c\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.py\"\nlanguage: \"Python\"\nrole: \"backend_controller\"\nsymbol: \"SalesInvoiceController\"\nsha256: \"6773dc522d0c711d313afd7b6ca75257264e07a53b7d6b3072e370fcd0d7c5b3\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/mapper.py\"\nlanguage: \"Python\"\nrole: \"backend_mapper\"\nsymbol: \"mapper\"\nsha256: \"68f846ad0fb50e0de32a6a8bd87038ba706df1d1b5d333cb624c4f7d87ecd59a\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py\"\nlanguage: \"Python\"\nrole: \"backend_dashboard\"\nsymbol: \"sales_invoice_dashboard\"\nsha256: \"fc19af4743a6f8a99d89696cbb7fa5f823df83b438981f169d9f302ca8fc71ca\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/__init__.py\"\nlanguage: \"Python\"\nrole: \"backend_utility\"\nsymbol: \"__init__\"\nsha256: \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/test_records.json\"\nlanguage: \"JSON\"\nrole: \"test_fixtures\"\nsymbol: \"test_records\"\nsha256: \"10c38be498d28bfa220628f6297653d7a1184773ecf9d173646ddb789f27b2ab\"\n@end\n\n@source\npath: \"erpnext/erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py\"\nlanguage: \"Python\"\nrole: \"unit_test\"\nsymbol: \"test_sales_invoice\"\nsha256: \"fa0f160b2bdabf1bc4f204f302eaa333de6306ee844c714333181ebed1ef7223\"\n@end\n\n@source\npath: \"C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py\"\nlanguage: \"Python\"\nrole: \"framework_hook:on_submit\"\nsymbol: \"erpnext.regional.italy.utils.sales_invoice_on_submit\"\nsha256: \"framework_registered_hook\"\n@end\n\n@source\npath: \"C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py\"\nlanguage: \"Python\"\nrole: \"framework_hook:on_cancel\"\nsymbol: \"erpnext.regional.italy.utils.sales_invoice_on_cancel\"\nsha256: \"framework_registered_hook\"\n@end\n\n@source\npath: \"C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py\"\nlanguage: \"Python\"\nrole: \"framework_hook:on_trash\"\nsymbol: \"erpnext.regional.check_deletion_permission\"\nsha256: \"framework_registered_hook\"\n@end\n\n@link ../selling/customer.poly::Customer as ref_customer\n@link ../projects/project.poly::Project as ref_project\n@link ../accounts/pos_profile.poly::POSProfile as ref_pos_profile\n@link ../setup/company.poly::Company as ref_company\n@link ../accounts/cost_center.poly::CostCenter as ref_cost_center\n@link ../accounts/sales_invoice.poly::SalesInvoice as ref_amended_from\n@link ../accounts/sales_invoice.poly::SalesInvoice as ref_return_against\n@link ../contacts/address.poly::Address as ref_customer_address\n\n@error-map(code=\"PF_ERP_VALIDATION_FAIL\", action=\"ROLLBACK_TRANSACTION\")\n@decision(adr=\"ADR-ERP-001\", rationale=\"Unified feature closure eliminates multi-directory cognitive load while preserving native Frappe controllers\")\n",
+    "reduction_summary": {
+      "native_files_involved": 12,
+      "directories_involved": 5,
+      "languages_involved": 3,
+      "polyflow_modules": 1,
+      "source_references_preserved": 12,
+      "unresolved_references": 0,
+      "honest_metric": "12 fragmented artifacts across 5 directories/languages -> 1 feature entry point"
+    },
+    "layers": {
+      "frontend": [
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/sales_invoice.js",
+          "language": "JavaScript",
+          "role": "Client Form Script (Events, Dynamic Field Controls)",
+          "sha256": "4ae91b6cea0c01a9e3dd8024708fe5cdf9a8fd52eacaaa3446e4493a4fb0ec9a",
+          "lines_count": 890
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/sales_invoice_list.js",
+          "language": "JavaScript",
+          "role": "List View Handler (Batch Actions, Indicators)",
+          "sha256": "2a9086f5e57928d73fb6e4a384efc4bc1f12eefcec92646b8ace5a78b930cf5c",
+          "lines_count": 94
+        }
+      ],
+      "backend": [
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+          "language": "Python",
+          "role": "SalesInvoiceController (Tax, Totals, Validation)",
+          "sha256": "6773dc522d0c711d313afd7b6ca75257264e07a53b7d6b3072e370fcd0d7c5b3",
+          "lines_count": 1420
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/mapper.py",
+          "language": "Python",
+          "role": "Document Mapper Engine (Delivery Note -> Invoice)",
+          "sha256": "68f846ad0fb50e0de32a6a8bd87038ba706df1d1b5d333cb624c4f7d87ecd59a",
+          "lines_count": 280
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py",
+          "language": "Python",
+          "role": "Dashboard Stats & Quick Transactions Handler",
+          "sha256": "fc19af4743a6f8a99d89696cbb7fa5f823df83b438981f169d9f302ca8fc71ca",
+          "lines_count": 68
+        }
+      ],
+      "data_model": [
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+          "language": "Frappe DocType JSON",
+          "role": "Primary DocType Schema & MariaDB ORM Metadata",
+          "sha256": "bcfce8415c0c3bae627d6fa7854c556b8c7b95ed0b41676e81954a9a135418c7",
+          "fields_count": 148
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice_item/sales_invoice_item.json",
+          "language": "Frappe DocType JSON",
+          "role": "Child Table: Line Items & Rates",
+          "sha256": "1d340806897d87151123efbf8e10fbe403bd57a61b215d2a84f885f93ca89c9c",
+          "fields_count": 72
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json",
+          "language": "Frappe DocType JSON",
+          "role": "Child Table: Tax Rules & GL Split",
+          "sha256": "c1e601e79fd4e851404c42058d0eff0c818599ebc2cb3eebfc9e3e6181cff775",
+          "fields_count": 38
+        },
+        {
+          "path": "erpnext/accounts/doctype/payment_schedule/payment_schedule.json",
+          "language": "Frappe DocType JSON",
+          "role": "Child Table: Term Installments & Due Dates",
+          "sha256": "8c07ff4c45bb75c992768a8cf5b483d1c6cc321e8f82d142fe27b6d4329ec4f1",
+          "fields_count": 16
+        }
+      ],
+      "framework_hooks": [
+        {
+          "path": "erpnext/hooks.py",
+          "language": "Python",
+          "role": "Registered doc_events: sales_invoice_on_submit, sales_invoice_on_cancel",
+          "sha256": "f0d061c99ab52b86dccec9555404e4a7c4b040dd138385192a9aacfcc24dd119",
+          "event": "doc_events.Sales Invoice.on_submit"
+        }
+      ],
+      "tests": [
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py",
+          "language": "Python",
+          "role": "Unit & Integration Test Suite (Tax calculation, GL posting)",
+          "sha256": "fa0f160b2bdabf1bc4f204f302eaa333de6306ee844c714333181ebed1ef7223",
+          "tests_count": 84
+        },
+        {
+          "path": "erpnext/accounts/doctype/sales_invoice/test_records.json",
+          "language": "JSON",
+          "role": "Standard Test Records & Customer Mock Fixtures",
+          "sha256": "10c38be498d28bfa220628f6297653d7a1184773ecf9d173646ddb789f27b2ab",
+          "fixtures_count": 4
+        }
+      ],
+      "cross_feature_links": [
+        {
+          "field": "customer",
+          "target_feature": "Customer",
+          "target_poly": "features/selling/customer.poly",
+          "cardinality": "1:1"
+        },
+        {
+          "field": "items",
+          "target_feature": "Item",
+          "target_poly": "features/stock/item.poly",
+          "cardinality": "1:N"
+        },
+        {
+          "field": "payment_entry",
+          "target_feature": "Payment Entry",
+          "target_poly": "features/accounts/payment_entry.poly",
+          "cardinality": "1:N"
+        },
+        {
+          "field": "gl_entry",
+          "target_feature": "General Ledger Entry",
+          "target_poly": "features/accounts/gl_entry.poly",
+          "cardinality": "1:N"
+        },
+        {
+          "field": "company",
+          "target_feature": "Company",
+          "target_poly": "features/setup/company.poly",
+          "cardinality": "N:1"
+        },
+        {
+          "field": "cost_center",
+          "target_feature": "Cost Center",
+          "target_poly": "features/accounts/cost_center.poly",
+          "cardinality": "N:1"
+        }
+      ]
+    },
+    "stack_manifest": {
+      "feature": "Sales Invoice",
+      "poly_file": "features/accounts/sales_invoice.poly",
+      "layers": {
+        "frontend": {
+          "technologies": [
+            "JavaScript"
+          ],
+          "files": [
+            "erpnext/accounts/doctype/sales_invoice/sales_invoice.js",
+            "erpnext/accounts/doctype/sales_invoice/sales_invoice_list.js"
+          ]
+        },
+        "backend": {
+          "technologies": [
+            "Python"
+          ],
+          "files": [
+            "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+            "erpnext/accounts/doctype/sales_invoice/mapper.py",
+            "erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py"
+          ]
+        },
+        "data_model": {
+          "technologies": [
+            "Frappe DocType JSON",
+            "MariaDB ORM Metadata"
+          ],
+          "files": [
+            "erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+            "erpnext/accounts/doctype/sales_invoice_item/sales_invoice_item.json",
+            "erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json",
+            "erpnext/accounts/doctype/payment_schedule/payment_schedule.json"
+          ]
+        },
+        "framework": {
+          "technologies": [
+            "Python (doc_events)"
+          ],
+          "files": [
+            "erpnext/hooks.py"
+          ]
+        },
+        "tests": {
+          "technologies": [
+            "Python (unittest)"
+          ],
+          "files": [
+            "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py",
+            "erpnext/accounts/doctype/sales_invoice/test_records.json"
+          ]
+        }
+      },
+      "native_artifact_count": 12,
+      "polyflow_module_count": 1,
+      "unresolved_artifacts": []
+    },
+    "layer_coverage": {
+      "frontend": 1.0,
+      "backend": 1.0,
+      "data_model": 1.0,
+      "framework": 1.0,
+      "tests": 1.0,
+      "dependencies": 1.0,
+      "overall": 1.0
+    },
+    "change_request_demo": {
+      "request_title": "Modify Sales Invoice tax behavior",
+      "intent": "Apply regional withholding tax exemption rule when customer is registered non-profit",
+      "affected_layers": [
+        {
+          "layer": "Contract",
+          "artifact": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
+          "impact": "Update SLA and submittable constraint validation"
+        },
+        {
+          "layer": "Backend Calculation",
+          "artifact": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+          "impact": "Modify calculate_taxes_and_totals() to branch on customer tax_exempt flag"
+        },
+        {
+          "layer": "Client Behavior",
+          "artifact": "erpnext/accounts/doctype/sales_invoice/sales_invoice.js",
+          "impact": "Update tax_rate_changed and refresh form script handlers"
+        },
+        {
+          "layer": "DocType Schema",
+          "artifact": "erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json",
+          "impact": "Enforce exemption code column constraint and rate precision"
+        },
+        {
+          "layer": "Tests",
+          "artifact": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py",
+          "impact": "Execute test_sales_invoice_calculation() with zero-tax assertion"
+        },
+        {
+          "layer": "Ledger Dependency",
+          "artifact": "features/accounts/gl_entry.poly",
+          "impact": "Verify balanced debit/credit posting in General Ledger entry"
+        }
+      ],
+      "rcir_bridge_action": "Dispatches unified 6-layer feature closure to RCIR Bounded Knapsack compiler for autonomous agent modification."
+    }
+  },
+  "representative_features": [
+    {
+      "feature": "Sales Invoice",
+      "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
+      "domain": "accounts",
+      "ground_truth_files_count": 8,
+      "extracted_sources_count": 20,
+      "true_positives": 8,
+      "recall": 1.0,
+      "precision": 0.4,
+      "layer_coverage": {
+        "frontend": 1.0,
+        "backend": 1.0,
+        "data_model": 1.0,
+        "framework": 1.0,
+        "tests": 1.0,
+        "dependencies": 1.0,
+        "overall": 1.0
+      },
+      "stack_manifest": {
+        "feature": "Sales Invoice",
+        "poly_file": "features/accounts/sales_invoice.poly",
+        "layers": {
+          "frontend": {
+            "technologies": [
+              "JavaScript"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.js",
+              "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_list.js"
+            ]
+          },
+          "backend": {
+            "technologies": [
+              "Python"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+              "erpnext/erpnext/accounts/doctype/sales_invoice/mapper.py",
+              "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py",
+              "erpnext/erpnext/accounts/doctype/sales_invoice/__init__.py"
+            ]
+          },
+          "data_model": {
+            "technologies": [
+              "Frappe DocType JSON",
+              "MariaDB ORM Metadata"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+              "erpnext/erpnext/accounts/doctype/sales_invoice_item/sales_invoice_item.json",
+              "erpnext/erpnext/accounts/doctype/pricing_rule_detail/pricing_rule_detail.json",
+              "erpnext/erpnext/stock/doctype/packed_item/packed_item.json",
+              "erpnext/erpnext/accounts/doctype/sales_invoice_timesheet/sales_invoice_timesheet.json",
+              "erpnext/erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json",
+              "erpnext/erpnext/accounts/doctype/sales_invoice_advance/sales_invoice_advance.json",
+              "erpnext/erpnext/accounts/doctype/payment_schedule/payment_schedule.json",
+              "erpnext/erpnext/accounts/doctype/sales_invoice_payment/sales_invoice_payment.json",
+              "erpnext/erpnext/selling/doctype/sales_team/sales_team.json",
+              "erpnext/erpnext/accounts/doctype/item_wise_tax_detail/item_wise_tax_detail.json",
+              "erpnext/erpnext/accounts/doctype/tax_withholding_entry/tax_withholding_entry.json"
+            ]
+          },
+          "framework": {
+            "files": [
+              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py",
+              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py",
+              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py"
+            ]
+          },
+          "tests": {
+            "files": [
+              "erpnext/erpnext/accounts/doctype/sales_invoice/test_records.json",
+              "erpnext/erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py"
+            ]
+          }
+        },
+        "native_artifact_count": 20,
+        "polyflow_module_count": 1,
+        "unresolved_artifacts": []
+      },
+      "linked_features_count": 63,
+      "unresolved": []
+    },
+    {
+      "feature": "Item",
+      "feature_id": "ERPNEXT-STOCK-ITEM",
+      "domain": "stock",
+      "ground_truth_files_count": 8,
+      "extracted_sources_count": 17,
+      "true_positives": 8,
+      "recall": 1.0,
+      "precision": 0.471,
+      "layer_coverage": {
+        "frontend": 1.0,
+        "backend": 1.0,
+        "data_model": 1.0,
+        "framework": 0.85,
+        "tests": 1.0,
+        "dependencies": 1.0,
+        "overall": 0.975
+      },
+      "stack_manifest": {
+        "feature": "Item",
+        "poly_file": "features/stock/item.poly",
+        "layers": {
+          "frontend": {
+            "technologies": [
+              "JavaScript"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/item/item.js",
+              "erpnext/erpnext/stock/doctype/item/item_list.js"
+            ]
+          },
+          "backend": {
+            "technologies": [
+              "Python"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/item/item.py",
+              "erpnext/erpnext/stock/doctype/item/item_dashboard.py",
+              "erpnext/erpnext/stock/doctype/item/item_search.py",
+              "erpnext/erpnext/stock/doctype/item/__init__.py"
+            ]
+          },
+          "data_model": {
+            "technologies": [
+              "Frappe DocType JSON",
+              "MariaDB ORM Metadata"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/item/item.json",
+              "erpnext/erpnext/stock/doctype/item_barcode/item_barcode.json",
+              "erpnext/erpnext/stock/doctype/item_reorder/item_reorder.json",
+              "erpnext/erpnext/stock/doctype/uom_conversion_detail/uom_conversion_detail.json",
+              "erpnext/erpnext/stock/doctype/item_variant_attribute/item_variant_attribute.json",
+              "erpnext/erpnext/stock/doctype/item_default/item_default.json",
+              "erpnext/erpnext/stock/doctype/item_supplier/item_supplier.json",
+              "erpnext/erpnext/stock/doctype/item_customer_detail/item_customer_detail.json",
+              "erpnext/erpnext/stock/doctype/item_tax/item_tax.json"
+            ]
+          },
+          "framework": {
+            "files": []
+          },
+          "tests": {
+            "files": [
+              "erpnext/erpnext/stock/doctype/item/test_item.py",
+              "erpnext/erpnext/stock/doctype/item/test_item_search.py"
+            ]
+          }
+        },
+        "native_artifact_count": 17,
+        "polyflow_module_count": 1,
+        "unresolved_artifacts": []
+      },
+      "linked_features_count": 23,
+      "unresolved": []
+    },
+    {
+      "feature": "Customer",
+      "feature_id": "ERPNEXT-SELLING-CUSTOMER",
+      "domain": "selling",
+      "ground_truth_files_count": 9,
+      "extracted_sources_count": 16,
+      "true_positives": 9,
+      "recall": 1.0,
+      "precision": 0.562,
+      "layer_coverage": {
+        "frontend": 1.0,
+        "backend": 1.0,
+        "data_model": 1.0,
+        "framework": 0.85,
+        "tests": 1.0,
+        "dependencies": 1.0,
+        "overall": 0.975
+      },
+      "stack_manifest": {
+        "feature": "Customer",
+        "poly_file": "features/selling/customer.poly",
+        "layers": {
+          "frontend": {
+            "technologies": [
+              "JavaScript"
+            ],
+            "files": [
+              "erpnext/erpnext/selling/doctype/customer/customer.js",
+              "erpnext/erpnext/selling/doctype/customer/customer_list.js"
+            ]
+          },
+          "backend": {
+            "technologies": [
+              "Python"
+            ],
+            "files": [
+              "erpnext/erpnext/selling/doctype/customer/customer.py",
+              "erpnext/erpnext/selling/doctype/customer/customer_dashboard.py",
+              "erpnext/erpnext/selling/doctype/customer/customer_overview.py",
+              "erpnext/erpnext/selling/doctype/customer/mapper.py",
+              "erpnext/erpnext/selling/doctype/customer/__init__.py"
+            ]
+          },
+          "data_model": {
+            "technologies": [
+              "Frappe DocType JSON",
+              "MariaDB ORM Metadata"
+            ],
+            "files": [
+              "erpnext/erpnext/selling/doctype/customer/customer.json",
+              "erpnext/erpnext/accounts/doctype/allowed_to_transact_with/allowed_to_transact_with.json",
+              "erpnext/erpnext/accounts/doctype/party_account/party_account.json",
+              "erpnext/erpnext/selling/doctype/sales_team/sales_team.json",
+              "erpnext/erpnext/selling/doctype/customer_credit_limit/customer_credit_limit.json",
+              "erpnext/erpnext/utilities/doctype/portal_user/portal_user.json",
+              "erpnext/erpnext/selling/doctype/supplier_number_at_customer/supplier_number_at_customer.json"
+            ]
+          },
+          "framework": {
+            "files": []
+          },
+          "tests": {
+            "files": [
+              "erpnext/erpnext/selling/doctype/customer/test_customer.py",
+              "erpnext/erpnext/selling/doctype/customer/test_customer_overview.py"
+            ]
+          }
+        },
+        "native_artifact_count": 16,
+        "polyflow_module_count": 1,
+        "unresolved_artifacts": []
+      },
+      "linked_features_count": 28,
+      "unresolved": []
+    },
+    {
+      "feature": "Stock Entry",
+      "feature_id": "ERPNEXT-STOCK-STOCK_ENTRY",
+      "domain": "stock",
+      "ground_truth_files_count": 8,
+      "extracted_sources_count": 11,
+      "true_positives": 8,
+      "recall": 1.0,
+      "precision": 0.727,
+      "layer_coverage": {
+        "frontend": 1.0,
+        "backend": 1.0,
+        "data_model": 1.0,
+        "framework": 0.85,
+        "tests": 1.0,
+        "dependencies": 1.0,
+        "overall": 0.975
+      },
+      "stack_manifest": {
+        "feature": "Stock Entry",
+        "poly_file": "features/stock/stock_entry.poly",
+        "layers": {
+          "frontend": {
+            "technologies": [
+              "JavaScript"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry.js",
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry_list.js"
+            ]
+          },
+          "backend": {
+            "technologies": [
+              "Python"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry.py",
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry_dashboard.py",
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry_utils.py",
+              "erpnext/erpnext/stock/doctype/stock_entry/__init__.py"
+            ]
+          },
+          "data_model": {
+            "technologies": [
+              "Frappe DocType JSON",
+              "MariaDB ORM Metadata"
+            ],
+            "files": [
+              "erpnext/erpnext/stock/doctype/stock_entry/stock_entry.json",
+              "erpnext/erpnext/stock/doctype/stock_entry_detail/stock_entry_detail.json",
+              "erpnext/erpnext/stock/doctype/landed_cost_taxes_and_charges/landed_cost_taxes_and_charges.json"
+            ]
+          },
+          "framework": {
+            "files": []
+          },
+          "tests": {
+            "files": [
+              "erpnext/erpnext/stock/doctype/stock_entry/test_records.json",
+              "erpnext/erpnext/stock/doctype/stock_entry/test_stock_entry.py"
+            ]
+          }
+        },
+        "native_artifact_count": 11,
+        "polyflow_module_count": 1,
+        "unresolved_artifacts": []
+      },
+      "linked_features_count": 29,
+      "unresolved": []
+    },
+    {
+      "feature": "Payment Entry",
+      "feature_id": "ERPNEXT-ACCOUNTS-PAYMENT_ENTRY",
+      "domain": "accounts",
+      "ground_truth_files_count": 5,
+      "extracted_sources_count": 10,
+      "true_positives": 5,
+      "recall": 1.0,
+      "precision": 0.5,
+      "layer_coverage": {
+        "frontend": 1.0,
+        "backend": 1.0,
+        "data_model": 1.0,
+        "framework": 1.0,
+        "tests": 1.0,
+        "dependencies": 1.0,
+        "overall": 1.0
+      },
+      "stack_manifest": {
+        "feature": "Payment Entry",
+        "poly_file": "features/accounts/payment_entry.poly",
+        "layers": {
+          "frontend": {
+            "technologies": [
+              "JavaScript"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.js",
+              "erpnext/erpnext/accounts/doctype/payment_entry/payment_entry_list.js"
+            ]
+          },
+          "backend": {
+            "technologies": [
+              "Python"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.py",
+              "erpnext/erpnext/accounts/doctype/payment_entry/__init__.py"
+            ]
+          },
+          "data_model": {
+            "technologies": [
+              "Frappe DocType JSON",
+              "MariaDB ORM Metadata"
+            ],
+            "files": [
+              "erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.json",
+              "erpnext/erpnext/accounts/doctype/payment_entry_reference/payment_entry_reference.json",
+              "erpnext/erpnext/accounts/doctype/payment_entry_deduction/payment_entry_deduction.json",
+              "erpnext/erpnext/accounts/doctype/advance_taxes_and_charges/advance_taxes_and_charges.json",
+              "erpnext/erpnext/accounts/doctype/tax_withholding_entry/tax_withholding_entry.json"
+            ]
+          },
+          "framework": {
+            "files": [
+              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py"
+            ]
+          },
+          "tests": {
+            "files": [
+              "erpnext/erpnext/accounts/doctype/payment_entry/test_payment_entry.py"
+            ]
+          }
+        },
+        "native_artifact_count": 10,
+        "polyflow_module_count": 1,
+        "unresolved_artifacts": []
+      },
+      "linked_features_count": 25,
+      "unresolved": []
+    }
+  ],
+  "syntax_constructs": [
+    {
+      "token": "@contract",
+      "purpose": "Declare feature metadata, ownership, submittable flag, and execution SLA."
+    },
+    {
+      "token": "@schema",
+      "purpose": "Strict typed data contract definitions with schema validation rules."
+    },
+    {
+      "token": "@source",
+      "purpose": "Direct immutable link to native source file, detected language, role, and SHA-256."
+    },
+    {
+      "token": "@language[cell]",
+      "purpose": "Polyglot execution cells (python, javascript, php)."
+    },
+    {
+      "token": "@link",
+      "purpose": "Explicit dependency edge linking business features across modules."
+    },
+    {
+      "token": "@decision",
+      "purpose": "Embedded Architecture Decision Record (ADR) rationale."
+    },
+    {
+      "token": "@error-map",
+      "purpose": "Structured error translation mapping raw exceptions to standard codes."
+    }
+  ],
+  "aggregation_packets": [
+    {
+      "role": "CLIENT",
+      "source": "sales_invoice.js",
+      "dest": "sales_invoice.poly",
+      "color": "#38bdf8"
+    },
+    {
+      "role": "BACKEND",
+      "source": "sales_invoice.py",
+      "dest": "sales_invoice.poly",
+      "color": "#818cf8"
+    },
+    {
+      "role": "SCHEMA",
+      "source": "sales_invoice.json",
+      "dest": "sales_invoice.poly",
+      "color": "#10b981"
+    },
+    {
+      "role": "HOOK",
+      "source": "hooks.py",
+      "dest": "sales_invoice.poly",
+      "color": "#f59e0b"
+    },
+    {
+      "role": "TEST",
+      "source": "test_sales_invoice.py",
+      "dest": "sales_invoice.poly",
+      "color": "#ec4899"
+    },
+    {
+      "role": "LINK",
+      "source": "customer.poly",
+      "dest": "sales_invoice.poly",
+      "color": "#a855f7"
+    }
+  ],
+  "sample_mapping": {
+    "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
+    "poly_path": "features/accounts/sales_invoice.poly",
+    "source_path": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "source_exists": true,
+    "source_sha256": "6773dc522d0c711d313afd7b6ca75257264e07a53b7d6b3072e370fcd0d7c5b3",
+    "source_span": {
+      "start_line": 1,
+      "end_line": 1420,
+      "symbol": "SalesInvoiceController"
+    }
+  },
+  "polyflow_representation": {
+    "mapped_features_count": 842,
+    "source_references_count": 842,
+    "schema_contracts_count": 840,
+    "test_contracts_count": 312,
+    "unresolved_count": 0,
+    "artifact_accounting_coverage_pct": 100.0
+  }
+}

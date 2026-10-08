@@ -1,0 +1,26 @@
+{
+  "recorded_at": "2026-10-08T14:53:11Z",
+  "environment": {
+    "os": "win32",
+    "python": "3.12.3 | packaged by conda-forge | (main, Apr 15 2024, 18:20:11) [MSC v.1938 64 bit (AMD64)]",
+    "model": "qwen2.5-coder:1.5b",
+    "provider": "ollama"
+  },
+  "repositories": {
+    "polyflow": {
+      "commit": "d5be98cafaf652e9d6242906b6dc3d054933fccb",
+      "dirty": true
+    },
+    "nextcloud_server": {
+      "path": "experiments/nextcloud_validation/nextcloud-server",
+      "commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+      "dirty": false
+    },
+    "frappe": {
+      "commit": "8f8a59ebe58607bc714c232777b9d835311f2229"
+    },
+    "erpnext": {
+      "commit": "6369f7fd5ab8d869b8d21c9c74f4ad8feb73255a"
+    }
+  }
+}
