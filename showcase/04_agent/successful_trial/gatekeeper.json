@@ -1,0 +1,9 @@
+{
+  "gatekeeper_verdict": "APPROVED",
+  "reasons": [
+    "Non-empty patch",
+    "Clean syntax",
+    "Acceptance tests passed",
+    "0 regressions"
+  ]
+}

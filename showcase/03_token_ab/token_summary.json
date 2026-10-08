@@ -1,0 +1,13 @@
+{
+  "total_paired_trials": 20,
+  "measurement_source": "Ollama Native UsageRecord (prompt_eval_count, eval_count)",
+  "model": "qwen2.5-coder:1.5b",
+  "token_budget_cap": 4000,
+  "budget_violations": 0,
+  "pricing_basis": {
+    "reference_model": "gpt-4o-mini equivalent rate",
+    "input_per_million_usd": 0.15,
+    "output_per_million_usd": 0.6,
+    "ide_credits": "NOT_MEASURED (no cloud credit billing API exposed)"
+  }
+}

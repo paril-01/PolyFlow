@@ -1,0 +1,12 @@
+{
+  "total_cataloged_artifacts": 10080,
+  "generated_poly_features": 842,
+  "status_distribution": {
+    "MAPPED_SCHEMA": 842,
+    "MAPPED_SOURCE_REFERENCE": 6775,
+    "EXCLUDED_GENERATED": 1530,
+    "MAPPED_TEST": 933
+  },
+  "semantic_coverage_percentage": 100.0,
+  "generated_at": "2026-10-08T13:22:25Z"
+}

@@ -1,0 +1,6 @@
+{
+  "pricing_model": "gpt-4o-mini equivalent ($0.15/1M input, $0.60/1M output)",
+  "token_budget_constraint": "4,000 tokens",
+  "context_saturation": "Guaranteed under contract",
+  "savings_mechanism": "Structural graph dependency pruning vs whole-file dumps"
+}

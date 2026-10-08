@@ -1,0 +1,61 @@
+# PolyFlow Semantic Contract for Item
+# Pinned source: C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\erpnext_validation\erpnext\erpnext\stock\doctype\item\item.json
+
+@contract
+feature_id: ERPNEXT_STOCK-ITEM
+owner: stock-engineering
+classification: enterprise
+is_submittable: false
+timeout_ms: 3000
+@end
+
+@schema Item
+  naming_series: string
+  item_code: string
+  variant_of: link<Item>
+  item_name: string
+  item_group: link<Item Group>
+  stock_uom: link<UOM>
+  column_break0: string
+  disabled: string
+  allow_alternative_item: string
+  is_stock_item: string
+  include_item_in_manufacturing: string
+  opening_stock: string
+  valuation_rate: string
+  standard_rate: string
+  is_fixed_asset: string
+  asset_category: link<Asset Category>
+  asset_naming_series: string
+  image: string
+  section_break_11: string
+  brand: link<Brand>
+  description: string
+  sb_barcodes: string
+  barcodes: table<Item Barcode>
+  inventory_section: string
+  shelf_life_in_days: string
+@end
+
+@source
+path: "erpnext/erpnext/stock/doctype/item/item.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "Item"
+sha256: "916ca7de51277b708e5059aa588200699fcda4872d74206047cb54b7679f872a"
+@end
+
+@source
+path: "erpnext/erpnext/stock/doctype/item/item.py"
+language: "python"
+role: "controller"
+symbol: "Item"
+sha256: "526126fcd67a2d91c1bd21e6a4d79bcd58242dd36c2184a2425f703216592ae8"
+@end
+
+@link ../erpnext_stock/item.poly::Item as ref_variant_of
+@link ../erpnext_setup/item_group.poly::ItemGroup as ref_item_group
+@link ../erpnext_setup/uom.poly::UOM as ref_stock_uom
+@link ../erpnext_assets/asset_category.poly::AssetCategory as ref_asset_category
+@link ../erpnext_setup/brand.poly::Brand as ref_brand
+

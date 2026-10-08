@@ -1,0 +1,152 @@
+{
+  "repository_inventory": {
+    "total_files": 10080,
+    "source_files": 8240,
+    "total_loc": 1375156,
+    "frappe_commit": "8f8a59ebe58607bc714c232777b9d835311f2229",
+    "erpnext_commit": "6369f7fd5ab8d869b8d21c9c74f4ad8feb73255a"
+  },
+  "compression_metrics": {
+    "file_to_feature_ratio": 9.79,
+    "file_reduction_pct": 89.78,
+    "semantic_token_compression_ratio": 35.21,
+    "semantic_token_reduction_pct": 97.16,
+    "polyflow_features_count": 842,
+    "polyflow_token_footprint": 304611,
+    "native_source_tokens_est": 10726216
+  },
+  "rcir_performance": {
+    "average_critical_recall": 0.917,
+    "average_mrr": 0.521,
+    "average_rcir_context_tokens": 581,
+    "tasks_evaluated": 4,
+    "graph_indexing_time_s": 1.21
+  },
+  "task_results": [
+    {
+      "task_id": "task_tier1_local",
+      "tier": "Tier 1: Local",
+      "title": "Sales Invoice Customer & Posting Date Validation",
+      "critical_recall": 1.0,
+      "mrr": 1.0,
+      "rcir_context_tokens": 589,
+      "baseline_a_tokens": 0,
+      "baseline_b_tokens": 228,
+      "baseline_c_status": "INFEASIBLE (1.37M LOC / 10.7M tokens exceeds context window)",
+      "baseline_c_bounded_tokens": 32000,
+      "context_compression_ratio": 54.33,
+      "live_telemetry": {
+        "rcir": {
+          "response": "To fix the issue in ERPNext related to Sales Invoice Customer & Posting Date Validation, you need to ensure that the customer linking and posting date locking rules are correctly implemented. Here are the exact steps to fix this issue:\n\n1. **Update the Sales Invoice JSON File**:\n   - Open the `erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json` file.\n   - Add or modify the `customer` field to include validation rules. For example:\n     ```json\n     {\n       \"fieldname\": \"customer\",\n       \"label\": \"Customer\",\n       \"fieldtype\": \"Link\",\n       \"options\":",
+          "prompt_eval_count": 209,
+          "eval_count": 128,
+          "total_duration_ms": 6876.54,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        },
+        "baseline": {
+          "response": "1. **Identify the Issue**: The issue lies in the validation rules for linking a customer to a sales invoice and ensuring that the posting date is locked after the invoice is created.\n\n2. **Implement the Fix**:\n   - **Customer Linking Validation**: Modify the `validate` method in the `Sales Invoice` model to ensure that the customer linked to the invoice exists in the system. If the customer does not exist, raise an error or prevent the invoice from being saved.\n   - **Posting Date Locking**: Implement a method to lock the posting date of the sales invoice after it is created. This can be done by",
+          "prompt_eval_count": 71,
+          "eval_count": 128,
+          "total_duration_ms": 5517.62,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        }
+      }
+    },
+    {
+      "task_id": "task_tier2_cross_file",
+      "tier": "Tier 2: Cross-file",
+      "title": "Sales Invoice Taxes and Totals Computation Engine",
+      "critical_recall": 1.0,
+      "mrr": 0.5,
+      "rcir_context_tokens": 589,
+      "baseline_a_tokens": 0,
+      "baseline_b_tokens": 255,
+      "baseline_c_status": "INFEASIBLE (1.37M LOC / 10.7M tokens exceeds context window)",
+      "baseline_c_bounded_tokens": 32000,
+      "context_compression_ratio": 54.33,
+      "live_telemetry": {
+        "rcir": {
+          "response": "To fix the issue in ERPNext related to Sales Invoice Taxes and Totals Computation Engine, we need to ensure that the line-item discounts are applied correctly, tax rates are calculated accurately, and the grand total is rounded properly across various controller files. Here are the exact fixes in bullet points:\n\n1. **Ensure Line-Item Discounts are Applied Correctly**:\n   - In the `sales_invoice.py` file, locate the method responsible for calculating the total amount of the sales invoice.\n   - Ensure that the line-item discounts are applied to the total amount before calculating taxes and the grand total.\n   - Use the `apply_discount`",
+          "prompt_eval_count": 217,
+          "eval_count": 128,
+          "total_duration_ms": 7307.81,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        },
+        "baseline": {
+          "response": "1. **Trace Line-item Discount Application**: Identify the controller file responsible for handling line-item discounts in the Sales Invoice. This could be `erpnext.controllers.sales_invoice` or a custom controller. Look for methods that apply discounts to line items, such as `apply_discount` or `update_line_item_discount`.\n\n2. **Tax Rate Calculation**: Ensure that the tax rate calculation is correctly implemented in the controller. This involves calculating the tax amount based on the line item price, tax rate, and any applicable tax rules. Look for methods that calculate taxes, such as `calculate_tax` or `update_line_item_tax`.\n\n3. **Grand",
+          "prompt_eval_count": 79,
+          "eval_count": 128,
+          "total_duration_ms": 5570.93,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        }
+      }
+    },
+    {
+      "task_id": "task_tier3_cross_module",
+      "tier": "Tier 3: Cross-module",
+      "title": "Stock Movement to General Ledger Accounting Reconciliation",
+      "critical_recall": 0.67,
+      "mrr": 0.5,
+      "rcir_context_tokens": 582,
+      "baseline_a_tokens": 0,
+      "baseline_b_tokens": 232,
+      "baseline_c_status": "INFEASIBLE (1.37M LOC / 10.7M tokens exceeds context window)",
+      "baseline_c_bounded_tokens": 32000,
+      "context_compression_ratio": 54.98,
+      "live_telemetry": {
+        "rcir": {
+          "response": "To fix the issue of stock valuation update propagation into GL account entries during inventory receipt and issue, you need to ensure that the stock valuation is correctly updated and propagated to the GL account entries. Here are the exact steps to achieve this:\n\n1. **Update Stock Valuation**: Ensure that the stock valuation is updated correctly before the inventory receipt or issue. This can be done by running the `update_valuation` method on the `StockValuation` doctype. This method should update the stock valuation for the affected items and update the stock ledger entries accordingly.\n\n2. **Propagate Valuation to GL**: After updating the stock valuation,",
+          "prompt_eval_count": 214,
+          "eval_count": 128,
+          "total_duration_ms": 7147.44,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        },
+        "baseline": {
+          "response": "1. **Update Stock Valuation**: Ensure that the stock valuation is updated correctly before the inventory receipt or issue. This involves updating the stock ledger entries with the new stock quantity and cost.\n\n2. **Propagate Valuation to GL**: After updating the stock valuation, propagate this information to the General Ledger (GL) account entries. This involves creating or updating GL entries that reflect the changes in stock value. The GL entries should be linked to the appropriate GL accounts and reflect the changes in inventory levels.",
+          "prompt_eval_count": 75,
+          "eval_count": 102,
+          "total_duration_ms": 4777.93,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        }
+      }
+    },
+    {
+      "task_id": "task_tier4_architectural",
+      "tier": "Tier 4: Architectural",
+      "title": "Framework Lifecycle Hooks & DocType Event Registration",
+      "critical_recall": 1.0,
+      "mrr": 0.0833,
+      "rcir_context_tokens": 564,
+      "baseline_a_tokens": 0,
+      "baseline_b_tokens": 150,
+      "baseline_c_status": "INFEASIBLE (1.37M LOC / 10.7M tokens exceeds context window)",
+      "baseline_c_bounded_tokens": 32000,
+      "context_compression_ratio": 56.74,
+      "live_telemetry": {
+        "rcir": {
+          "response": "To verify multi-app hook resolution, doc_events dispatch, and class override inheritance at framework scale, we need to ensure that the hooks and events are correctly registered and resolved across different applications. Here are the exact fixes in 2 bullet points:\n\n1. **Ensure Correct Registration of Hooks and Events**:\n   - In the `company.json` file, ensure that the hooks and events are correctly registered. For example, if you have a custom hook in a custom app, make sure it is registered in the `hooks.py` file of that app.\n   - In the `company.py` file, ensure that the doc_events are correctly registered",
+          "prompt_eval_count": 191,
+          "eval_count": 128,
+          "total_duration_ms": 7272.7,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        },
+        "baseline": {
+          "response": "1. **Fix Multi-app Hook Resolution**: The issue was that the framework was not correctly resolving hooks across different apps. This was due to the lack of proper inheritance and registration of hooks in the app's `hooks.py` file. The fix involved adding the necessary hooks to the app's `hooks.py` file and ensuring that they were correctly registered in the framework. This was done by using the `frappe.get_hooks` function to retrieve the hooks and then registering them using the `frappe.hooks` module.\n\n2. **Fix Doc_events Dispatch**: The issue was that the framework was not correctly dispatching doc events across different",
+          "prompt_eval_count": 78,
+          "eval_count": 128,
+          "total_duration_ms": 5686.71,
+          "provider": "ollama",
+          "model": "qwen2.5-coder:1.5b"
+        }
+      }
+    }
+  ],
+  "timestamp": "2026-10-08T13:41:12Z"
+}

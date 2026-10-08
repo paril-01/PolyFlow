@@ -1,0 +1,101 @@
+# PolyFlow Executable Vertical Slice: Accounts (General Ledger Balance Validation)
+# Derived from native ERPNext Accounts General Ledger validation invariants
+
+@contract
+feature_id: ERPNEXT-ACCOUNTS-GENERAL-LEDGER-VALIDATION
+owner: accounts-engineering
+classification: enterprise
+is_submittable: true
+timeout_ms: 5000
+@end
+
+@schema GLEntry
+  posting_date: string
+  account: link<Account>
+  party: link<Party>
+  debit: float
+  credit: float
+  voucher_type: string
+  voucher_no: string
+  cost_center: link<Cost Center>
+@end
+
+@schema GLValidationResult
+  voucher_no: string
+  total_debit: float
+  total_credit: float
+  difference: float
+  is_balanced: bool
+  entry_count: int
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/gl_entry/gl_entry.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "GL Entry"
+sha256: "0c98f86f77ff6a27fc1ec793836d50ff90d9659b85c276a6cf06daea2252a9c1"
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/gl_entry/gl_entry.py"
+language: "python"
+role: "controller"
+symbol: "GLEntry"
+@end
+
+@source
+path: "erpnext/erpnext/accounts/general_ledger.py"
+language: "python"
+role: "service"
+symbol: "validate_accounting_entries"
+@end
+
+@link ../erpnext_polyflow/features/erpnext_accounts/account.poly::Account as ref_account
+@link ../erpnext_polyflow/features/erpnext_accounts/gl_entry.poly::GLEntry as ref_gl_entry
+
+@python[validate_gl_entries]
+def process(req):
+    voucher_no = req.get("voucher_no", "ACC-SINV-2026-0001")
+    entries = req.get("gl_entries", [
+        {"account": "Debtors - Company", "debit": 707.0, "credit": 0.0, "cost_center": "Main - CC"},
+        {"account": "Sales - Company", "debit": 0.0, "credit": 620.1, "cost_center": "Main - CC"},
+        {"account": "Output VAT - Company", "debit": 0.0, "credit": 86.9, "cost_center": "Main - CC"}
+    ])
+    
+    total_debit = 0.0
+    total_credit = 0.0
+    errors = []
+    
+    for i, e in enumerate(entries):
+        d = float(e.get("debit", 0.0))
+        c = float(e.get("credit", 0.0))
+        if d < 0 or c < 0:
+            errors.append(f"Row {i+1}: Negative debit/credit not allowed.")
+        if d > 0 and c > 0:
+            errors.append(f"Row {i+1}: Cannot have both debit and credit.")
+        if not e.get("account"):
+            errors.append(f"Row {i+1}: Missing account reference.")
+            
+        total_debit += d
+        total_credit += c
+        
+    diff = round(abs(total_debit - total_credit), 4)
+    tolerance = 0.01
+    is_balanced = diff <= tolerance
+    
+    if not is_balanced:
+        errors.append(f"Debit and Credit do not match. Difference: {diff}")
+        
+    return {
+        "status": "success" if is_balanced and not errors else "validation_error",
+        "verified": is_balanced and len(errors) == 0,
+        "voucher_no": voucher_no,
+        "entry_count": len(entries),
+        "total_debit": round(total_debit, 2),
+        "total_credit": round(total_credit, 2),
+        "difference": diff,
+        "is_balanced": is_balanced,
+        "errors": errors
+    }
+@end

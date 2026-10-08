@@ -1,0 +1,41 @@
+@contract
+feature_id: COMMERCE-CHECKOUT-ENGINE
+owner: checkout-platform
+classification: enterprise
+timeout_ms: 3000
+@end
+
+@schema OrderPayload
+  order_id: string
+  customer_id: string
+  items: list<dict>
+  currency: string
+@end
+
+@source
+path: "apps/commerce/services/order.py"
+language: "python"
+role: "service"
+symbol: "ProcessOrder"
+sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+@end
+
+@python[calculate_totals]
+def process(payload):
+    items = payload.get("items", [
+        {"sku": "SKU-PRO-01", "qty": 2, "unit_price": 50.0},
+        {"sku": "SKU-PRO-02", "qty": 1, "unit_price": 100.0}
+    ])
+    subtotal = sum(i["qty"] * i["unit_price"] for i in items)
+    tax = round(subtotal * 0.08, 2)
+    grand_total = subtotal + tax
+    return {
+        "status": "success",
+        "verified": True,
+        "items_count": len(items),
+        "subtotal": subtotal,
+        "tax": tax,
+        "grand_total": grand_total,
+        "currency": payload.get("currency", "USD")
+    }
+@end

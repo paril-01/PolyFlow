@@ -22,6 +22,7 @@ build/
 dist/
 node_modules/
 experiments/rcir_runs/
+experiments/erpnext_validation/
 scratch/
 *.egg-info/
 *.egg

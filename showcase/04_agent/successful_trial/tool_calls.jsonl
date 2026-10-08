@@ -1,0 +1,2 @@
+{"turn": 1, "tool": "inspect_file", "path": "lib/private/User/Manager.php"}
+{"turn": 2, "tool": "apply_patch", "files": 1}

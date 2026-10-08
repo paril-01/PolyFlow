@@ -1,0 +1,4 @@
+@contract
+feature_id: BROKEN-SAMPLE-FEATURE
+owner: qa-team
+# missing @end delimiter

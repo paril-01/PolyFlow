@@ -1,0 +1,39 @@
+================================================================================
+PolyFlow Contract Inspection: example.poly
+================================================================================
+File Path:          C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\showcase\01_polyflow_interpreter\example.poly
+Grammar Version:    1.0.0
+AST Schema Version: 1.0.0
+
+[Contracts] (1 declared)
+  â€¢ feature_id: COMMERCE-CHECKOUT-ENGINE
+  â€¢ owner: checkout-platform
+  â€¢ classification: enterprise
+  â€¢ timeout_ms: 3000
+
+[Schemas] (1 declared)
+  â€¢ @schema OrderPayload
+      - order_id: string
+      - customer_id: string
+      - items: list<dict>
+      - currency: string
+
+[Source References] (1 mapped)
+  â€¢ [PYTHON] apps/commerce/services/order.py :: ProcessOrder (role: service)
+      sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+[Language Cells] (1 executable blocks)
+  â€¢ @python[calculate_totals] (lines 23-41, 17 lines)
+
+[Links] (0 linked modules)
+  (None)
+
+[Merge Strategy]
+  (default)
+
+[Error Maps] (0 registered)
+  (None)
+
+[Governance & Standards] (0 entries)
+
+================================================================================

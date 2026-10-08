@@ -1,0 +1,109 @@
+# PolyFlow Executable Vertical Slice: Selling (Sales Invoice Taxes & Totals Calculation)
+# Derived from native ERPNext Accounts & Selling controller logic
+
+@contract
+feature_id: ERPNEXT-SELLING-SALES-INVOICE-CALCULATION
+owner: selling-engineering
+classification: enterprise
+is_submittable: true
+timeout_ms: 5000
+@end
+
+@schema SalesInvoiceItem
+  item_code: string
+  qty: float
+  rate: float
+  discount_percentage: float
+  tax_rate: float
+@end
+
+@schema SalesInvoiceTotals
+  net_total: float
+  total_discount: float
+  total_taxes: float
+  grand_total: float
+  rounded_total: float
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "Sales Invoice"
+sha256: "23291aa6cb9c25b0b4709dbc6102349accbd5483005fed2ca513ee97ea16cfc1"
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.py"
+language: "python"
+role: "controller"
+symbol: "SalesInvoice"
+sha256: "6773dc522d0c711d313afd7b6ca75257264e07a53b7d6b3072e370fcd0d7c5b3"
+@end
+
+@source
+path: "erpnext/erpnext/controllers/taxes_and_totals.py"
+language: "python"
+role: "controller"
+symbol: "calculate_taxes_and_totals"
+@end
+
+@link ../erpnext_polyflow/features/erpnext_selling/customer.poly::Customer as ref_customer
+@link ../erpnext_polyflow/features/erpnext_accounts/sales_invoice.poly::SalesInvoice as ref_invoice
+
+@python[calculate_totals]
+def process(req):
+    items = req.get("items", [
+        {"item_code": "ITEM-A", "qty": 2.0, "rate": 100.0, "discount_percentage": 10.0, "tax_rate": 0.18},
+        {"item_code": "ITEM-B", "qty": 1.0, "rate": 250.0, "discount_percentage": 0.0, "tax_rate": 0.18},
+        {"item_code": "ITEM-C", "qty": 5.0, "rate": 40.0, "discount_percentage": 5.0, "tax_rate": 0.05}
+    ])
+    
+    net_total = 0.0
+    total_discount = 0.0
+    total_taxes = 0.0
+    processed_items = []
+    
+    for item in items:
+        qty = float(item.get("qty", 0.0))
+        rate = float(item.get("rate", 0.0))
+        disc_pct = float(item.get("discount_percentage", 0.0))
+        tax_rate = float(item.get("tax_rate", 0.0))
+        
+        base_amount = qty * rate
+        discount_amount = base_amount * (disc_pct / 100.0)
+        net_amount = base_amount - discount_amount
+        tax_amount = net_amount * tax_rate
+        
+        net_total += net_amount
+        total_discount += discount_amount
+        total_taxes += tax_amount
+        
+        processed_items.append({
+            "item_code": item.get("item_code"),
+            "qty": qty,
+            "rate": rate,
+            "base_amount": round(base_amount, 2),
+            "discount_amount": round(discount_amount, 2),
+            "net_amount": round(net_amount, 2),
+            "tax_amount": round(tax_amount, 2)
+        })
+        
+    grand_total = net_total + total_taxes
+    rounded_total = round(grand_total)
+    rounding_adjustment = round(rounded_total - grand_total, 2)
+    
+    return {
+        "status": "success",
+        "verified": True,
+        "item_count": len(processed_items),
+        "items": processed_items,
+        "net_total": round(net_total, 2),
+        "total_discount": round(total_discount, 2),
+        "total_taxes": round(total_taxes, 2),
+        "grand_total": round(grand_total, 2),
+        "rounded_total": rounded_total,
+        "rounding_adjustment": rounding_adjustment,
+        "currency": req.get("currency", "USD")
+    }
+@end

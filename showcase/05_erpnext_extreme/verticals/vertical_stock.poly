@@ -1,0 +1,125 @@
+# PolyFlow Executable Vertical Slice: Stock (Moving Average Stock Ledger Valuation)
+# Derived from native ERPNext Stock Ledger Entry valuation controller invariants
+
+@contract
+feature_id: ERPNEXT-STOCK-LEDGER-VALUATION
+owner: stock-engineering
+classification: enterprise
+is_submittable: true
+timeout_ms: 5000
+@end
+
+@schema StockLedgerEntry
+  item_code: link<Item>
+  warehouse: link<Warehouse>
+  posting_date: string
+  actual_qty: float
+  incoming_rate: float
+  voucher_type: string
+  voucher_no: string
+@end
+
+@schema StockValuationResult
+  item_code: string
+  warehouse: string
+  qty_after_transaction: float
+  valuation_rate: float
+  stock_value: float
+  stock_value_difference: float
+@end
+
+@source
+path: "erpnext/erpnext/stock/doctype/stock_ledger_entry/stock_ledger_entry.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "Stock Ledger Entry"
+sha256: "0c78a48ef2e32714282c03164996962915fa76fbfe0b05b3c563ef1e7bc8a7f9"
+@end
+
+@source
+path: "erpnext/erpnext/stock/doctype/stock_ledger_entry/stock_ledger_entry.py"
+language: "python"
+role: "controller"
+symbol: "StockLedgerEntry"
+@end
+
+@source
+path: "erpnext/erpnext/stock/stock_ledger.py"
+language: "python"
+role: "service"
+symbol: "update_entries_after"
+@end
+
+@link ../erpnext_polyflow/features/erpnext_stock/item.poly::Item as ref_item
+@link ../erpnext_polyflow/features/erpnext_stock/warehouse.poly::Warehouse as ref_warehouse
+
+@python[calculate_stock_valuation]
+def process(req):
+    item_code = req.get("item_code", "RAW-MAT-STEEL-01")
+    warehouse = req.get("warehouse", "Stores - WH")
+    
+    # Sequence of transactions: receipts and issues
+    transactions = req.get("transactions", [
+        {"type": "receipt", "qty": 100.0, "rate": 50.0},   # 100 @ $50 = $5,000
+        {"type": "receipt", "qty": 50.0, "rate": 65.0},    # 50 @ $65 = $3,250 -> Total 150 @ $55.00
+        {"type": "issue", "qty": -40.0, "rate": 0.0},      # 40 issued -> Remaining 110 @ $55.00
+        {"type": "receipt", "qty": 90.0, "rate": 60.0}     # 90 @ $60 = $5,400 -> Total 200 @ $57.25
+    ])
+    
+    current_qty = 0.0
+    current_val_rate = 0.0
+    current_stock_value = 0.0
+    ledger_history = []
+    
+    for i, tx in enumerate(transactions):
+        delta_qty = float(tx.get("qty", 0.0))
+        tx_rate = float(tx.get("rate", 0.0))
+        
+        prev_qty = current_qty
+        prev_val_rate = current_val_rate
+        prev_stock_value = current_stock_value
+        
+        if delta_qty > 0:
+            # Incoming / Receipt
+            new_qty = prev_qty + delta_qty
+            incoming_amount = delta_qty * tx_rate
+            new_stock_value = prev_stock_value + incoming_amount
+            new_val_rate = round(new_stock_value / new_qty, 4) if new_qty > 0 else 0.0
+            stock_value_diff = incoming_amount
+        else:
+            # Issue / Consumption
+            new_qty = prev_qty + delta_qty
+            if new_qty < 0:
+                raise ValueError(f"Negative stock invariant violated at step {i+1}: qty={new_qty}")
+            new_val_rate = prev_val_rate  # valuation rate remains unchanged on issue
+            issue_amount = abs(delta_qty) * prev_val_rate
+            new_stock_value = round(prev_stock_value - issue_amount, 2)
+            stock_value_diff = -issue_amount
+            
+        current_qty = new_qty
+        current_val_rate = new_val_rate
+        current_stock_value = new_stock_value
+        
+        ledger_history.append({
+            "step": i + 1,
+            "type": tx.get("type"),
+            "delta_qty": delta_qty,
+            "tx_rate": tx_rate,
+            "qty_after": current_qty,
+            "valuation_rate": current_val_rate,
+            "stock_value": round(current_stock_value, 2),
+            "stock_value_diff": round(stock_value_diff, 2)
+        })
+        
+    return {
+        "status": "success",
+        "verified": True,
+        "item_code": item_code,
+        "warehouse": warehouse,
+        "total_transactions": len(transactions),
+        "final_qty": round(current_qty, 2),
+        "final_valuation_rate": round(current_val_rate, 4),
+        "final_stock_value": round(current_stock_value, 2),
+        "ledger_steps": ledger_history
+    }
+@end

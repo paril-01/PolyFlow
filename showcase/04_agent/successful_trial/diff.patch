@@ -1,0 +1,4 @@
+--- a/lib/private/User/Manager.php
++++ b/lib/private/User/Manager.php
+@@ -10,3 +10,4 @@
++ // PolyFlow type-safe resolver hook

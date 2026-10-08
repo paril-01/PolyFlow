@@ -1,0 +1,46 @@
+{
+  "frappe_commit": "8f8a59ebe58607bc714c232777b9d835311f2229",
+  "erpnext_commit": "6369f7fd5ab8d869b8d21c9c74f4ad8feb73255a",
+  "total_files": 10080,
+  "source_files": 8240,
+  "loc": 1375156,
+  "languages": {
+    "other": {
+      "files": 893,
+      "loc": 0
+    },
+    "JavaScript/TypeScript": {
+      "files": 2092,
+      "loc": 296627
+    },
+    "JSON": {
+      "files": 947,
+      "loc": 268556
+    },
+    "Python": {
+      "files": 4767,
+      "loc": 602607
+    },
+    "Shell": {
+      "files": 6,
+      "loc": 633
+    },
+    "DocType Metadata": {
+      "files": 840,
+      "loc": 151261
+    },
+    "HTML/CSS": {
+      "files": 533,
+      "loc": 54849
+    },
+    "SQL": {
+      "files": 2,
+      "loc": 623
+    }
+  },
+  "doctype_count": 840,
+  "python_files": 4767,
+  "js_ts_files": 2092,
+  "json_metadata_files": 1787,
+  "generated_at": "2026-10-08T13:17:58Z"
+}

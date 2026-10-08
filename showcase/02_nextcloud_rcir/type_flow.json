@@ -1,0 +1,198 @@
+{
+  "run_id": "rcir-v8.5.2-b95f523e26c628f3",
+  "manifest_hash": "50e924bab7d93086b9b2e9d6c5dfd9984149edcbb2d99831fe936f7cb70d19e0",
+  "polyflow_commit": "6b02f0eeb14098e588a807454b954fdba64d2c14",
+  "polyflow_dirty": false,
+  "polyflow_worktree_diff_hash": "",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "target_repo_dirty": false,
+  "target_repo_diff_hash": "",
+  "contract_hash": "3acab3058b2a4f83cc06ab5da5c5b145a4fbf95ff33a2a3891357414607cc61e",
+  "dataset_hashes": {
+    "dev": "3cbf592d0f89833398987b8e2d735fe6591757333afa3ad834e0029038e98215",
+    "validation": "23e760823e664205c83f9a96111787826eab0b1e15d0d7464c20aa5de14b2db6",
+    "test": "1353982f387eefb954bcb33dd5b2074b31180c1db063240abe67950ea16cbde8"
+  },
+  "ground_truth_hash": "f17b3c00155ccef829b1bdf447aa0ac1d8da614e20f3ef99f421c5dc321d96b8",
+  "edge_ground_truth_hash": "93650deeee34499836853f34aa6f77f43c28176aaa933e81921da78e5daa548d",
+  "receiver_ground_truth_hash": "83d0440f63833741d63359931557cb6ddf661bdd11d1557aab3ab0b4914c6980",
+  "canonicalization_ground_truth_hash": "d2cd07e5d164fc6078f84c7b621a7f883ad5caaa98d2f90603e1315a4cf82eac",
+  "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
+  "config_hashes": {
+    "candidate_config": "d0ef69ae8d04eff1b17b280006e9a904e0e050b557b9cdcb3f27d3dcc8bf5ba3",
+    "ranker_config": "1cd7477fa3d22e383240d59b84ba9ea5e69f837d4ba3b0bdeb4c0e2148608af6",
+    "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
+    "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
+    "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
+    "retrieval_runner_code": "70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528",
+    "ranker_code": "5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2",
+    "adapter_code": "8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672",
+    "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
+    "typeflow_code": "8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e"
+  },
+  "created_at": "2026-10-08T12:52:19Z",
+  "validation_status": "PASSED",
+  "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "confusion_matrix": {
+    "correct_exact": 7,
+    "correct_graph_compatible": 3,
+    "correct_adjudicated_compatible": 0,
+    "correct_compatible": 3,
+    "wrong_exact": 0,
+    "wrong_compatible": 0,
+    "correct_abstention": 2,
+    "false_abstention": 0,
+    "ambiguous": 0,
+    "invalid_gt": 0
+  },
+  "metrics": {
+    "resolvable_ground_truth_cases": 10,
+    "abstention_ground_truth_cases": 2,
+    "coverage": 1.0,
+    "exact_precision": 1.0,
+    "resolved_precision": 1.0,
+    "wrong_exact_rate": 0.0,
+    "abstention_accuracy": 1.0,
+    "ambiguity_rate": 0.0
+  },
+  "contract_thresholds": {
+    "coverage_min": 0.6,
+    "resolved_precision_min": 0.9,
+    "wrong_exact_rate_max": 0.05
+  },
+  "contract_gate_satisfied": true,
+  "eval_records": [
+    {
+      "call_id": "tf_001",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 76,
+      "receiver": "$user",
+      "method": "getUID",
+      "expected_type": "OCP\\IUser",
+      "predicted_type": "OCP\\IUser",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_002",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 108,
+      "receiver": "$file",
+      "method": "getId",
+      "expected_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_003",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 115,
+      "receiver": "$file",
+      "method": "getStorage",
+      "expected_type": "OCP\\Files\\File",
+      "predicted_type": "OCP\\Files\\File",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_004",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 118,
+      "receiver": "$storage",
+      "method": "getShare",
+      "expected_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_005",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 119,
+      "receiver": "$share",
+      "method": "canSeeContent",
+      "expected_type": "OCP\\Share\\IShare",
+      "predicted_type": "OCP\\Share\\IShare",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_006",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 175,
+      "receiver": "$node",
+      "method": "getId",
+      "expected_type": "OCP\\Files\\Node",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "status": "CORRECT_GRAPH_COMPATIBLE (OC\\Files\\Node\\Node)"
+    },
+    {
+      "call_id": "tf_007",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 176,
+      "receiver": "$node",
+      "method": "getFileInfo",
+      "expected_type": "OCP\\Files\\Node",
+      "predicted_type": "OC\\Files\\Node\\Node",
+      "confidence": "proven_exact",
+      "status": "CORRECT_GRAPH_COMPATIBLE (OC\\Files\\Node\\Node)"
+    },
+    {
+      "call_id": "tf_008",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 295,
+      "receiver": "$currentFolder",
+      "method": "getParent",
+      "expected_type": "OCP\\Files\\Folder",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_009",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 296,
+      "receiver": "$parentFolder",
+      "method": "getDirectoryListing",
+      "expected_type": "OCP\\Files\\Folder",
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "interface_bound",
+      "status": "CORRECT_EXACT"
+    },
+    {
+      "call_id": "tf_010",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 496,
+      "receiver": "$response",
+      "method": "setContentSecurityPolicy",
+      "expected_type": "OCP\\AppFramework\\Http\\Response",
+      "predicted_type": "OCP\\AppFramework\\Http\\StreamResponse",
+      "confidence": "proven_exact",
+      "status": "CORRECT_GRAPH_COMPATIBLE (OCP\\AppFramework\\Http\\StreamResponse)"
+    },
+    {
+      "call_id": "tf_011_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 358,
+      "receiver": "$th",
+      "method": "getMessage",
+      "expected_type": "UNKNOWN",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "CORRECT_ABSTENTION"
+    },
+    {
+      "call_id": "tf_012_abstain",
+      "file": "apps/files/lib/Controller/ApiController.php",
+      "line": 391,
+      "receiver": "$e",
+      "method": "getMessage",
+      "expected_type": "UNKNOWN",
+      "predicted_type": null,
+      "confidence": "ambiguous",
+      "status": "CORRECT_ABSTENTION"
+    }
+  ]
+}

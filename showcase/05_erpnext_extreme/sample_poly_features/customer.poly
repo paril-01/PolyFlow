@@ -1,0 +1,61 @@
+# PolyFlow Semantic Contract for Customer
+# Pinned source: C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\erpnext_validation\erpnext\erpnext\selling\doctype\customer\customer.json
+
+@contract
+feature_id: ERPNEXT_SELLING-CUSTOMER
+owner: selling-engineering
+classification: enterprise
+is_submittable: false
+timeout_ms: 3000
+@end
+
+@schema Customer
+  overview_tab: string
+  overview_html: string
+  details_tab: string
+  basic_info: string
+  naming_series: string
+  customer_name: string
+  gender: link<Gender>
+  customer_type: string
+  default_bank_account: link<Bank Account>
+  lead_name: link<Lead>
+  image: string
+  column_break0: string
+  account_manager: link<User>
+  customer_group: link<Customer Group>
+  territory: link<Territory>
+  tax_id: string
+  tax_category: link<Tax Category>
+  disabled: string
+  is_internal_customer: string
+  represents_company: link<Company>
+  companies: table<Allowed To Transact With>
+  default_currency: link<Currency>
+  default_price_list: link<Price List>
+  language: link<Language>
+  address_contacts: string
+@end
+
+@source
+path: "erpnext/erpnext/selling/doctype/customer/customer.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "Customer"
+sha256: "92640c208af8ceef50bfb6a4368664bf6129636f0fe03b4fd69f2d959693b388"
+@end
+
+@source
+path: "erpnext/erpnext/selling/doctype/customer/customer.py"
+language: "python"
+role: "controller"
+symbol: "Customer"
+sha256: "141ad8a484dc2e49194f3e05651657beacab2bbf75fc5128cf747a919072249e"
+@end
+
+@link ../frappe_contacts/gender.poly::Gender as ref_gender
+@link ../erpnext_accounts/bank_account.poly::BankAccount as ref_default_bank_account
+@link ../erpnext_crm/lead.poly::Lead as ref_lead_name
+@link ../frappe_core/user.poly::User as ref_account_manager
+@link ../erpnext_setup/customer_group.poly::CustomerGroup as ref_customer_group
+

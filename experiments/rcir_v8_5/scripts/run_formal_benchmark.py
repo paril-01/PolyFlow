@@ -190,7 +190,7 @@ def run_formal_benchmark(
         raise RuntimeError("Formal gate evaluation artifact 'gate_evaluation.json' was not produced.")
 
     gate_eval = json.loads(gate_eval_path.read_text(encoding="utf-8"))
-    overall_validity = gate_eval.get("benchmark_run_validity", "INVALID")
+    overall_validity = gate_eval.get("run_validity", gate_eval.get("benchmark_run_validity", "INVALID"))
     arch_verdict = gate_eval.get("architecture_decision", "UNKNOWN")
 
     print("\n" + "=" * 80)
@@ -203,11 +203,20 @@ def run_formal_benchmark(
     print(f"Total Execution Time:   {total_elapsed:.2f}s ({total_elapsed/60:.1f} min)")
 
     # Print Gate Status Table
-    gates = gate_eval.get("gates", {})
     print("\n[Gate Results]")
-    for gname, gdata in gates.items():
-        st = gdata.get("status", "UNKNOWN")
-        print(f"  • {gname:25s}: {st}")
+    for gname in [
+        "integrity_gate",
+        "impact_gate",
+        "ranking_gate",
+        "context_gate",
+        "type_flow_gate",
+        "canonicalization_gate",
+        "agent_gate",
+    ]:
+        gdata = gate_eval.get(gname, {})
+        passed = gdata.get("passed", False)
+        status_str = "PASSED" if passed else gdata.get("status", "NOT_VERIFIED")
+        print(f"  • {gname:25s}: {status_str}")
 
     summary_file = target_run_dir / "formal_benchmark_summary.json"
     summary_file.write_text(json.dumps(run_meta, indent=2), encoding="utf-8")

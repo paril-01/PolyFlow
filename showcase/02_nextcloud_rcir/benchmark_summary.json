@@ -1,0 +1,77 @@
+{
+  "run_id": "rcir-v8.5.3-release",
+  "run_dir": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\rcir_runs\\rcir-v8.5.3-release",
+  "started_at": "2026-10-08T12:51:31Z",
+  "source_state": {
+    "polyflow_commit": "6b02f0eeb14098e588a807454b954fdba64d2c14",
+    "polyflow_dirty": false,
+    "polyflow_worktree_diff_hash": "",
+    "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+    "target_repo_dirty": false,
+    "target_repo_diff_hash": ""
+  },
+  "stages": {
+    "generate_manifest": {
+      "title": "Stage 01: Benchmark Manifest",
+      "elapsed_seconds": 1.07,
+      "status": "PASSED"
+    },
+    "evaluate_canonical_graph": {
+      "title": "Stage 02: Canonical Graph Integrity",
+      "elapsed_seconds": 5.98,
+      "status": "PASSED"
+    },
+    "evaluate_canonicalization": {
+      "title": "Stage 03: Canonicalization Corpus",
+      "elapsed_seconds": 4.92,
+      "status": "PASSED"
+    },
+    "validate_ground_truth_provenance": {
+      "title": "Stage 04: Ground Truth Provenance",
+      "elapsed_seconds": 0.9,
+      "status": "PASSED"
+    },
+    "evaluate_edges": {
+      "title": "Stage 05: Edge Evaluation",
+      "elapsed_seconds": 5.25,
+      "status": "PASSED"
+    },
+    "retrieval_runner": {
+      "title": "Stage 06: Multi-Channel Retrieval & Ranker Selection",
+      "elapsed_seconds": 22.02,
+      "status": "PASSED"
+    },
+    "context_runner": {
+      "title": "Stage 07: Context Compilation & Saturation Curve",
+      "elapsed_seconds": 1.84,
+      "status": "PASSED"
+    },
+    "evaluate_type_flow": {
+      "title": "Stage 08: PHP Type Flow Evaluation",
+      "elapsed_seconds": 6.46,
+      "status": "PASSED"
+    },
+    "evaluate_determinism": {
+      "title": "Stage 09: Bitwise Determinism Evaluation",
+      "elapsed_seconds": 29.75,
+      "status": "PASSED"
+    },
+    "run_agent_validation": {
+      "title": "Stage 10: Live Agent Validation & Telemetry",
+      "elapsed_seconds": 1247.69,
+      "status": "PASSED"
+    },
+    "evaluate_gates": {
+      "title": "Stage 11: Formal Contract Gates",
+      "elapsed_seconds": 1.5,
+      "status": "PASSED"
+    },
+    "generate_reports": {
+      "title": "Stage 12: Formal Benchmark Reports",
+      "elapsed_seconds": 1.08,
+      "status": "PASSED"
+    }
+  },
+  "completed_at": "2026-10-08T13:13:40Z",
+  "total_elapsed_seconds": 1328.47
+}

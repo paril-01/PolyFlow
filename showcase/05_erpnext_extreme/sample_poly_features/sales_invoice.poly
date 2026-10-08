@@ -1,0 +1,61 @@
+# PolyFlow Semantic Contract for Sales Invoice
+# Pinned source: C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\erpnext_validation\erpnext\erpnext\accounts\doctype\sales_invoice\sales_invoice.json
+
+@contract
+feature_id: ERPNEXT_ACCOUNTS-SALES_INVOICE
+owner: accounts-engineering
+classification: enterprise
+is_submittable: true
+timeout_ms: 3000
+@end
+
+@schema SalesInvoice
+  customer_section: string
+  naming_series: string
+  customer: link<Customer>
+  customer_name: string
+  tax_id: string
+  project: link<Project>
+  is_pos: string
+  pos_profile: link<POS Profile>
+  is_return: string
+  column_break1: string
+  company: link<Company>
+  cost_center: link<Cost Center>
+  posting_date: string
+  posting_time: string
+  set_posting_time: string
+  due_date: string
+  amended_from: link<Sales Invoice>
+  return_against: link<Sales Invoice>
+  update_billed_amount_in_sales_order: string
+  customer_po_details: string
+  po_no: string
+  column_break_23: string
+  po_date: string
+  address_and_contact: string
+  customer_address: link<Address>
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json"
+language: "json"
+role: "doctype_metadata"
+symbol: "Sales Invoice"
+sha256: "23291aa6cb9c25b0b4709dbc6102349accbd5483005fed2ca513ee97ea16cfc1"
+@end
+
+@source
+path: "erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.py"
+language: "python"
+role: "controller"
+symbol: "SalesInvoice"
+sha256: "6773dc522d0c711d313afd7b6ca75257264e07a53b7d6b3072e370fcd0d7c5b3"
+@end
+
+@link ../erpnext_selling/customer.poly::Customer as ref_customer
+@link ../erpnext_projects/project.poly::Project as ref_project
+@link ../erpnext_accounts/pos_profile.poly::POSProfile as ref_pos_profile
+@link ../erpnext_setup/company.poly::Company as ref_company
+@link ../erpnext_accounts/cost_center.poly::CostCenter as ref_cost_center
+

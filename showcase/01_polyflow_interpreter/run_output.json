@@ -1,0 +1,5 @@
+{
+  "cli_output": "\n[PolyFlow] Interpreting: example.poly\nContracts: 1 | Schemas: 1 | Cells: 1\n------------------------------------------------------------\n[\u00e2\u0153\u201c] @python[calculate_totals] (153.8ms)\n    Output: {\"status\": \"success\", \"verified\": true, \"items_count\": 2, \"subtotal\": 200.0, \"tax\": 16.0, \"grand_total\": 216.0, \"currency\": \"USD\"}\n------------------------------------------------------------\nStatus: SUCCESS\n\n",
+  "status": "success",
+  "executed_at": "2026-10-08T13:54:06Z"
+}
