@@ -101,29 +101,32 @@ class NextcloudSourceDerivedAdapter:
             return matches
 
         content = routes_full.read_text(encoding="utf-8", errors="ignore")
-        # Extract controller name: ApiController -> api
-        ctrl_match = re.search(r"([A-Za-z0-9_]+)Controller\.php$", clean_fp)
-        target_ctrl = ctrl_match.group(1).lower() if ctrl_match else ""
+        # Extract component name: ApiController -> api, DirectEditingService -> directediting
+        base_match = re.search(r"([A-Za-z0-9_]+?)(?:Controller|Service)?\.php$", clean_fp)
+        target_ctrl = base_match.group(1).lower() if base_match else ""
+        sym_clean = target_symbol.lower().replace("service", "").replace("controller", "") if target_symbol else ""
 
-        # Check for route registration of this controller precisely (Issue 24 & 25)
+        # Check for route registration of this controller or service precisely
         has_route = False
         span = "routes_declaration"
         for line_no, line in enumerate(content.splitlines(), start=1):
             line_lower = line.lower()
-            if target_ctrl:
-                # Precise controller route registration matching:
-                # e.g., 'name' => 'api#getThumbnail', 'controller' => 'api', 'api#', or target_ctrl
-                is_ctrl_route = (
-                    f"'{target_ctrl}#" in line_lower
-                    or f'"{target_ctrl}#' in line_lower
-                    or f"'{target_ctrl}'" in line_lower
-                    or f'"{target_ctrl}"' in line_lower
-                    or f"#{target_ctrl}" in line_lower
+            candidates_to_check = [c for c in (target_ctrl, sym_clean) if len(c) >= 3]
+            for cand in candidates_to_check:
+                is_route_match = (
+                    f"'{cand}#" in line_lower
+                    or f'"{cand}#' in line_lower
+                    or f"'{cand}'" in line_lower
+                    or f'"{cand}"' in line_lower
+                    or f"#{cand}" in line_lower
+                    or cand in line_lower
                 )
-                if is_ctrl_route:
+                if is_route_match:
                     has_route = True
                     span = f"line {line_no}: {line.strip()}"
                     break
+            if has_route:
+                break
 
         if has_route:
             matches.append(

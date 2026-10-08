@@ -43,6 +43,10 @@ TASKS_PATH = RCIR_V8_5_ROOT / "agent_tasks" / "tasks.json"
 DEV_CONTEXTS_PATH = RCIR_V8_5_ROOT / "raw" / "context" / "dev_contexts.json"
 
 
+from rcir.context.models import ContextRetrievalResult
+from orchestrator.telemetry import UsageRecord, TelemetryCollector
+
+
 class ConcreteRCIRContextProvider(ContextProvider):
     """Provides iterative or pre-compiled RCIR context to coding agents (F04, v8.5.1 delivery accounting)."""
 
@@ -57,7 +61,7 @@ class ConcreteRCIRContextProvider(ContextProvider):
         already_seen: Optional[set[str]] = None,
         token_budget: int = 1500,
         entry_limit: int = 5,
-    ) -> Dict[str, Any]:
+    ) -> ContextRetrievalResult:
         if already_seen is None:
             already_seen = set()
 
@@ -74,10 +78,13 @@ class ConcreteRCIRContextProvider(ContextProvider):
 
         # Step 1: Collect candidates without modifying already_seen
         candidate_entries = []
+        duplicates_skipped = 0
+        total_matched = 0
+
         for tid, ctx in target_contexts:
             for entry in ctx.get("entries", []):
                 ent_id = entry.get("entity_id", "")
-                if not ent_id or ent_id in already_seen:
+                if not ent_id:
                     continue
 
                 entry_sym = ent_id.split("::")[-1].lower() if "::" in ent_id else ent_id.lower()
@@ -89,6 +96,10 @@ class ConcreteRCIRContextProvider(ContextProvider):
                 matches_task = bool(sym_lower and sym_lower in tid.lower())
 
                 if matches_symbol or matches_query or matches_task or not (symbol or query):
+                    total_matched += 1
+                    if ent_id in already_seen:
+                        duplicates_skipped += 1
+                        continue
                     candidate_entries.append(entry)
 
         # Step 2 & 3: Enforce entry limit and strict token budget
@@ -104,17 +115,45 @@ class ConcreteRCIRContextProvider(ContextProvider):
                 tokens_delivered += entry_tokens
             # Strict budget invariant: never exceed budget to force inclusion
 
-        # Step 4 & 5: Only add delivered entries to already_seen
+        # Step 4: Only add delivered entries to already_seen (Section 7)
         for entry in delivered_entries:
             already_seen.add(entry["entity_id"])
 
-        # Step 6: Return synchronized entries and count
-        return {
-            "entities_found": len(delivered_entries),
-            "entries": delivered_entries,
-            "token_budget": token_budget,
-            "tokens_delivered": tokens_delivered,
-        }
+        # Step 5: Render prompt markdown
+        lines = [
+            f"# RCIR Iterative Context for `{symbol}` ({tokens_delivered}/{token_budget} tokens)",
+            f"**Candidates Evaluated:** {total_matched} | **Delivered:** {len(delivered_entries)} | **Skipped (Already Seen):** {duplicates_skipped}",
+            "",
+        ]
+        for idx, entry in enumerate(delivered_entries, start=1):
+            ent_id = entry.get("entity_id", "")
+            s_file = entry.get("source_file", "")
+            s_lines = entry.get("source_lines", [1, 1])
+            snippet = entry.get("content_snippet", "")
+            reason = entry.get("reason", "target_dependency")
+            lines.append(f"## [{idx}] {ent_id}")
+            lines.append(f"- **File:** `{s_file}` (Lines {s_lines[0]}-{s_lines[1]})")
+            lines.append(f"- **Reason:** {reason}")
+            if snippet:
+                lines.append("```php")
+                lines.append(snippet.strip())
+                lines.append("```")
+            lines.append("")
+        rendered_md = "\n".join(lines)
+
+        return ContextRetrievalResult(
+            entries=delivered_entries,
+            entity_ids=[e["entity_id"] for e in delivered_entries],
+            rendered_markdown=rendered_md,
+            tokens_added=tokens_delivered,
+            duplicates_skipped=duplicates_skipped,
+            requested_symbol=symbol,
+            source_task_id=self.scoped_task_id or "",
+            budget=token_budget,
+            candidate_count=len(candidate_entries),
+            remaining_budget=max(0, token_budget - tokens_delivered),
+            provider_name="ConcreteRCIRContextProvider",
+        )
 
 
 def execute_harness_command(
@@ -214,7 +253,12 @@ def evaluate_trial_with_gatekeeper(trial_data: Dict[str, Any]) -> Dict[str, Any]
     if not acceptance_after_passed:
         reasons.append("ACCEPTANCE_AFTER_FAILED")
 
-    regression_passed = trial_data.get("regression_passed", trial_data.get("regression_exit_code", -1) in (0, 3))
+    reg_code = trial_data.get("regression_exit_code", -1)
+    regression_status = trial_data.get(
+        "regression_status",
+        "PASS" if reg_code == 0 else ("NOT_MEASURED" if reg_code == 3 else ("SETUP_ERROR" if reg_code == 2 else "FAIL"))
+    )
+    regression_passed = trial_data.get("regression_passed", regression_status == "PASS")
     if not regression_passed:
         reasons.append("REGRESSION_FAILED")
 
@@ -291,19 +335,8 @@ def execute_agent_trial(
     worktrees_dir = raw_agent_dir / "worktrees"
     worktrees_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest_file = trial_dir / "trial_manifest.json"
-    if manifest_file.exists():
-        try:
-            cached_m = json.loads(manifest_file.read_text(encoding="utf-8"))
-            if cached_m.get("task_id") == task["task_id"] and cached_m.get("provider") == "ollama":
-                print(f"\n>>> Reusing Completed Trial Manifest: {trial_id} (Stamping Active Provenance)")
-                cached_m.update(envelope)
-                manifest_file.write_text(json.dumps(cached_m, indent=2), encoding="utf-8")
-                return cached_m
-        except Exception:
-            pass
-
-    print(f"\n>>> Starting Trial: {trial_id} (Condition: {condition}, Budget: {turn_budget} turns)")
+    # Section 8.1 & Section 4: Do not restamp old trials. Always run fresh in clean isolated trial.
+    print(f"\n>>> Starting Fresh Trial: {trial_id} (Condition: {condition}, Budget: {turn_budget} turns)")
     worktree_path, worktree_meta = setup_worktree(target_repo_root, trial_id, worktrees_dir)
 
     timeout_sec = task.get("timeout_seconds", 120)
@@ -352,14 +385,15 @@ def execute_agent_trial(
         acceptance_after_passed = p_after.returncode == 0
         print(f"  Acceptance test after trial: {'PASSED' if acceptance_after_passed else 'FAILED'}")
 
-        # Run regression suite (Issue 16: Returncode 3 is NOT_MEASURED, must NOT count as PASS)
+        # Run regression suite (Section 8.2: Returncode 3 is NOT_MEASURED, must NOT count as PASS)
         p_reg = execute_harness_command(task["regression_suite"], worktree_path, env_info.polyflow_root, timeout_seconds=timeout_sec)
         (trial_dir / "regression.log").write_text(
             f"ReturnCode: {p_reg.returncode}\nSTDOUT:\n{p_reg.stdout}\nSTDERR:\n{p_reg.stderr}",
             encoding="utf-8",
         )
-        regression_passed = p_reg.returncode == 0
-        regression_not_measured = p_reg.returncode == 3
+        regression_status = "PASS" if p_reg.returncode == 0 else ("NOT_MEASURED" if p_reg.returncode == 3 else ("SETUP_ERROR" if p_reg.returncode == 2 else "FAIL"))
+        regression_passed = (regression_status == "PASS")
+        regression_not_measured = (regression_status == "NOT_MEASURED")
 
         # Get git diff
         diff_text = tool_env.get_git_diff()
@@ -378,6 +412,14 @@ def execute_agent_trial(
             json.dumps(loop_result.provenance) + "\n",
             encoding="utf-8",
         )
+        # Record UsageRecord telemetry (Section 9.2)
+        with open(trial_dir / "usage_records.jsonl", "w", encoding="utf-8") as f_u:
+            for u in loop_result.usage_records:
+                f_u.write(json.dumps(u) + "\n")
+        # Record Section 7 context request records
+        with open(trial_dir / "context_request_records.jsonl", "w", encoding="utf-8") as f_cr:
+            for cr in tool_env.context_request_records:
+                f_cr.write(json.dumps(cr) + "\n")
 
         # Phase 76: Strict agent success verification (Issues 18 & 20)
         is_live = not loop_result.provenance.get("simulation_fallback", False)
@@ -540,14 +582,24 @@ def run_agent_validation(env: Optional[Any] = None):
             contexts_by_task = dev_ctx_data.get("tasks", {})
 
     # Execute Matrix Trials: conditions (rcir, baseline) x turn_budgets (5, 8)
+    replicates_count = int(os.environ.get("RCIR_AGENT_REPLICATES", "1"))
+    target_tasks = agent_tasks
+    if os.environ.get("RCIR_AGENT_TASK_ID"):
+        target_tasks = [t for t in agent_tasks if t["task_id"] == os.environ["RCIR_AGENT_TASK_ID"]]
+    elif os.environ.get("RCIR_AGENT_MAX_TASKS"):
+        target_tasks = agent_tasks[:int(os.environ["RCIR_AGENT_MAX_TASKS"])]
+
     matrix_budgets = [5, 8]
+    if os.environ.get("RCIR_AGENT_BUDGETS"):
+        matrix_budgets = [int(b.strip()) for b in os.environ["RCIR_AGENT_BUDGETS"].split(",")]
+
     matrix_conditions = ["rcir", "baseline"]
-    replicates_count = 1
 
     trial_manifests: List[Dict[str, Any]] = []
-    budget_trials: Dict[int, List[Dict[str, Any]]] = {5: [], 8: []}
+    budget_trials: Dict[int, List[Dict[str, Any]]] = {b: [] for b in matrix_budgets}
+    collector = TelemetryCollector()
 
-    for task in agent_tasks[:1]:
+    for task in target_tasks:
         context_task_id = task.get("context_task_id", task.get("task_id", "TASK-DEV-01"))
         task_ctx_bundle = contexts_by_task.get(context_task_id, {})
         rcir_prompt = task_ctx_bundle.get("rendered_prompt_markdown") or task_ctx_bundle.get("prompt_markdown", "")
@@ -572,21 +624,35 @@ def run_agent_validation(env: Optional[Any] = None):
                     trial_manifests.append(m)
                     budget_trials[budget].append(m)
 
-    # Aggregate metrics across primary budget (8 turns)
-    rcir_trials_8 = [m for m in budget_trials[8] if m["condition"] == "rcir"]
-    base_trials_8 = [m for m in budget_trials[8] if m["condition"] == "baseline"]
+                    # Ingest usage records into TelemetryCollector (Section 9)
+                    trial_dir = raw_agent_dir / m["trial_id"]
+                    u_file = trial_dir / "usage_records.jsonl"
+                    if u_file.exists():
+                        for line in u_file.read_text(encoding="utf-8").splitlines():
+                            if line.strip():
+                                try:
+                                    collector.record_usage(UsageRecord.from_dict(json.loads(line)))
+                                except Exception:
+                                    pass
 
-    rcir_completed_8 = sum(1 for m in rcir_trials_8 if m["success"])
-    base_completed_8 = sum(1 for m in base_trials_8 if m["success"])
+    # Statistical A/B comparison across all conditions (Section 9.5 & 9.7)
+    rcir_trial_ids = [m["trial_id"] for m in trial_manifests if m.get("condition") == "rcir"]
+    base_trial_ids = [m["trial_id"] for m in trial_manifests if m.get("condition") == "baseline"]
+    stats_ab = collector.aggregate_ab_comparison(base_trial_ids, rcir_trial_ids)
 
-    rcir_comp_rate_8 = rcir_completed_8 / len(rcir_trials_8) if rcir_trials_8 else 0.0
-    base_comp_rate_8 = base_completed_8 / len(base_trials_8) if base_trials_8 else 0.0
+    # Primary budget evaluation (8 turns)
+    primary_budget = 8 if 8 in matrix_budgets else matrix_budgets[-1]
+    rcir_trials_p = [m for m in budget_trials.get(primary_budget, []) if m.get("condition") == "rcir"]
+    base_trials_p = [m for m in budget_trials.get(primary_budget, []) if m.get("condition") == "baseline"]
 
-    rcir_turns_8 = sum(m["turns"] for m in rcir_trials_8) / len(rcir_trials_8) if rcir_trials_8 else 0.0
-    base_turns_8 = sum(m["turns"] for m in base_trials_8) / len(base_trials_8) if base_trials_8 else 0.0
+    rcir_completed_p = sum(1 for m in rcir_trials_p if m.get("success", False))
+    base_completed_p = sum(1 for m in base_trials_p if m.get("success", False))
 
-    rcir_tokens_8 = sum(m["tokens"] for m in rcir_trials_8) / len(rcir_trials_8) if rcir_trials_8 else 0
-    base_tokens_8 = sum(m["tokens"] for m in base_trials_8) / len(base_trials_8) if base_trials_8 else 0
+    rcir_comp_rate_p = rcir_completed_p / len(rcir_trials_p) if rcir_trials_p else 0.0
+    base_comp_rate_p = base_completed_p / len(base_trials_p) if base_trials_p else 0.0
+
+    rcir_turns_p = sum(m.get("turns", 0) for m in rcir_trials_p) / len(rcir_trials_p) if rcir_trials_p else 0.0
+    base_turns_p = sum(m.get("turns", 0) for m in base_trials_p) / len(base_trials_p) if base_trials_p else 0.0
 
     ab_result = {
         **envelope,
@@ -598,28 +664,22 @@ def run_agent_validation(env: Optional[Any] = None):
             "is_simulation": False,
         },
         "condition_a_rcir": {
-            "trials_count": len(rcir_trials_8),
-            "completed_count": rcir_completed_8,
-            "completion_rate": round(rcir_comp_rate_8, 4),
-            "avg_turns": round(rcir_turns_8, 2),
-            "avg_tokens": round(rcir_tokens_8, 1),
+            "trials_count": len(rcir_trials_p),
+            "completed_count": rcir_completed_p,
+            "completion_rate": round(rcir_comp_rate_p, 4),
+            "avg_turns": round(rcir_turns_p, 2),
         },
         "condition_b_baseline": {
-            "trials_count": len(base_trials_8),
-            "completed_count": base_completed_8,
-            "completion_rate": round(base_comp_rate_8, 4),
-            "avg_turns": round(base_turns_8, 2),
-            "avg_tokens": round(base_tokens_8, 1),
+            "trials_count": len(base_trials_p),
+            "completed_count": base_completed_p,
+            "completion_rate": round(base_comp_rate_p, 4),
+            "avg_turns": round(base_turns_p, 2),
         },
-        "comparison": {
-            "completion_rate_delta": round(rcir_comp_rate_8 - base_comp_rate_8, 4),
-            "turn_reduction": round(base_turns_8 - rcir_turns_8, 2),
-            "token_reduction": round(base_tokens_8 - rcir_tokens_8, 1),
-        },
+        "statistical_reductions": stats_ab,
         "trials": trial_manifests,
     }
 
-    # Aggregate independent turn budgets (Issue 15)
+    # Aggregate independent turn budgets (Section 8.5)
     turn_budget_result = {
         **envelope,
         "validation_status": "MEASURED_TURN_BUDGET",
@@ -627,11 +687,11 @@ def run_agent_validation(env: Optional[Any] = None):
         "turn_budgets": {},
     }
     for b_val in matrix_budgets:
-        b_rcir = [m for m in budget_trials[b_val] if m["condition"] == "rcir"]
-        b_comp = sum(1 for m in b_rcir if m["success"])
+        b_rcir = [m for m in budget_trials.get(b_val, []) if m.get("condition") == "rcir"]
+        b_comp = sum(1 for m in b_rcir if m.get("success", False))
         b_rate = b_comp / len(b_rcir) if b_rcir else 0.0
         turn_budget_result["turn_budgets"][str(b_val)] = {
-            "trials_evaluated": len(budget_trials[b_val]),
+            "trials_evaluated": len(budget_trials.get(b_val, [])),
             "rcir_trials_count": len(b_rcir),
             "rcir_completed_count": b_comp,
             "completion_rate": round(b_rate, 4),
@@ -646,10 +706,31 @@ def run_agent_validation(env: Optional[Any] = None):
 
     print(f"\n================================================================================")
     print(f"Agent A/B Validation COMPLETE (Measured on Live Model '{model_name}')")
+    print(f"Reductions: Context {stats_ab['context_compression']['relative_percentage']}%, Model {stats_ab['live_model_reduction']['relative_percentage']}%")
     print(f"Saved to: {out_ab} and {out_tb}")
     print(f"================================================================================")
 
 
 if __name__ == "__main__":
-    run_agent_validation()
+    import argparse
+    parser = argparse.ArgumentParser(description="RCIR Live Agent Validation Runner")
+    parser.add_argument("--task-id", type=str, default=None, help="Filter to specific task ID")
+    parser.add_argument("--max-tasks", type=int, default=None, help="Limit maximum tasks")
+    parser.add_argument("--replicates", type=int, default=1, help="Replicates per cell")
+    parser.add_argument("--budgets", type=str, default="5,8", help="Comma-separated turn budgets")
+    parser.add_argument("--run-dir", type=str, default=None, help="Isolated run directory")
+    args = parser.parse_args()
+
+    if args.task_id:
+        os.environ["RCIR_AGENT_TASK_ID"] = args.task_id
+    if args.max_tasks:
+        os.environ["RCIR_AGENT_MAX_TASKS"] = str(args.max_tasks)
+    if args.replicates:
+        os.environ["RCIR_AGENT_REPLICATES"] = str(args.replicates)
+    if args.budgets:
+        os.environ["RCIR_AGENT_BUDGETS"] = args.budgets
+
+    env_inst = get_default_environment(run_dir=args.run_dir)
+    run_agent_validation(env_inst)
+
 

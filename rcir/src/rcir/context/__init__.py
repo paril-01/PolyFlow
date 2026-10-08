@@ -7,9 +7,12 @@ from rcir.context.compiler import (
     ContextGranularity,
 )
 
+from rcir.context.models import ContextRetrievalResult
+
 __all__ = [
     "CompiledContext",
     "ContextCompiler",
     "ContextEntry",
     "ContextGranularity",
+    "ContextRetrievalResult",
 ]

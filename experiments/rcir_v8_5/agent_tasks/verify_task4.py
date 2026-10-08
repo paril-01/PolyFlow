@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+"""
+Acceptance verification test for AGENT-TASK-04.
+Verifies that IConfig interface declares hasSystemValue(string $key): bool method.
+"""
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+
+def run_verification(worktree_root: Path) -> int:
+    target_file = worktree_root / "lib" / "public" / "IConfig.php"
+    if not target_file.exists():
+        sys.stderr.write(f"SETUP_ERROR: Target file not found: {target_file}\n")
+        return 2
+
+    content = target_file.read_text(encoding="utf-8", errors="replace")
+
+    # Check for hasSystemValue(string $key): bool declaration in interface
+    pattern = r"function\s+hasSystemValue\s*\(\s*(?:string\s+)?\$key\s*\)\s*:\s*bool\s*;"
+    if re.search(pattern, content, re.IGNORECASE):
+        print("PASS: IConfig declares hasSystemValue(string $key): bool method.")
+        return 0
+    else:
+        sys.stderr.write("ACCEPTANCE_FAILURE: Missing method declaration 'public function hasSystemValue(string $key): bool;' in IConfig.php\n")
+        return 1
+
+
+if __name__ == "__main__":
+    root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".")
+    sys.exit(run_verification(root))

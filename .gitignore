@@ -21,6 +21,11 @@ site/
 build/
 dist/
 node_modules/
+experiments/rcir_runs/
+scratch/
+*.egg-info/
+*.egg
+*.log
 
 # Generated files
 *.pdf

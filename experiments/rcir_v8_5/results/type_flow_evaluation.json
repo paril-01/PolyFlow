@@ -1,9 +1,9 @@
 {
-  "run_id": "rcir-v8.5.2-3ddfcbf688cd4401",
+  "run_id": "rcir-v8.5.2-2bbf710f61db8971",
   "manifest_hash": "e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247",
-  "polyflow_commit": "48c6f6170891173e46582466c248e9d882b693a5",
+  "polyflow_commit": "989249cfbaf003f329d53e93f4b299ad81aaebec",
   "polyflow_dirty": true,
-  "polyflow_worktree_diff_hash": "735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18",
+  "polyflow_worktree_diff_hash": "08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86",
   "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "target_repo_dirty": false,
   "target_repo_diff_hash": "",
@@ -24,34 +24,34 @@
     "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
     "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
     "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
-    "retrieval_runner_code": "a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16",
-    "ranker_code": "4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4",
-    "adapter_code": "35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1",
+    "retrieval_runner_code": "70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528",
+    "ranker_code": "5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2",
+    "adapter_code": "8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672",
     "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
-    "typeflow_code": "f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716"
+    "typeflow_code": "8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e"
   },
-  "created_at": "2026-10-07T20:20:58Z",
-  "validation_status": "FAILED",
+  "created_at": "2026-10-08T06:25:01Z",
+  "validation_status": "PASSED",
   "target_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "confusion_matrix": {
-    "correct_exact": 1,
+    "correct_exact": 7,
     "correct_graph_compatible": 3,
     "correct_adjudicated_compatible": 0,
     "correct_compatible": 3,
-    "wrong_exact": 3,
+    "wrong_exact": 0,
     "wrong_compatible": 0,
     "correct_abstention": 2,
-    "false_abstention": 3,
+    "false_abstention": 0,
     "ambiguous": 0,
     "invalid_gt": 0
   },
   "metrics": {
     "resolvable_ground_truth_cases": 10,
     "abstention_ground_truth_cases": 2,
-    "coverage": 0.9,
-    "exact_precision": 0.25,
-    "resolved_precision": 0.5714,
-    "wrong_exact_rate": 0.4286,
+    "coverage": 1.0,
+    "exact_precision": 1.0,
+    "resolved_precision": 1.0,
+    "wrong_exact_rate": 0.0,
     "abstention_accuracy": 1.0,
     "ambiguity_rate": 0.0
   },
@@ -60,7 +60,7 @@
     "resolved_precision_min": 0.9,
     "wrong_exact_rate_max": 0.05
   },
-  "contract_gate_satisfied": false,
+  "contract_gate_satisfied": true,
   "eval_records": [
     {
       "call_id": "tf_001",
@@ -69,9 +69,9 @@
       "receiver": "$user",
       "method": "getUID",
       "expected_type": "OCP\\IUser",
-      "predicted_type": "bool",
+      "predicted_type": "OCP\\IUser",
       "confidence": "proven_exact",
-      "status": "WRONG (pred: bool vs exp: OCP\\IUser)"
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_002",
@@ -80,9 +80,9 @@
       "receiver": "$file",
       "method": "getId",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "string",
+      "predicted_type": "OCP\\Files\\File",
       "confidence": "proven_exact",
-      "status": "WRONG (pred: string vs exp: OCP\\Files\\File)"
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_003",
@@ -91,9 +91,9 @@
       "receiver": "$file",
       "method": "getStorage",
       "expected_type": "OCP\\Files\\File",
-      "predicted_type": "string",
+      "predicted_type": "OCP\\Files\\File",
       "confidence": "proven_exact",
-      "status": "WRONG (pred: string vs exp: OCP\\Files\\File)"
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_004",
@@ -102,9 +102,9 @@
       "receiver": "$storage",
       "method": "getShare",
       "expected_type": "OCP\\Files\\Storage\\ISharedStorage",
-      "predicted_type": null,
-      "confidence": "ambiguous",
-      "status": "FALSE_ABSTENTION"
+      "predicted_type": "OCP\\Files\\Storage\\ISharedStorage",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_005",
@@ -113,9 +113,9 @@
       "receiver": "$share",
       "method": "canSeeContent",
       "expected_type": "OCP\\Share\\IShare",
-      "predicted_type": null,
-      "confidence": "ambiguous",
-      "status": "FALSE_ABSTENTION"
+      "predicted_type": "OCP\\Share\\IShare",
+      "confidence": "proven_exact",
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_006",
@@ -157,9 +157,9 @@
       "receiver": "$parentFolder",
       "method": "getDirectoryListing",
       "expected_type": "OCP\\Files\\Folder",
-      "predicted_type": null,
-      "confidence": "ambiguous",
-      "status": "FALSE_ABSTENTION"
+      "predicted_type": "OCP\\Files\\Folder",
+      "confidence": "interface_bound",
+      "status": "CORRECT_EXACT"
     },
     {
       "call_id": "tf_010",

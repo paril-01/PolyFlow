@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
 from orchestrator.providers import LLMProvider, LLMProviderError, LLMResponse
+from orchestrator.telemetry import UsageRecord, MeasurementSource, IDEUsageAdapter
 from orchestrator.tools import RepoToolEnvironment
 
 
@@ -27,6 +28,7 @@ class AgentLoopResult:
     gatekeeper_verdict: str  # "APPROVE", "REJECT", "ERROR"
     summary: str
     provenance: Dict[str, Any]
+    usage_records: List[Dict[str, Any]] = field(default_factory=list)
     error: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
@@ -42,6 +44,7 @@ class AgentLoopResult:
             "gatekeeper_verdict": self.gatekeeper_verdict,
             "summary": self.summary,
             "provenance": self.provenance,
+            "usage_records": self.usage_records,
             "error": self.error,
         }
 
@@ -173,6 +176,7 @@ class ReActAgentRunner:
         final_summary = ""
         final_test_res = None
         turn = 0
+        usage_records: List[Dict[str, Any]] = []
 
         last_prov: Dict[str, Any] = {
             "provider": self.provider.provider_name,
@@ -212,12 +216,32 @@ class ReActAgentRunner:
                     gatekeeper_verdict="ERROR",
                     summary="Execution failed due to provider error.",
                     provenance=last_prov,
+                    usage_records=usage_records,
                     error=f"LLMProviderError: {str(e)}",
                 )
 
             total_prompt_tokens += llm_resp.prompt_tokens
             total_completion_tokens += llm_resp.completion_tokens
             total_latency += llm_resp.latency_seconds
+
+            u_rec = UsageRecord(
+                run_id=os.environ.get("RCIR_RUN_ID", "default_run"),
+                trial_id=f"{task_id}_{condition}",
+                task_id=task_id,
+                condition=condition,
+                provider=llm_resp.provider,
+                model=llm_resp.model,
+                turn=turn,
+                measurement_source=getattr(llm_resp, "measurement_source", "PROVIDER_NATIVE"),
+                input_tokens=llm_resp.prompt_tokens,
+                output_tokens=llm_resp.completion_tokens,
+                total_tokens=llm_resp.total_tokens,
+                context_tokens=self.env.context_tokens_added,
+                tool_result_tokens=len(history_text) // 4,
+                latency=round(llm_resp.latency_seconds, 3),
+            )
+            usage_records.append(u_rec.to_dict())
+
             last_prov = {
                 "provider": llm_resp.provider,
                 "endpoint": llm_resp.endpoint,
@@ -227,6 +251,7 @@ class ReActAgentRunner:
                 "total_tokens": total_prompt_tokens + total_completion_tokens,
                 "latency_seconds": round(total_latency, 3),
                 "simulation_fallback": llm_resp.simulation_fallback,
+                "measurement_source": getattr(llm_resp, "measurement_source", "PROVIDER_NATIVE"),
             }
 
             resp_text = llm_resp.content.strip()
@@ -348,5 +373,6 @@ class ReActAgentRunner:
             gatekeeper_verdict=gatekeeper_verdict,
             summary=final_summary or "Completed agent run.",
             provenance=last_prov,
+            usage_records=usage_records,
             error=None,
         )

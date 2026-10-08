@@ -1,9 +1,9 @@
 {
-  "run_id": "rcir-v8.5.2-3ddfcbf688cd4401",
-  "manifest_hash": "e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247",
-  "polyflow_commit": "48c6f6170891173e46582466c248e9d882b693a5",
+  "run_id": "rcir-v8.5.2-2bbf710f61db8971",
+  "manifest_hash": "59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6",
+  "polyflow_commit": "989249cfbaf003f329d53e93f4b299ad81aaebec",
   "polyflow_dirty": true,
-  "polyflow_worktree_diff_hash": "735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18",
+  "polyflow_worktree_diff_hash": "08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86",
   "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
   "target_repo_dirty": false,
   "target_repo_diff_hash": "",
@@ -24,17 +24,17 @@
     "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
     "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
     "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
-    "retrieval_runner_code": "a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16",
-    "ranker_code": "4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4",
-    "adapter_code": "35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1",
+    "retrieval_runner_code": "70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528",
+    "ranker_code": "5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2",
+    "adapter_code": "8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672",
     "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
-    "typeflow_code": "f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716"
+    "typeflow_code": "8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e"
   },
-  "created_at": "2026-10-07T20:23:01Z",
-  "evaluated_at": "2026-10-07T20:23:01Z",
-  "run_validity": "VALID",
-  "architecture_decision": "OPTION_C_REJECTED",
-  "decision_summary": "Formal benchmark thresholds not met; architectural retreat required.",
+  "created_at": "2026-10-08T06:25:23Z",
+  "evaluated_at": "2026-10-08T06:25:23Z",
+  "run_validity": "INVALID",
+  "architecture_decision": "NOT_EVALUATED",
+  "decision_summary": "Benchmark integrity gate failed with 47 violation(s). Run is invalid.",
   "contract_version": "8.5.2",
   "contract_feasibility": {
     "status": "VALID_CONTRACT",
@@ -53,30 +53,78 @@
     "violations": []
   },
   "integrity_gate": {
-    "passed": true,
-    "failures": []
+    "passed": false,
+    "failures": [
+      "Artifact ground_truth_provenance.json run_id mismatch: rcir-v8.5.2-3ddfcbf688cd4401 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact ground_truth_provenance.json: Run ID mismatch: artifact has 'rcir-v8.5.2-3ddfcbf688cd4401' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact ground_truth_provenance.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact ground_truth_provenance.json: PolyFlow commit mismatch: artifact has '48c6f6170891173e46582466c248e9d882b693a5' but expected '989249cfbaf003f329d53e93f4b299ad81aaebec'",
+      "Artifact ground_truth_provenance.json: PolyFlow worktree diff hash mismatch: artifact has '735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact ground_truth_provenance.json: Config hash mismatch for 'retrieval_runner_code': artifact has 'a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16' but expected '70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528'",
+      "Artifact ground_truth_provenance.json: Config hash mismatch for 'ranker_code': artifact has '4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4' but expected '5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2'",
+      "Artifact ground_truth_provenance.json: Config hash mismatch for 'adapter_code': artifact has '35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1' but expected '8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672'",
+      "Artifact ground_truth_provenance.json: Config hash mismatch for 'typeflow_code': artifact has 'f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716' but expected '8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e'",
+      "Artifact canonical_graph_integrity.json run_id mismatch: rcir-v8.5.2-3ddfcbf688cd4401 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact canonical_graph_integrity.json: Run ID mismatch: artifact has 'rcir-v8.5.2-3ddfcbf688cd4401' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact canonical_graph_integrity.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact canonical_graph_integrity.json: PolyFlow commit mismatch: artifact has '48c6f6170891173e46582466c248e9d882b693a5' but expected '989249cfbaf003f329d53e93f4b299ad81aaebec'",
+      "Artifact canonical_graph_integrity.json: PolyFlow worktree diff hash mismatch: artifact has '735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact canonical_graph_integrity.json: Config hash mismatch for 'retrieval_runner_code': artifact has 'a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16' but expected '70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528'",
+      "Artifact canonical_graph_integrity.json: Config hash mismatch for 'ranker_code': artifact has '4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4' but expected '5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2'",
+      "Artifact canonical_graph_integrity.json: Config hash mismatch for 'adapter_code': artifact has '35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1' but expected '8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672'",
+      "Artifact canonical_graph_integrity.json: Config hash mismatch for 'typeflow_code': artifact has 'f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716' but expected '8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e'",
+      "Artifact canonicalization_evaluation.json run_id mismatch: rcir-v8.5.2-3ddfcbf688cd4401 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact canonicalization_evaluation.json: Run ID mismatch: artifact has 'rcir-v8.5.2-3ddfcbf688cd4401' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact canonicalization_evaluation.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact canonicalization_evaluation.json: PolyFlow commit mismatch: artifact has '48c6f6170891173e46582466c248e9d882b693a5' but expected '989249cfbaf003f329d53e93f4b299ad81aaebec'",
+      "Artifact canonicalization_evaluation.json: PolyFlow worktree diff hash mismatch: artifact has '735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact canonicalization_evaluation.json: Config hash mismatch for 'retrieval_runner_code': artifact has 'a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16' but expected '70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528'",
+      "Artifact canonicalization_evaluation.json: Config hash mismatch for 'ranker_code': artifact has '4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4' but expected '5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2'",
+      "Artifact canonicalization_evaluation.json: Config hash mismatch for 'adapter_code': artifact has '35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1' but expected '8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672'",
+      "Artifact canonicalization_evaluation.json: Config hash mismatch for 'typeflow_code': artifact has 'f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716' but expected '8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e'",
+      "Artifact edge_evaluation.json run_id mismatch: rcir-v8.5.2-3ddfcbf688cd4401 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact edge_evaluation.json: Run ID mismatch: artifact has 'rcir-v8.5.2-3ddfcbf688cd4401' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact edge_evaluation.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact edge_evaluation.json: PolyFlow commit mismatch: artifact has '48c6f6170891173e46582466c248e9d882b693a5' but expected '989249cfbaf003f329d53e93f4b299ad81aaebec'",
+      "Artifact edge_evaluation.json: PolyFlow worktree diff hash mismatch: artifact has '735afce615723484a7b7455af9cc65079f33f4257f5bb753f19469441dd2da18' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact edge_evaluation.json: Config hash mismatch for 'retrieval_runner_code': artifact has 'a80ab3ffcb266b95b024dec61530199bbd3f4feba564603a97ade34c1f5a5e16' but expected '70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528'",
+      "Artifact edge_evaluation.json: Config hash mismatch for 'ranker_code': artifact has '4c2fd51b2a7a6006fdaa7acb01f0ca594d01b790fe54f690e2e6fa2e989d40b4' but expected '5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2'",
+      "Artifact edge_evaluation.json: Config hash mismatch for 'adapter_code': artifact has '35bddb210bcdf88ac91243337996735333674a2780cdd4abb8c2e0a4ad6fcad1' but expected '8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672'",
+      "Artifact edge_evaluation.json: Config hash mismatch for 'typeflow_code': artifact has 'f7056ae2f91b94cf12176e0c6bf8a68552b42f5ea0455d80d70d0e04531c3716' but expected '8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e'",
+      "Artifact type_flow_evaluation.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact impact_test.json run_id mismatch: rcir-v8.5.2-329b8d73575a0562 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact impact_test.json: Run ID mismatch: artifact has 'rcir-v8.5.2-329b8d73575a0562' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact impact_test.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact impact_test.json: PolyFlow worktree diff hash mismatch: artifact has '5e360452023d5b9830c7532a4d3b334b9f930aaaa7cd8adbd49521c47a602c5e' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact ranker_test.json run_id mismatch: rcir-v8.5.2-329b8d73575a0562 != rcir-v8.5.2-2bbf710f61db8971",
+      "Artifact ranker_test.json: Run ID mismatch: artifact has 'rcir-v8.5.2-329b8d73575a0562' but expected 'rcir-v8.5.2-2bbf710f61db8971'",
+      "Artifact ranker_test.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact ranker_test.json: PolyFlow worktree diff hash mismatch: artifact has '5e360452023d5b9830c7532a4d3b334b9f930aaaa7cd8adbd49521c47a602c5e' but expected '08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86'",
+      "Artifact context_test.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'",
+      "Artifact determinism_evaluation.json: Manifest hash mismatch: artifact has 'e5b8d7602f4350d0f951ffab2e5ae038d5c4c5ea45988a03587229b26074e247' but expected '59afac363cc3cab5d8b8cd99ee92d58f736ac70629628b7db4eb33ed897018f6'"
+    ]
   },
   "impact_gate": {
-    "macro_recall": 0.8433,
+    "macro_recall": 0.91,
     "macro_recall_threshold": 0.65,
     "macro_passed": true,
-    "worst_task_recall": 0.6667,
+    "worst_task_recall": 0.75,
     "worst_task_floor": 0.3,
     "worst_task_passed": true,
-    "silent_misses": 3,
+    "silent_misses": 2,
     "max_silent_misses": 10,
     "silent_misses_passed": true,
     "passed": true
   },
   "ranking_gate": {
-    "p20_excluding_target": 0.05,
+    "p20_excluding_target": 0.1,
     "p20_passed": true,
-    "p50_excluding_target": 0.02,
+    "p50_excluding_target": 0.04,
     "p50_passed": true,
-    "ndcg_at_50": 0.3911,
+    "ndcg_at_50": 0.5213,
     "ndcg_min": 0.2,
     "ndcg_passed": true,
-    "dependency_mrr": 0.4728,
+    "dependency_mrr": 0.6167,
     "dependency_mrr_min": 0.2,
     "dependency_mrr_passed": true,
     "contract_feasible": true,
@@ -87,7 +135,7 @@
     "passed": true
   },
   "context_gate": {
-    "critical_source_recall_at_4k": 0.7333,
+    "critical_source_recall_at_4k": 0.8,
     "critical_source_recall_min": 0.6,
     "source_recall_passed": true,
     "budget_violations": 0,
@@ -97,18 +145,18 @@
     "passed": true
   },
   "type_flow_gate": {
-    "coverage": 0.9,
+    "coverage": 1.0,
     "coverage_min": 0.6,
     "coverage_passed": true,
-    "resolved_precision": 0.5714,
+    "resolved_precision": 1.0,
     "resolved_precision_min": 0.85,
-    "precision_passed": false,
-    "wrong_exact_rate": 0.4286,
+    "precision_passed": true,
+    "wrong_exact_rate": 0.0,
     "wrong_exact_max": 0.05,
-    "wrong_exact_passed": false,
+    "wrong_exact_passed": true,
     "invalid_gt_count": 0,
     "ground_truth_valid": true,
-    "passed": false
+    "passed": true
   },
   "canonicalization_gate": {
     "wrong_canonical_rate": 0.0,
@@ -130,16 +178,16 @@
   },
   "option_b_evaluation": {
     "evaluable": true,
-    "passed": false,
+    "passed": true,
     "requirements": {
       "macro_recall": {
         "passed": true,
-        "observed": 0.8433,
+        "observed": 0.91,
         "threshold": 0.65
       },
       "worst_task_recall": {
         "passed": true,
-        "observed": 0.6667,
+        "observed": 0.75,
         "threshold": 0.3
       },
       "determinism": {
@@ -147,8 +195,8 @@
         "observed": true
       },
       "type_flow": {
-        "passed": false,
-        "gate_verdict": false
+        "passed": true,
+        "gate_verdict": true
       },
       "canonicalization": {
         "passed": true,
@@ -160,8 +208,8 @@
       },
       "ranking_improvement": {
         "evaluable": true,
-        "passed": false,
-        "details": "Current dependency_mrr = 0.4728 vs Baseline = 0.4728 => Relative improvement = 0.00% (required >= 5.0%)"
+        "passed": true,
+        "details": "Current dependency_mrr = 0.6167 vs Baseline = 0.4728 => Relative improvement = 30.44% (required >= 5.0%)"
       }
     }
   }

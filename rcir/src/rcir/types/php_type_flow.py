@@ -1,5 +1,5 @@
 """
-RCIR v8.4 — Structured Lexical PHP Type-Flow Analyzer & Receiver Resolver (PHASES 26-35).
+RCIR v8.5.2 — Structured Lexical PHP Type-Flow Analyzer & Receiver Resolver.
 
 Features:
 - Source-order forward data flow with Env(line) state tracking
@@ -10,11 +10,16 @@ Features:
 - Method return-type propagation and chained call decomposition ($event->getNode()->getId())
 - Union, nullable, and intersection types (?Node, Node|Folder)
 - PHPDoc type extraction (@param, @return, @var, array<Type>, Type[])
+- Dynamic method return type derivation from declarations, preceding docblocks, and parent/interface hierarchies
+- Guard clause and short-circuit instanceof narrowing
+- PHPDoc @var variable assignment bindings
+- Trace mode for deterministic step-by-step diagnostic logging (--trace-line)
 - Strict evidence provenance: NO guesswork based on variable names.
 """
 
 from __future__ import annotations
 
+import argparse
 import re
 from dataclasses import dataclass, field
 from enum import Enum
@@ -98,13 +103,6 @@ class PHPTypeFlowAnalyzer:
         self.repo_root = Path(repo_root) if repo_root else None
         # (class_fqn, method_name) -> return type binding
         self.method_summaries: dict[tuple[str, str], TypeBinding] = {}
-        # Pre-seed standard Nextcloud contracts
-        self._seed_standard_summaries()
-
-    def _seed_standard_summaries(self) -> None:
-        """Derive standard method return types dynamically from source when repo_root is available (Issue 31)."""
-        # When running without repository, fallback to empty dictionary (no hardcoded contracts)
-        self.method_summaries.clear()
 
     def _find_class_file(self, class_fqn: str) -> Optional[Path]:
         """Locate the PHP source file declaring class_fqn under repo_root."""
@@ -142,15 +140,24 @@ class PHPTypeFlowAnalyzer:
             pass
         return None
 
-    def _derive_method_summary_from_source(self, class_fqn: str, method_name: str) -> Optional[TypeBinding]:
-        """Derive method summary dynamically from source declarations and PHPDoc (Issue 31)."""
+    def _derive_method_summary_from_source(
+        self, class_fqn: str, method_name: str, visited: Optional[set[str]] = None
+    ) -> Optional[TypeBinding]:
+        """Derive method summary dynamically from source declarations, PHPDoc, and hierarchy."""
         if not self.repo_root:
             return None
-        summary_key = (class_fqn, method_name)
+        if visited is None:
+            visited = set()
+        clean_class = class_fqn.strip().lstrip("\\")
+        if clean_class in visited:
+            return None
+        visited.add(clean_class)
+
+        summary_key = (clean_class, method_name)
         if summary_key in self.method_summaries:
             return self.method_summaries[summary_key]
 
-        class_file = self._find_class_file(class_fqn)
+        class_file = self._find_class_file(clean_class)
         if not class_file or not class_file.exists():
             return None
 
@@ -166,39 +173,90 @@ class PHPTypeFlowAnalyzer:
         if ns_m:
             ctx.namespace = ns_m.group(1).strip().lstrip("\\")
 
-        # Search for method signature return type hint: function method(...) : ?Type
-        pattern = re.compile(
-            r'function\s+' + re.escape(method_name) + r'\s*\([^)]*\)\s*:\s*([A-Za-z0-9_\\?|&\[\]]+)',
+        # 1. Search method signature return type hint: function method(...) : ?Type
+        sig_pattern = re.compile(
+            r'\bfunction\s+' + re.escape(method_name) + r'\s*\([^)]*\)\s*:\s*([A-Za-z0-9_\\?|&\[\]]+)',
             re.MULTILINE,
         )
-        m = pattern.search(content)
-        if m:
-            ret_type_str = m.group(1).strip()
+        for sm in sig_pattern.finditer(content):
+            ret_type_str = sm.group(1).strip()
             parsed_types = self.parse_type_expression(ret_type_str, ctx)
             if parsed_types:
-                binding = TypeBinding(parsed_types, TypeResolutionConfidence.PROVEN_EXACT, [f"source_return_type:{class_file.name}"])
+                binding = TypeBinding(
+                    parsed_types,
+                    TypeResolutionConfidence.PROVEN_EXACT,
+                    [f"source_return_type:{class_file.name}:{method_name}"],
+                )
                 self.method_summaries[summary_key] = binding
                 return binding
 
-        # Search for PHPDoc @return preceding method
-        doc_pattern = re.compile(
-            r'/\*\*[\s\S]*?@return\s+([A-Za-z0-9_\\?|&\[\]]+)[\s\S]*?\*/\s*(?:(?:public|protected|private|static)\s+)*function\s+' + re.escape(method_name) + r'\b',
+        # 2. Search for PHPDoc @return immediately preceding the method definition
+        # Inspect each occurrence of function <method_name>(
+        method_decl_pattern = re.compile(r'\bfunction\s+' + re.escape(method_name) + r'\s*\(', re.MULTILINE)
+        for mdm in method_decl_pattern.finditer(content):
+            pre_text = content[:mdm.start()].rstrip()
+            # Strip PHP 8 attributes: #[Attribute(...)]
+            pre_text = re.sub(r'#\[[^\]]*\]\s*', '', pre_text)
+            # Strip modifiers
+            pre_text = re.sub(r'(?:public|protected|private|static|final|abstract)\s*$', '', pre_text).rstrip()
+            if pre_text.endswith("*/"):
+                last_open = pre_text.rfind("/**")
+                if last_open != -1:
+                    doc = pre_text[last_open:]
+                    # Ensure no intervening function or class declarations
+                    if "function " not in doc and "class " not in doc and "interface " not in doc:
+                        ret_m = re.search(r'@return\s+([A-Za-z0-9_\\|&?\[\]<>]+)', doc)
+                        if ret_m:
+                            raw_ret = ret_m.group(1).strip()
+                            parsed_types = self.parse_type_expression(raw_ret, ctx)
+                            if parsed_types:
+                                binding = TypeBinding(
+                                    parsed_types,
+                                    TypeResolutionConfidence.PROVEN_EXACT,
+                                    [f"phpdoc_return_type:{class_file.name}:{method_name}"],
+                                )
+                                self.method_summaries[summary_key] = binding
+                                return binding
+
+        # 3. If not found in this file, check extends and implements hierarchies
+        parents_to_check: list[str] = []
+        cls_decl_m = re.search(
+            r'class\s+[A-Za-z0-9_]+(?:\s+extends\s+([A-Za-z0-9_\\]+))?(?:\s+implements\s+([^{]+))?',
+            content,
             re.MULTILINE,
         )
-        doc_m = doc_pattern.search(content)
-        if doc_m:
-            ret_type_str = doc_m.group(1).strip()
-            parsed_types = self.parse_type_expression(ret_type_str, ctx)
-            if parsed_types:
-                binding = TypeBinding(parsed_types, TypeResolutionConfidence.PROVEN_EXACT, [f"phpdoc_return_type:{class_file.name}"])
+        if not cls_decl_m:
+            cls_decl_m = re.search(
+                r'interface\s+[A-Za-z0-9_]+(?:\s+extends\s+([^{]+))?',
+                content,
+                re.MULTILINE,
+            )
+
+        if cls_decl_m:
+            for g in cls_decl_m.groups():
+                if g:
+                    for item in g.split(","):
+                        clean_item = item.strip()
+                        if clean_item:
+                            resolved_p = self.resolve_type_fqn(clean_item, ctx)
+                            if resolved_p:
+                                parents_to_check.append(resolved_p)
+
+        for parent_fqn in parents_to_check:
+            parent_binding = self._derive_method_summary_from_source(parent_fqn, method_name, visited)
+            if parent_binding:
+                binding = TypeBinding(
+                    set(parent_binding.candidate_types),
+                    TypeResolutionConfidence.INTERFACE_BOUND,
+                    [f"hierarchy_return_type:{parent_fqn}:{method_name}"] + list(parent_binding.evidence),
+                )
                 self.method_summaries[summary_key] = binding
                 return binding
 
         return None
 
-
     def parse_use_statements(self, content: str) -> dict[str, str]:
-        """Resolve PHP `use` declarations into an alias -> FQN mapping (Phase 31)."""
+        """Resolve PHP `use` declarations into an alias -> FQN mapping."""
         use_map: dict[str, str] = {}
         # Matches: use OCP\Files\Node; or use OCP\Files\Node as FileNode;
         pattern = re.compile(r'^\s*use\s+([A-Za-z0-9_\\]+)(?:\s+as\s+([A-Za-z0-9_]+))?\s*;', re.MULTILINE)
@@ -237,7 +295,7 @@ class PHPTypeFlowAnalyzer:
         return clean
 
     def parse_type_expression(self, raw_type: str, ctx: ClassContext) -> set[str]:
-        """Parse union, nullable, or intersection types (Phase 32)."""
+        """Parse union, nullable, or intersection types."""
         if not raw_type:
             return set()
         types: set[str] = set()
@@ -251,8 +309,10 @@ class PHPTypeFlowAnalyzer:
                     types.add(resolved)
         return types
 
-    def analyze_source_content(self, content: str, file_path: str = "") -> list[CallSiteInfo]:
-        """Analyze PHP source with source-order forward flow and environment tracking."""
+    def analyze_source_content(
+        self, content: str, file_path: str = "", trace_line: Optional[int] = None
+    ) -> list[CallSiteInfo]:
+        """Analyze PHP source with source-order forward flow, environment tracking, and optional trace mode."""
         call_sites: list[CallSiteInfo] = []
         ctx = ClassContext()
         ctx.use_map = self.parse_use_statements(content)
@@ -293,9 +353,10 @@ class PHPTypeFlowAnalyzer:
                 ev = ["property_type_declaration" if sig_type else "property_phpdoc_var"]
                 ctx.properties[prop_name] = TypeBinding(cand, conf, ev)
 
-        # Parse methods with line spans (PHASE 35)
+        # Parse methods with line spans
         method_pattern = re.compile(
-            r'(?:public|protected|private)\s+(?:static\s+)?function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)(?:\s*:\s*([A-Za-z0-9_\\|&?]+))?\s*\{'
+            r'(?:public|protected|private)\s+(?:static\s+)?function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)(?:\s*:\s*([A-Za-z0-9_\\|&?]+))?\s*\{',
+            re.DOTALL,
         )
 
         for m in method_pattern.finditer(content):
@@ -304,9 +365,10 @@ class PHPTypeFlowAnalyzer:
             params_str = m.group(2)
             ret_type_str = m.group(3) or ""
 
-            # Extract docblock immediately preceding method without backtracking
+            # Extract docblock immediately preceding method
             docblock = ""
             pre_text = content[:m.start()].rstrip()
+            pre_text = re.sub(r'#\[[^\]]*\]\s*', '', pre_text)
             if pre_text.endswith("*/"):
                 doc_start = pre_text.rfind("/**")
                 if doc_start != -1:
@@ -346,7 +408,7 @@ class PHPTypeFlowAnalyzer:
                 for dp in re.finditer(r'@param\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', docblock):
                     doc_params[dp.group(2)] = dp.group(1)
 
-            # Parameters & Constructor Promotion (PHP 8, Phase 35)
+            # Parameters & Constructor Promotion (PHP 8)
             for p_item in params_str.split(","):
                 p_item = p_item.strip()
                 if not p_item:
@@ -366,21 +428,30 @@ class PHPTypeFlowAnalyzer:
                         if promoted and method_name == "__construct":
                             ctx.properties[p_name] = binding
 
-            # Line-by-line forward simulation (Phase 27, 28, 29, F07)
-            # Forward simulation with normalized statements (Phase 27, 28, 29, F07, v8.5.1 CFG)
+            # Line-by-line forward simulation with normalized statements
             body_lines = method_body.splitlines()
             current_env = dict(env)
             branch_stack: list[dict[str, Any]] = []
             closure_stack: list[dict[str, Any]] = []
             current_brace_depth = 0
+            pending_var_docs: dict[str, str] = {}
 
             # Decompose lines into sequential statement units
-            statement_units: list[tuple[int, str]] = []
+            statement_units: list[tuple[int, str, str]] = []
             for line_idx, raw_line in enumerate(body_lines):
                 l_no = body_start_line + line_idx
                 stripped_line = raw_line.strip()
                 if not stripped_line:
                     continue
+
+                # Check for inline PHPDoc @var before stripping comments: /** @var Type $var */
+                v_doc_m = re.search(r'@var\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', stripped_line)
+                if v_doc_m:
+                    pending_var_docs[v_doc_m.group(2)] = v_doc_m.group(1)
+                else:
+                    v_doc_alt = re.search(r'@var\s+\$([A-Za-z0-9_]+)\s+([A-Za-z0-9_\\|&?\[\]<>]+)', stripped_line)
+                    if v_doc_alt:
+                        pending_var_docs[v_doc_alt.group(1)] = v_doc_alt.group(2)
 
                 # Strip inline comments for statement normalization
                 clean = re.sub(r'//.*$', '', stripped_line)
@@ -388,15 +459,12 @@ class PHPTypeFlowAnalyzer:
                 if not clean:
                     continue
 
-                # 1. Normalize } else { and } elseif (...) {
+                # Statement normalizations
                 norm = re.sub(r'}\s*(else\s*if\b|elseif\b|else\b)', r'}\n\1', clean)
-
-                # 2. Normalize one-line branch with braces: if (...) { ... }
                 ol_brace = re.match(r'^(if\s*\([^)]+\)\s*\{)(.+)(\})$', norm)
                 if ol_brace:
                     norm = f"{ol_brace.group(1)}\n{ol_brace.group(2).strip()}\n{ol_brace.group(3)}"
 
-                # 3. Normalize one-line guard without braces: if (...) return/throw;
                 ol_guard = re.match(r'^(if\s*\([^)]+\))\s*(return\b[^;]*;|throw\b[^;]*;)$', norm)
                 if ol_guard:
                     norm = f"{ol_guard.group(1)} {{\n{ol_guard.group(2)}\n}}"
@@ -404,9 +472,9 @@ class PHPTypeFlowAnalyzer:
                 for part in norm.splitlines():
                     p = part.strip()
                     if p:
-                        statement_units.append((l_no, p))
+                        statement_units.append((l_no, p, raw_line))
 
-            for u_idx, (line_no, stripped) in enumerate(statement_units):
+            for u_idx, (line_no, stripped, raw_orig) in enumerate(statement_units):
                 clean_braces = re.sub(r'//.*$', '', stripped)
                 clean_braces = re.sub(r'/\*.*?\*/', '', clean_braces)
                 clean_braces = re.sub(r"'(?:\\.|[^'])*'", "''", clean_braces)
@@ -415,7 +483,7 @@ class PHPTypeFlowAnalyzer:
                 closes_count = clean_braces.count("}")
                 opens_count = clean_braces.count("{")
 
-                # Lookahead to see if next statement is else or elseif (i.e. branch transition)
+                # Lookahead to see if next statement is else or elseif (branch transition)
                 next_is_else_or_elseif = False
                 if u_idx + 1 < len(statement_units):
                     next_stmt = statement_units[u_idx + 1][1]
@@ -424,14 +492,11 @@ class PHPTypeFlowAnalyzer:
 
                 # Process closing braces
                 if closes_count > 0:
-                    # Pop closures if closing a closure scope
                     while closure_stack and (current_brace_depth - closes_count) < closure_stack[-1]["open_depth"]:
                         top_closure = closure_stack.pop()
                         current_env = top_closure["saved_env"]
 
-                    # Process branch stack
                     while branch_stack and (current_brace_depth - closes_count) <= branch_stack[-1]["open_depth"]:
-                        # If this closing brace is immediately followed by else/elseif, transition without popping!
                         if next_is_else_or_elseif:
                             br = branch_stack[-1]
                             if not br.get("has_early_return", False):
@@ -443,8 +508,7 @@ class PHPTypeFlowAnalyzer:
                             br["branch_exits"].append(dict(current_env))
 
                         if br.get("has_early_return", False) and not br.get("in_else", False) and not br["branch_exits"]:
-                            # Guard clause: early return occurred in the 'if' body with no surviving exits.
-                            # Surviving path is when condition was FALSE!
+                            # Guard clause: early return/throw in 'if' body. Surviving path: condition was FALSE!
                             surviving_env = dict(br["pre_branch_env"])
                             if br["is_negated"] and br["narrowed_var"] and br["narrowed_type"]:
                                 surviving_env[br["narrowed_var"]] = TypeBinding(
@@ -456,7 +520,6 @@ class PHPTypeFlowAnalyzer:
                                 surviving_env.pop(br["narrowed_var"], None)
                             current_env = surviving_env
                         else:
-                            # Join all surviving paths + pre_branch_env if if-only branch
                             all_paths = list(br["branch_exits"])
                             if not br.get("in_else", False) and br["pre_branch_env"] not in all_paths:
                                 all_paths.append(dict(br["pre_branch_env"]))
@@ -490,14 +553,20 @@ class PHPTypeFlowAnalyzer:
                 else:
                     current_brace_depth += opens_count
 
-                # Inline PHPDoc @var
-                var_doc_m = re.search(r'@var\s+([A-Za-z0-9_\\|&?\[\]<>]+)\s+\$([A-Za-z0-9_]+)', stripped)
-                if var_doc_m:
-                    v_type = self.resolve_type_fqn(var_doc_m.group(1), ctx)
-                    v_name = var_doc_m.group(2)
-                    current_env[v_name] = TypeBinding({v_type}, TypeResolutionConfidence.HEURISTIC_INFERRED, ["inline_phpdoc_var"])
+                # Apply pending @var bindings
+                if pending_var_docs:
+                    for pv_name, pv_raw in list(pending_var_docs.items()):
+                        # Check if this statement defines or assigns $pv_name
+                        if re.search(r'\$' + re.escape(pv_name) + r'\b', stripped):
+                            pv_resolved = self.resolve_type_fqn(pv_raw, ctx)
+                            current_env[pv_name] = TypeBinding(
+                                {pv_resolved},
+                                TypeResolutionConfidence.PROVEN_EXACT,
+                                [f"phpdoc_var:{pv_raw}"],
+                            )
+                            del pending_var_docs[pv_name]
 
-                # Closure parameter handling with lexical isolation
+                # Closure parameter handling
                 closure_m = re.search(r'function\s*\(([^)]*)\)', stripped)
                 if closure_m:
                     saved_outer_env = dict(current_env)
@@ -535,37 +604,58 @@ class PHPTypeFlowAnalyzer:
                                     current_env[a_name] = TypeBinding(set(), TypeResolutionConfidence.UNKNOWN, ["arrow_param"])
 
                 # Branch points: if / elseif / else
-                if re.match(r'^if\s*\(', stripped):
-                    pre_branch = dict(current_env)
-                    neg_inst_m = re.search(r'!\s*\(?\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+                if re.match(r'^if\s*\(', stripped) or (branch_stack and stripped.startswith("||") or stripped.startswith("&&")):
+                    # Check for negated instanceof: !($file instanceof File) or !$file instanceof File
+                    neg_inst_m = re.search(r'!\s*\(\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)\s*\)', stripped)
+                    if not neg_inst_m:
+                        neg_inst_m = re.search(r'!\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
                     pos_inst_m = re.search(r'(?<![!])\s*\$([A-Za-z0-9_]+)\s+instanceof\s+([A-Za-z0-9_\\]+)', stripped)
+                    # Nextcloud custom instanceOfStorage check: $storage->instanceOfStorage(ISharedStorage::class)
+                    storage_inst_m = re.search(r'\$([A-Za-z0-9_]+)\s*->\s*instanceOfStorage\s*\(\s*([A-Za-z0-9_\\]+)::class\s*\)', stripped)
 
-                    br_record: dict[str, Any] = {
-                        "open_depth": current_brace_depth - opens_count,
-                        "pre_branch_env": pre_branch,
-                        "is_negated": False,
-                        "narrowed_var": None,
-                        "narrowed_type": None,
-                        "branch_exits": [],
-                        "has_early_return": False,
-                        "in_else": False,
-                    }
-
-                    if neg_inst_m:
+                    if re.match(r'^if\s*\(', stripped):
+                        pre_branch = dict(current_env)
+                        br_record: dict[str, Any] = {
+                            "open_depth": current_brace_depth - opens_count,
+                            "pre_branch_env": pre_branch,
+                            "is_negated": False,
+                            "narrowed_var": None,
+                            "narrowed_type": None,
+                            "branch_exits": [],
+                            "has_early_return": False,
+                            "in_else": False,
+                        }
+                        if neg_inst_m:
+                            v_name = neg_inst_m.group(1)
+                            t_name = self.resolve_type_fqn(neg_inst_m.group(2), ctx)
+                            br_record["is_negated"] = True
+                            br_record["narrowed_var"] = v_name
+                            br_record["narrowed_type"] = t_name
+                        elif pos_inst_m:
+                            v_name = pos_inst_m.group(1)
+                            t_name = self.resolve_type_fqn(pos_inst_m.group(2), ctx)
+                            br_record["is_negated"] = False
+                            br_record["narrowed_var"] = v_name
+                            br_record["narrowed_type"] = t_name
+                            current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
+                        elif storage_inst_m:
+                            v_name = storage_inst_m.group(1)
+                            t_name = self.resolve_type_fqn(storage_inst_m.group(2), ctx)
+                            br_record["is_negated"] = False
+                            br_record["narrowed_var"] = v_name
+                            br_record["narrowed_type"] = t_name
+                            current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceOfStorage_narrowing"])
+                        branch_stack.append(br_record)
+                    elif branch_stack and neg_inst_m:
+                        # Continuation line of compound condition: || !($file instanceof File)
+                        br = branch_stack[-1]
                         v_name = neg_inst_m.group(1)
                         t_name = self.resolve_type_fqn(neg_inst_m.group(2), ctx)
-                        br_record["is_negated"] = True
-                        br_record["narrowed_var"] = v_name
-                        br_record["narrowed_type"] = t_name
-                    elif pos_inst_m:
-                        v_name = pos_inst_m.group(1)
-                        t_name = self.resolve_type_fqn(pos_inst_m.group(2), ctx)
-                        br_record["is_negated"] = False
-                        br_record["narrowed_var"] = v_name
-                        br_record["narrowed_type"] = t_name
-                        current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["instanceof_narrowing"])
-
-                    branch_stack.append(br_record)
+                        br["is_negated"] = True
+                        br["narrowed_var"] = v_name
+                        br["narrowed_type"] = t_name
+                        # On subsequent condition terms in ||, the negation was false, so variable IS narrowed
+                        current_env[v_name] = TypeBinding({t_name}, TypeResolutionConfidence.PROVEN_EXACT, ["short_circuit_instanceof_narrowing"])
 
                 elif re.match(r'^(?:else\s*if|elseif)\s*\(', stripped):
                     if branch_stack:
@@ -621,12 +711,18 @@ class PHPTypeFlowAnalyzer:
                         src_var = expr.lstrip("$")
                         if src_var in current_env:
                             current_env[var_name] = current_env[src_var]
-                    # Chained call or method call: $receiver->method(...) or $this->prop?->method(...) (Phase 35)
+                    # Chained call or method call: $receiver->method(...) or $this->prop?->method(...)
                     elif "->" in expr or "?->" in expr:
                         clean_expr = expr.replace("?->", "->")
-                        resolved_t = self._evaluate_expression_type(clean_expr, current_env, ctx)
-                        if resolved_t:
-                            current_env[var_name] = resolved_t
+                        # If variable has an explicit @var annotation on the same/preceding line, preserve it!
+                        has_explicit_doc = (
+                            var_name in current_env
+                            and any("phpdoc_var" in ev for ev in current_env[var_name].evidence)
+                        )
+                        if not has_explicit_doc:
+                            resolved_t = self._evaluate_expression_type(clean_expr, current_env, ctx)
+                            if resolved_t:
+                                current_env[var_name] = resolved_t
 
                 # 2. Foreach element unpacking: foreach ($items as $item)
                 fe_m = re.search(r'foreach\s*\(\s*\$([A-Za-z0-9_]+)\s+as\s+\$([A-Za-z0-9_]+)\s*\)', stripped)
@@ -643,7 +739,10 @@ class PHPTypeFlowAnalyzer:
                         )
 
                 # 3. Detect method invocations: $receiver->method(...)
-                for call_match in re.finditer(r'(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+(?:\([^)]*\))?)*))\s*->\s*([A-Za-z0-9_]+)\s*\(', stripped):
+                for call_match in re.finditer(
+                    r'(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+(?:\([^)]*\))?)*))\s*(?:->|\?->)\s*([A-Za-z0-9_]+)\s*\(',
+                    stripped,
+                ):
                     raw_recv = call_match.group(1).strip()
                     called_m = call_match.group(2).strip()
 
@@ -660,7 +759,7 @@ class PHPTypeFlowAnalyzer:
                         conf = TypeResolutionConfidence.AMBIGUOUS if raw_recv != "$this" else TypeResolutionConfidence.UNKNOWN
                         ev = ["unresolved_receiver_expression"]
 
-                    call_sites.append(CallSiteInfo(
+                    call_info = CallSiteInfo(
                         file_path=file_path,
                         line_number=line_no,
                         raw_statement=stripped,
@@ -672,7 +771,18 @@ class PHPTypeFlowAnalyzer:
                         evidence=ev,
                         enclosing_class=ctx.class_name,
                         enclosing_method=enclosing_method_name,
-                    ))
+                    )
+                    call_sites.append(call_info)
+
+                    # Diagnostic trace logging
+                    if trace_line is not None and trace_line == line_no:
+                        print(f"[TRACE L{line_no}] Statement: {stripped}")
+                        print(f"  Enclosing: {ctx.class_name}::{enclosing_method_name}")
+                        print(f"  Receiver: '{raw_recv}', Method: '{called_m}'")
+                        print(f"  Inferred: {primary} ({conf.value}) via {ev}")
+                        print(f"  Environment at L{line_no}:")
+                        for ek, eb in sorted(current_env.items()):
+                            print(f"    ${ek}: {sorted(list(eb.candidate_types))} ({eb.confidence.value})")
 
                 # If an arrow function was evaluated, restore outer environment
                 if arrow_saved_env is not None:
@@ -684,34 +794,37 @@ class PHPTypeFlowAnalyzer:
         self, recv_expr: str, env: dict[str, TypeBinding], ctx: ClassContext
     ) -> Optional[TypeBinding]:
         """Resolve simple and chained receivers: $node, $this, $this->node, $event->getNode()."""
+        clean_expr = recv_expr.replace("?->", "->")
+
         # Exact $this
-        if recv_expr == "$this":
+        if clean_expr == "$this":
             if ctx.fqn:
                 return TypeBinding({ctx.fqn}, TypeResolutionConfidence.PROVEN_EXACT, ["this_receiver"])
             return None
 
         # Simple variable $node
-        if re.match(r'^\$([A-Za-z0-9_]+)$', recv_expr):
-            var_name = recv_expr.lstrip("$")
+        if re.match(r'^\$([A-Za-z0-9_]+)$', clean_expr):
+            var_name = clean_expr.lstrip("$")
             if var_name in env:
                 return env[var_name]
             return None
 
         # Property on this: $this->property
-        if re.match(r'^\$this->([A-Za-z0-9_]+)$', recv_expr):
-            p_name = recv_expr.replace("$this->", "").strip()
+        if re.match(r'^\$this->([A-Za-z0-9_]+)$', clean_expr):
+            p_name = clean_expr.replace("$this->", "").strip()
             if p_name in ctx.properties:
                 return ctx.properties[p_name]
             return None
 
         # Chained expression: $event->getNode()
-        return self._evaluate_expression_type(recv_expr, env, ctx)
+        return self._evaluate_expression_type(clean_expr, env, ctx)
 
     def _evaluate_expression_type(
         self, expr: str, env: dict[str, TypeBinding], ctx: ClassContext
     ) -> Optional[TypeBinding]:
         """Evaluate type of an expression chain like $event->getNode(), $this->userSession->getUser(), or $file->getStorage()."""
-        chain_m = re.match(r'^(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+)?))\s*->\s*([A-Za-z0-9_]+)\s*\([^)]*\)$', expr)
+        clean_expr = expr.replace("?->", "->")
+        chain_m = re.match(r'^(\$(?:[A-Za-z0-9_]+(?:->[A-Za-z0-9_]+)?))\s*->\s*([A-Za-z0-9_]+)\s*\([^)]*\)$', clean_expr)
         if chain_m:
             head_expr = chain_m.group(1).strip()
             called_m = chain_m.group(2).strip()
@@ -737,8 +850,8 @@ class PHPTypeFlowAnalyzer:
                         return derived
         return None
 
-    def analyze_file(self, rel_path: str) -> list[CallSiteInfo]:
-        """Analyze a file located under repo_root (PHASE 27)."""
+    def analyze_file(self, rel_path: str, trace_line: Optional[int] = None) -> list[CallSiteInfo]:
+        """Analyze a file located under repo_root with optional line tracing."""
         if not self.repo_root:
             raise ValueError("repo_root must be configured to call analyze_file")
         clean = rel_path.replace("\\", "/").lstrip("/")
@@ -746,4 +859,23 @@ class PHPTypeFlowAnalyzer:
         if not full_path.exists():
             return []
         content = full_path.read_text(encoding="utf-8", errors="ignore")
-        return self.analyze_source_content(content, file_path=clean)
+        return self.analyze_source_content(content, file_path=clean, trace_line=trace_line)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="RCIR PHP Type-Flow Analyzer & Receiver Resolver CLI")
+    parser.add_argument("--repo", type=str, required=True, help="Path to repository root")
+    parser.add_argument("--file", type=str, required=True, help="Relative path to PHP file")
+    parser.add_argument("--trace-line", type=int, default=None, help="Line number to trace in detail")
+    args = parser.parse_args()
+
+    analyzer = PHPTypeFlowAnalyzer(Path(args.repo))
+    calls = analyzer.analyze_file(args.file, trace_line=args.trace_line)
+    print(f"Analyzed {args.file}: found {len(calls)} call sites.")
+    for c in calls:
+        if args.trace_line is None or c.line_number == args.trace_line:
+            print(f"L{c.line_number}: {c.receiver_expr}->{c.method_name}() => {c.inferred_type} ({c.confidence.value})")
+
+
+if __name__ == "__main__":
+    main()

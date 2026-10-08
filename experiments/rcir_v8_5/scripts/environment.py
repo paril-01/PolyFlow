@@ -165,6 +165,8 @@ class BenchmarkEnvironment:
                 ":!experiments/rcir_v8_5/raw",
                 ":!experiments/rcir_v8_5/reports",
                 ":!experiments/rcir_v8_5/manifests",
+                ":!experiments/rcir_runs",
+                ":!scratch",
             ]
             status = subprocess.check_output(
                 ["git", "-C", str(self.polyflow_root), "status", "--porcelain", "--ignore-submodules=dirty", "--", "."] + output_excludes,
@@ -279,8 +281,9 @@ def get_default_environment(run_id: Optional[str] = None, run_dir: Optional[Path
         target_repo_root=target_repo_root,
         run_id=env_run_id,
     )
-    if run_dir:
-        env.set_run_directory(run_dir)
+    env_run_dir = run_dir or os.environ.get("RCIR_RUN_DIR")
+    if env_run_dir:
+        env.set_run_directory(env_run_dir)
     else:
         env.ensure_directories()
     return env

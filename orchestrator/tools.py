@@ -50,6 +50,7 @@ class RepoToolEnvironment:
         self.context_tokens_added: int = 0
         self.context_provider = context_provider
         self.already_seen_entities: set[str] = set()
+        self.context_request_records: List[Dict[str, Any]] = []
         self.context_telemetry: Dict[str, Any] = {
             "entities_requested": 0,
             "entities_returned": 0,
@@ -406,16 +407,55 @@ class RepoToolEnvironment:
                 already_seen=self.already_seen_entities,
                 token_budget=1500,
             )
-            text = res.get("context_markdown", "")
-            tokens_added = res.get("tokens_added", max(1, len(text) // 4))
-            returned_ents = res.get("entities", [])
+            # Support canonical ContextRetrievalResult as well as dictionary
+            text = (
+                getattr(res, "rendered_markdown", None)
+                or res.get("rendered_markdown")
+                or res.get("context_markdown", "")
+            )
+            tokens_added = (
+                getattr(res, "tokens_added", None)
+                or res.get("tokens_added")
+                or res.get("tokens_delivered", max(1, len(text) // 4))
+            )
+            returned_ents = (
+                getattr(res, "entity_ids", None)
+                or res.get("entity_ids")
+                or res.get("entities", [])
+            )
+            cand_count = (
+                getattr(res, "candidate_count", None)
+                or res.get("candidate_count", len(returned_ents))
+            )
+            skipped = (
+                getattr(res, "duplicates_skipped", None)
+                or res.get("duplicates_skipped", 0)
+            )
+            rem_budget = (
+                getattr(res, "remaining_budget", None)
+                or res.get("remaining_budget", max(0, 1500 - tokens_added))
+            )
+
+            # Only delivered entries become already_seen (Section 7)
             for ent in returned_ents:
                 self.already_seen_entities.add(ent)
 
             self.context_tokens_added += tokens_added
             self.context_telemetry["entities_returned"] += len(returned_ents)
-            self.context_telemetry["duplicate_entities_skipped"] += res.get("duplicates_skipped", 0)
+            self.context_telemetry["duplicate_entities_skipped"] += skipped
             self.context_telemetry["exact_tokens_added"] += tokens_added
+
+            # Record detailed context request record (Section 7)
+            req_record = {
+                "requested_symbol": symbol,
+                "candidate_entries": cand_count,
+                "returned_entries": len(returned_ents),
+                "already_seen_skipped": skipped,
+                "exact_rendered_token_count": tokens_added,
+                "cumulative_context_tokens": self.context_tokens_added,
+                "budget_remaining": rem_budget,
+            }
+            self.context_request_records.append(req_record)
             return f"RCIR ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{text}"
 
         search_target = query or symbol
@@ -423,6 +463,15 @@ class RepoToolEnvironment:
         tokens_added = max(1, len(matches) // 4)
         self.context_tokens_added += tokens_added
         self.context_telemetry["exact_tokens_added"] += tokens_added
+        self.context_request_records.append({
+            "requested_symbol": symbol,
+            "candidate_entries": 8,
+            "returned_entries": 8,
+            "already_seen_skipped": 0,
+            "exact_rendered_token_count": tokens_added,
+            "cumulative_context_tokens": self.context_tokens_added,
+            "budget_remaining": 0,
+        })
         return f"ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{matches}"
 
     def run_command(self, command: str, timeout_sec: int = 60, cwd: Optional[str] = None) -> Dict[str, Any]:

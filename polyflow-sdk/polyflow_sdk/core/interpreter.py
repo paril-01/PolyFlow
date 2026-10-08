@@ -13,8 +13,8 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional, Tuple
 
-from polyflow.parser import LanguageBlock
-from polyflow.runtime import PolyCellRuntime, CellResult
+from polyflow_sdk.core.parser import LanguageBlock, PolyParser, PolyAST, SourceDirective
+from polyflow_sdk.core.runtime import PolyCellRuntime, CellResult
 
 
 @dataclass

@@ -27,6 +27,7 @@ import json
 import math
 import sys
 import time
+from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Optional
@@ -64,12 +65,40 @@ class ChannelDiscoveryResult:
     channel_counts: dict[str, int] = field(default_factory=dict)
 
 
+@dataclass
+class SourceEvidenceIndex:
+    """Run-scoped source evidence index accelerating lookups and eliminating per-query graph scans (Section 11)."""
+    hierarchy_index: dict[str, list[tuple[str, str, str]]] = field(default_factory=lambda: defaultdict(list))
+    alias_index: dict[str, list[tuple[str, str]]] = field(default_factory=lambda: defaultdict(list))
+    node_degrees: dict[str, int] = field(default_factory=dict)
+
+    @classmethod
+    def build(cls, cg: CanonicalGraph) -> SourceEvidenceIndex:
+        idx = cls()
+        idx.node_degrees = {
+            nid: len(cg.incoming_edges.get(nid, [])) + len(cg.outgoing_edges.get(nid, []))
+            for nid in cg.nodes
+        }
+        for ent_id, ent in cg.nodes.items():
+            if ent.kind in (EntityKind.CLASS, EntityKind.INTERFACE):
+                for alias in ent.aliases:
+                    idx.alias_index[alias].append((ent_id, ent.file))
+                for edge in cg.get_outgoing_edges(ent_id):
+                    if edge.edge_type.value in ("implements", "inherits", "overrides"):
+                        idx.hierarchy_index[edge.target_id].append((ent_id, ent.file, edge.edge_type.value))
+                for edge in cg.get_incoming_edges(ent_id):
+                    if edge.edge_type.value in ("implements", "inherits", "overrides"):
+                        idx.hierarchy_index[edge.source_id].append((ent_id, ent.file, edge.edge_type.value))
+        return idx
+
+
 def discover_multi_channel_candidates(
     spec: ChangeSpecification,
     cg: CanonicalGraph,
     registry: CanonicalEntityRegistry,
+    evidence_index: Optional[SourceEvidenceIndex] = None,
 ) -> ChannelDiscoveryResult:
-    """Execute 7-channel semantic discovery (PHASE 53-60)."""
+    """Execute 7-channel semantic discovery (PHASE 53-60 & Section 11)."""
     candidates: dict[str, EvidenceVector] = {}
     channel_counts: dict[str, int] = {
         "channel_a_exact_graph": 0,
@@ -166,40 +195,67 @@ def discover_multi_channel_candidates(
                 if e.edge_type.value not in existing.edge_types:
                     existing.edge_types.append(e.edge_type.value)
 
-    # CHANNEL B — TYPE FLOW & IMPLEMENTATIONS (Phase 53 Channel B)
-    # Search actual implementation hierarchy for interfaces / classes
-    for root_id in roots:
-        for ent_id, ent in cg.nodes.items():
-            if ent.kind in (EntityKind.CLASS, EntityKind.INTERFACE):
-                # Verify true hierarchy: check implements/inherits in graph edges or verified aliases
-                is_hierarchy_match = False
-                if root_id in ent.aliases:
-                    is_hierarchy_match = True
-                else:
-                    # Check edges between ent_id and root_id
-                    for edge in cg.get_outgoing_edges(ent_id):
-                        if edge.target_id == root_id and edge.edge_type.value in ("implements", "inherits"):
-                            is_hierarchy_match = True
-                            break
-                    if not is_hierarchy_match:
-                        for edge in cg.get_incoming_edges(root_id):
-                            if edge.source_id == ent_id and edge.edge_type.value in ("implements", "inherits"):
+    # CHANNEL B — TYPE FLOW & IMPLEMENTATIONS (Phase 53 Channel B & Section 11)
+    # Search actual implementation hierarchy for interfaces / classes using indexed lookups
+    if evidence_index:
+        for root_id in roots:
+            for ent_id, ent_file, edge_type in evidence_index.hierarchy_index.get(root_id, []):
+                channel_counts["channel_b_type_flow"] += 1
+                if ent_id not in candidates:
+                    candidates[ent_id] = EvidenceVector(
+                        entity_id=ent_id,
+                        file_path=ent_file,
+                        entity_match="none",
+                        resolution_class="static_inference",
+                        type_compatibility="compatible",
+                        edge_types=[edge_type],
+                        hop_distance=1,
+                        traversal_score=0.82,
+                    )
+            for ent_id, ent_file in evidence_index.alias_index.get(root_id, []):
+                channel_counts["channel_b_type_flow"] += 1
+                if ent_id not in candidates:
+                    candidates[ent_id] = EvidenceVector(
+                        entity_id=ent_id,
+                        file_path=ent_file,
+                        entity_match="none",
+                        resolution_class="static_inference",
+                        type_compatibility="compatible",
+                        edge_types=["implements"],
+                        hop_distance=1,
+                        traversal_score=0.82,
+                    )
+    else:
+        for root_id in roots:
+            for ent_id, ent in cg.nodes.items():
+                if ent.kind in (EntityKind.CLASS, EntityKind.INTERFACE):
+                    is_hierarchy_match = False
+                    if root_id in ent.aliases:
+                        is_hierarchy_match = True
+                    else:
+                        for edge in cg.get_outgoing_edges(ent_id):
+                            if edge.target_id == root_id and edge.edge_type.value in ("implements", "inherits", "overrides"):
                                 is_hierarchy_match = True
                                 break
+                        if not is_hierarchy_match:
+                            for edge in cg.get_incoming_edges(root_id):
+                                if edge.source_id == ent_id and edge.edge_type.value in ("implements", "inherits", "overrides"):
+                                    is_hierarchy_match = True
+                                    break
 
-                if is_hierarchy_match:
-                    channel_counts["channel_b_type_flow"] += 1
-                    if ent_id not in candidates:
-                        candidates[ent_id] = EvidenceVector(
-                            entity_id=ent_id,
-                            file_path=ent.file,
-                            entity_match="none",
-                            resolution_class="static_inference",
-                            type_compatibility="compatible",
-                            edge_types=["implements"],
-                            hop_distance=1,
-                            traversal_score=0.82,
-                        )
+                    if is_hierarchy_match:
+                        channel_counts["channel_b_type_flow"] += 1
+                        if ent_id not in candidates:
+                            candidates[ent_id] = EvidenceVector(
+                                entity_id=ent_id,
+                                file_path=ent.file,
+                                entity_match="none",
+                                resolution_class="static_inference",
+                                type_compatibility="compatible",
+                                edge_types=["implements"],
+                                hop_distance=1,
+                                traversal_score=0.82,
+                            )
 
     # CHANNEL C — BOUNDARY (Phase 53 Channel C: source-derived routes parsing)
     route_matches = NextcloudSourceDerivedAdapter.discover_routes(
@@ -335,6 +391,15 @@ def discover_multi_channel_candidates(
                         hop_distance=2,
                         traversal_score=0.60,
                     )
+
+    # Populate hub_degree and ensure typed relation compatibility
+    degrees = evidence_index.node_degrees if evidence_index else {}
+    for vec in candidates.values():
+        if vec.entity_id in degrees:
+            vec.hub_degree = degrees[vec.entity_id]
+        if any(et in ("implements", "inherits", "overrides") for et in vec.edge_types):
+            if vec.type_compatibility in ("unknown", "unspecified"):
+                vec.type_compatibility = "compatible"
 
     return ChannelDiscoveryResult(candidates=candidates, channel_counts=channel_counts)
 
@@ -472,13 +537,14 @@ def execute_retrieval_suite():
     print("RCIR v8.5 — Semantic Multi-Channel Retrieval & Validation Selection")
     print("=" * 80)
 
-    # 1. Load full Canonical Graph
+    # 1. Load full Canonical Graph and build run-scoped evidence index (Section 11)
     t0 = time.time()
     with open(env.graph_path, "r", encoding="utf-8") as f:
         raw_graph = json.load(f)
     cg = CanonicalGraph.from_legacy_dict(raw_graph, target_repo_root=env.target_repo_root)
     registry = cg.registry
-    print(f"Loaded graph in {time.time() - t0:.2f}s with {len(registry.entities)} registry entities.")
+    evidence_index = SourceEvidenceIndex.build(cg)
+    print(f"Loaded graph and built index in {time.time() - t0:.2f}s with {len(registry.entities)} registry entities.")
 
     # 2. Load Ground Truth
     gt_data = json.loads((env.ground_truth_root / "ground_truth.json").read_text(encoding="utf-8"))
@@ -513,7 +579,7 @@ def execute_retrieval_suite():
                 description=task.get("description", ""),
             )
 
-            res = discover_multi_channel_candidates(spec, cg, registry)
+            res = discover_multi_channel_candidates(spec, cg, registry, evidence_index=evidence_index)
             split_cands[tid] = list(res.candidates.values())
 
             for ch, cnt in res.channel_counts.items():
@@ -592,22 +658,22 @@ RANKER_CANDIDATE_CONFIGS: dict[str, dict[str, Any]] = {
     "R0": {
         "name": "R0_GraphDistanceBaseline",
         "type": "linear",
-        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False),
+        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=False, use_hub_penalty=False),
     },
     "ExactFirst": {
         "name": "ExactFirstCascaded",
         "type": "cascaded",
-        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False, use_hub_penalty=True),
     },
     "OperationCascade": {
         "name": "OperationAwareCascade",
         "type": "operation_cascaded",
-        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False),
+        "config": RankerConfig(use_cascaded_ranking=True, use_diversity=False, use_hub_penalty=True),
     },
     "Coverage": {
         "name": "CoverageDiversityRanker",
         "type": "diversity",
-        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5),
+        "config": RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5, use_hub_penalty=True),
     },
     "AnchorCoverageRRF": {
         "name": "AnchorCoverageRRF_MultiObjective",
@@ -621,14 +687,14 @@ def build_ranker(config_name: str, operation: Optional[str] = None) -> Any:
     """Centralized ranker factory used across retrieval runner, validation selection, TEST execution, and determinism evaluation (v8.5.2)."""
     cfg = (config_name or "").strip()
     if cfg in ("R0", "R0_GraphDistanceBaseline", "linear"):
-        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False))
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=False, use_hub_penalty=False))
     elif cfg in ("ExactFirst", "ExactFirstCascaded", "cascaded"):
-        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False))
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False, use_hub_penalty=True))
     elif cfg in ("OperationCascade", "OperationAwareCascade", "operation_cascaded"):
         profile = OperationRankerProfile.for_operation(operation) if operation else None
-        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False), profile=profile)
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=True, use_diversity=False, use_hub_penalty=True), profile=profile)
     elif cfg in ("Coverage", "CoverageDiversityRanker", "diversity"):
-        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5))
+        return DeterministicRanker(RankerConfig(use_cascaded_ranking=False, use_diversity=True, max_per_module=5, use_hub_penalty=True))
     elif cfg in ("AnchorCoverageRRF", "AnchorCoverageRRF_MultiObjective", "multi_objective_rrf"):
         return MultiObjectiveRanker(operation=operation or "behavior_change")
     else:

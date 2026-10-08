@@ -26,6 +26,7 @@ class LLMResponse:
     total_tokens: int = 0
     latency_seconds: float = 0.0
     simulation_fallback: bool = False
+    measurement_source: str = "PROVIDER_NATIVE"
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -37,6 +38,7 @@ class LLMResponse:
             "total_tokens": self.total_tokens,
             "latency_seconds": round(self.latency_seconds, 3),
             "simulation_fallback": self.simulation_fallback,
+            "measurement_source": self.measurement_source,
         }
 
 
@@ -237,6 +239,7 @@ class LLMProvider:
             with urllib.request.urlopen(req, timeout=120) as resp_raw:
                 res_data = json.loads(resp_raw.read().decode("utf-8"))
             content = res_data.get("response", "")
+            is_native = "prompt_eval_count" in res_data
             p_tokens = res_data.get("prompt_eval_count", len(system_prompt + user_prompt) // 4)
             c_tokens = res_data.get("eval_count", len(content) // 4)
             t_tokens = p_tokens + c_tokens
@@ -251,6 +254,7 @@ class LLMProvider:
                 total_tokens=t_tokens,
                 latency_seconds=time.time() - start_time,
                 simulation_fallback=False,
+                measurement_source="PROVIDER_NATIVE" if is_native else "ESTIMATED",
             )
             self.last_response = resp
             return resp

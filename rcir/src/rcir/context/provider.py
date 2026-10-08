@@ -16,6 +16,7 @@ from typing import Any, Optional
 
 from orchestrator.tools import ContextProvider
 from rcir.context.compiler import ContextCompiler, CompiledContext
+from rcir.context.models import ContextRetrievalResult
 from rcir.context.planner import ContextPlanner
 from rcir.entities.canonical import CanonicalEntityRegistry, ResolutionResult, AliasResolution
 from rcir.query.change_spec import ChangeOperation, ChangeSpecification
@@ -166,13 +167,22 @@ class RCIRContextProvider(ContextProvider):
 
         self.session_state.tokens_already_supplied += compiled.total_estimated_tokens
 
-        return {
-            "status": "success",
-            "symbol": symbol,
-            "canonical_target": canonical_target,
-            "entries_count": len(compiled.entries),
-            "new_entities": newly_seen,
-            "tokens_consumed": compiled.total_estimated_tokens,
-            "rendered_markdown": compiled.render_prompt_markdown(),
-            "session": self.session_state.to_dict(),
-        }
+        entries_data = [e.to_dict() for e in compiled.entries]
+        return ContextRetrievalResult(
+            entries=entries_data,
+            entity_ids=newly_seen,
+            rendered_markdown=compiled.render_prompt_markdown(),
+            tokens_added=compiled.total_estimated_tokens,
+            duplicates_skipped=len(seen_entities),
+            requested_symbol=symbol,
+            source_task_id="",
+            budget=token_budget,
+            candidate_count=len(candidate_vectors),
+            remaining_budget=max(0, token_budget - compiled.total_estimated_tokens),
+            provider_name="RCIRContextProvider",
+            metadata={
+                "status": "success",
+                "canonical_target": canonical_target,
+                "session": self.session_state.to_dict(),
+            },
+        )

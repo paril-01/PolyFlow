@@ -202,13 +202,13 @@ class DeterministicRanker:
         if vec.entity_match == "exact":
             return "A0"
 
+        # A2: Typed interface/implementation/override (Section 6.4: prioritized for contract/signature impact)
+        if any(et in ("implements", "inherits", "overrides") for et in vec.edge_types):
+            return "A2"
+
         # A1: Direct static-exact dependency
         if vec.resolution_class == "static_exact" and vec.hop_distance <= 1:
             return "A1"
-
-        # A2: Typed interface/implementation/override
-        if any(et in ("implements", "inherits", "overrides") for et in vec.edge_types):
-            return "A2"
 
         # A3: Direct boundary contract
         if vec.boundary_contract != "none":
@@ -302,9 +302,12 @@ class DeterministicRanker:
         if cfg.use_module_distance and vec.module_distance > 0:
             sb.module_distance_penalty = - (vec.module_distance * p.p_module_step)
 
-        # 12. Hub Penalty (log-damped)
+        # 12. Hub Penalty (log-damped, Section 6.5: damp generic hubs unless direct exact/typed evidence)
         if cfg.use_hub_penalty and vec.hub_degree > 10:
-            sb.hub_penalty = - (math.log10(vec.hub_degree) * p.p_hub_log_scale)
+            is_direct_exact = (vec.resolution_class == "static_exact" and vec.hop_distance <= 1)
+            is_typed = any(et in ("implements", "inherits", "overrides") for et in vec.edge_types)
+            if not is_direct_exact and not is_typed:
+                sb.hub_penalty = - (math.log10(vec.hub_degree) * p.p_hub_log_scale)
 
         sb.total_score = (
             sb.exact_entity_score +

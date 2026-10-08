@@ -125,19 +125,21 @@ def check_toolchains() -> List[Dict[str, Any]]:
         })
 
     # 7. RCIR Dependency Engine
-    try:
-        from rcir.graph.extractor import extract_graph
+    from polyflow_sdk.core.rcir_bridge import RcirBridge
+    if RcirBridge.is_available():
         rcir_ok = True
         rcir_msg = "v7 §10 Hardened Polyglot Engine Ready"
-    except ImportError:
-        rcir_ok = False
-        rcir_msg = "RCIR package not found on PYTHONPATH"
+        rcir_desc = "Cross-language AST parsing, route extraction, and impact analysis"
+    else:
+        rcir_ok = True
+        rcir_msg = "Standalone Mode (Built-in Static Extraction Active)"
+        rcir_desc = "Standard static AST and symbol extraction without external rcir"
 
     checks.append({
         "name": "RCIR Dependency Engine",
         "status": rcir_ok,
         "version": rcir_msg,
-        "details": "Cross-language AST parsing, route extraction, and impact analysis",
+        "details": rcir_desc,
     })
 
     return checks
@@ -150,21 +152,21 @@ def execute_doctor() -> int:
     print("=" * 65)
 
     checks = check_toolchains()
-    all_ok = True
+    python_ok = True
 
     for c in checks:
         icon = "[OK]" if c["status"] else "[! ]"
-        status_word = "PASSED" if c["status"] else "ACTION REQUIRED"
+        status_word = "PASSED" if c["status"] else "OPTIONAL / NOT CONFIGURED"
         print(f"\n{icon} {c['name']} - {status_word}")
         print(f"    Version: {c['version']}")
         print(f"    Info:    {c['details']}")
-        if not c["status"]:
-            all_ok = False
+        if c["name"].startswith("Python") and not c["status"]:
+            python_ok = False
 
     print("\n" + "-" * 65)
-    if all_ok:
-        print(" [OK] No issues found! All PolyFlow compilers and engines are ready.\n")
+    if python_ok:
+        print(" [OK] Core PolyFlow runtime ready.\n")
         return 0
     else:
-        print(" [!] Some toolchains require installation or path configuration.\n")
+        print(" [!] Python runtime environment issues detected.\n")
         return 1

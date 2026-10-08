@@ -1,6 +1,6 @@
 {
   "version": "8.5",
-  "generated_at": "2026-10-06T00:00:00Z",
+  "generated_at": "2026-10-08T00:00:00Z",
   "tasks": [
     {
       "task_id": "AGENT-TASK-01",
@@ -13,7 +13,64 @@
       "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
       "context_task_id": "TASK-DEV-01",
       "max_turns": 8,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "difficulty": "medium"
+    },
+    {
+      "task_id": "AGENT-TASK-02",
+      "title": "Add Permanent Deletion Flag to NodeDeletedEvent",
+      "category": "event_contract",
+      "target_symbol": "NodeDeletedEvent",
+      "target_file": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "prompt": "Update NodeDeletedEvent to declare a protected boolean property $permanent = false, and a public getter method: public function isPermanent(): bool { return $this->permanent; }",
+      "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task2.py {worktree}",
+      "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
+      "context_task_id": "TASK-DEV-02",
+      "max_turns": 5,
+      "timeout_seconds": 120,
+      "difficulty": "easy"
+    },
+    {
+      "task_id": "AGENT-TASK-03",
+      "title": "Add ID Verification Method to IShare Contract",
+      "category": "interface_contract",
+      "target_symbol": "getId",
+      "target_file": "lib/public/Share/IShare.php",
+      "prompt": "Update IShare interface to declare a method hasId(): public function hasId(): bool; for checking if the share instance has an assigned internal id.",
+      "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task3.py {worktree}",
+      "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
+      "context_task_id": "TASK-DEV-03",
+      "max_turns": 5,
+      "timeout_seconds": 120,
+      "difficulty": "easy"
+    },
+    {
+      "task_id": "AGENT-TASK-04",
+      "title": "Add Existence Check Method to IConfig Contract",
+      "category": "config_di",
+      "target_symbol": "getSystemValue",
+      "target_file": "lib/public/IConfig.php",
+      "prompt": "Update IConfig interface to declare a method hasSystemValue(): public function hasSystemValue(string $key): bool; for checking if a system configuration key exists.",
+      "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task4.py {worktree}",
+      "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
+      "context_task_id": "TASK-DEV-04",
+      "max_turns": 5,
+      "timeout_seconds": 120,
+      "difficulty": "medium"
+    },
+    {
+      "task_id": "AGENT-TASK-05",
+      "title": "Add Active Session Status Check to IUserSession Contract",
+      "category": "session_contract",
+      "target_symbol": "getUser",
+      "target_file": "lib/public/IUserSession.php",
+      "prompt": "Update IUserSession interface to declare a method hasActiveSession(): public function hasActiveSession(): bool; to query whether an authenticated user session is active.",
+      "acceptance_test": "python experiments/rcir_v8_5/agent_tasks/verify_task5.py {worktree}",
+      "regression_suite": "python experiments/rcir_v8_5/agent_tasks/verify_regression.py {worktree}",
+      "context_task_id": "TASK-DEV-05",
+      "max_turns": 5,
+      "timeout_seconds": 120,
+      "difficulty": "medium"
     }
   ]
 }

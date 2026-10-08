@@ -93,29 +93,55 @@ def check_php_syntax(file_path: Path) -> Tuple[bool, str]:
 
 
 def run_regression_check(worktree_root: Path) -> int:
-    target_file = worktree_root / "apps" / "files" / "lib" / "Controller" / "ApiController.php"
-    if not target_file.exists():
-        sys.stderr.write(f"SETUP_ERROR: Target file not found: {target_file}\n")
+    modified_php_files = []
+    try:
+        res = subprocess.run(
+            ["git", "-C", str(worktree_root), "status", "--porcelain"],
+            capture_output=True, text=True, timeout=10
+        )
+        if res.returncode == 0:
+            for line in res.stdout.splitlines():
+                parts = line.strip().split()
+                if len(parts) >= 2:
+                    rel_p = parts[-1]
+                    if rel_p.endswith(".php"):
+                        full_p = worktree_root / rel_p
+                        if full_p.exists():
+                            modified_php_files.append(full_p)
+    except Exception:
+        pass
+
+    if not modified_php_files:
+        candidates = [
+            worktree_root / "apps" / "files" / "lib" / "Controller" / "ApiController.php",
+            worktree_root / "lib" / "public" / "Files" / "Events" / "Node" / "NodeDeletedEvent.php",
+            worktree_root / "lib" / "public" / "Share" / "IShare.php",
+            worktree_root / "lib" / "public" / "IConfig.php",
+            worktree_root / "lib" / "public" / "IUserSession.php",
+        ]
+        modified_php_files = [c for c in candidates if c.exists()]
+
+    if not modified_php_files:
+        sys.stderr.write("SETUP_ERROR: No PHP files to verify regression syntax.\n")
         return 2
 
-    # Check target file syntax
-    ok, msg = check_php_syntax(target_file)
-    if not ok:
-        sys.stderr.write(f"REGRESSION_FAILURE: {target_file.name}: {msg}\n")
-        return 1
+    for tf in modified_php_files:
+        ok, msg = check_php_syntax(tf)
+        if not ok:
+            sys.stderr.write(f"REGRESSION_FAILURE: {tf.name}: {msg}\n")
+            return 1
 
     php_bin = shutil.which("php")
     if not php_bin:
-        # Issue 16: Return code 3 = NOT_MEASURED when PHP runtime is not available
-        print(f"REGRESSION_NOT_MEASURED: PHP runtime not installed. Delimiter syntax check: {msg}")
+        print(f"REGRESSION_NOT_MEASURED: PHP runtime not installed. Delimiter syntax passed for {len(modified_php_files)} files.")
         return 3
     else:
-        # Check targeted controller test if phpunit is available
-        print(f"PASS: Regression syntax checks passed via {msg}")
+        print(f"PASS: Regression syntax checks passed for {len(modified_php_files)} files via PHP.")
         return 0
 
 
 if __name__ == "__main__":
     root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".")
     sys.exit(run_regression_check(root))
+
 
