@@ -1,0 +1,11 @@
+trial_id,task_id,condition,model,turn_budget,turns_used,tool_calls,files_modified_count,syntax_pass,targeted_pass,regression_pass,gatekeeper,success,duration_seconds,prompt_tokens,completion_tokens,total_tokens,error
+BLIND-TASK-01_baseline_turn5,BLIND-TASK-01,baseline,qwen2.5-coder:1.5b,5,5,4,0,True,False,True,REJECT,False,77.54,5061,589,5650,
+BLIND-TASK-01_rcir_turn5,BLIND-TASK-01,rcir,qwen2.5-coder:1.5b,5,5,2,0,True,False,True,REJECT,False,61.78,4976,489,5465,
+BLIND-TASK-02_baseline_turn5,BLIND-TASK-02,baseline,qwen2.5-coder:1.5b,5,3,1,0,True,False,True,REJECT,False,147.92,1431,283,1714,LLMProviderError: Ollama provider call failed: timed out
+BLIND-TASK-02_rcir_turn5,BLIND-TASK-02,rcir,qwen2.5-coder:1.5b,5,2,1,0,True,False,True,REJECT,False,126.54,673,50,723,LLMProviderError: Ollama provider call failed: timed out
+BLIND-TASK-03_baseline_turn5,BLIND-TASK-03,baseline,qwen2.5-coder:1.5b,5,5,5,0,True,False,True,REJECT,False,68.88,6084,369,6453,
+BLIND-TASK-03_rcir_turn5,BLIND-TASK-03,rcir,qwen2.5-coder:1.5b,5,5,4,0,True,False,True,REJECT,False,47.12,4512,295,4807,
+BLIND-TASK-04_baseline_turn5,BLIND-TASK-04,baseline,qwen2.5-coder:1.5b,5,4,3,0,True,False,True,REJECT,False,147.55,2652,116,2768,LLMProviderError: Ollama provider call failed: timed out
+BLIND-TASK-04_rcir_turn5,BLIND-TASK-04,rcir,qwen2.5-coder:1.5b,5,5,4,0,True,False,True,REJECT,False,129.65,5876,1019,6895,
+BLIND-TASK-05_baseline_turn5,BLIND-TASK-05,baseline,qwen2.5-coder:1.5b,5,5,2,0,True,False,True,REJECT,False,70.19,4634,504,5138,
+BLIND-TASK-05_rcir_turn5,BLIND-TASK-05,rcir,qwen2.5-coder:1.5b,5,5,5,0,True,False,True,REJECT,False,78.55,4888,619,5507,

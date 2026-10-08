@@ -5,7 +5,7 @@ import { ProofModal } from './components/ProofModal';
 import { Tab01PolyFlow } from './components/Tab01PolyFlow';
 import { Tab02Interpreter } from './components/Tab02Interpreter';
 import { Tab03RCIR } from './components/Tab03RCIR';
-import { Tab04AgentValidation } from './components/Tab04AgentValidation';
+import { Tab04Proofs } from './components/Tab04Proofs';
 import { Tab05ERPNextScale } from './components/Tab05ERPNextScale';
 
 import { useGraphData } from './hooks/useGraphData';
@@ -118,7 +118,7 @@ export default function App() {
               resetCamera={resetCamera}
             />
           )}
-          {activeTab === 'agent' && <Tab04AgentValidation />}
+          {(activeTab === 'proofs' || activeTab === 'agent') && <Tab04Proofs />}
           {activeTab === 'erpnext' && <Tab05ERPNextScale />}
         </div>
       </main>

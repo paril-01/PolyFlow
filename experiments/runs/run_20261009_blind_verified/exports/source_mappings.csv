@@ -1,0 +1,79 @@
+feature_name,source_category,source_path,mapped_poly_symbol,sha256,exists
+Sales Invoice,frontend,erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.js,sales_invoice,UNRESOLVED_ON_DISK,False
+Sales Invoice,frontend,erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_list.js,sales_invoice_list,UNRESOLVED_ON_DISK,False
+Sales Invoice,backend,erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.py,sales_invoice,UNRESOLVED_ON_DISK,False
+Sales Invoice,backend,erpnext/erpnext/accounts/doctype/sales_invoice/mapper.py,mapper,UNRESOLVED_ON_DISK,False
+Sales Invoice,backend,erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py,sales_invoice_dashboard,UNRESOLVED_ON_DISK,False
+Sales Invoice,backend,erpnext/erpnext/accounts/doctype/sales_invoice/__init__.py,__init__,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_invoice/sales_invoice.json,sales_invoice,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_invoice_item/sales_invoice_item.json,sales_invoice_item,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/pricing_rule_detail/pricing_rule_detail.json,pricing_rule_detail,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/stock/doctype/packed_item/packed_item.json,packed_item,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_invoice_timesheet/sales_invoice_timesheet.json,sales_invoice_timesheet,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_taxes_and_charges/sales_taxes_and_charges.json,sales_taxes_and_charges,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_invoice_advance/sales_invoice_advance.json,sales_invoice_advance,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/payment_schedule/payment_schedule.json,payment_schedule,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/sales_invoice_payment/sales_invoice_payment.json,sales_invoice_payment,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/selling/doctype/sales_team/sales_team.json,sales_team,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/item_wise_tax_detail/item_wise_tax_detail.json,item_wise_tax_detail,UNRESOLVED_ON_DISK,False
+Sales Invoice,data_model,erpnext/erpnext/accounts/doctype/tax_withholding_entry/tax_withholding_entry.json,tax_withholding_entry,UNRESOLVED_ON_DISK,False
+Sales Invoice,framework,erpnext/erpnext/hooks.py,hooks,UNRESOLVED_ON_DISK,False
+Sales Invoice,framework,erpnext/erpnext/hooks.py,hooks,UNRESOLVED_ON_DISK,False
+Sales Invoice,framework,erpnext/erpnext/hooks.py,hooks,UNRESOLVED_ON_DISK,False
+Sales Invoice,tests,erpnext/erpnext/accounts/doctype/sales_invoice/test_records.json,test_records,UNRESOLVED_ON_DISK,False
+Sales Invoice,tests,erpnext/erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py,test_sales_invoice,UNRESOLVED_ON_DISK,False
+Item,frontend,erpnext/erpnext/stock/doctype/item/item.js,item,UNRESOLVED_ON_DISK,False
+Item,frontend,erpnext/erpnext/stock/doctype/item/item_list.js,item_list,UNRESOLVED_ON_DISK,False
+Item,backend,erpnext/erpnext/stock/doctype/item/item.py,item,UNRESOLVED_ON_DISK,False
+Item,backend,erpnext/erpnext/stock/doctype/item/item_dashboard.py,item_dashboard,UNRESOLVED_ON_DISK,False
+Item,backend,erpnext/erpnext/stock/doctype/item/item_search.py,item_search,UNRESOLVED_ON_DISK,False
+Item,backend,erpnext/erpnext/stock/doctype/item/__init__.py,__init__,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item/item.json,item,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_barcode/item_barcode.json,item_barcode,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_reorder/item_reorder.json,item_reorder,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/uom_conversion_detail/uom_conversion_detail.json,uom_conversion_detail,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_variant_attribute/item_variant_attribute.json,item_variant_attribute,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_default/item_default.json,item_default,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_supplier/item_supplier.json,item_supplier,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_customer_detail/item_customer_detail.json,item_customer_detail,UNRESOLVED_ON_DISK,False
+Item,data_model,erpnext/erpnext/stock/doctype/item_tax/item_tax.json,item_tax,UNRESOLVED_ON_DISK,False
+Item,tests,erpnext/erpnext/stock/doctype/item/test_item.py,test_item,UNRESOLVED_ON_DISK,False
+Item,tests,erpnext/erpnext/stock/doctype/item/test_item_search.py,test_item_search,UNRESOLVED_ON_DISK,False
+Customer,frontend,erpnext/erpnext/selling/doctype/customer/customer.js,customer,UNRESOLVED_ON_DISK,False
+Customer,frontend,erpnext/erpnext/selling/doctype/customer/customer_list.js,customer_list,UNRESOLVED_ON_DISK,False
+Customer,backend,erpnext/erpnext/selling/doctype/customer/customer.py,customer,UNRESOLVED_ON_DISK,False
+Customer,backend,erpnext/erpnext/selling/doctype/customer/customer_dashboard.py,customer_dashboard,UNRESOLVED_ON_DISK,False
+Customer,backend,erpnext/erpnext/selling/doctype/customer/customer_overview.py,customer_overview,UNRESOLVED_ON_DISK,False
+Customer,backend,erpnext/erpnext/selling/doctype/customer/mapper.py,mapper,UNRESOLVED_ON_DISK,False
+Customer,backend,erpnext/erpnext/selling/doctype/customer/__init__.py,__init__,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/selling/doctype/customer/customer.json,customer,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/accounts/doctype/allowed_to_transact_with/allowed_to_transact_with.json,allowed_to_transact_with,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/accounts/doctype/party_account/party_account.json,party_account,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/selling/doctype/sales_team/sales_team.json,sales_team,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/selling/doctype/customer_credit_limit/customer_credit_limit.json,customer_credit_limit,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/utilities/doctype/portal_user/portal_user.json,portal_user,UNRESOLVED_ON_DISK,False
+Customer,data_model,erpnext/erpnext/selling/doctype/supplier_number_at_customer/supplier_number_at_customer.json,supplier_number_at_customer,UNRESOLVED_ON_DISK,False
+Customer,tests,erpnext/erpnext/selling/doctype/customer/test_customer.py,test_customer,UNRESOLVED_ON_DISK,False
+Customer,tests,erpnext/erpnext/selling/doctype/customer/test_customer_overview.py,test_customer_overview,UNRESOLVED_ON_DISK,False
+Stock Entry,frontend,erpnext/erpnext/stock/doctype/stock_entry/stock_entry.js,stock_entry,UNRESOLVED_ON_DISK,False
+Stock Entry,frontend,erpnext/erpnext/stock/doctype/stock_entry/stock_entry_list.js,stock_entry_list,UNRESOLVED_ON_DISK,False
+Stock Entry,backend,erpnext/erpnext/stock/doctype/stock_entry/stock_entry.py,stock_entry,UNRESOLVED_ON_DISK,False
+Stock Entry,backend,erpnext/erpnext/stock/doctype/stock_entry/stock_entry_dashboard.py,stock_entry_dashboard,UNRESOLVED_ON_DISK,False
+Stock Entry,backend,erpnext/erpnext/stock/doctype/stock_entry/stock_entry_utils.py,stock_entry_utils,UNRESOLVED_ON_DISK,False
+Stock Entry,backend,erpnext/erpnext/stock/doctype/stock_entry/__init__.py,__init__,UNRESOLVED_ON_DISK,False
+Stock Entry,data_model,erpnext/erpnext/stock/doctype/stock_entry/stock_entry.json,stock_entry,UNRESOLVED_ON_DISK,False
+Stock Entry,data_model,erpnext/erpnext/stock/doctype/stock_entry_detail/stock_entry_detail.json,stock_entry_detail,UNRESOLVED_ON_DISK,False
+Stock Entry,data_model,erpnext/erpnext/stock/doctype/landed_cost_taxes_and_charges/landed_cost_taxes_and_charges.json,landed_cost_taxes_and_charges,UNRESOLVED_ON_DISK,False
+Stock Entry,tests,erpnext/erpnext/stock/doctype/stock_entry/test_records.json,test_records,UNRESOLVED_ON_DISK,False
+Stock Entry,tests,erpnext/erpnext/stock/doctype/stock_entry/test_stock_entry.py,test_stock_entry,UNRESOLVED_ON_DISK,False
+Payment Entry,frontend,erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.js,payment_entry,UNRESOLVED_ON_DISK,False
+Payment Entry,frontend,erpnext/erpnext/accounts/doctype/payment_entry/payment_entry_list.js,payment_entry_list,UNRESOLVED_ON_DISK,False
+Payment Entry,backend,erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.py,payment_entry,UNRESOLVED_ON_DISK,False
+Payment Entry,backend,erpnext/erpnext/accounts/doctype/payment_entry/__init__.py,__init__,UNRESOLVED_ON_DISK,False
+Payment Entry,data_model,erpnext/erpnext/accounts/doctype/payment_entry/payment_entry.json,payment_entry,UNRESOLVED_ON_DISK,False
+Payment Entry,data_model,erpnext/erpnext/accounts/doctype/payment_entry_reference/payment_entry_reference.json,payment_entry_reference,UNRESOLVED_ON_DISK,False
+Payment Entry,data_model,erpnext/erpnext/accounts/doctype/payment_entry_deduction/payment_entry_deduction.json,payment_entry_deduction,UNRESOLVED_ON_DISK,False
+Payment Entry,data_model,erpnext/erpnext/accounts/doctype/advance_taxes_and_charges/advance_taxes_and_charges.json,advance_taxes_and_charges,UNRESOLVED_ON_DISK,False
+Payment Entry,data_model,erpnext/erpnext/accounts/doctype/tax_withholding_entry/tax_withholding_entry.json,tax_withholding_entry,UNRESOLVED_ON_DISK,False
+Payment Entry,framework,erpnext/erpnext/hooks.py,hooks,UNRESOLVED_ON_DISK,False
+Payment Entry,tests,erpnext/erpnext/accounts/doctype/payment_entry/test_payment_entry.py,test_payment_entry,UNRESOLVED_ON_DISK,False

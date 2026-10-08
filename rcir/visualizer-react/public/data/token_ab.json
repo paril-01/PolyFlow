@@ -6,7 +6,7 @@
   "measurement_source": "PROVIDER_NATIVE",
   "individual_trials": 10,
   "paired_comparisons": 5,
-  "valid_pairs": 5,
+  "valid_pairs": 3,
   "successful_pairs": 0,
   "median_input_token_delta_pct": 1.68,
   "pairs": [
@@ -20,7 +20,8 @@
         "turns_used": 5,
         "duration_seconds": 77.54,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "rcir": {
         "prompt_tokens": 4976,
@@ -29,7 +30,8 @@
         "turns_used": 5,
         "duration_seconds": 61.78,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "input_token_delta_pct": 1.68,
       "status": "VALID_PAIR"
@@ -44,7 +46,8 @@
         "turns_used": 3,
         "duration_seconds": 147.92,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": "LLMProviderError: Ollama provider call failed: timed out"
       },
       "rcir": {
         "prompt_tokens": 673,
@@ -53,10 +56,11 @@
         "turns_used": 2,
         "duration_seconds": 126.54,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": "LLMProviderError: Ollama provider call failed: timed out"
       },
-      "input_token_delta_pct": 52.97,
-      "status": "VALID_PAIR"
+      "input_token_delta_pct": null,
+      "status": "TIMEOUT"
     },
     {
       "task_id": "BLIND-TASK-03",
@@ -68,7 +72,8 @@
         "turns_used": 5,
         "duration_seconds": 68.88,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "rcir": {
         "prompt_tokens": 4512,
@@ -77,7 +82,8 @@
         "turns_used": 5,
         "duration_seconds": 47.12,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "input_token_delta_pct": 25.84,
       "status": "VALID_PAIR"
@@ -92,7 +98,8 @@
         "turns_used": 4,
         "duration_seconds": 147.55,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": "LLMProviderError: Ollama provider call failed: timed out"
       },
       "rcir": {
         "prompt_tokens": 5876,
@@ -101,10 +108,11 @@
         "turns_used": 5,
         "duration_seconds": 129.65,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
-      "input_token_delta_pct": -121.57,
-      "status": "VALID_PAIR"
+      "input_token_delta_pct": null,
+      "status": "TIMEOUT"
     },
     {
       "task_id": "BLIND-TASK-05",
@@ -116,7 +124,8 @@
         "turns_used": 5,
         "duration_seconds": 70.19,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "rcir": {
         "prompt_tokens": 4888,
@@ -125,7 +134,8 @@
         "turns_used": 5,
         "duration_seconds": 78.55,
         "success": false,
-        "gatekeeper": "REJECT"
+        "gatekeeper": "REJECT",
+        "error": null
       },
       "input_token_delta_pct": -5.48,
       "status": "VALID_PAIR"

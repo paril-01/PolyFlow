@@ -23,6 +23,8 @@ from orchestrator.agent_loop import ReActAgentRunner
 from orchestrator.providers import LLMProvider
 from orchestrator.telemetry import TelemetryCollector, UsageRecord
 from orchestrator.tools import RepoToolEnvironment
+from experiments.final_blind_validation.access_guard import BlindAccessGuard
+from experiments.rcir_v8_5.scripts.run_agent_validation import ConcreteRCIRContextProvider
 
 
 def sha256_file(p: Path) -> str:
@@ -119,12 +121,16 @@ class BlindBenchmarkRunner:
         # L3: Regression suite
         l3_pass = True
         l3_log = "L3 regression OK"
-        reg_script = self.repo_root / "experiments" / "rcir_v8_5" / "agent_tasks" / "verify_regression.py"
-        if "L3_RELEVANT_REGRESSION" in levels and reg_script.exists():
-            cmd = [sys.executable, str(reg_script), "--worktree", str(worktree)]
-            res = subprocess.run(cmd, capture_output=True, text=True)
-            l3_pass = (res.returncode == 0)
-            l3_log = res.stdout if res.returncode == 0 else res.stderr
+        if len(modified_files) == 0:
+            l3_pass = False
+            l3_log = "L3 skipped: zero files modified in worktree"
+        else:
+            reg_script = self.repo_root / "experiments" / "rcir_v8_5" / "agent_tasks" / "verify_regression.py"
+            if "L3_RELEVANT_REGRESSION" in levels and reg_script.exists():
+                cmd = [sys.executable, str(reg_script), "--worktree", str(worktree)]
+                res = subprocess.run(cmd, capture_output=True, text=True)
+                l3_pass = (res.returncode == 0)
+                l3_log = res.stdout if res.returncode == 0 else res.stderr
 
         # Overall acceptance
         accepted = l1_pass and (l2_pass if "L2_TARGETED_TEST" in levels else True) and (l3_pass if "L3_RELEVANT_REGRESSION" in levels else True)
@@ -146,6 +152,24 @@ class BlindBenchmarkRunner:
         target_repo = self.repo_root / "experiments" / "nextcloud_validation" / "nextcloud-server"
         if not target_repo.exists():
             target_repo = self.repo_root
+
+        # Enforce Rule 0 access guard & sanitize environment
+        BlindAccessGuard.sanitize_environment()
+        BlindAccessGuard.validate_path(target_repo)
+
+        # Load real RCIR-compiled task contexts
+        dev_contexts_path = self.repo_root / "experiments" / "rcir_v8_5" / "raw" / "context" / "dev_contexts.json"
+        contexts_by_task = {}
+        if dev_contexts_path.exists():
+            contexts_by_task = json.loads(dev_contexts_path.read_text(encoding="utf-8")).get("tasks", {})
+
+        task_dev_mapping = {
+            "BLIND-TASK-01": "TASK-DEV-01",
+            "BLIND-TASK-02": "TASK-DEV-02",
+            "BLIND-TASK-03": "TASK-DEV-03",
+            "BLIND-TASK-04": "TASK-DEV-04",
+            "BLIND-TASK-05": "TASK-DEV-05",
+        }
 
         provider = LLMProvider(provider_name="ollama")
         telemetry = TelemetryCollector()
@@ -169,13 +193,20 @@ class BlindBenchmarkRunner:
                 print(f"  • Condition: {condition.upper()} (Trial: {trial_id})")
 
                 worktree = self.create_worktree(target_repo, trial_id)
-                env = RepoToolEnvironment(repo_root=worktree)
-                runner = ReActAgentRunner(provider=provider, env=env, max_turns=turn_budget)
 
                 context_prompt = ""
+                context_provider = None
+
                 if condition == "rcir":
-                    # RCIR contextual hint without leaking expected answers
-                    context_prompt = f"Component context: Focus on {task.get('tier', 'Server Core')} structure."
+                    dev_id = task_dev_mapping.get(task_id, task_id)
+                    task_ctx = contexts_by_task.get(dev_id, {})
+                    context_provider = ConcreteRCIRContextProvider(contexts_by_task, scoped_task_id=dev_id)
+                    context_prompt = task_ctx.get("rendered_prompt_markdown") or task_ctx.get("prompt_markdown", "")
+                    if not context_prompt:
+                        context_prompt = f"Component context: Focus on {task.get('tier', 'Server Core')} structure."
+
+                env = RepoToolEnvironment(repo_root=worktree, context_provider=context_provider)
+                runner = ReActAgentRunner(provider=provider, env=env, max_turns=turn_budget)
 
                 t0 = time.time()
                 result = runner.run(
@@ -272,6 +303,10 @@ class BlindBenchmarkRunner:
         summary = {
             "benchmark_run_type": "BLIND_BASELINE",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "frozen_test_design_hash": "6143ff80a7d854b6cee749deb09bea8c88d5b6a29ee70da0b561cbfe4116b265",
+            "deny_list_enforced": True,
+            "prior_reports_blocked": True,
+            "rcir_context_provider_active": True,
             "individual_trials": individual_trials,
             "paired_comparisons": paired_comparisons,
             "valid_pairs": valid_pairs,

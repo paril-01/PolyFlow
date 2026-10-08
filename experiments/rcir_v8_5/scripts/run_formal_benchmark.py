@@ -177,14 +177,17 @@ def run_formal_benchmark(
         
         # F02: Verify machine-readable semantic stage result
         stage_res_file = env.results_root / f"{module_name}_result.json"
-        gate_status = "PASS"
         stage_data: Dict[str, Any] = {}
         if stage_res_file.exists():
             try:
                 stage_data = json.loads(stage_res_file.read_text(encoding="utf-8"))
                 gate_status = stage_data.get("gate_status", "PASS")
-            except Exception:
-                pass
+            except Exception as e:
+                gate_status = "INVALID"
+                stage_data = {"failures": [f"Corrupt semantic stage result file: {e}"]}
+        else:
+            gate_status = "NOT_MEASURED"
+            stage_data = {"failures": [f"Missing semantic stage result file: {stage_res_file.name}"]}
 
         status_str = "PASSED" if gate_status in ("PASS", "NOT_REQUIRED") else "FAILED"
         run_meta["stages"][module_name] = {

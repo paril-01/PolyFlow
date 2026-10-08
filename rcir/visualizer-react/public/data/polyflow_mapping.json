@@ -331,9 +331,9 @@
           },
           "framework": {
             "files": [
-              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py",
-              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py",
-              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py"
+              "erpnext/erpnext/hooks.py",
+              "erpnext/erpnext/hooks.py",
+              "erpnext/erpnext/hooks.py"
             ]
           },
           "tests": {
@@ -343,7 +343,7 @@
             ]
           }
         },
-        "native_artifact_count": 20,
+        "native_artifact_count": 21,
         "polyflow_module_count": 1,
         "unresolved_artifacts": []
       },
@@ -363,10 +363,10 @@
         "frontend": 1.0,
         "backend": 1.0,
         "data_model": 1.0,
-        "framework": 0.85,
+        "framework": 0.0,
         "tests": 1.0,
         "dependencies": 1.0,
-        "overall": 0.975
+        "overall": 0.833
       },
       "stack_manifest": {
         "feature": "Item",
@@ -439,10 +439,10 @@
         "frontend": 1.0,
         "backend": 1.0,
         "data_model": 1.0,
-        "framework": 0.85,
+        "framework": 0.0,
         "tests": 1.0,
         "dependencies": 1.0,
-        "overall": 0.975
+        "overall": 0.833
       },
       "stack_manifest": {
         "feature": "Customer",
@@ -514,10 +514,10 @@
         "frontend": 1.0,
         "backend": 1.0,
         "data_model": 1.0,
-        "framework": 0.85,
+        "framework": 0.0,
         "tests": 1.0,
         "dependencies": 1.0,
-        "overall": 0.975
+        "overall": 0.833
       },
       "stack_manifest": {
         "feature": "Stock Entry",
@@ -626,7 +626,7 @@
           },
           "framework": {
             "files": [
-              "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\erpnext_validation\\erpnext\\erpnext\\hooks.py"
+              "erpnext/erpnext/hooks.py"
             ]
           },
           "tests": {
@@ -635,7 +635,7 @@
             ]
           }
         },
-        "native_artifact_count": 10,
+        "native_artifact_count": 11,
         "polyflow_module_count": 1,
         "unresolved_artifacts": []
       },

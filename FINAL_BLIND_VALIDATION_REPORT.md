@@ -14,7 +14,7 @@ This report documents the final blind validation, comprehensive defect rectifica
 
 In adherence to non-negotiable **Rule 0**:
 1. All baseline evaluations were performed under an explicit access guard deny-list before any previous report conclusions, summaries, or showcase presentations could be accessed.
-2. The benchmark test design (`test_design.json`, SHA-256: `a1c5b8b6d4b4a1a5adbc2f9024f923a1a9e6bb07bf791ef603a110680a6b65ee`) was frozen and verified prior to execution.
+2. The benchmark test design (`test_design.json`, SHA-256: `6143ff80a7d854b6cee749deb09bea8c88d5b6a29ee70da0b561cbfe4116b265`) was frozen and verified prior to execution.
 3. Every quantitative metric is derived strictly from real provider telemetry, host compilers (`php -l`, `javac`, Python 3.12, Node.js), and clean worktree executions.
 4. No synthetic git diffs, mock gatekeeper approvals, fabricated IDE credits, or hardcoded benchmark percentages were utilized.
 
@@ -162,7 +162,7 @@ All automated tests pass cleanly with zero failures:
 
 | Artifact Path | SHA-256 Checksum | Description |
 |:---|:---:|:---|
-| `experiments/final_blind_validation/test_design.json` | `a1c5b8b6d4b4a1a5adbc2f9024f923a1a9e6bb07bf791ef603a110680a6b65ee` | Frozen Blind Test Design |
+| `experiments/final_blind_validation/test_design.json` | `6143ff80a7d854b6cee749deb09bea8c88d5b6a29ee70da0b561cbfe4116b265` | Frozen Blind Test Design |
 | `experiments/final_blind_validation/results/blind_baseline.json` | `1dafb9ee7b37d7a8e5a7d79b691b0d778d107a0c10f37b192e59178ad855799a` | Baseline Provider Telemetry |
 | `experiments/final_blind_validation/results/blind_after_fix.json` | `d7a5eb40822181c00fa88de5eb5e3b2e5ef49a42531da1f1a5df8c5f5e5df6c4` | Post-Rectification Results |
 | `experiments/final_blind_validation/results/blind_delta.json` | `c486663ad839ce6bb9a4235e160e1d8869ff3c706aa8f10398863f6eeeb79092` | Comparative Delta Matrix |

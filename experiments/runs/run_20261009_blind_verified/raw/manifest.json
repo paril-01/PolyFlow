@@ -1,0 +1,15 @@
+{
+  "manifest_version": "1.0.0",
+  "created_at": "2026-10-08T14:54:16Z",
+  "test_design_hash": "6143ff80a7d854b6cee749deb09bea8c88d5b6a29ee70da0b561cbfe4116b265",
+  "source_inventory_hash": "9899dfbfc87f44001f84c34f41800fe3288f91376d0c16f4ecbb2a564b186fdd",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "rule_0_blind_guard": "ENFORCED",
+  "denied_paths": [
+    "FINAL_SYSTEM_ASSESSMENT.md",
+    "showcase/**",
+    "benchmarkData.js",
+    "experiments/rcir_runs/**"
+  ],
+  "test_design_version": "1.1.0"
+}

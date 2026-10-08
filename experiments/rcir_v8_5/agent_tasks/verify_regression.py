@@ -112,18 +112,8 @@ def run_regression_check(worktree_root: Path) -> int:
         pass
 
     if not modified_php_files:
-        candidates = [
-            worktree_root / "apps" / "files" / "lib" / "Controller" / "ApiController.php",
-            worktree_root / "lib" / "public" / "Files" / "Events" / "Node" / "NodeDeletedEvent.php",
-            worktree_root / "lib" / "public" / "Share" / "IShare.php",
-            worktree_root / "lib" / "public" / "IConfig.php",
-            worktree_root / "lib" / "public" / "IUserSession.php",
-        ]
-        modified_php_files = [c for c in candidates if c.exists()]
-
-    if not modified_php_files:
-        sys.stderr.write("SETUP_ERROR: No PHP files to verify regression syntax.\n")
-        return 2
+        print("REGRESSION_SKIPPED: Zero files modified in worktree. Regression not applicable.")
+        return 4
 
     for tf in modified_php_files:
         ok, msg = check_php_syntax(tf)

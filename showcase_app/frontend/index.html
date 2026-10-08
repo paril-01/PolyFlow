@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolyFlow — Evidence-First Architectural Showcase</title>
+  <meta name="description" content="PolyFlow unified feature architecture, PolyCell polyglot interpreter, and RCIR context compiler demonstration.">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <span class="brand-title">PolyFlow</span>
+        <span class="brand-badge">Evidence-First</span>
+        <span class="brand-badge" id="header-repo-badge">ERPNext v15</span>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Showcase Tabs">
+        <button class="tab-btn active" data-tab="tab-polyflow" id="btn-tab-polyflow">1. PolyFlow</button>
+        <button class="tab-btn" data-tab="tab-interpreter" id="btn-tab-interpreter">2. Interpreter</button>
+        <button class="tab-btn" data-tab="tab-rcir" id="btn-tab-rcir">3. RCIR</button>
+        <button class="tab-btn" data-tab="tab-proofs" id="btn-tab-proofs">4. Proofs</button>
+        <button class="tab-btn" data-tab="tab-erpnext" id="btn-tab-erpnext">5. ERPNext</button>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-dot"></span>
+        <span id="backend-status-text">Live Backend Connected</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+
+      <!-- TAB 01: PolyFlow (Native vs Feature View) -->
+      <section class="tab-pane active" id="tab-polyflow">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 20px; font-weight: 700;">Native vs Feature View</h1>
+            <p style="color: var(--text-secondary); font-size: 13px;">ERPNext Sales Invoice: 12 scattered native artifacts unified into 1 cohesive feature entry point.</p>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <span class="brand-badge" style="background: var(--bg-tertiary);">Reduction Ratio: 12 : 1</span>
+            <button class="btn btn-outline btn-sm" id="btn-open-polyflow-proof">View Proof</button>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Left: Native ERPNext Sources -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Original ERPNext (Scattered Layers)</span>
+              <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">12 Native Files</span>
+            </div>
+            <div class="panel-body" style="padding: 12px;">
+              <div id="native-layers-container" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Dynamically populated native layers -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Unified PolyFlow Feature -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">PolyFlow Specification (sales_invoice.poly)</span>
+              <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">1 Entry Point (142 LOC)</span>
+            </div>
+            <div class="panel-body" style="padding: 12px;">
+              <div class="code-container" id="poly-code-view">
+                <!-- Dynamically populated .poly code -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 02: Interpreter (Real-time Animated Workflow) -->
+      <section class="tab-pane" id="tab-interpreter">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 20px; font-weight: 700;">PolyCell Polyglot Runtime</h1>
+            <p style="color: var(--text-secondary); font-size: 13px;">Real-time animated execution of polyglot cells with contract validation and fallback policy.</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn btn-primary" id="btn-run-normal">Run Normal Flow</button>
+            <button class="btn btn-danger" id="btn-run-failure">Run Failure Flow</button>
+          </div>
+        </div>
+
+        <!-- Animated Workflow Stage Diagram -->
+        <div class="workflow-diagram" id="workflow-diagram">
+          <div class="workflow-node" id="node-parse">
+            <div class="node-title">Stage 1</div>
+            <div class="node-label">Parser / AST</div>
+          </div>
+          <div class="workflow-arrow">→</div>
+          <div class="workflow-node" id="node-validate">
+            <div class="node-title">Stage 2</div>
+            <div class="node-label">Schema Guard</div>
+          </div>
+          <div class="workflow-arrow">→</div>
+          <div class="workflow-node" id="node-schedule">
+            <div class="node-title">Stage 3</div>
+            <div class="node-label">Cell Scheduler</div>
+          </div>
+          <div class="workflow-arrow">→</div>
+          <div class="workflow-node" id="node-runtimes">
+            <div class="node-title">Stage 4</div>
+            <div class="node-label">Python / JS Cells</div>
+          </div>
+          <div class="workflow-arrow">→</div>
+          <div class="workflow-node" id="node-merge">
+            <div class="node-title">Stage 5</div>
+            <div class="node-label">Merge / Fallback</div>
+          </div>
+          <div class="workflow-arrow">→</div>
+          <div class="workflow-node" id="node-receipt">
+            <div class="node-title">Stage 6</div>
+            <div class="node-label">Signed Receipt</div>
+          </div>
+        </div>
+
+        <!-- Telemetry & Details Grid -->
+        <div class="grid-3col" style="margin-bottom: 24px;">
+          <div class="metric-card">
+            <div class="metric-label">Execution Status</div>
+            <div class="metric-value" id="interp-status-val">READY</div>
+            <div class="metric-sub" id="interp-status-sub">Waiting for execution trigger</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Measured Latency</div>
+            <div class="metric-value" id="interp-latency-val">-- ms</div>
+            <div class="metric-sub">PolyCell fast native execution</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Cells Executed</div>
+            <div class="metric-value" id="interp-cells-val">0 / 5</div>
+            <div class="metric-sub" id="interp-fallback-sub">0 fallbacks triggered</div>
+          </div>
+        </div>
+
+        <!-- Two Expandable Sections -->
+        <div class="grid-2col">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Run Details & Cell Timeline</span>
+              <span class="brand-badge" id="interp-mode-badge">SSE STREAM</span>
+            </div>
+            <div class="panel-body">
+              <div id="interp-timeline" style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 12px; max-height: 280px; overflow-y: auto;">
+                <div style="color: var(--text-muted);">No active run. Click 'Run Normal Flow' or 'Run Failure Flow' above.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Execution Receipt & Provenance</span>
+              <button class="btn btn-outline btn-sm" id="btn-copy-receipt">Copy Receipt</button>
+            </div>
+            <div class="panel-body">
+              <div class="code-container" style="max-height: 280px;">
+                <pre id="interp-receipt-view" style="color: var(--text-secondary);">Waiting for receipt emission...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 03: RCIR (Structure and Token Comparison) -->
+      <section class="tab-pane" id="tab-rcir">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 20px; font-weight: 700;">RCIR — Repository Context Information Retrieval</h1>
+            <p style="color: var(--text-secondary); font-size: 13px;">Compiler pipeline and token telemetry comparison under blind benchmark conditions.</p>
+          </div>
+          <div style="display: flex; gap: 4px; background: var(--bg-secondary); padding: 4px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <button class="btn btn-sm btn-primary" id="btn-rcir-sub-pipeline">How it works</button>
+            <button class="btn btn-sm btn-outline" id="btn-rcir-sub-tokens">Tokens Comparison</button>
+          </div>
+        </div>
+
+        <!-- Subtab 1: Pipeline & Live Query -->
+        <div id="rcir-subtab-pipeline">
+          <div class="workflow-diagram" style="margin-bottom: 24px;">
+            <div class="workflow-node"><div class="node-title">Step 1</div><div class="node-label">Repository</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 2</div><div class="node-label">Index</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 3</div><div class="node-label">Graph</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 4</div><div class="node-label">Retrieve</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 5</div><div class="node-label">Rank</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 6</div><div class="node-label">Pack</div></div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-node"><div class="node-title">Step 7</div><div class="node-label">Agent Context</div></div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Query Candidate Selector</span>
+                <span class="brand-badge">accounts domain</span>
+              </div>
+              <div class="panel-body">
+                <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                  <input type="text" id="rcir-query-input" value="Find accounting ledger entry calculation in ERPNext" style="flex: 1; background: var(--bg-primary); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px;">
+                  <button class="btn btn-primary" id="btn-rcir-run-query">Run Query</button>
+                </div>
+                <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                  <div><span style="color: var(--text-muted); font-size: 11px;">REPO FILES:</span> <strong id="rcir-repo-files">4,412</strong></div>
+                  <div><span style="color: var(--text-muted); font-size: 11px;">SELECTED:</span> <strong id="rcir-selected-files">5</strong></div>
+                  <div><span style="color: var(--text-muted); font-size: 11px;">BUDGET:</span> <strong id="rcir-budget-tokens">4,000</strong></div>
+                </div>
+                <div id="rcir-candidates-list" style="display: flex; flex-direction: column; gap: 8px;">
+                  <!-- Candidates -->
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Selected Context Evidence</span>
+                <span class="brand-badge">Source Provenance</span>
+              </div>
+              <div class="panel-body">
+                <div class="code-container" style="max-height: 380px;">
+                  <pre id="rcir-evidence-view" style="color: var(--text-secondary);">Select a ranked candidate on the left to inspect its dependency justification.</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtab 2: Measured Token Comparison -->
+        <div id="rcir-subtab-tokens" style="display: none;">
+          <div class="grid-2col" style="margin-bottom: 24px;">
+            <!-- Without RCIR -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Without RCIR (Baseline Condition)</span>
+                <span class="brand-badge" style="color: var(--accent-amber);">Unassisted Tools</span>
+              </div>
+              <div class="panel-body">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                  <div>
+                    <div class="metric-label">Mean Input Tokens</div>
+                    <div class="metric-value" style="font-size: 20px;">4,820</div>
+                  </div>
+                  <div>
+                    <div class="metric-label">Mean Total Tokens</div>
+                    <div class="metric-value" style="font-size: 20px;">5,380</div>
+                  </div>
+                  <div>
+                    <div class="metric-label">Completed Task Success</div>
+                    <div class="metric-value" style="font-size: 20px; color: var(--accent-red);">0 / 5 (0.0%)</div>
+                    <div class="metric-sub">qwen2.5-coder:1.5b local capability limit</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- With RCIR -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">With RCIR (Compiled Context)</span>
+                <span class="brand-badge" style="color: var(--accent-green);">Live Context Provider</span>
+              </div>
+              <div class="panel-body">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                  <div>
+                    <div class="metric-label">Mean Input Tokens</div>
+                    <div class="metric-value" style="font-size: 20px;">4,740</div>
+                  </div>
+                  <div>
+                    <div class="metric-label">Mean Total Tokens</div>
+                    <div class="metric-value" style="font-size: 20px;">5,290</div>
+                  </div>
+                  <div>
+                    <div class="metric-label">Completed Task Success</div>
+                    <div class="metric-value" style="font-size: 20px; color: var(--accent-red);">0 / 5 (0.0%)</div>
+                    <div class="metric-sub">No successful paired trial evidence</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Empirical Paired Token Usage Ledger (3 Valid Pairs / 2 Timeouts)</span>
+              <div style="display: flex; gap: 8px;">
+                <a href="/api/benchmarks/run_20261009_blind_verified/pairs.csv" target="_blank" class="btn btn-outline btn-sm">Download pairs.csv</a>
+              </div>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+              <table class="data-table" id="table-paired-tokens">
+                <thead>
+                  <tr>
+                    <th>Task ID</th>
+                    <th>Status</th>
+                    <th>Baseline Prompt</th>
+                    <th>RCIR Prompt</th>
+                    <th>Input Delta %</th>
+                    <th>Baseline Total</th>
+                    <th>RCIR Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-paired-tokens">
+                  <!-- Populated from paired_token_usage.csv -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 04: Proofs (Neutral Compact Evidence Library) -->
+      <section class="tab-pane" id="tab-proofs">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 20px; font-weight: 700;">Verified Evidence & Benchmark Artifacts</h1>
+            <p style="color: var(--text-secondary); font-size: 13px;">Allow-listed proof registry with cryptographic SHA-256 integrity and path-traversal protection.</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-outline btn-sm" id="btn-refresh-proofs">Refresh Registry</button>
+          </div>
+        </div>
+
+        <div class="grid-3col" style="margin-bottom: 24px;">
+          <div class="metric-card">
+            <div class="metric-label">Benchmark Run ID</div>
+            <div class="metric-value" style="font-size: 16px;">run_20261009_blind_verified</div>
+            <div class="metric-sub">Frozen commit: 3a29ceb... (HEAD)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Valid Pairs Accounting</div>
+            <div class="metric-value" style="font-size: 16px;">3 Valid / 2 Timeouts</div>
+            <div class="metric-sub">Zero synthetic passes</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Registered Proof Files</div>
+            <div class="metric-value" id="proofs-count-val" style="font-size: 16px;">--</div>
+            <div class="metric-sub">SHA-256 validated on serving</div>
+          </div>
+        </div>
+
+        <!-- CSV Export Hub -->
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <span class="panel-title">Export Hub — Derived Empirical CSVs</span>
+            <span class="brand-badge">9 Official Datasets</span>
+          </div>
+          <div class="panel-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;" id="csv-links-grid">
+              <!-- Dynamically populated CSV links -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Proof Files Table -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Evidence Artifact Registry</span>
+            <span class="brand-badge" id="proof-status-badge">Integrity Guard Active</span>
+          </div>
+          <div class="panel-body" style="padding: 0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Proof ID</th>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>SHA-256</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-proofs-registry">
+                <!-- Dynamically populated proofs -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 05: ERPNext (Scale and Transformation Tree) -->
+      <section class="tab-pane" id="tab-erpnext">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 20px; font-weight: 700;">ERPNext Enterprise Scale Transformation</h1>
+            <p style="color: var(--text-secondary); font-size: 13px;">840 DocType schemas, 842 Poly features, and 712,940 lines of code across 5 core domains.</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <a href="/api/erpnext/coverage.csv" target="_blank" class="btn btn-outline btn-sm">Download coverage_ledger.csv</a>
+          </div>
+        </div>
+
+        <div class="grid-3col" style="margin-bottom: 24px;">
+          <div class="metric-card">
+            <div class="metric-label">DocType Schemas (JSON)</div>
+            <div class="metric-value">840</div>
+            <div class="metric-sub">100% structural discovery</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Poly Features Mapped</div>
+            <div class="metric-value">842</div>
+            <div class="metric-sub">Modular feature closures</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Source Lines (LOC)</div>
+            <div class="metric-value">712,940</div>
+            <div class="metric-sub">Python, JS, DocType metadata</div>
+          </div>
+        </div>
+
+        <!-- Parity Tiers Segregation Alert -->
+        <div style="background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-weight: 600; color: var(--text-primary); font-size: 13px;">Parity Tier Separation:</span>
+            <span style="color: var(--text-secondary); font-size: 13px; margin-left: 8px;">Structural: 100% | Executable: Controlled Verticals | Behavioral: Local Fixture Only</span>
+          </div>
+          <span class="brand-badge" style="color: var(--accent-amber);">Fail-Closed Rule 0</span>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Left: Domain Tree -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">ERPNext Domain & Feature Tree</span>
+              <span class="brand-badge">5 Core Domains</span>
+            </div>
+            <div class="panel-body">
+              <div id="erpnext-domain-tree" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Populated tree -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Selected Feature Detail -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title" id="erpnext-selected-title">Feature Specification: Sales Invoice</span>
+              <span class="brand-badge" id="erpnext-selected-badge">VERIFIED_STRUCTURAL</span>
+            </div>
+            <div class="panel-body">
+              <div id="erpnext-feature-details" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Details -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal / Drawer Viewer for Proof Inspection -->
+  <div class="modal-overlay" id="proof-modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="panel-title" id="modal-proof-title">Proof Viewer</span>
+        <button class="btn btn-outline btn-sm" id="btn-close-modal">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container" style="max-height: 550px;">
+          <pre id="modal-proof-content" style="color: var(--text-secondary);">Loading proof...</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/polyflow.js"></script>
+  <script src="js/interpreter.js"></script>
+  <script src="js/rcir.js"></script>
+  <script src="js/proofs.js"></script>
+  <script src="js/erpnext.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

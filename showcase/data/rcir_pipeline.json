@@ -99,5 +99,43 @@
         210
       ]
     }
+  ],
+  "ranked_candidates": [
+    {
+      "rank": 1,
+      "path": "apps/files/lib/Controller/ApiController.php",
+      "symbol": "ApiController::getThumbnail",
+      "score": 0.985,
+      "reason": "Direct modified target and AST route controller handler",
+      "channel": "AST_TARGET",
+      "span": [
+        120,
+        165
+      ]
+    },
+    {
+      "rank": 2,
+      "path": "lib/public/Preview/IPreviewManager.php",
+      "symbol": "IPreviewManager::getPreview",
+      "score": 0.892,
+      "reason": "Direct 1-hop outbound call dependency from getThumbnail",
+      "channel": "CALL_GRAPH",
+      "span": [
+        45,
+        78
+      ]
+    },
+    {
+      "rank": 3,
+      "path": "lib/private/Preview/Manager.php",
+      "symbol": "PreviewManager::getPreview",
+      "score": 0.824,
+      "reason": "Interface implementer for IPreviewManager",
+      "channel": "TYPE_FLOW",
+      "span": [
+        150,
+        210
+      ]
+    }
   ]
 }

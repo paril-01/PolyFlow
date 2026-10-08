@@ -704,8 +704,13 @@ def run_agent_validation(env: Optional[Any] = None):
     with open(out_tb, "w", encoding="utf-8") as f:
         json.dump(turn_budget_result, f, indent=2)
 
+    # Calculate valid paired comparisons across rcir and baseline conditions
+    rcir_completed = {t.get("task_id") for t in trial_manifests if t.get("condition") == "rcir" and not t.get("error")}
+    base_completed = {t.get("task_id") for t in trial_manifests if t.get("condition") == "baseline" and not t.get("error")}
+    valid_pairs_count = len(rcir_completed.intersection(base_completed))
+    ab_result["valid_pairs"] = valid_pairs_count
+
     # F02: Emit machine-readable semantic stage result
-    valid_pairs_count = ab_result.get("valid_pairs", 0)
     stage_res = {
         "stage": "agent_validation",
         "execution_status": "COMPLETED",

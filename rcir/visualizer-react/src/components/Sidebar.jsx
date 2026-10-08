@@ -10,10 +10,10 @@ export function Sidebar({
   onToggleCollapse
 }) {
   const tabs = [
-    { id: 'polyflow', label: '01 PolyFlow — Feature Closure', icon: Layers, badge: 'Architecture' },
+    { id: 'polyflow', label: '01 PolyFlow — Feature View', icon: Layers, badge: 'Unified' },
     { id: 'interpreter', label: '02 Interpreter', icon: PlayCircle, badge: 'Runtime' },
     { id: 'rcir', label: '03 RCIR', icon: Network, badge: 'Context' },
-    { id: 'agent', label: '04 Agent & Validation', icon: ShieldCheck, badge: 'Blind A/B' },
+    { id: 'agent', label: '04 Agent & Validation', icon: ShieldCheck, badge: 'Proofs & A/B' },
     { id: 'erpnext', label: '05 ERPNext Scale', icon: Database, badge: 'Enterprise' }
   ];
 

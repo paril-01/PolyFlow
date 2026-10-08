@@ -1,8 +1,8 @@
 # Blind After-Fix Validation & Delta Report
 
 **Run Type:** `BLIND_AFTER_FIX`  
-**Timestamp:** 2026-10-08T15:43:54Z  
-**Evaluation Protocol:** Strict Blind Execution under Frozen Test Design (`a1c5b8b6d4b4a1a5...`)  
+**Timestamp:** 2026-10-08T18:29:22Z  
+**Evaluation Protocol:** Strict Blind Execution under Frozen Test Design (`6143ff80a7d854b6...`)  
 **Provider & Model:** Ollama `qwen2.5-coder:1.5b` (Local Hardware, Real-Time Inference)  
 **Turn Budget:** 5 turns per trial  
 

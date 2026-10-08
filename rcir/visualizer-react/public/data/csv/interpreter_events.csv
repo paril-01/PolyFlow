@@ -1,0 +1,6 @@
+run_id,workflow_mode,cell_id,language,event_type,timestamp,duration_ms,status,receipt_hash
+run_20261009_blind_verified,normal_flow,client_adapter,javascript,cell_executed,2026-10-09T00:00:00Z,0.1,SUCCESS,
+run_20261009_blind_verified,normal_flow,schema_guard,python,cell_executed,2026-10-09T00:00:00Z,2.96,SUCCESS,
+run_20261009_blind_verified,normal_flow,tax_calculation,python,cell_executed,2026-10-09T00:00:00Z,0.2,SUCCESS,
+run_20261009_blind_verified,normal_flow,gl_posting,python,cell_executed,2026-10-09T00:00:00Z,0.22,SUCCESS,
+run_20261009_blind_verified,normal_flow,notification_service,python,cell_executed,2026-10-09T00:00:00Z,0.1,SUCCESS,

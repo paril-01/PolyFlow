@@ -33,7 +33,7 @@
   ],
   "normal_run": {
     "execution_status": "SUCCESS",
-    "latency_ms": 22.4,
+    "latency_ms": 4.12,
     "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
     "cells_executed": 5,
     "cells": [
@@ -41,22 +41,25 @@
         "cell_id": "client_adapter",
         "language": "javascript",
         "status": "SUCCESS",
-        "latency_ms": 4.1,
+        "latency_ms": 0.1,
         "toolchain": "Node.js 20 (Client Form Script Sandbox)",
         "role": "Frontend Adapter",
         "output": {
-          "event": "validate_form",
-          "customer": "CUST-00912",
-          "items_count": 3,
-          "currency": "USD",
-          "client_validation": "PASSED"
+          "status": "success",
+          "native_engine": "PolyFlow-Native-JAVASCRIPT",
+          "feature": "client_adapter",
+          "processed": true,
+          "payload_keys": [
+            "customer",
+            "items"
+          ]
         }
       },
       {
         "cell_id": "schema_guard",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 3.2,
+        "latency_ms": 3.64,
         "toolchain": "CPython 3.12 (Contract Guard)",
         "role": "Validation",
         "output": {
@@ -71,7 +74,7 @@
         "cell_id": "tax_calculation",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 6.8,
+        "latency_ms": 0.15,
         "toolchain": "CPython 3.12 (SalesInvoiceController)",
         "role": "Business Rule",
         "output": {
@@ -86,7 +89,7 @@
         "cell_id": "gl_posting",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 5.1,
+        "latency_ms": 0.19,
         "toolchain": "CPython 3.12 (Frappe ORM Adapter)",
         "role": "Persistence Adapter",
         "output": {
@@ -115,7 +118,7 @@
         "cell_id": "notification_service",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 3.2,
+        "latency_ms": 0.1,
         "toolchain": "CPython 3.12 (doc_events Hook)",
         "role": "Notification",
         "output": {
@@ -127,16 +130,16 @@
       }
     ],
     "receipt": {
-      "receipt_id": "rcpt_sinv_2026_norm_9021",
+      "receipt_id": "rcpt_sinv_norm_1743e343",
       "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
       "status": "SUCCESS",
-      "provenance_hash": "e7b892a01948bd2189012a4921bf762901a89b01",
+      "provenance_hash": "1743e343b8ca6a5c923cb339386931ab557fdc6a0577f999c668475b1b14486a",
       "verified": true
     }
   },
   "cell_failure_run": {
     "execution_status": "DEGRADED",
-    "latency_ms": 28.5,
+    "latency_ms": 10.65,
     "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
     "injected_cell": "notification_service",
     "failure_details": {
@@ -150,7 +153,7 @@
         "cell_id": "client_adapter",
         "language": "javascript",
         "status": "SUCCESS",
-        "latency_ms": 4.0,
+        "latency_ms": 0.1,
         "toolchain": "Node.js 20",
         "role": "Frontend Adapter",
         "output": {
@@ -161,7 +164,7 @@
         "cell_id": "schema_guard",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 3.1,
+        "latency_ms": 3.64,
         "toolchain": "CPython 3.12",
         "role": "Validation",
         "output": {
@@ -172,7 +175,7 @@
         "cell_id": "tax_calculation",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 6.5,
+        "latency_ms": 0.15,
         "toolchain": "CPython 3.12",
         "role": "Business Rule",
         "output": {
@@ -184,7 +187,7 @@
         "cell_id": "gl_posting",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 5.0,
+        "latency_ms": 0.19,
         "toolchain": "CPython 3.12",
         "role": "Persistence Adapter",
         "output": {
@@ -196,7 +199,7 @@
         "cell_id": "notification_service",
         "language": "python",
         "status": "FAILED",
-        "latency_ms": 9.9,
+        "latency_ms": 6.52,
         "toolchain": "CPython 3.12",
         "role": "Notification",
         "error": "GatewayTimeout: Upstream notification webhook unreachable at port 443 after 3000ms"
@@ -218,10 +221,10 @@
     },
     "fallback_action": "Deferred to frappe.background_jobs queue with exponential backoff",
     "receipt": {
-      "receipt_id": "rcpt_sinv_2026_degraded_9022",
+      "receipt_id": "rcpt_sinv_degraded_cc6c3fd2",
       "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
       "status": "DEGRADED",
-      "provenance_hash": "4a0819bd89210fa098190281baf1098231089201",
+      "provenance_hash": "cc6c3fd277ffd2096654cf64aafbad6fe8007847fdcb4536d5febf094596c9e4",
       "verified": true
     }
   },
@@ -260,7 +263,7 @@
   "error_log": {
     "code": "PF_NOTIF_GATEWAY_TIMEOUT",
     "category": "NETWORK_TIMEOUT",
-    "timestamp": "2026-10-08T16:03:31Z",
+    "timestamp": "2026-10-08T18:33:53Z",
     "message": "Upstream notification webhook unreachable at port 443 after 3000ms. Applying @error-map fallback rule.",
     "file": "erpnext/hooks.py",
     "line": 84,
@@ -269,7 +272,7 @@
   },
   "injected_failure_run": {
     "execution_status": "DEGRADED",
-    "latency_ms": 28.5,
+    "latency_ms": 10.65,
     "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
     "injected_cell": "notification_service",
     "failure_details": {
@@ -283,7 +286,7 @@
         "cell_id": "client_adapter",
         "language": "javascript",
         "status": "SUCCESS",
-        "latency_ms": 4.0,
+        "latency_ms": 0.1,
         "toolchain": "Node.js 20",
         "role": "Frontend Adapter",
         "output": {
@@ -294,7 +297,7 @@
         "cell_id": "schema_guard",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 3.1,
+        "latency_ms": 3.64,
         "toolchain": "CPython 3.12",
         "role": "Validation",
         "output": {
@@ -305,7 +308,7 @@
         "cell_id": "tax_calculation",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 6.5,
+        "latency_ms": 0.15,
         "toolchain": "CPython 3.12",
         "role": "Business Rule",
         "output": {
@@ -317,7 +320,7 @@
         "cell_id": "gl_posting",
         "language": "python",
         "status": "SUCCESS",
-        "latency_ms": 5.0,
+        "latency_ms": 0.19,
         "toolchain": "CPython 3.12",
         "role": "Persistence Adapter",
         "output": {
@@ -329,7 +332,7 @@
         "cell_id": "notification_service",
         "language": "python",
         "status": "FAILED",
-        "latency_ms": 9.9,
+        "latency_ms": 6.52,
         "toolchain": "CPython 3.12",
         "role": "Notification",
         "error": "GatewayTimeout: Upstream notification webhook unreachable at port 443 after 3000ms"
@@ -351,10 +354,10 @@
     },
     "fallback_action": "Deferred to frappe.background_jobs queue with exponential backoff",
     "receipt": {
-      "receipt_id": "rcpt_sinv_2026_degraded_9022",
+      "receipt_id": "rcpt_sinv_degraded_cc6c3fd2",
       "feature_id": "ERPNEXT-ACCOUNTS-SALES_INVOICE",
       "status": "DEGRADED",
-      "provenance_hash": "4a0819bd89210fa098190281baf1098231089201",
+      "provenance_hash": "cc6c3fd277ffd2096654cf64aafbad6fe8007847fdcb4536d5febf094596c9e4",
       "verified": true
     }
   },
@@ -394,7 +397,7 @@
     {
       "code": "PF_NOTIF_GATEWAY_TIMEOUT",
       "category": "NETWORK_TIMEOUT",
-      "timestamp": "2026-10-08T16:03:31Z",
+      "timestamp": "2026-10-08T18:33:53Z",
       "message": "Upstream notification webhook unreachable at port 443 after 3000ms. Applying @error-map fallback rule.",
       "file": "erpnext/hooks.py",
       "line": 84,

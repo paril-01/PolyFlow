@@ -38,8 +38,9 @@ export function Tab03RCIR({
       .then(r => r.json())
       .then(d => {
         setPipelineData(d);
-        if (d?.ranked_candidates?.length > 0) {
-          setSelectedCandidate(d.ranked_candidates[0]);
+        const candidates = d?.ranked_candidates || d?.sample_ranked_candidates || [];
+        if (candidates.length > 0) {
+          setSelectedCandidate(candidates[0]);
         }
       })
       .catch(err => console.warn('Could not load rcir_pipeline.json', err));
@@ -58,8 +59,10 @@ export function Tab03RCIR({
     );
   }
 
-  const { pipeline_stages, graph_summary, ranked_candidates } = pipelineData;
-  const currentPair = tokenData.pairs.find(p => p.task_id === selectedTaskId) || tokenData.pairs[0];
+  const { pipeline_stages = [], graph_summary = {} } = pipelineData;
+  const ranked_candidates = pipelineData.ranked_candidates || pipelineData.sample_ranked_candidates || [];
+  const tokenPairs = tokenData.pairs || [];
+  const currentPair = tokenPairs.find(p => p.task_id === selectedTaskId) || tokenPairs[0] || {};
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: 20 }}>

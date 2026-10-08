@@ -1,0 +1,6 @@
+task_id,baseline_trial_id,rcir_trial_id,baseline_input_tokens,rcir_input_tokens,input_token_delta_pct,baseline_total_tokens,rcir_total_tokens,total_token_delta_pct,status
+BLIND-TASK-01,BLIND-TASK-01_baseline_turn5,BLIND-TASK-01_rcir_turn5,5061,4976,1.68,5650,5465,3.27,VALID_PAIR
+BLIND-TASK-02,BLIND-TASK-02_baseline_turn5,BLIND-TASK-02_rcir_turn5,1431,673,N/A,1714,723,N/A,TIMEOUT_PAIR
+BLIND-TASK-03,BLIND-TASK-03_baseline_turn5,BLIND-TASK-03_rcir_turn5,6084,4512,25.84,6453,4807,25.51,VALID_PAIR
+BLIND-TASK-04,BLIND-TASK-04_baseline_turn5,BLIND-TASK-04_rcir_turn5,2652,5876,N/A,2768,6895,N/A,TIMEOUT_PAIR
+BLIND-TASK-05,BLIND-TASK-05_baseline_turn5,BLIND-TASK-05_rcir_turn5,4634,4888,-5.48,5138,5507,-7.18,VALID_PAIR

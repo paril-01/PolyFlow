@@ -23,6 +23,7 @@ dist/
 node_modules/
 experiments/rcir_runs/
 experiments/erpnext_validation/
+!experiments/erpnext_validation/feature_closure_validation.json
 experiments/final_blind_validation/raw/worktrees/
 scratch/
 *.egg-info/
@@ -32,6 +33,8 @@ scratch/
 # Generated files
 *.pdf
 *.html
+!showcase_app/frontend/index.html
+!rcir/visualizer-react/index.html
 
 # Environment
 .env

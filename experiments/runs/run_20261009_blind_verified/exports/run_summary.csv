@@ -1,0 +1,2 @@
+run_id,timestamp,benchmark_type,model,total_trials,valid_pairs,successful_pairs,median_input_token_delta_pct,crash_rate_pct,agent_gate_status
+run_20261009_blind_verified,2026-10-08T15:25:53Z,BLIND_BASELINE,qwen2.5-coder:1.5b,10,3,0,1.68,0.0,NOT_SATISFIED

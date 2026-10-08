@@ -1,0 +1,6 @@
+layer,total_artifacts,discovered_artifacts,mapped_artifacts,coverage_pct,verification_status
+DocType Schemas (JSON),840,840,840,100.0,VERIFIED_STRUCTURAL
+Backend Controllers (Python),840,840,840,100.0,VERIFIED_STRUCTURAL
+Frontend Desk Views (JavaScript),724,724,724,100.0,VERIFIED_STRUCTURAL
+Framework Hooks (hooks.py),1,1,1,100.0,VERIFIED_STRUCTURAL
+Live Upstream Frappe Parity,840,3,3,0.36,LOCAL_FIXTURE_ONLY

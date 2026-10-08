@@ -41,7 +41,7 @@ def test_agent_success_count_consistency():
 
     # Token A/B agreement
     assert token_ab["successful_pairs"] == 0
-    assert token_ab["valid_pairs"] == 5
+    assert token_ab["valid_pairs"] == baseline["valid_pairs"]
     assert token_ab["individual_trials"] == 10
 
     # Baseline results agreement
@@ -115,9 +115,11 @@ def test_token_delta_recomputation():
 
     deltas = []
     for pair in token_ab["pairs"]:
+        if pair.get("status") != "VALID_PAIR":
+            continue
         b_prompt = pair["baseline"]["prompt_tokens"]
         r_prompt = pair["rcir"]["prompt_tokens"]
-        
+
         expected_delta = round(((b_prompt - r_prompt) / b_prompt) * 100, 2)
         assert abs(pair["input_token_delta_pct"] - expected_delta) < 0.05, (
             f"Token delta mismatch for {pair['task_id']}: expected {expected_delta}%, got {pair['input_token_delta_pct']}%"

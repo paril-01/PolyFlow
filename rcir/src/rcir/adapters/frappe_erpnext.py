@@ -381,13 +381,22 @@ class FrappeFeatureClosureExtractor:
             }
         )
 
+        if rel_to is None:
+            rel_to = adapter.repo_root
+
         def make_rel(p: Path) -> str:
+            p_str = str(p).replace("\\", "/")
             if rel_to:
                 try:
-                    return os.path.relpath(p, rel_to).replace("\\", "/")
+                    rel = os.path.relpath(p, rel_to).replace("\\", "/")
+                    if not rel.startswith(".."):
+                        return rel
                 except Exception:
                     pass
-            return str(p).replace("\\", "/")
+            for marker in ("erpnext/", "frappe/"):
+                if marker in p_str:
+                    return p_str[p_str.index(marker):]
+            return p_str
 
         # 1. Data Model / Persistence Sources
         dt_sha = dt.sha256 or cls._hash_file(dt_path)
@@ -486,12 +495,18 @@ class FrappeFeatureClosureExtractor:
 
         # 4. Hooks & Framework Events
         for hook in adapter.find_hooks_for_doctype(dt_name):
+            hook_file_path = Path(hook.source_file)
+            hook_sha = cls._hash_file(hook_file_path) if hook_file_path.exists() else ""
+            hook_rel = make_rel(hook_file_path)
             closure.hook_sources.append({
                 "hook_type": hook.hook_type,
                 "event": hook.event,
                 "handler_method": hook.handler_method,
-                "source_file": make_rel(Path(hook.source_file)),
+                "source_file": hook_rel,
+                "sha256": hook_sha,
             })
+            if hook_sha and hook_rel not in closure.source_hashes:
+                closure.source_hashes[hook_rel] = hook_sha
 
         # 5. Tests
         if dt_dir.exists():
@@ -563,14 +578,14 @@ class FrappeFeatureClosureExtractor:
             "unresolved_artifacts": closure.unresolved_sources,
         }
 
-        # 8. Layer Coverage Calculation
+        # 8. Layer Coverage Calculation (Strict evidence-backed, zero heuristic guessing)
         closure.coverage = {
             "frontend": 1.0 if closure.frontend_sources else 0.0,
             "backend": 1.0 if closure.backend_sources else 0.0,
             "data_model": 1.0 if closure.data_model_sources else 0.0,
-            "framework": 1.0 if closure.hook_sources else 0.85,
+            "framework": 1.0 if closure.hook_sources else 0.0,
             "tests": 1.0 if closure.test_sources else 0.0,
-            "dependencies": 1.0 if closure.linked_features else 0.9,
+            "dependencies": 1.0 if closure.linked_features else 0.0,
         }
         closure.coverage["overall"] = round(
             sum(closure.coverage.values()) / len(closure.coverage), 3
@@ -657,13 +672,14 @@ class FrappeFeatureClosureExtractor:
 
         # Hook sources
         for hook in closure.hook_sources[:3]:
+            h_sha = hook.get("sha256") or "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             lines.extend([
                 "@source",
                 f'path: "{hook["source_file"]}"',
                 'language: "Python"',
                 f'role: "framework_hook:{hook["event"]}"',
                 f'symbol: "{hook["handler_method"]}"',
-                'sha256: "framework_registered_hook"',
+                f'sha256: "{h_sha}"',
                 "@end",
                 ""
             ])

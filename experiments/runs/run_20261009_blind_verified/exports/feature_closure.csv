@@ -1,0 +1,6 @@
+feature_name,domain,native_files_count,schema_files_count,backend_files_count,frontend_files_count,test_files_count,hook_files_count,poly_lines,coverage_ratio,status
+Sales Invoice,accounts,23,12,4,2,2,3,142,1.0,VERIFIED_MAPPING
+Item,stock,17,9,4,2,2,0,110,0.833,VERIFIED_MAPPING
+Customer,selling,16,7,5,2,2,0,110,0.833,VERIFIED_MAPPING
+Stock Entry,stock,11,3,4,2,2,0,110,0.833,VERIFIED_MAPPING
+Payment Entry,accounts,11,5,2,2,1,1,142,1.0,VERIFIED_MAPPING
