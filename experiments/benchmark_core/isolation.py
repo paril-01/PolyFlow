@@ -47,7 +47,7 @@ class WorktreeManager:
 
         head_commit = res.stdout.strip()
         if head_commit.lower() != PINNED_NEXTCLOUD_COMMIT.lower():
-            # If on different commit, attempt to verify if pinned commit exists in repo
+            # If on different commit, verify pinned commit exists in repo
             check_obj = subprocess.run(
                 ["git", "cat-file", "-e", PINNED_NEXTCLOUD_COMMIT],
                 cwd=self.target_repo,
@@ -57,6 +57,8 @@ class WorktreeManager:
                 raise BenchmarkSetupError(
                     f"Pinned commit {PINNED_NEXTCLOUD_COMMIT} not found in {self.target_repo} (current HEAD: {head_commit})"
                 )
+            # The actual worktrees will checkout PINNED_NEXTCLOUD_COMMIT, so the experiment target SHA is PINNED_NEXTCLOUD_COMMIT
+            return PINNED_NEXTCLOUD_COMMIT
 
         return head_commit
 
@@ -65,7 +67,7 @@ class WorktreeManager:
         Creates an isolated git worktree for a trial.
         Never copies partial folders and never falls back to PolyFlow root.
         """
-        self.verify_target_checkout()
+        verified_sha = self.verify_target_checkout()
         trial_dir = self.worktrees_root / trial_id
 
         # Clean existing directory if present
@@ -73,11 +75,11 @@ class WorktreeManager:
             self.remove_trial_worktree(trial_id)
 
         # Attempt git worktree add --detach
-        cmd = ["git", "worktree", "add", "--detach", str(trial_dir), PINNED_NEXTCLOUD_COMMIT]
+        cmd = ["git", "worktree", "add", "--detach", str(trial_dir), verified_sha]
         res = subprocess.run(cmd, cwd=self.target_repo, capture_output=True, text=True)
 
         if res.returncode != 0:
-            # If worktree creation failed (e.g. branch lock or OneDrive path limitation),
+            # If worktree creation failed (e.g. branch lock or filesystem limitation),
             # perform a clean isolated detached clone from local target repo
             clone_cmd = ["git", "clone", "--no-checkout", str(self.target_repo), str(trial_dir)]
             clone_res = subprocess.run(clone_cmd, capture_output=True, text=True)
@@ -85,7 +87,7 @@ class WorktreeManager:
                 raise BenchmarkSetupError(f"Failed to create isolated trial worktree: {res.stderr} / {clone_res.stderr}")
 
             # Checkout exact pinned commit in cloned worktree
-            co_res = subprocess.run(["git", "checkout", PINNED_NEXTCLOUD_COMMIT], cwd=trial_dir, capture_output=True, text=True)
+            co_res = subprocess.run(["git", "checkout", verified_sha], cwd=trial_dir, capture_output=True, text=True)
             if co_res.returncode != 0:
                 raise BenchmarkSetupError(f"Failed to checkout pinned commit in clone: {co_res.stderr}")
 
@@ -119,3 +121,15 @@ class WorktreeManager:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+
+    def get_worktree_diff(self, trial_dir: Path) -> str:
+        """Extracts complete git diff against HEAD before cleanup."""
+        if not trial_dir.exists():
+            return ""
+        diff_res = subprocess.run(
+            ["git", "diff", "HEAD"],
+            cwd=trial_dir,
+            capture_output=True,
+            text=True,
+        )
+        return diff_res.stdout if diff_res.returncode == 0 else ""

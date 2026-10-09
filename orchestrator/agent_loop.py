@@ -30,6 +30,7 @@ class AgentLoopResult:
     summary: str
     provenance: Dict[str, Any]
     usage_records: List[Dict[str, Any]] = field(default_factory=list)
+    agent_workflow_completed: bool = False
     error: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
@@ -37,6 +38,7 @@ class AgentLoopResult:
             "task_id": self.task_id,
             "condition": self.condition,
             "success": self.success,
+            "agent_workflow_completed": self.agent_workflow_completed,
             "turns": self.turns,
             "tool_calls_executed": self.tool_calls_executed,
             "files_modified": self.files_modified,
@@ -354,7 +356,9 @@ class ReActAgentRunner:
             # PHASE 32: If no verification command exists, Gatekeeper = CONDITIONAL
             gatekeeper_verdict = "CONDITIONAL"
 
-        # PHASE 31: Strict agent success condition
+        workflow_completed = bool(final_summary is not None)
+
+        # Strict agent self-report condition when test_command is provided
         success = (
             bool(diff)
             and verification_executed
@@ -366,6 +370,7 @@ class ReActAgentRunner:
             task_id=task_id,
             condition=condition,
             success=success,
+            agent_workflow_completed=workflow_completed,
             turns=turn,
             tool_calls_executed=tool_calls_count,
             files_modified=self.env.get_modified_files(),

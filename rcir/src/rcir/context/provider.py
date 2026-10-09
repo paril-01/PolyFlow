@@ -205,6 +205,7 @@ class LiveRCIRContextProvider(RCIRContextProvider):
         target_repo: Path,
         graph_path: Optional[Path] = None,
         token_budget: int = 4000,
+        expected_commit: Optional[str] = None,
     ):
         self.target_repo = Path(target_repo).resolve()
         if not self.target_repo.exists():
@@ -225,40 +226,111 @@ class LiveRCIRContextProvider(RCIRContextProvider):
             raise RCIRContextError(f"RCIR dependency graph not found for target {self.target_repo}")
 
         self.graph_path = graph_path
+        import hashlib
         import json
-        with open(graph_path, "r", encoding="utf-8") as gf:
-            raw_graph = json.load(gf)
 
-        super().__init__(raw_graph=raw_graph)
+        graph_bytes = graph_path.read_bytes()
+        self.graph_sha256 = hashlib.sha256(graph_bytes).hexdigest()
+        raw_graph = json.loads(graph_bytes.decode("utf-8"))
+
+        # Verify graph target commit if present (F27)
+        self.graph_target_sha = raw_graph.get("metadata", {}).get("target_commit", raw_graph.get("target_commit", ""))
+        if expected_commit and self.graph_target_sha:
+            if expected_commit.lower() != self.graph_target_sha.lower():
+                raise RCIRContextError(
+                    f"Graph target revision mismatch: graph built for {self.graph_target_sha}, but worktree expects {expected_commit}"
+                )
+
+        # F01: Bind ContextCompiler directly to target_repo so snippet extraction reads real files
+        compiler = ContextCompiler(repo_root=self.target_repo)
+
+        # F11: Populate CanonicalEntityRegistry from graph nodes
+        registry = CanonicalEntityRegistry()
+        nodes = raw_graph.get("nodes", {})
+        if isinstance(nodes, dict):
+            for node_id, node_data in nodes.items():
+                fpath = node_data.get("file", "")
+                if fpath:
+                    registry.alias_to_uris.setdefault(fpath, set()).add(node_id)
+                # Short symbol name (after last \ or ::)
+                short_name = node_id.replace("::", "\\").split("\\")[-1]
+                if short_name and len(short_name) >= 3:
+                    registry.alias_to_uris.setdefault(short_name, set()).add(node_id)
+
+        super().__init__(raw_graph=raw_graph, compiler=compiler, registry=registry)
         self.default_token_budget = token_budget
         self.last_retrieval_trace: dict[str, Any] = {}
 
-    def compile_task_context(self, task_id: str, instructions: str, token_budget: Optional[int] = None) -> str:
+    def reset_session(self) -> None:
+        """F03: Resets session state to guarantee per-trial isolation with zero cross-trial leakage."""
+        self.session_state = ContextSessionState()
+
+    def compile_task_context(
+        self,
+        task_id: str,
+        instructions: str,
+        token_budget: Optional[int] = None,
+        reject_stubs: bool = True,
+    ) -> str:
         """
         Derives change intent from instructions, retrieves candidates from graph,
         ranks them deterministically, and compiles markdown context.
-        Fails closed on zero context.
+        Fails closed on zero context or unresolved stubs.
         """
+        # Guarantee per-trial session isolation (F03)
+        self.reset_session()
+
         budget = token_budget or self.default_token_budget
         if not self.raw_graph.get("nodes") and not self.raw_graph.get("edges"):
             raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id} (empty graph)")
 
+        # F11: Robust multi-entity symbol extraction
         import re
-        symbols = re.findall(r'[A-Z][a-zA-Z0-9_]{3,}', instructions)
+
+        # Look for PHP namespaces, paths, or qualified identifiers
+        namespace_matches = re.findall(r'[A-Za-z0-9_]+(?:\\[A-Za-z0-9_]+)+', instructions)
+        path_matches = re.findall(r'[A-Za-z0-9_/-]+\.php', instructions)
+        general_symbols = re.findall(r'[A-Z][a-zA-Z0-9_]{3,}', instructions)
+
         common_words = {
             "Nextcloud", "Server", "Implement", "Create", "Update", "Method",
             "Class", "Interface", "Function", "Return", "Public", "Private",
-            "When", "Then", "Should", "Ensure", "Verify"
+            "When", "Then", "Should", "Ensure", "Verify", "Error", "Test"
         }
-        filtered_symbols = [s for s in symbols if s not in common_words]
-        if not filtered_symbols:
+        filtered_symbols = [s for s in general_symbols if s not in common_words]
+
+        # Prioritize matching graph entities
+        candidates_to_check = namespace_matches + path_matches + filtered_symbols
+        nodes = self.raw_graph.get("nodes", {})
+
+        primary_symbol = None
+        for cand in candidates_to_check:
+            if cand in nodes or cand in getattr(self.registry, "alias_to_uris", {}):
+                primary_symbol = cand
+                break
+
+        if not primary_symbol and candidates_to_check:
+            primary_symbol = candidates_to_check[0]
+
+        if not primary_symbol:
             raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id} (no symbol identified)")
 
-        primary_symbol = filtered_symbols[0]
         res = self.retrieve(symbol=primary_symbol, query=instructions, token_budget=budget)
 
         if not res.rendered_markdown or res.tokens_added == 0:
             raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id}")
+
+        # F01: Reject stub-only results in formal benchmarking
+        if reject_stubs and res.entries:
+            verified_spans = [
+                e for e in res.entries
+                if (e.get("source_exists", False) if isinstance(e, dict) else getattr(e, "source_exists", False))
+                and ((e.get("representation_type", "") if isinstance(e, dict) else getattr(e, "representation_type", "")).upper() == "SOURCE_SPAN")
+            ]
+            if not verified_spans:
+                raise RCIRContextError(
+                    f"RCIR_CONTEXT_ERROR: rejected stub-only context for task {task_id}; no verified source-backed spans produced"
+                )
 
         self.last_retrieval_trace = {
             "task_id": task_id,
@@ -267,6 +339,7 @@ class LiveRCIRContextProvider(RCIRContextProvider):
             "tokens_added": res.tokens_added,
             "entries_count": len(res.entries),
             "graph_path": str(self.graph_path),
+            "graph_sha256": getattr(self, "graph_sha256", ""),
         }
         return res.rendered_markdown
 

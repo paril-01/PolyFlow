@@ -37,7 +37,7 @@ def compute_benchmark_metrics(pairs: List[Dict[str, Any]], total_trials: int) ->
     rcir_successes = sum(1 for p in pairs if p.get("rcir_success"))
 
     # Primary efficiency metric: requires both-successful pairs
-    if len(successful_pairs) > 0:
+    if len(successful_pairs) >= 3:
         both_succ_deltas = [
             p["input_token_delta_pct"] for p in successful_pairs if p.get("input_token_delta_pct") is not None
         ]
@@ -45,12 +45,20 @@ def compute_benchmark_metrics(pairs: List[Dict[str, Any]], total_trials: int) ->
             f"{statistics.median(both_succ_deltas):.2f}%" if both_succ_deltas else "NOT_MEASURED"
         )
         primary_efficiency_status = "MEASURED"
+    elif len(successful_pairs) > 0:
+        both_succ_deltas = [
+            p["input_token_delta_pct"] for p in successful_pairs if p.get("input_token_delta_pct") is not None
+        ]
+        primary_efficiency_headline = (
+            f"{statistics.median(both_succ_deltas):.2f}%" if both_succ_deltas else "NOT_MEASURED"
+        )
+        primary_efficiency_status = "INSUFFICIENT_SAMPLE_EXPLORATORY"
     else:
         primary_efficiency_headline = "NOT_MEASURED"
         primary_efficiency_status = "INCONCLUSIVE_ZERO_SUCCESSFUL_PAIRS"
 
     # Agent success gate status
-    agent_gate_status = "SATISFIED" if rcir_successes > 0 and len(successful_pairs) > 0 else "NOT_SATISFIED"
+    agent_gate_status = "SATISFIED" if rcir_successes > 0 and len(successful_pairs) >= 3 else "NOT_SATISFIED"
 
     return {
         "total_trials": total_trials,

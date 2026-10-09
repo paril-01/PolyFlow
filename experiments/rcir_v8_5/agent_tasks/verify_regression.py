@@ -112,10 +112,15 @@ def run_regression_check(worktree_root: Path) -> int:
         pass
 
     if not modified_php_files:
-        # If not a git repo or no git modifications detected, check if worktree has explicit php files
-        for p in worktree_root.rglob("*.php"):
-            if not any(part.startswith(".") for part in p.parts):
-                modified_php_files.append(p)
+        is_git = (worktree_root / ".git").exists() or (worktree_root / ".git").is_file()
+        if is_git:
+            print("REGRESSION_SKIPPED: Zero files modified in worktree. Regression not applicable.")
+            return 4
+        else:
+            # If genuinely not a git repository, inspect directory
+            for p in worktree_root.rglob("*.php"):
+                if not any(part.startswith(".") for part in p.parts):
+                    modified_php_files.append(p)
 
     if not modified_php_files:
         print("REGRESSION_SKIPPED: Zero files modified in worktree. Regression not applicable.")

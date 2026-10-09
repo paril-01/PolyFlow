@@ -463,16 +463,72 @@ class RepoToolEnvironment:
 
     def run_command(self, command: str, timeout_sec: int = 60, cwd: Optional[str] = None) -> Dict[str, Any]:
         """
-        Execute command with toolchain PATH resolution.
+        Execute command with toolchain PATH resolution and safe sandboxing.
+        F10: Enforces shell=False, blocks metacharacters, and restricts to allowlisted tools.
         Returns dict with exit_code, stdout, stderr, duration_seconds.
         """
         exec_cwd = self._resolve_safe_path(cwd) if cwd else self.repo_root
         import time
+        import shlex
+
+        # Reject shell metacharacters and command chaining
+        banned_patterns = [";", "&&", "||", "|", "`", "$(", ">", "<", "\n"]
+        for bp in banned_patterns:
+            if bp in command:
+                return {
+                    "exit_code": -1,
+                    "stdout": "",
+                    "stderr": f"TOOL_DENIED: Shell metacharacter '{bp}' is forbidden in sandboxed execution.",
+                    "duration_seconds": 0.0,
+                    "timed_out": False,
+                    "status": "TOOL_DENIED",
+                }
+
+        try:
+            cmd_args = shlex.split(command, posix=(os.name != "nt"))
+        except Exception as e:
+            return {
+                "exit_code": -1,
+                "stdout": "",
+                "stderr": f"TOOL_DENIED: Malformed command arguments: {e}",
+                "duration_seconds": 0.0,
+                "timed_out": False,
+                "status": "TOOL_DENIED",
+            }
+
+        if not cmd_args:
+            return {
+                "exit_code": -1,
+                "stdout": "",
+                "stderr": "TOOL_DENIED: Empty command.",
+                "duration_seconds": 0.0,
+                "timed_out": False,
+                "status": "TOOL_DENIED",
+            }
+
+        exe_name = Path(cmd_args[0]).name.lower()
+        if exe_name.endswith(".exe"):
+            exe_name = exe_name[:-4]
+
+        allowed_tools = {
+            "git", "php", "python", "python3", "pytest", "node", "npm", "composer",
+            "cat", "ls", "grep", "diff", "find", "echo", "pwd", "head", "tail"
+        }
+        if exe_name not in allowed_tools:
+            return {
+                "exit_code": -1,
+                "stdout": "",
+                "stderr": f"TOOL_DENIED: Command '{exe_name}' is not in the sandbox allowlist.",
+                "duration_seconds": 0.0,
+                "timed_out": False,
+                "status": "TOOL_DENIED",
+            }
+
         t0 = time.time()
         try:
             proc = subprocess.run(
-                command,
-                shell=True,
+                cmd_args,
+                shell=False,
                 cwd=str(exec_cwd),
                 env=self._toolchain_env,
                 stdout=subprocess.PIPE,
@@ -487,6 +543,7 @@ class RepoToolEnvironment:
                 "stderr": proc.stderr,
                 "duration_seconds": round(duration, 3),
                 "timed_out": False,
+                "status": "SUCCESS" if proc.returncode == 0 else "ERROR",
             }
         except subprocess.TimeoutExpired as te:
             duration = time.time() - t0
@@ -496,6 +553,7 @@ class RepoToolEnvironment:
                 "stderr": f"Command timed out after {timeout_sec} seconds.",
                 "duration_seconds": round(duration, 3),
                 "timed_out": True,
+                "status": "TOOL_TIMEOUT",
             }
         except Exception as e:
             duration = time.time() - t0
@@ -505,13 +563,29 @@ class RepoToolEnvironment:
                 "stderr": f"Execution error: {str(e)}",
                 "duration_seconds": round(duration, 3),
                 "timed_out": False,
+                "status": "TOOL_ERROR",
             }
 
     def get_git_diff(self) -> str:
         """
         Generate unified diff of all modifications made in this environment.
-        Uses difflib against recorded original backups, guaranteed portable.
+        F10: Performs an independent git change census first, with portable difflib fallback.
         """
+        git_dir = self.repo_root / ".git"
+        if git_dir.exists():
+            try:
+                proc = subprocess.run(
+                    ["git", "diff", "HEAD"],
+                    cwd=str(self.repo_root),
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if proc.returncode == 0 and proc.stdout.strip():
+                    return proc.stdout
+            except Exception:
+                pass
+
         if not self._modified_files:
             return ""
 
@@ -554,8 +628,43 @@ class RepoToolEnvironment:
                 pass
         self._original_files.clear()
         self._modified_files.clear()
+
+        # If git repo, also checkout HEAD
+        git_dir = self.repo_root / ".git"
+        if git_dir.exists():
+            try:
+                subprocess.run(["git", "checkout", "."], cwd=str(self.repo_root), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(["git", "clean", "-fd"], cwd=str(self.repo_root), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception:
+                pass
+
         return restored
 
     def get_modified_files(self) -> List[str]:
-        """Return list of relative paths for modified files."""
+        """
+        Return list of relative paths for modified files.
+        F10: Queries git status directly to capture files altered via commands.
+        """
+        git_dir = self.repo_root / ".git"
+        if git_dir.exists():
+            try:
+                proc = subprocess.run(
+                    ["git", "status", "--porcelain"],
+                    cwd=str(self.repo_root),
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if proc.returncode == 0:
+                    lines = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+                    files = []
+                    for line in lines:
+                        parts = line.split(maxsplit=1)
+                        if len(parts) == 2:
+                            files.append(parts[1].replace("\\", "/"))
+                    if files:
+                        return sorted(list(set(files)))
+            except Exception:
+                pass
+
         return [p.relative_to(self.repo_root).as_posix() for p in self._modified_files]
