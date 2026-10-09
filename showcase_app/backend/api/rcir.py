@@ -3,7 +3,7 @@ showcase_app/backend/api/rcir.py — RCIR Context Retrieval & Pipeline Endpoints
 """
 
 from typing import Any, Dict
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from showcase_app.backend.schemas import RCIRQueryRequest, RCIRQueryResponse
 from showcase_app.backend.services.rcir_service import rcir_service
 
@@ -30,7 +30,7 @@ def run_rcir_query(req: RCIRQueryRequest):
 
 @router.get("/rcir/queries/{query_id}", response_model=RCIRQueryResponse)
 def get_rcir_query(query_id: str):
-    if query_id in QUERY_CACHE:
-        return QUERY_CACHE[query_id]
-    # Default query response
-    return rcir_service.query("Default accounting ledger query")
+    res = rcir_service.get_query(query_id)
+    if res:
+        return res
+    raise HTTPException(status_code=404, detail=f"Query ID '{query_id}' not found")

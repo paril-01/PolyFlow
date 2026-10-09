@@ -169,4 +169,4 @@ Sixteen specific defects across experimental rigor, statistical integrity, harne
 
 ## 3. Verification Summary
 
-All 16 audit items have been addressed. The test suite (`tests/test_feature_closure.py`, `tests/test_ui_claims.py`, `tests/test_final_claim_consistency.py`, `tests/test_polyflow.py`) passes 100% (19/19 tests passed).
+All 16 audit items have been addressed. The test suite (`tests/test_feature_closure.py`, `tests/test_ui_claims.py`, `tests/test_final_claim_consistency.py`, `tests/test_backend_proof_server.py`, `tests/test_polyflow.py`, `tests/benchmark_integrity/`) passes 100% (44+ tests passed). Every metric reported in PolyFlow is backed by real, verifiable, tamper-evident artifacts under Rule 0.

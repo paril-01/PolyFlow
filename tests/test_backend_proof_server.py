@@ -126,3 +126,28 @@ def test_valid_pairs_rule_zero_accounting():
     assert data["valid_pairs"] == 3
     assert data["successful_pairs"] == 0
     assert data["individual_trials"] == 10
+
+
+def test_runs_endpoints_valid_and_404(client):
+    # Test valid run
+    res = client.get("/api/runs/run_20261009_blind_verified")
+    assert res.status_code == 200
+    assert res.json()["run_id"] == "run_20261009_blind_verified"
+
+    # Test metrics endpoint
+    res_m = client.get("/api/runs/run_20261009_blind_verified/metrics")
+    assert res_m.status_code == 200
+    assert "valid_pairs" in res_m.json()
+
+    # Test pairs.csv and trials.csv
+    res_pairs = client.get("/api/runs/run_20261009_blind_verified/pairs.csv")
+    assert res_pairs.status_code == 200
+    assert "text/csv" in res_pairs.headers["content-type"]
+
+    res_trials = client.get("/api/runs/run_20261009_blind_verified/trials.csv")
+    assert res_trials.status_code == 200
+    assert "text/csv" in res_trials.headers["content-type"]
+
+    # Test unknown run returns 404
+    res_404 = client.get("/api/runs/nonexistent_invalid_run_99999")
+    assert res_404.status_code == 404

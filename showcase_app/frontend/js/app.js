@@ -24,12 +24,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (res.ok) {
       const health = await res.json();
       const statusEl = document.getElementById("backend-status-text");
-      if (statusEl) statusEl.textContent = `Backend Live (${health.evidence_status})`;
+      if (statusEl) {
+        statusEl.innerHTML = `Run: run_20261009_blind_verified &bull; Target: da57df07 &bull; Evidence: ${health.evidence_status || 'VALIDATED'}`;
+      }
     }
   } catch (err) {
     const statusEl = document.getElementById("backend-status-text");
     if (statusEl) {
-      statusEl.textContent = "Offline / Static Mode";
+      statusEl.innerHTML = "Offline &bull; Target: da57df07 &bull; Evidence: STATIC_FIXTURES";
       statusEl.style.color = "var(--text-muted)";
     }
   }

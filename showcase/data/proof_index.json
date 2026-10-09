@@ -1,7 +1,7 @@
 {
   "run_id": "run_20261009_blind_verified",
-  "generated_at": "2026-10-08T19:02:05Z",
-  "git_commit": "3a29cebe9732f91c60d4dd78844d8a5d0039104e",
+  "generated_at": "2026-10-09T17:10:03Z",
+  "git_commit": "b86acd511ffdee5b834a56e00ab8c1b87d66530a",
   "total_proofs": 18,
   "proofs": [
     {
@@ -16,7 +16,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_001_agent_trials"
     },
     {
@@ -31,7 +31,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_002_coverage_ledger"
     },
     {
@@ -46,7 +46,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_003_feature_closure"
     },
     {
@@ -55,13 +55,13 @@
       "run_id": "run_20261009_blind_verified",
       "rel_path": "exports/interpreter_events.csv",
       "source_file": "experiments/runs/run_20261009_blind_verified/exports/interpreter_events.csv",
-      "sha256": "b2993e51647db3bc669a5be62070380d26734281aa7d04f80f62e6c74530aef5",
-      "bytes": 654,
+      "sha256": "03e3499b1b3a883ac5c9d429f38956c344bed5067729833f54ece705297a4efd",
+      "bytes": 655,
       "mime_type": "text/csv",
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_004_interpreter_events"
     },
     {
@@ -76,7 +76,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_005_paired_token_usage"
     },
     {
@@ -91,7 +91,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_006_retrieved_files"
     },
     {
@@ -100,13 +100,13 @@
       "run_id": "run_20261009_blind_verified",
       "rel_path": "exports/runtime_receipts.csv",
       "source_file": "experiments/runs/run_20261009_blind_verified/exports/runtime_receipts.csv",
-      "sha256": "7a23c18771d495360a98f090c0e4bd5b2b383075295066c954a5f0cd4ec35141",
+      "sha256": "d8af9695ad85ea76c05479138a7bde292e84c2df8055838949af326e55b26986",
       "bytes": 267,
       "mime_type": "text/csv",
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_007_runtime_receipts"
     },
     {
@@ -121,7 +121,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_008_run_summary"
     },
     {
@@ -136,7 +136,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_009_source_mappings"
     },
     {
@@ -151,7 +151,7 @@
       "origin_kind": "RECORDED_LOG",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_010_source_inventory"
     },
     {
@@ -166,7 +166,7 @@
       "origin_kind": "RECORDED_LOG",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_011_test_design"
     },
     {
@@ -175,13 +175,13 @@
       "run_id": "run_20261009_blind_verified",
       "rel_path": "reports/AUDIT_FINDINGS.md",
       "source_file": "experiments/runs/run_20261009_blind_verified/reports/AUDIT_FINDINGS.md",
-      "sha256": "9c5caf211ecdcaee6c253d6139f2d3e1bc850f95a37063c89e9e1da4d706fa70",
-      "bytes": 13374,
+      "sha256": "f096f1e0b705aca32abf4cb45e15dc9928e6ada04513ce08574af162948542fd",
+      "bytes": 13544,
       "mime_type": "text/markdown",
       "origin_kind": "RECORDED_LOG",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_012_AUDIT_FINDINGS"
     },
     {
@@ -196,7 +196,7 @@
       "origin_kind": "RECORDED_LOG",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_013_BLIND_AFTER_FIX_REPORT"
     },
     {
@@ -211,7 +211,7 @@
       "origin_kind": "RECORDED_LOG",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_014_FINAL_SYSTEM_ASSESSMENT"
     },
     {
@@ -226,7 +226,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_015_blind_after_fix"
     },
     {
@@ -241,7 +241,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_016_blind_baseline"
     },
     {
@@ -256,7 +256,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_017_blind_delta"
     },
     {
@@ -271,7 +271,7 @@
       "origin_kind": "MEASURED_ARTIFACT",
       "measurement_method": "NATIVE_EXECUTION",
       "validity_status": "VALIDATED",
-      "timestamp": "2026-10-08T19:02:05Z",
+      "timestamp": "2026-10-09T17:10:03Z",
       "safe_url": "/api/proofs/proof_018_feature_closure_validation"
     }
   ]

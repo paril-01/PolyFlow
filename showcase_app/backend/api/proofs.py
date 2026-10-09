@@ -18,12 +18,72 @@ def list_runs():
     return benchmark_service.get_runs()
 
 
+@router.get("/runs/{run_id}")
+def get_run(run_id: str):
+    summary = benchmark_service.get_run_summary(run_id)
+    if not summary:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return summary
+
+
+@router.get("/runs/{run_id}/metrics")
+def get_run_metrics(run_id: str):
+    summary = benchmark_service.get_run_summary(run_id)
+    if not summary:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {
+        "run_id": run_id,
+        "valid_pairs": summary.get("valid_pairs"),
+        "successful_pairs": summary.get("successful_pairs"),
+        "median_input_token_delta_pct": summary.get("median_input_token_delta_pct"),
+        "agent_gate_status": summary.get("agent_gate_status"),
+        "crash_rate_pct": summary.get("crash_rate_pct"),
+    }
+
+
 @router.get("/runs/{run_id}/status")
 def get_run_status(run_id: str):
     summary = benchmark_service.get_run_summary(run_id)
     if not summary:
         raise HTTPException(status_code=404, detail="Run not found")
     return summary
+
+
+@router.get("/runs/{run_id}/pairs.csv")
+def get_run_pairs_csv(run_id: str):
+    csv_text = benchmark_service.get_csv_content("paired_token_usage.csv", run_id=run_id)
+    if csv_text is None:
+        raise HTTPException(status_code=404, detail="paired_token_usage.csv not found")
+    return Response(content=csv_text, media_type="text/csv")
+
+
+@router.get("/runs/{run_id}/retrieval.csv")
+def get_run_retrieval_csv(run_id: str):
+    csv_text = benchmark_service.get_csv_content("retrieved_files.csv", run_id=run_id)
+    if csv_text is None:
+        raise HTTPException(status_code=404, detail="retrieved_files.csv not found")
+    return Response(content=csv_text, media_type="text/csv")
+
+
+@router.get("/runs/{run_id}/trials.csv")
+def get_run_trials_csv(run_id: str):
+    csv_text = benchmark_service.get_csv_content("agent_trials.csv", run_id=run_id)
+    if csv_text is None:
+        raise HTTPException(status_code=404, detail="agent_trials.csv not found")
+    return Response(content=csv_text, media_type="text/csv")
+
+
+@router.get("/runs/{run_id}/proofs")
+def get_run_proofs(run_id: str):
+    summary = benchmark_service.get_run_summary(run_id)
+    if not summary:
+        raise HTTPException(status_code=404, detail="Run not found")
+    proofs = evidence_registry.get_all_proofs()
+    return {
+        "run_id": run_id,
+        "total_proofs": len(proofs),
+        "proofs": proofs,
+    }
 
 
 @router.get("/benchmarks/{run_id}/summary")

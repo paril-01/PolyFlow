@@ -101,8 +101,10 @@ class ContextRetrievalResult(Mapping[str, Any]):
             return self.entity_ids
         if key == "tokens_delivered":
             return self.tokens_added
-        if key == "entities_found":
+        if key == "entities_found" or key == "entries_count":
             return len(self.entries)
+        if key == "new_entities":
+            return self.entity_ids
         if hasattr(self, key):
             return getattr(self, key)
         if key in self.metadata:

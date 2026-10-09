@@ -83,7 +83,8 @@ def generate_all_reports(out_dir: Path | None = None, strict: bool = False, env=
     print("=" * 80)
 
     # 1. Load immutable run manifest
-    manifest_path = env.manifests_root / "benchmark_run_manifest.json"
+    manifest_root = getattr(env, "manifests_root", getattr(env, "results_root", Path(".")))
+    manifest_path = manifest_root / "benchmark_run_manifest.json"
     manifest = load_required_json(manifest_path) if strict else (load_optional_json(manifest_path) or {})
 
     # 2. Load gate evaluation

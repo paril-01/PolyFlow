@@ -63,7 +63,7 @@ You have access to the following tools to inspect, modify, and verify the codeba
    Usage: {"tool": "list_dir", "args": {"path": "optional/dir"}}
 
 4. apply_patch: Safely apply a unified diff or hunk patch with syntax validation and atomic rollback.
-   Usage: {"tool": "apply_patch", "args": {"patch": "--- a/file.py\n+++ b/file.py\n@@ -1,3 +1,3 @@\n-old code\n+new code"}}
+   Usage: {"tool": "apply_patch", "args": {"patch": "--- a/file.php\n+++ b/file.php\n@@ -1,3 +1,3 @@\n-old code\n+new code"}}
 
 5. edit_file: Safely replace an exact string in a file with new code (fallback).
    Usage: {"tool": "edit_file", "args": {"path": "path/to/file", "old_str": "exact old code", "new_str": "exact new code"}}
@@ -71,71 +71,76 @@ You have access to the following tools to inspect, modify, and verify the codeba
 6. run_command: Run shell commands, compilers, or test suites.
    Usage: {"tool": "run_command", "args": {"command": "python path/to/test.py"}}
 
-7. request_context: Request additional dependency context for an unfamiliar symbol or class (PHASE 14).
+7. request_context: Request additional dependency context for an unfamiliar symbol or class.
    Usage: {"tool": "request_context", "args": {"symbol": "SymbolName"}}
 
 8. finish: Signal that the task is complete.
    Usage: {"tool": "finish", "args": {"summary": "Description of changes and verification results"}}
 
-CRITICAL INSTRUCTIONS & WORKFLOW:
-1. Turn 1 (Inspect): Use {"tool": "inspect_file", "args": {"path": "...", "start_line": 1, "end_line": 50}} to view target code lines.
-2. Turn 2 (Edit/Patch): Use {"tool": "apply_patch", "args": {"patch": "..."}} (preferred) or {"tool": "edit_file", ...} to apply the exact change.
-3. Turn 3 (Verify): Use {"tool": "run_command", "args": {"command": "..."}} to compile and test the code.
-4. Turn 4 (Complete): If tests pass (exit 0), call {"tool": "finish", "args": {"summary": "..."}}.
+WORKFLOW & PLANNING GUIDELINES:
+- Inspect relevant files to locate the exact code requiring modification.
+- Formulate your patch or edit carefully and apply it using 'apply_patch' or 'edit_file'.
+- Run the verification command using 'run_command' to confirm tests pass.
+- Only call 'finish' when your modifications are complete and verified.
 
-Always wrap your tool call in ```json and ``` code fence, or output plain JSON object.
+Always output your tool call as a JSON object, preferably wrapped in ```json and ``` code blocks.
 """
 
 
 def extract_tool_call(response_text: str) -> Optional[Dict[str, Any]]:
-    """Extract and parse tool call JSON from model response."""
-    # Pattern 1: fenced json ```json ... ```
-    fence_pattern = r"```(?:json)?\s*(\{.*?\})\s*```"
-    match = re.search(fence_pattern, response_text, re.DOTALL)
-    if match:
-        try:
-            parsed = json.loads(match.group(1))
-            if "tool" in parsed:
-                return parsed
-        except Exception:
-            pass
+    """
+    Extract and parse tool call JSON from model response with full balanced-brace
+    and string literal tracking. Handles nested tool invocations and code fences reliably.
+    """
+    targets = []
+    # 1. Search inside code fences first
+    fence_matches = re.findall(r"```(?:json)?\s*(.*?)\s*```", response_text, re.DOTALL)
+    if fence_matches:
+        targets.extend(fence_matches)
+    targets.append(response_text)
 
-    # Pattern 2: raw json object containing "tool"
-    # Find { ... } with "tool":
-    obj_pattern = r"(\{\s*\"tool\"\s*:\s*\"[^\"]+\".*?\})"
-    match = re.search(obj_pattern, response_text, re.DOTALL)
-    if match:
-        try:
-            parsed = json.loads(match.group(1))
-            if "tool" in parsed:
-                return parsed
-        except Exception:
-            pass
+    for text in targets:
+        idx = 0
+        while idx < len(text):
+            start_pos = text.find("{", idx)
+            if start_pos == -1:
+                break
 
-    # Pattern 3: Look for balanced braces
-    start_idx = response_text.find('{"tool"')
-    if start_idx == -1:
-        start_idx = response_text.find('{ "tool"')
-    if start_idx != -1:
-        # scan forward for matching closing brace
-        depth = 0
-        end_idx = -1
-        for i in range(start_idx, len(response_text)):
-            if response_text[i] == '{':
-                depth += 1
-            elif response_text[i] == '}':
-                depth -= 1
-                if depth == 0:
-                    end_idx = i + 1
-                    break
-        if end_idx != -1:
-            try:
-                candidate = response_text[start_idx:end_idx]
-                parsed = json.loads(candidate)
-                if "tool" in parsed:
-                    return parsed
-            except Exception:
-                pass
+            # Balanced brace parsing with string quote tracking
+            depth = 0
+            in_string = False
+            escape_next = False
+            end_pos = -1
+
+            for i in range(start_pos, len(text)):
+                char = text[i]
+                if escape_next:
+                    escape_next = False
+                    continue
+                if char == "\\":
+                    escape_next = True
+                    continue
+                if char == '"':
+                    in_string = not in_string
+                    continue
+                if not in_string:
+                    if char == "{":
+                        depth += 1
+                    elif char == "}":
+                        depth -= 1
+                        if depth == 0:
+                            end_pos = i + 1
+                            break
+
+            if end_pos != -1:
+                candidate = text[start_pos:end_pos].strip()
+                try:
+                    parsed = json.loads(candidate)
+                    if isinstance(parsed, dict) and "tool" in parsed:
+                        return parsed
+                except Exception:
+                    pass
+            idx = start_pos + 1
 
     return None
 
@@ -143,7 +148,7 @@ def extract_tool_call(response_text: str) -> Optional[Dict[str, Any]]:
 class ReActAgentRunner:
     """Executes iterative tool-calling loops with fail-closed LLM inference."""
 
-    def __init__(self, provider: LLMProvider, env: RepoToolEnvironment, max_turns: int = 5):
+    def __init__(self, provider: LLMProvider, env: RepoToolEnvironment, max_turns: int = 12):
         self.provider = provider
         self.env = env
         self.max_turns = max_turns
@@ -261,15 +266,10 @@ class ReActAgentRunner:
             # Parse tool call
             tool_call = extract_tool_call(resp_text)
             if not tool_call:
-                # If model didn't emit a tool, check if it claims completion
-                if "finish" in resp_text.lower() or "completed" in resp_text.lower():
-                    final_summary = resp_text[:300]
-                    break
-                else:
-                    # Provide feedback to agent
-                    obs = "ERROR: No valid JSON tool call was found in your response. Please output a valid tool call object, e.g., ```json {\"tool\": \"run_command\", \"args\": {\"command\": \"...\"}} ```"
-                    conversation_history.append({"role": "user", "content": obs})
-                    continue
+                # Provide feedback to agent requesting a valid JSON tool invocation
+                obs = "ERROR: No valid JSON tool call was found in your response. Please output a valid tool call object. If your modifications are complete, call: ```json {\"tool\": \"finish\", \"args\": {\"summary\": \"...\"}} ```. Otherwise, use inspect_file, apply_patch, edit_file, or run_command."
+                conversation_history.append({"role": "user", "content": obs})
+                continue
 
             tool_name = tool_call.get("tool", "")
             args = tool_call.get("args", {})

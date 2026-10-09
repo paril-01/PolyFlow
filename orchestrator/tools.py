@@ -458,21 +458,8 @@ class RepoToolEnvironment:
             self.context_request_records.append(req_record)
             return f"RCIR ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{text}"
 
-        search_target = query or symbol
-        matches = self.search_code(query=search_target, max_matches=8)
-        tokens_added = max(1, len(matches) // 4)
-        self.context_tokens_added += tokens_added
-        self.context_telemetry["exact_tokens_added"] += tokens_added
-        self.context_request_records.append({
-            "requested_symbol": symbol,
-            "candidate_entries": 8,
-            "returned_entries": 8,
-            "already_seen_skipped": 0,
-            "exact_rendered_token_count": tokens_added,
-            "cumulative_context_tokens": self.context_tokens_added,
-            "budget_remaining": 0,
-        })
-        return f"ITERATIVE CONTEXT for '{symbol}' (+{tokens_added} tokens):\n{matches}"
+        # Fail closed: Baseline arm has no context provider
+        return f"ERROR: RCIR Context Provider is not configured in this environment (baseline arm). Use search_code or inspect_file to find context."
 
     def run_command(self, command: str, timeout_sec: int = 60, cwd: Optional[str] = None) -> Dict[str, Any]:
         """

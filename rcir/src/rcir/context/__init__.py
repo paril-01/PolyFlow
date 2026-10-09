@@ -8,6 +8,7 @@ from rcir.context.compiler import (
 )
 
 from rcir.context.models import ContextRetrievalResult
+from rcir.context.provider import RCIRContextProvider, LiveRCIRContextProvider, RCIRContextError
 
 __all__ = [
     "CompiledContext",
@@ -15,4 +16,7 @@ __all__ = [
     "ContextEntry",
     "ContextGranularity",
     "ContextRetrievalResult",
+    "RCIRContextProvider",
+    "LiveRCIRContextProvider",
+    "RCIRContextError",
 ]

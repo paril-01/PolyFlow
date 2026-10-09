@@ -19,7 +19,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 import sys
 sys.path.insert(0, str(REPO_ROOT))
 from polyflow.runtime import PolyCellRuntime
-from polyflow.parser import LanguageBlock
+from polyflow.parser import LanguageBlock, PolyParser
 
 
 class InterpreterService:
@@ -49,7 +49,7 @@ class InterpreterService:
         runtime = PolyCellRuntime(fast_native_mode=True)
         t_start = time.perf_counter()
 
-        # Step 1: Parser / AST
+        # Step 1: Real Parser / AST Execution
         yield {
             "type": "stage",
             "stage": "parse",
@@ -58,17 +58,24 @@ class InterpreterService:
             "description": "Parsing sales_invoice.poly AST contract.",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-        await asyncio.sleep(0.05)
+        t_parse_0 = time.perf_counter_ns()
+        poly_file = self.repo_root / "showcase" / "05_erpnext_extreme" / "sample_poly_features" / "sales_invoice.poly"
+        if not poly_file.exists():
+            poly_file = self.repo_root / "showcase" / "01_polyflow_interpreter" / "example.poly"
+        poly_text = poly_file.read_text(encoding="utf-8")
+        parsed_ast = PolyParser().parse_text(poly_text)
+        t_parse_ms = round((time.perf_counter_ns() - t_parse_0) / 1_000_000, 3)
+
         yield {
             "type": "stage",
             "stage": "parse",
             "status": "COMPLETED",
             "name": "Parser / AST",
-            "duration_ms": 0.8,
+            "duration_ms": max(0.1, t_parse_ms),
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
 
-        # Step 2: Validate Schema
+        # Step 2: Validate Schema Contract
         yield {
             "type": "stage",
             "stage": "validate",
@@ -77,17 +84,20 @@ class InterpreterService:
             "description": "Validating fields: docstatus, customer, grand_total.",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-        await asyncio.sleep(0.05)
+        t_val_0 = time.perf_counter_ns()
+        has_schema = bool(parsed_ast.schemas)
+        t_val_ms = round((time.perf_counter_ns() - t_val_0) / 1_000_000, 3)
+
         yield {
             "type": "stage",
             "stage": "validate",
             "status": "COMPLETED",
             "name": "Contract & Schema Guard",
-            "duration_ms": 0.5,
+            "duration_ms": max(0.1, t_val_ms),
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
 
-        # Step 3: Scheduler
+        # Step 3: Scheduler DAG Construction
         yield {
             "type": "stage",
             "stage": "schedule",
@@ -96,13 +106,16 @@ class InterpreterService:
             "description": "Constructing polyglot DAG schedule.",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-        await asyncio.sleep(0.05)
+        t_sched_0 = time.perf_counter_ns()
+        dag_nodes_count = len(parsed_ast.sources) + len(parsed_ast.schemas)
+        t_sched_ms = round((time.perf_counter_ns() - t_sched_0) / 1_000_000, 3)
+
         yield {
             "type": "stage",
             "stage": "schedule",
             "status": "COMPLETED",
             "name": "Cell Scheduler",
-            "duration_ms": 0.3,
+            "duration_ms": max(0.1, t_sched_ms),
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
 

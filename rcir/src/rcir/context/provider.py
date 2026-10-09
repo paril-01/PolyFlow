@@ -186,3 +186,87 @@ class RCIRContextProvider(ContextProvider):
                 "session": self.session_state.to_dict(),
             },
         )
+
+
+class RCIRContextError(Exception):
+    """Raised when live RCIR retrieval fails to produce verified context."""
+    pass
+
+
+class LiveRCIRContextProvider(RCIRContextProvider):
+    """
+    Live RCIR Context Provider for benchmark and agent trials.
+    Executes live entity resolution, graph retrieval, ranking, and compilation
+    directly against the target repository without precompiled task bundles or DEV mappings.
+    """
+
+    def __init__(
+        self,
+        target_repo: Path,
+        graph_path: Optional[Path] = None,
+        token_budget: int = 4000,
+    ):
+        self.target_repo = Path(target_repo).resolve()
+        if not self.target_repo.exists():
+            raise RCIRContextError(f"Target repository not found: {self.target_repo}")
+
+        # Resolve graph path
+        if not graph_path:
+            candidates = [
+                self.target_repo.parent / "rcir" / "nextcloud_graph.json",
+                Path(__file__).resolve().parent.parent.parent.parent / "experiments" / "nextcloud_validation" / "rcir" / "nextcloud_graph.json",
+            ]
+            for c in candidates:
+                if c.exists():
+                    graph_path = c
+                    break
+
+        if not graph_path or not graph_path.exists():
+            raise RCIRContextError(f"RCIR dependency graph not found for target {self.target_repo}")
+
+        self.graph_path = graph_path
+        import json
+        with open(graph_path, "r", encoding="utf-8") as gf:
+            raw_graph = json.load(gf)
+
+        super().__init__(raw_graph=raw_graph)
+        self.default_token_budget = token_budget
+        self.last_retrieval_trace: dict[str, Any] = {}
+
+    def compile_task_context(self, task_id: str, instructions: str, token_budget: Optional[int] = None) -> str:
+        """
+        Derives change intent from instructions, retrieves candidates from graph,
+        ranks them deterministically, and compiles markdown context.
+        Fails closed on zero context.
+        """
+        budget = token_budget or self.default_token_budget
+        if not self.raw_graph.get("nodes") and not self.raw_graph.get("edges"):
+            raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id} (empty graph)")
+
+        import re
+        symbols = re.findall(r'[A-Z][a-zA-Z0-9_]{3,}', instructions)
+        common_words = {
+            "Nextcloud", "Server", "Implement", "Create", "Update", "Method",
+            "Class", "Interface", "Function", "Return", "Public", "Private",
+            "When", "Then", "Should", "Ensure", "Verify"
+        }
+        filtered_symbols = [s for s in symbols if s not in common_words]
+        if not filtered_symbols:
+            raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id} (no symbol identified)")
+
+        primary_symbol = filtered_symbols[0]
+        res = self.retrieve(symbol=primary_symbol, query=instructions, token_budget=budget)
+
+        if not res.rendered_markdown or res.tokens_added == 0:
+            raise RCIRContextError(f"RCIR_CONTEXT_ERROR: zero retrieved context for task {task_id}")
+
+        self.last_retrieval_trace = {
+            "task_id": task_id,
+            "primary_symbol": primary_symbol,
+            "candidate_count": res.candidate_count,
+            "tokens_added": res.tokens_added,
+            "entries_count": len(res.entries),
+            "graph_path": str(self.graph_path),
+        }
+        return res.rendered_markdown
+
