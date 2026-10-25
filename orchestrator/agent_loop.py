@@ -150,10 +150,17 @@ def extract_tool_call(response_text: str) -> Optional[Dict[str, Any]]:
 class ReActAgentRunner:
     """Executes iterative tool-calling loops with fail-closed LLM inference."""
 
-    def __init__(self, provider: LLMProvider, env: RepoToolEnvironment, max_turns: int = 12):
+    def __init__(
+        self,
+        provider: LLMProvider,
+        env: RepoToolEnvironment,
+        max_turns: int = 12,
+        role_prompt: Optional[str] = None,
+    ):
         self.provider = provider
         self.env = env
         self.max_turns = max_turns
+        self.role_prompt = role_prompt
 
     def run(
         self,
@@ -172,10 +179,15 @@ class ReActAgentRunner:
         if test_command:
             user_message += f"\nVERIFICATION COMMAND:\nRun this command to test your changes:\n{test_command}\n"
 
+        system_content = TOOL_SYSTEM_PROMPT
+        if self.role_prompt:
+            system_content = f"{self.role_prompt.strip()}\n\n---\n\n{TOOL_SYSTEM_PROMPT}"
+
         conversation_history = [
-            {"role": "system", "content": TOOL_SYSTEM_PROMPT},
+            {"role": "system", "content": system_content},
             {"role": "user", "content": user_message},
         ]
+
 
         total_prompt_tokens = 0
         total_completion_tokens = 0

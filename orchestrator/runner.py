@@ -211,7 +211,13 @@ class OrchestratorRunner:
             combined_context = "\n\n".join(context_blocks)
 
             if self.tool_env:
-                react_runner = ReActAgentRunner(provider=self.provider, env=self.tool_env, max_turns=turn_budget)
+                implementer_prompt = self._load_prompt("agents/implementer/system-prompt.md")
+                react_runner = ReActAgentRunner(
+                    provider=self.provider,
+                    env=self.tool_env,
+                    max_turns=turn_budget,
+                    role_prompt=implementer_prompt,
+                )
                 agent_loop_res = react_runner.run(
                     task_id="AEF-TASK",
                     task_description=user_request,
