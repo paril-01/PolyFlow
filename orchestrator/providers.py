@@ -289,6 +289,14 @@ class LLMProvider:
                 "- P3: Add structured logging correlation IDs.\n\n"
                 "**Verdict**: APPROVE\n"
             )
+        elif "Retriever Agent" in system_prompt or "Retriever" in system_prompt:
+            return (
+                "## Stage Output: Retriever Agent (Discovery & Context)\n\n"
+                "### Discovered Files & Symbols\n"
+                "- File: orchestrator/router.py (TaskRiskRouter, RoutingDecision)\n"
+                "- File: orchestrator/runner.py (OrchestratorRunner, SUPPORTED_STAGES)\n"
+                "- Confidence: EXACT (0 hops)\n"
+            )
         elif "Implementer Agent" in system_prompt or "Implementer" in system_prompt:
             return (
                 "## Stage 3 Output: Implementer Agent (Production Code)\n\n"
