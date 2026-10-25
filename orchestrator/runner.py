@@ -18,6 +18,19 @@ from orchestrator.agent_loop import ReActAgentRunner, AgentLoopResult
 from orchestrator.router import TaskRiskRouter, RoutingDecision, TaskRiskLevel
 
 
+SUPPORTED_STAGES = {
+    "maker",
+    "reviewer_design",
+    "maker_revision",
+    "retriever",
+    "implementer",
+    "reviewer",
+    "reviewer_code",
+    "gatekeeper",
+    "historian",
+}
+
+
 class BenchmarkIntegrityError(RuntimeError):
     """Raised when simulated or dry-run execution occurs during strict validation benchmarks (PHASE 46)."""
     pass
@@ -74,6 +87,12 @@ class OrchestratorRunner:
         decision = routing_decision or TaskRiskRouter.route(user_request)
         stages = decision.stages
 
+        for stage in stages:
+            if stage not in SUPPORTED_STAGES:
+                raise ValueError(
+                    f"Unsupported pipeline stage: '{stage}'. Valid stages are: {sorted(SUPPORTED_STAGES)}"
+                )
+
         if decision.risk_level == TaskRiskLevel.LOCAL_BUG:
             turn_budget = 8
         elif decision.risk_level == TaskRiskLevel.ARCHITECTURE_REFACTOR:
@@ -100,6 +119,8 @@ class OrchestratorRunner:
 
         stage1_output = ""
         stage2_output = ""
+        stage_maker_revision_output = ""
+        stage_retriever_output = ""
         diff_content = ""
         files_modified = []
         test_result = None
@@ -135,18 +156,73 @@ class OrchestratorRunner:
             results["stages_executed"].append("reviewer_design")
             (self.output_dir / "02_reviewer_design_review.md").write_text(stage2_output, encoding="utf-8")
 
+        # STAGE: Maker Revision (Iterative Design Revision)
+        if "maker_revision" in stages:
+            if verbose:
+                _safe_print("[Stage: Maker Revision] Executing Iterative Design Revision...")
+            maker_prompt = self._load_prompt("agents/maker/system-prompt.md")
+            maker_revision_input = (
+                f"Original Request: {user_request}\n\n"
+                f"Initial Maker Design:\n{stage1_output}\n\n"
+                f"Adversarial Review Findings:\n{stage2_output}\n\n"
+                "Update and revise the architecture design and ADRs to resolve all critical adversarial findings."
+            )
+            stage_maker_revision_output = self.provider.generate(maker_prompt, maker_revision_input)
+            results["stage_maker_revision"] = stage_maker_revision_output
+            results["stages_executed"].append("maker_revision")
+            (self.output_dir / "02b_maker_revision.md").write_text(stage_maker_revision_output, encoding="utf-8")
+
+        # STAGE: Retriever Agent (Context & Symbol Discovery)
+        if "retriever" in stages:
+            if verbose:
+                _safe_print("[Stage: Retriever] Executing Context Retrieval...")
+            if self.tool_env and hasattr(self.tool_env, "context_provider") and self.tool_env.context_provider:
+                try:
+                    stage_retriever_output = self.tool_env.context_provider.compile_task_context(
+                        task_id="AEF-TASK", instructions=user_request, token_budget=4000
+                    )
+                except Exception as e:
+                    stage_retriever_output = f"Context provider retrieval failed: {e}"
+            else:
+                retriever_prompt = self._load_prompt("agents/retriever/system-prompt.md")
+                effective_design = stage_maker_revision_output or stage1_output
+                retriever_user_input = (
+                    f"Task Request: {user_request}\n\n"
+                    f"Design Context: {effective_design[:400] if effective_design else 'None'}\n\n"
+                    "Identify relevant source files, symbols, definitions, and dependencies needed for implementation."
+                )
+                stage_retriever_output = self.provider.generate(retriever_prompt, retriever_user_input)
+
+            results["stage_retriever"] = stage_retriever_output
+            results["stages_executed"].append("retriever")
+            (self.output_dir / "01b_retriever_context.md").write_text(stage_retriever_output, encoding="utf-8")
+
         # STAGE: Implementer Agent (Production Code with Repo Tools & dynamic turn budget)
         if "implementer" in stages:
             if verbose:
                 _safe_print(f"[Stage: Implementer] Running ReAct loop (turn budget: {turn_budget})...")
 
+            effective_design = stage_maker_revision_output or stage1_output
+            context_blocks = [f"Approved Design:\n{effective_design[:400]}"]
+            if stage2_output:
+                context_blocks.append(f"Review Notes:\n{stage2_output[:400]}")
+            if stage_retriever_output:
+                context_blocks.append(f"Retrieved Context:\n{stage_retriever_output[:400]}")
+            combined_context = "\n\n".join(context_blocks)
+
             if self.tool_env:
-                react_runner = ReActAgentRunner(provider=self.provider, env=self.tool_env, max_turns=turn_budget)
+                implementer_prompt = self._load_prompt("agents/implementer/system-prompt.md")
+                react_runner = ReActAgentRunner(
+                    provider=self.provider,
+                    env=self.tool_env,
+                    max_turns=turn_budget,
+                    role_prompt=implementer_prompt,
+                )
                 agent_loop_res = react_runner.run(
                     task_id="AEF-TASK",
                     task_description=user_request,
                     condition="tool_enabled",
-                    context_prompt=f"Approved Design:\n{stage1_output[:400]}\n\nReview Notes:\n{stage2_output[:400]}",
+                    context_prompt=combined_context,
                     test_command=test_command,
                 )
                 stage3_output = (
@@ -163,8 +239,7 @@ class OrchestratorRunner:
                 implementer_prompt = self._load_prompt("agents/implementer/system-prompt.md")
                 implementer_user_input = (
                     f"Original Request: {user_request}\n\n"
-                    f"Approved Design:\n{stage1_output}\n\n"
-                    f"Design Review Notes:\n{stage2_output}\n\n"
+                    f"{combined_context}\n\n"
                     "Write production-quality, tested, and documented code adhering to minimal safe changes and SOLID principles."
                 )
                 stage3_output = self.provider.generate(implementer_prompt, implementer_user_input)
@@ -172,6 +247,7 @@ class OrchestratorRunner:
             results["stage3_implementer"] = stage3_output
             results["stages_executed"].append("implementer")
             (self.output_dir / "03_implementer_code.md").write_text(stage3_output, encoding="utf-8")
+
 
         # STAGE: Reviewer Agent (Code & Diff Review)
         if "reviewer" in stages or "reviewer_code" in stages:
@@ -186,8 +262,12 @@ class OrchestratorRunner:
             )
             stage4_output = self.provider.generate(reviewer_prompt, stage4_user_input)
             results["stage4_reviewer_code"] = stage4_output
-            results["stages_executed"].append("reviewer_code")
+            if "reviewer" in stages:
+                results["stages_executed"].append("reviewer")
+            if "reviewer_code" in stages:
+                results["stages_executed"].append("reviewer_code")
             (self.output_dir / "04_reviewer_code_review.md").write_text(stage4_output, encoding="utf-8")
+
 
         # STAGE: Gatekeeper Agent (Release Authority)
         if "gatekeeper" in stages:
@@ -235,6 +315,13 @@ class OrchestratorRunner:
         results["files_modified"] = files_modified
         results["git_diff"] = diff_content
         results["test_result"] = test_result
+
+        # Strict validation: verify every planned stage was executed
+        for stage in stages:
+            if stage not in results["stages_executed"]:
+                raise RuntimeError(
+                    f"Scheduled stage '{stage}' was not executed by runner. Executed: {results['stages_executed']}"
+                )
 
         if verbose:
             _safe_print("\n==================================================")

@@ -150,3 +150,65 @@ class ContextRetrievalResult(Mapping[str, Any]):
             provider_name=data.get("provider_name", "RCIRContextProvider"),
             metadata=data.get("metadata", {}),
         )
+
+
+@dataclass
+class ContextEvidenceItem:
+    """Individual verified evidence item in ContextEvidenceBundle v1."""
+    file_path: str
+    file_sha256: str
+    start_line: int
+    end_line: int
+    snippet: str
+    symbol_name: str
+    resolution_class: str  # STATIC_EXACT | INFERRED | AMBIGUOUS
+    confidence: float = 1.0
+    freshness: str = "FRESH"  # FRESH | STALE
+    reason_code: str = "symbol_match"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "file_path": self.file_path,
+            "file_sha256": self.file_sha256,
+            "start_line": self.start_line,
+            "end_line": self.end_line,
+            "snippet": self.snippet,
+            "symbol_name": self.symbol_name,
+            "resolution_class": self.resolution_class,
+            "confidence": self.confidence,
+            "freshness": self.freshness,
+            "reason_code": self.reason_code,
+        }
+
+
+@dataclass
+class ContextEvidenceBundle:
+    """
+    ContextEvidenceBundle v1 (Phase C0 specification):
+    Bounded, verified context evidence payload with exact source freshness,
+    cryptographic file digests, explicitly omitted targets, and truthful tokenizer identity.
+    """
+    schema_version: str = "v1"
+    query: str = ""
+    target_repo_commit: str = ""
+    evidence_items: list[ContextEvidenceItem] = field(default_factory=list)
+    omitted_targets: list[str] = field(default_factory=list)
+    tokens_consumed: int = 0
+    token_budget: int = 4000
+    tokenizer_name: str = "cl100k_base_exact_with_header_invariant"
+    freshness_ratio: float = 1.0
+    created_at: str = ""
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "query": self.query,
+            "target_repo_commit": self.target_repo_commit,
+            "evidence_items": [item.to_dict() for item in self.evidence_items],
+            "omitted_targets": self.omitted_targets,
+            "tokens_consumed": self.tokens_consumed,
+            "token_budget": self.token_budget,
+            "tokenizer_name": self.tokenizer_name,
+            "freshness_ratio": self.freshness_ratio,
+            "created_at": self.created_at,
+        }

@@ -76,8 +76,9 @@ class TestAgentLoop(unittest.TestCase):
             task_id="TEST-001",
             task_description="Update MSG in hello.py to new",
             condition="mock_test",
-            test_command="python -c \"import sys; sys.exit(0)\"",
+            test_command="python -c \"exit(0)\"",
         )
+
 
         self.assertTrue(result.success)
         self.assertEqual(result.turns, 3)

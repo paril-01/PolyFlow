@@ -1,0 +1,3 @@
+# STOP AGENT DRIFT
+
+Stop editing immediately. You deviated from the approved ticket, invented facts, skipped evidence, changed unauthorized files, or tried to progress to a new phase. Do not clean/reset/overwrite anything. Report exact current SHA, dirty file paths, commands executed, observable unintended edits, tests actually run, uncertainty and blast radius. Identify violated invariant in `AGENTS.md` or approved plan. Propose two safe recovery options including preservation of any user edits, with diff-level scope, and wait for the native approval mechanism. Never relabel failed/unknown as success. Do not commit or push.

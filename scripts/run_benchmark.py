@@ -134,11 +134,14 @@ def main():
         print(f"[WARN] Live RCIR Provider initialization failed: {e}")
         live_rcir = None
 
+    provider = LLMProvider(provider_name=args.provider, model_name=args.model)
+
     # Handle --dry-run
     if args.dry_run:
         print("\n--- DRY RUN SANITY CHECKS ---")
         print(f"Target commit verification: OK ({target_head})")
         print(f"Public tasks count: {len(public_tasks)}")
+        print(f"LLM Provider verification: OK (provider={provider.provider_name}, model={provider.model_name})")
         if live_rcir and public_tasks:
             sample_t = public_tasks[0]
             try:
@@ -149,7 +152,6 @@ def main():
         print("Dry run completed successfully under Rule 0.")
         sys.exit(0)
 
-    provider = LLMProvider(provider_name=args.provider, model_name=args.model)
 
     # 3. Execute Paired Trials
     trials_results: List[TrialResult] = []

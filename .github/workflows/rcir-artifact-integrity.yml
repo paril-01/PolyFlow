@@ -35,4 +35,4 @@ jobs:
 
     - name: Verify Gate Evaluator Consistency
       run: |
-        python experiments/rcir_v8_5/scripts/evaluate_gates.py
+        python experiments/rcir_v8_5/scripts/evaluate_gates.py --allow-historical

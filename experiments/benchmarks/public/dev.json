@@ -1,0 +1,35 @@
+{
+  "tasks": [
+    {
+      "task_id": "BLIND-TASK-01",
+      "tier": "route_and_service",
+      "title": "Add Optional Crop Parameter to Preview Thumbnail",
+      "instructions": "Update ApiController getThumbnail to accept an optional $crop parameter with default true: public function getThumbnail($x, $y, $file, $crop = true), and pass $crop to $this->previewManager->getPreview($file, $x, $y, $crop)."
+    },
+    {
+      "task_id": "BLIND-TASK-02",
+      "tier": "event_contract",
+      "title": "Add Permanent Deletion Flag to NodeDeletedEvent",
+      "instructions": "Update NodeDeletedEvent to declare a protected boolean property $permanent = false, and a public getter method: public function isPermanent(): bool { return $this->permanent; }"
+    },
+    {
+      "task_id": "BLIND-TASK-03",
+      "tier": "interface_contract",
+      "title": "Add ID Verification Method to IShare Contract",
+      "instructions": "Update IShare interface to declare a method hasId(): public function hasId(): bool; for checking if the share instance has an assigned internal id."
+    },
+    {
+      "task_id": "BLIND-TASK-04",
+      "tier": "config_di",
+      "title": "Add Existence Check Method to IConfig Contract",
+      "instructions": "Update IConfig interface to declare a method hasSystemValue(): public function hasSystemValue(string $key): bool; for checking if a system configuration key exists."
+    },
+    {
+      "task_id": "BLIND-TASK-05",
+      "tier": "session_contract",
+      "title": "Add Active Session Status Check to IUserSession Contract",
+      "instructions": "Update IUserSession interface to declare a method hasActiveSession(): public function hasActiveSession(): bool; to query whether an authenticated user session is active."
+    }
+  ],
+  "description": "Public benchmark task specifications."
+}

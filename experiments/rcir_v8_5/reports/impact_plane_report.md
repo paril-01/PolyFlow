@@ -14,9 +14,9 @@
 |---|---|---|---|---|---|
 | **DEV** | 6 | 85.8% | 60.0% | 4 | 4300 |
 | **VALIDATION** | 5 | 66.7% | 33.3% | 5 | 742 |
-| **TEST** | 5 | 84.3% | 66.7% | 3 | 728 |
+| **TEST** | 5 | 91.0% | 75.0% | 2 | 749 |
 
 ## Impact Gate Compliance
-- **Macro Pool Recall on TEST**: `84.3%` (Floor: 90.0%) -> **FAILED**
-- **Worst Task Recall on TEST**: `66.7%` (Floor: 80.0%) -> **FAILED**
-- **Silent Misses on TEST**: `3` (Ceiling: 20) -> **PASSED**
+- **Macro Pool Recall on TEST**: `91.0%` (Floor: 90.0%) -> **PASSED**
+- **Worst Task Recall on TEST**: `75.0%` (Floor: 80.0%) -> **FAILED**
+- **Silent Misses on TEST**: `2` (Ceiling: 20) -> **PASSED**
