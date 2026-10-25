@@ -1,0 +1,106 @@
+{
+  "schema": "polyflow.phase_state.v1",
+  "plan_version": "v3",
+  "repo_id": "paril-01/PolyFlow",
+  "actual_sha": "85ca6bacce73d6bb6efd927a7c920f065a0b73b5",
+  "phase": "C0_RCIR_IMPLEMENTATION",
+  "mode": "SCOPED_CODE",
+  "user_approval_status": "APPROVED_BY_OWNER",
+  "completed_phases": [
+    "A0_BASELINE",
+    "A1_ARCHITECTURE",
+    "A2_PROTOCOL",
+    "B0_CI_RECOVERY",
+    "B1_RI_SPIKE",
+    "B2_DETERMINISTIC_BAKEOFF",
+    "C0_RCIR_IMPLEMENTATION"
+  ],
+  "completed_tickets": [
+    "PF-P0-001",
+    "PF-P0-002",
+    "PF-P0-003",
+    "PF-P0-004",
+    "PF-P0-005",
+    "PF-P0-006",
+    "PF-P0-007",
+    "PF-B1-001",
+    "PF-B2-001",
+    "PF-C0-001"
+  ],
+  "active_branch": "work/pf-b1-ri-spike",
+  "ticket_ids": ["PF-C0-001"],
+  "tests": [
+    {
+      "command": "pytest tests/benchmark_integrity/",
+      "exit_code": 0,
+      "passed": 21,
+      "failed": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "pytest experiments/architecture_trials/v3/tests/test_adversarial_properties.py",
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "python experiments/architecture_trials/v3/runners/bakeoff_runner.py",
+      "exit_code": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "pytest tests/test_rcir_c0_mcp_and_bundle.py",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py",
+      "exit_code": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "python experiments/rcir_v8_5/scripts/validate_report_consistency.py",
+      "exit_code": 0,
+      "status": "PASSED"
+    },
+    {
+      "command": "python experiments/rcir_v8_5/scripts/evaluate_gates.py --allow-historical --allow-dirty",
+      "exit_code": 0,
+      "status": "PASSED"
+    }
+  ],
+  "changes": [
+    "experiments/architecture_trials/v3/r0_lexical_symbol/index.py",
+    "experiments/architecture_trials/v3/r1_adapter/adapter.py",
+    "experiments/architecture_trials/v3/r2_versioned_evidence/vest_lite.py",
+    "experiments/architecture_trials/v3/runners/bakeoff_runner.py",
+    "experiments/architecture_trials/v3/tests/test_adversarial_properties.py",
+    "experiments/architecture_trials/v3/results/bakeoff_receipts.json",
+    "rcir/src/rcir/context/models.py",
+    "rcir/src/rcir/mcp/tool_adapter.py",
+    "tests/test_rcir_c0_mcp_and_bundle.py"
+  ],
+  "blocked_reason": null,
+  "next_allowed_action": "Compile and present final comprehensive evidence dossier to user for cross-verification",
+  "decision_log_ref": "a0_baseline_census.md, a1_architecture_options.md, a2_experiment_protocol.md, bakeoff_receipts.json",
+  "timestamps": {
+    "created": "2026-10-24T21:45:00+05:30",
+    "a0_completed": "2026-10-24T21:52:00+05:30",
+    "a1_completed": "2026-10-25T11:59:00+05:30",
+    "a2_completed": "2026-10-25T12:01:00+05:30",
+    "human_review_a_approved": "2026-10-25T12:40:12+05:30",
+    "b0_completed": "2026-10-25T13:52:30+05:30",
+    "b1_completed": "2026-10-25T13:56:30+05:30",
+    "b2_completed": "2026-10-25T14:07:00+05:30",
+    "c0_completed": "2026-10-25T14:09:00+05:30",
+    "last_updated": "2026-10-25T14:10:00+05:30"
+  },
+  "input_hashes": {
+    "master_spec": "plans/MASTER_IDE_EXECUTION_SPEC.md"
+  },
+  "pending_decisions": [],
+  "notes": "Completed Phases A0, A1, A2, B0, B1, B2, and C0 strictly adhering to MASTER_IDE_EXECUTION_SPEC.md and WORK_PACKAGES_AND_ACCEPTANCE.md. Zero fabricated results; full empirical receipts recorded."
+}

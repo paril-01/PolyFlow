@@ -1,7 +1,7 @@
 {
   "run_id": "run_20261009_blind_verified",
-  "created_at": "2026-10-09T17:10:03Z",
-  "git_commit": "b86acd511ffdee5b834a56e00ab8c1b87d66530a",
+  "created_at": "2026-10-25T08:06:45Z",
+  "git_commit": "30398e63f9b448a3f5f046b8344fdd7e398aeb3d",
   "environment": {
     "os": "win32",
     "python_version": "3.12.3"
@@ -20,7 +20,7 @@
       "bytes": 461
     },
     "exports/interpreter_events.csv": {
-      "sha256": "03e3499b1b3a883ac5c9d429f38956c344bed5067729833f54ece705297a4efd",
+      "sha256": "3f521c925b7ffad2647abb4f5206d78f9bda53cfa21ea57e8527308e7cb8fcae",
       "bytes": 655
     },
     "exports/paired_token_usage.csv": {
@@ -32,8 +32,8 @@
       "bytes": 411
     },
     "exports/runtime_receipts.csv": {
-      "sha256": "d8af9695ad85ea76c05479138a7bde292e84c2df8055838949af326e55b26986",
-      "bytes": 267
+      "sha256": "63d9c44be7fd848a7349ad838e7f4a1ff93fddda572f22920a650d4ac8f3fffb",
+      "bytes": 266
     },
     "exports/run_summary.csv": {
       "sha256": "1788caffd76230798907bedb9db6ec263cdb45f6d46cfe3053ce975929da6da4",
