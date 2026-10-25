@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-10-25T08:36:58Z",
+  "tasks_evaluated": 11,
+  "winner": "R0_LEXICAL_SYMBOL",
+  "summary": {
+    "R0": {
+      "target_recall_pct": 63.6,
+      "recall_at_1k_pct": 54.5,
+      "recall_at_2k_pct": 63.6,
+      "recall_at_4k_pct": 63.6,
+      "avg_latency_ms": 119.03,
+      "budget_violations": 0
+    },
+    "R1": {
+      "target_recall_pct": 0.0,
+      "recall_at_1k_pct": 0.0,
+      "recall_at_2k_pct": 0.0,
+      "recall_at_4k_pct": 0.0,
+      "avg_latency_ms": 5974.46,
+      "budget_violations": 0
+    },
+    "R2": {
+      "target_recall_pct": 36.4,
+      "recall_at_1k_pct": 36.4,
+      "recall_at_2k_pct": 45.5,
+      "recall_at_4k_pct": 36.4,
+      "avg_latency_ms": 304.5,
+      "budget_violations": 0
+    }
+  },
+  "index_times_ms": {
+    "R0": 15241.42,
+    "R1": 1098.72,
+    "R2": 7992.66
+  },
+  "invalidation_test": {
+    "target_file": "apps/files/lib/Controller/ApiController.php",
+    "r2_invalidated_facts": 25,
+    "r0_supported": false,
+    "r1_supported": false,
+    "r2_supported": true
+  },
+  "per_task_records": [
+    {
+      "task_id": "TASK-DEV-01",
+      "symbol": "getThumbnail",
+      "target_hint": "apps/files/lib/Controller/ApiController.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "lib/private/Preview/Imaginary.php",
+            "lib/public/Preview/IProviderV2.php",
+            "apps/dav/lib/Avatars/AvatarNode.php"
+          ],
+          "latency_ms": 122.34
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5404.5
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/updatenotification/composer/composer/ClassLoader.php",
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 411.84
+        }
+      }
+    },
+    {
+      "task_id": "TASK-DEV-02",
+      "symbol": "NodeDeletedEvent",
+      "target_hint": "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "lib/public/EventDispatcher/Event.php",
+            "lib/public/Files/Events/Node/NodeDeletedEvent.php",
+            "apps/appstore/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 93.71
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5883.91
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/updatenotification/composer/composer/ClassLoader.php",
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 245.4
+        }
+      }
+    },
+    {
+      "task_id": "TASK-DEV-03",
+      "symbol": "getId",
+      "target_hint": "lib/public/Share/IShare.php",
+      "candidates": {
+        "R0": {
+          "hit": false,
+          "files": [
+            "apps/files/lib/Search/FilesSearchProvider.php",
+            "apps/dav/lib/Search/ContactsSearchProvider.php",
+            "apps/comments/lib/Search/CommentsSearchProvider.php"
+          ],
+          "latency_ms": 184.01
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5635.98
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "lib/private/Share20/Share.php",
+            "lib/private/Files/Storage/Local.php",
+            "lib/public/FullTextSearch/IFullTextSearchProvider.php"
+          ],
+          "latency_ms": 222.96
+        }
+      }
+    },
+    {
+      "task_id": "TASK-DEV-04",
+      "symbol": "getSystemValue",
+      "target_hint": "lib/public/IConfig.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "apps/files_sharing/lib/Cache.php",
+            "apps/dav/lib/Avatars/AvatarNode.php",
+            "apps/dav/lib/CalDAV/Federation/FederatedCalendarObject.php"
+          ],
+          "latency_ms": 90.53
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5490.49
+        },
+        "R2": {
+          "hit": true,
+          "files": [
+            "apps/dav/lib/Storage/PublicOwnerWrapper.php",
+            "apps/user_ldap/lib/Configuration.php",
+            "apps/federatedfilesharing/tests/Controller/MountPublicLinkControllerTest.php"
+          ],
+          "latency_ms": 440.57
+        }
+      }
+    },
+    {
+      "task_id": "TASK-DEV-05",
+      "symbol": "getUser",
+      "target_hint": "lib/public/IUserSession.php",
+      "candidates": {
+        "R0": {
+          "hit": false,
+          "files": [
+            "lib/private/Accounts/AccountManager.php",
+            "apps/files_versions/lib/Versions/Version.php",
+            "apps/files_sharing/lib/Controller/RemoteController.php"
+          ],
+          "latency_ms": 131.35
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5855.71
+        },
+        "R2": {
+          "hit": true,
+          "files": [
+            "lib/private/Accounts/AccountManager.php",
+            "lib/public/Notification/INotification.php",
+            "apps/files_versions/lib/Versions/Version.php"
+          ],
+          "latency_ms": 202.89
+        }
+      }
+    },
+    {
+      "task_id": "TASK-DEV-06",
+      "symbol": "getUID",
+      "target_hint": "lib/public/IUser.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "lib/public/User/Events/PasswordUpdatedEvent.php",
+            "lib/public/Authentication/LoginCredentials/ICredentials.php",
+            "apps/dav/lib/Avatars/AvatarNode.php"
+          ],
+          "latency_ms": 92.48
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5986.94
+        },
+        "R2": {
+          "hit": true,
+          "files": [
+            "lib/public/User/Events/PasswordUpdatedEvent.php",
+            "lib/public/Authentication/LoginCredentials/ICredentials.php",
+            "lib/public/User/Events/UserLoggedInEvent.php"
+          ],
+          "latency_ms": 368.41
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-01",
+      "symbol": "get",
+      "target_hint": "lib/public/Files/Folder.php",
+      "candidates": {
+        "R0": {
+          "hit": false,
+          "files": [
+            "apps/files_sharing/lib/Cache.php",
+            "apps/dav/lib/Avatars/AvatarNode.php",
+            "apps/dav/lib/CalDAV/Federation/FederatedCalendarObject.php"
+          ],
+          "latency_ms": 123.81
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 7983.99
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/updatenotification/composer/composer/ClassLoader.php",
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 376.46
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-02",
+      "symbol": "updateFileTags",
+      "target_hint": "apps/files/lib/Controller/ApiController.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "apps/files_sharing/lib/Cache.php",
+            "apps/workflowengine/lib/Controller/UserWorkflowsController.php",
+            "apps/settings/lib/Controller/AISettingsController.php"
+          ],
+          "latency_ms": 182.48
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 6401.54
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/updatenotification/composer/composer/ClassLoader.php",
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 223.46
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-03",
+      "symbol": "getGID",
+      "target_hint": "lib/public/IGroup.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "apps/files_sharing/lib/Cache.php",
+            "apps/dav/lib/Avatars/AvatarNode.php",
+            "apps/dav/lib/CalDAV/Federation/FederatedCalendarObject.php"
+          ],
+          "latency_ms": 80.79
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 6016.91
+        },
+        "R2": {
+          "hit": true,
+          "files": [
+            "apps/dav/lib/Storage/PublicOwnerWrapper.php",
+            "apps/federatedfilesharing/tests/Controller/MountPublicLinkControllerTest.php",
+            "apps/dav/lib/CalDAV/PublicCalendar.php"
+          ],
+          "latency_ms": 220.4
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-04",
+      "symbol": "OwnershipTransferService",
+      "target_hint": "apps/files/lib/Service/OwnershipTransferService.php",
+      "candidates": {
+        "R0": {
+          "hit": true,
+          "files": [
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files/lib/Controller/TransferOwnershipController.php",
+            "apps/files/lib/Service/OwnershipTransferService.php"
+          ],
+          "latency_ms": 99.44
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5184.72
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/updatenotification/composer/composer/ClassLoader.php",
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 349.08
+        }
+      }
+    },
+    {
+      "task_id": "TASK-VAL-05",
+      "symbol": "register",
+      "target_hint": "apps/files/lib/AppInfo/Application.php",
+      "candidates": {
+        "R0": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/composer/composer/ClassLoader.php",
+            "apps/dav/composer/composer/ClassLoader.php",
+            "apps/contactsinteraction/composer/composer/ClassLoader.php"
+          ],
+          "latency_ms": 108.38
+        },
+        "R1": {
+          "hit": false,
+          "files": [
+            "apps/admin_audit/l10n/de.js",
+            "vite.config.ts",
+            "apps/admin_audit/l10n/br.js"
+          ],
+          "latency_ms": 5874.32
+        },
+        "R2": {
+          "hit": false,
+          "files": [
+            "apps/appstore/composer/composer/ClassLoader.php",
+            "apps/files_reminders/composer/composer/ClassLoader.php",
+            "apps/workflowengine/lib/AppInfo/Application.php"
+          ],
+          "latency_ms": 288.07
+        }
+      }
+    }
+  ]
+}
