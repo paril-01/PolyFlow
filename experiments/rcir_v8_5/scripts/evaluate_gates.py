@@ -39,7 +39,11 @@ from provenance import (
 )
 
 
-def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = None) -> Dict[str, Any]:
+def evaluate_gates(
+    allow_development_dirty: bool = False,
+    allow_historical: bool = False,
+    env: Optional[Any] = None,
+) -> Dict[str, Any]:
     print("=" * 80)
     print("RCIR v8.5.2 — Formal Contract Gate Evaluation")
     print("=" * 80)
@@ -68,6 +72,7 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
     # 2. Manifest existence, content validation, and hash
     manifest_path = env.manifests_root / "benchmark_run_manifest.json"
     manifest_hash = ""
+    manifest = {}
     if not manifest_path.exists():
         integrity_failures.append("benchmark_run_manifest.json does not exist")
     else:
@@ -76,15 +81,25 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
             with open(manifest_path, "r", encoding="utf-8") as f:
                 manifest = json.load(f)
 
-            # Validate manifest run_id
-            if manifest.get("run_id") != expected_run_id:
-                integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {expected_run_id}")
+            if not allow_historical:
+                # Validate manifest run_id
+                if manifest.get("run_id") != expected_run_id:
+                    integrity_failures.append(f"Manifest run_id mismatch: {manifest.get('run_id')} != {expected_run_id}")
 
-            # Issue 5: Validate all manifest fields against independently recomputed inputs
-            if manifest.get("polyflow_commit") != current_inputs["polyflow_commit"]:
-                integrity_failures.append(
-                    f"Manifest polyflow_commit mismatch: {manifest.get('polyflow_commit')} != {current_inputs['polyflow_commit']}"
-                )
+                # Issue 5: Validate all manifest fields against independently recomputed inputs
+                if manifest.get("polyflow_commit") != current_inputs["polyflow_commit"]:
+                    integrity_failures.append(
+                        f"Manifest polyflow_commit mismatch: {manifest.get('polyflow_commit')} != {current_inputs['polyflow_commit']}"
+                    )
+                # Validate config hashes key-by-key
+                m_cfg = manifest.get("config_hashes", {})
+                for cfg_name, cfg_hash in current_inputs["config_hashes"].items():
+                    if m_cfg.get(cfg_name) != cfg_hash:
+                        integrity_failures.append(
+                            f"Manifest config hash mismatch for '{cfg_name}': {m_cfg.get(cfg_name)} != {cfg_hash}"
+                        )
+
+            # In both live and historical modes, immutable external contracts, datasets, targets, and graph must match
             if manifest.get("target_repository_commit") != current_inputs["target_repo_commit"]:
                 integrity_failures.append(
                     f"Manifest target_repository_commit mismatch: {manifest.get('target_repository_commit')} != {current_inputs['target_repo_commit']}"
@@ -114,20 +129,32 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
                         f"Manifest ground truth hash mismatch for '{gt_name}': {m_gt.get(gt_name)} != {gt_hash}"
                     )
 
-            # Validate config hashes key-by-key
-            m_cfg = manifest.get("config_hashes", {})
-            for cfg_name, cfg_hash in current_inputs["config_hashes"].items():
-                if m_cfg.get(cfg_name) != cfg_hash:
-                    integrity_failures.append(
-                        f"Manifest config hash mismatch for '{cfg_name}': {m_cfg.get(cfg_name)} != {cfg_hash}"
-                    )
-
         except Exception as e:
             integrity_failures.append(f"Manifest corrupted: {e}")
 
     # Build expected current run envelope
-    expected_envelope = build_provenance_envelope(env, manifest_hash=manifest_hash)
-
+    if allow_historical and manifest:
+        expected_envelope = {
+            "run_id": manifest.get("run_id"),
+            "manifest_hash": manifest_hash,
+            "polyflow_commit": manifest.get("polyflow_commit"),
+            "polyflow_dirty": manifest.get("polyflow_dirty", False),
+            "polyflow_worktree_diff_hash": manifest.get("polyflow_worktree_diff_hash", ""),
+            "target_repo_commit": manifest.get("target_repository_commit"),
+            "target_repo_dirty": manifest.get("target_repo_dirty", False),
+            "target_repo_diff_hash": manifest.get("target_repo_diff_hash", ""),
+            "contract_hash": manifest.get("contract_hash"),
+            "dataset_hashes": manifest.get("dataset_hashes", {}),
+            "ground_truth_hash": manifest.get("ground_truth_hashes", {}).get("ground_truth", ""),
+            "edge_ground_truth_hash": manifest.get("ground_truth_hashes", {}).get("edges", ""),
+            "receiver_ground_truth_hash": manifest.get("ground_truth_hashes", {}).get("receivers", ""),
+            "canonicalization_ground_truth_hash": manifest.get("ground_truth_hashes", {}).get("canonicalization", ""),
+            "graph_hash": manifest.get("graph_hash"),
+            "config_hashes": manifest.get("config_hashes", {}),
+            "created_at": manifest.get("created_at"),
+        }
+    else:
+        expected_envelope = build_provenance_envelope(env, manifest_hash=manifest_hash)
 
     # 2. Strict provenance validation across all result artifacts
     artifacts_to_check = [
@@ -151,15 +178,26 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
                 with open(fpath, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 art_run_id = data.get("run_id")
-                if art_run_id != env.run_id:
-                    integrity_failures.append(f"Artifact {fname} run_id mismatch: {art_run_id} != {env.run_id}")
-                # Check provenance envelope if artifact has been generated in v8.5.1 format
-                if "manifest_hash" in data or "polyflow_commit" in data:
-                    is_valid_prov, prov_errs = validate_artifact_provenance(
-                        data, expected_envelope, allow_development_dirty=allow_development_dirty
-                    )
-                    if not is_valid_prov:
-                        integrity_failures.extend([f"Artifact {fname}: {err}" for err in prov_errs])
+                if not allow_historical:
+                    if art_run_id != env.run_id:
+                        integrity_failures.append(f"Artifact {fname} run_id mismatch: {art_run_id} != {env.run_id}")
+                    # Check provenance envelope if artifact has been generated in v8.5.1 format
+                    if "manifest_hash" in data or "polyflow_commit" in data:
+                        is_valid_prov, prov_errs = validate_artifact_provenance(
+                            data, expected_envelope, allow_development_dirty=allow_development_dirty
+                        )
+                        if not is_valid_prov:
+                            integrity_failures.extend([f"Artifact {fname}: {err}" for err in prov_errs])
+                else:
+                    # In historical mode, verify artifact cryptographic invariants against manifest
+                    if data.get("target_repo_commit") != expected_envelope["target_repo_commit"]:
+                        integrity_failures.append(f"Artifact {fname}: target_repo_commit mismatch")
+                    if data.get("contract_hash") != expected_envelope["contract_hash"]:
+                        integrity_failures.append(f"Artifact {fname}: contract_hash mismatch")
+                    if data.get("graph_hash") != expected_envelope["graph_hash"]:
+                        integrity_failures.append(f"Artifact {fname}: graph_hash mismatch")
+                    if data.get("dataset_hashes") != expected_envelope["dataset_hashes"]:
+                        integrity_failures.append(f"Artifact {fname}: dataset_hashes mismatch")
             except Exception as e:
                 integrity_failures.append(f"Artifact {fname} corrupted: {e}")
 
@@ -210,8 +248,12 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
             integrity_failures.append(f"Could not load canonical graph integrity artifact: {e}")
 
     # 6. Clean source state verification (formal release benchmark requires clean tree)
-    if env.polyflow_dirty and not allow_development_dirty:
-        integrity_failures.append("PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)")
+    if not allow_historical:
+        if env.polyflow_dirty and not allow_development_dirty:
+            integrity_failures.append("PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)")
+    else:
+        if expected_envelope.get("polyflow_dirty") and not allow_development_dirty:
+            integrity_failures.append("PolyFlow working tree was dirty during execution (formal release benchmark requires clean tree)")
 
     manifest_valid = manifest_path.exists() and not any("manifest" in f.lower() for f in integrity_failures)
     run_id_consistent = not any("run_id mismatch" in f.lower() for f in integrity_failures)
@@ -698,7 +740,8 @@ def evaluate_gates(allow_development_dirty: bool = False, env: Optional[Any] = N
 
 if __name__ == "__main__":
     allow_dirty = "--allow-dirty" in sys.argv
-    res = evaluate_gates(allow_development_dirty=allow_dirty)
+    allow_hist = "--allow-historical" in sys.argv or "--historical" in sys.argv
+    res = evaluate_gates(allow_development_dirty=allow_dirty, allow_historical=allow_hist)
     if not res or res.get("run_validity") != "VALID" or res.get("architecture_decision") in ("NOT_EVALUATED", "INVALID_CONTRACT"):
         sys.exit(1)
 
