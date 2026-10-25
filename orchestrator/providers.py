@@ -248,6 +248,11 @@ class LLMProvider:
             with urllib.request.urlopen(req, timeout=120) as resp_raw:
                 res_data = json.loads(resp_raw.read().decode("utf-8"))
             content = res_data.get("response", "")
+            returned_model = res_data.get("model", model_name)
+            if returned_model != model_name and not returned_model.startswith(model_name):
+                raise LLMProviderError(
+                    f"Ollama model identity mismatch: requested '{model_name}', but API response returned '{returned_model}'"
+                )
             is_native = "prompt_eval_count" in res_data
             p_tokens = res_data.get("prompt_eval_count", len(system_prompt + user_prompt) // 4)
             c_tokens = res_data.get("eval_count", len(content) // 4)
@@ -257,7 +262,7 @@ class LLMProvider:
                 content=content,
                 provider="ollama",
                 endpoint=endpoint,
-                model=model_name,
+                model=returned_model,
                 prompt_tokens=p_tokens,
                 completion_tokens=c_tokens,
                 total_tokens=t_tokens,
@@ -267,6 +272,7 @@ class LLMProvider:
             )
             self.last_response = resp
             return resp
+
         except Exception as e:
             raise LLMProviderError(f"Ollama provider call failed: {e}") from e
 

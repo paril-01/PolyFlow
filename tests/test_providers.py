@@ -83,6 +83,50 @@ class TestLLMProviderContract(unittest.TestCase):
         self.assertIn("Model identity mismatch", str(ctx.exception))
 
 
+    @patch.dict(os.environ, {"OLLAMA_MODEL": "env-ollama-model"})
+    def test_ollama_explicit_model_precedes_env(self):
+        """Explicit model_name takes precedence over OLLAMA_MODEL environment variable in request payload."""
+        import json
+        import io
+        p = LLMProvider(provider_name="ollama", model_name="cli-ollama-model")
+        captured_payload = {}
+
+        def mock_urlopen(req, timeout=120):
+            nonlocal captured_payload
+            captured_payload = json.loads(req.data.decode("utf-8"))
+            mock_resp = io.BytesIO(json.dumps({
+                "response": "ok",
+                "model": "cli-ollama-model",
+                "prompt_eval_count": 10,
+                "eval_count": 5,
+            }).encode("utf-8"))
+            return mock_resp
+
+        with patch("urllib.request.urlopen", side_effect=mock_urlopen):
+            resp = p._call_ollama("sys", "user", 0.0)
+            self.assertEqual(captured_payload.get("model"), "cli-ollama-model")
+            self.assertEqual(resp.model, "cli-ollama-model")
+
+    def test_ollama_response_model_mismatch_aborts(self):
+        """If Ollama server returns a model different than requested, fail-closed with LLMProviderError."""
+        import json
+        import io
+        p = LLMProvider(provider_name="ollama", model_name="requested-qwen")
+
+        def mock_urlopen(req, timeout=120):
+            mock_resp = io.BytesIO(json.dumps({
+                "response": "ok",
+                "model": "different-llama",
+            }).encode("utf-8"))
+            return mock_resp
+
+        with patch("urllib.request.urlopen", side_effect=mock_urlopen):
+            with self.assertRaises(LLMProviderError) as ctx:
+                p._call_ollama("sys", "user", 0.0)
+            self.assertIn("Ollama model identity mismatch", str(ctx.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
+
 
