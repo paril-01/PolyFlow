@@ -82,6 +82,7 @@ def test_proof_security_path_traversal_guard():
 
 
 def test_proofs_api_endpoints(client):
+    import hashlib
     res = client.get("/api/proofs")
     assert res.status_code == 200
     data = res.json()
@@ -89,10 +90,28 @@ def test_proofs_api_endpoints(client):
     proofs = data["proofs"]
     assert len(proofs) >= 10
 
-    # Test downloading first proof
-    first_proof = proofs[0]
-    p_res = client.get(f"/api/proofs/{first_proof['proof_id']}")
-    assert p_res.status_code == 200
+    # Test that EVERY advertised proof resolves to 200 with matching declared hash
+    for proof in proofs:
+        proof_id = proof["proof_id"]
+        p_res = client.get(f"/api/proofs/{proof_id}")
+        assert p_res.status_code == 200, f"Advertised proof {proof_id} returned HTTP {p_res.status_code}"
+        expected_hash = proof.get("sha256")
+        if expected_hash:
+            actual_hash = hashlib.sha256(p_res.content).hexdigest()
+            assert actual_hash == expected_hash, f"Hash mismatch on advertised proof {proof_id}"
+
+        # Test download endpoint as well
+        dl_res = client.get(f"/api/proofs/{proof_id}/download")
+        assert dl_res.status_code == 200
+
+    # Negative control: Nonexistent proof returns controlled 404
+    missing_res = client.get("/api/proofs/nonexistent_proof_xyz_99999")
+    assert missing_res.status_code == 404
+
+    # Negative control: Path traversal attempt via API returns controlled 404
+    traversal_res = client.get("/api/proofs/..%2F..%2F..%2Fetc%2Fpasswd")
+    assert traversal_res.status_code in (404, 400)
+
 
 
 def test_all_nine_derived_csvs_exist(client):
