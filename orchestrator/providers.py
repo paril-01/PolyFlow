@@ -43,8 +43,9 @@ class LLMResponse:
 
 
 class LLMProvider:
-    def __init__(self, provider_name: str = "auto"):
+    def __init__(self, provider_name: str = "auto", model_name: Optional[str] = None):
         self.provider_name = provider_name.lower()
+        self.model_name = model_name
         self.last_usage: dict[str, int] = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         self.total_tokens_consumed: int = 0
         self.last_response: Optional[LLMResponse] = None
@@ -58,6 +59,8 @@ class LLMProvider:
                 self.provider_name = "gemini"
             else:
                 self.provider_name = "dry-run"
+        elif self.provider_name not in ("openai", "anthropic", "gemini", "ollama", "dry-run", "simulated", "mock"):
+            raise LLMProviderError(f"Unsupported LLM provider: '{self.provider_name}'")
 
     @property
     def is_simulated(self) -> bool:
@@ -76,36 +79,42 @@ class LLMProvider:
         t0 = time.time()
         if self.provider_name == "dry-run":
             content = self._simulated_response(system_prompt, user_prompt)
+            model_used = self.model_name or "simulated-aef-mock"
             resp = LLMResponse(
                 content=content,
                 provider="dry-run",
                 endpoint="local-simulation",
-                model="simulated-aef-mock",
+                model=model_used,
                 prompt_tokens=len(user_prompt) // 4,
                 completion_tokens=len(content) // 4,
                 total_tokens=(len(user_prompt) + len(content)) // 4,
                 latency_seconds=time.time() - t0,
                 simulation_fallback=False,
             )
-            self.last_response = resp
-            return resp
         elif self.provider_name == "openai":
-            return self._call_openai(system_prompt, user_prompt, t0)
+            resp = self._call_openai(system_prompt, user_prompt, t0)
         elif self.provider_name == "anthropic":
-            return self._call_anthropic(system_prompt, user_prompt, t0)
+            resp = self._call_anthropic(system_prompt, user_prompt, t0)
         elif self.provider_name == "gemini":
-            return self._call_gemini(system_prompt, user_prompt, t0)
+            resp = self._call_gemini(system_prompt, user_prompt, t0)
         elif self.provider_name == "ollama":
-            return self._call_ollama(system_prompt, user_prompt, t0)
+            resp = self._call_ollama(system_prompt, user_prompt, t0)
         else:
             raise LLMProviderError(f"Unsupported LLM provider: '{self.provider_name}'")
+
+        if self.model_name and resp.model != self.model_name and not resp.model.startswith(self.model_name):
+            raise LLMProviderError(
+                f"Model identity mismatch: requested '{self.model_name}', but provider returned '{resp.model}'"
+            )
+        self.last_response = resp
+        return resp
 
     def _call_openai(self, system_prompt: str, user_prompt: str, start_time: float) -> LLMResponse:
         try:
             import openai
             base_url = os.environ.get("OPENAI_BASE_URL")
             client = openai.OpenAI(base_url=base_url, timeout=120.0) if base_url else openai.OpenAI(timeout=120.0)
-            model_name = os.environ.get("AEF_MODEL")
+            model_name = self.model_name or os.environ.get("AEF_MODEL")
             endpoint = str(getattr(client, "base_url", "https://api.openai.com/v1"))
             if not model_name:
                 if "11434" in endpoint or os.environ.get("OPENAI_API_KEY") == "ollama":
@@ -162,7 +171,7 @@ class LLMProvider:
         try:
             import anthropic
             client = anthropic.Anthropic()
-            model_name = os.environ.get("AEF_MODEL", "claude-3-5-sonnet-20241022")
+            model_name = self.model_name or os.environ.get("AEF_MODEL", "claude-3-5-sonnet-20241022")
             response = client.messages.create(
                 model=model_name,
                 max_tokens=4000,
@@ -195,7 +204,7 @@ class LLMProvider:
             import google.generativeai as genai
             api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
             genai.configure(api_key=api_key)
-            model_name = os.environ.get("AEF_MODEL", "gemini-1.5-pro")
+            model_name = self.model_name or os.environ.get("AEF_MODEL", "gemini-1.5-pro")
             model = genai.GenerativeModel(
                 model_name=model_name,
                 system_instruction=system_prompt
@@ -227,7 +236,7 @@ class LLMProvider:
         import urllib.request
         import json
         endpoint = os.environ.get("OLLAMA_ENDPOINT", "http://127.0.0.1:11434").rstrip("/")
-        model_name = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
+        model_name = self.model_name or os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:1.5b")
         url = f"{endpoint}/api/generate"
         payload = json.dumps({
             "model": model_name,
