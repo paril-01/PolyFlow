@@ -6,6 +6,8 @@ The owner has explicitly requested implementation of the complete master plan fo
 
 Checkpoint `5159abf32624c4b008c7caa8f3d3c00b95165f8a` was pushed and verified with `git ls-remote`. GitHub connector PR creation returned HTTP 403; GitKraken integration was not authenticated and did not execute. The four existing workflows now also accept pushes to this exact work branch, preserving all existing jobs/checks and avoiding a dependency on PR-creation access. No main-branch write, merge, disabled test or relaxed gate is involved.
 
+Hosted checkpoint `f6ee1024d7ec369e7eb7b22a1f9a75dca8251295`: smoke and React build passed; Linux provenance and report consistency passed; the artifact evaluator failed with nine raw-LF versus recorded-CRLF input digest comparisons. The patch adds an explicitly historical-only UTF-8 LF-to-CRLF reconstruction policy to those comparisons, retaining current-run raw digests, original recorded hashes, substantive-edit rejection and all other gates. Local command `python -m pytest tests/benchmark_integrity/test_historical_hash_policy.py tests/benchmark_integrity/test_historical_provenance_gate.py -q` exited 0 with 16 passed; exact executable and raw log are in `experiments/runs/pf_rp_ci_20261126/commands.jsonl` and `historical-hash-policy.log`. This does not turn historical replay into a fresh benchmark.
+
 PHASE: PF-RP-00 baseline captured; PF-RP-01 local repair implemented; hosted CI/independent acceptance pending.
 
 REPO/SHA/BRANCH/DIRTY: paril-01/PolyFlow @ 6a586e16007cb1bed123619b4494067f99eccf2f; work/pf-rp-01-proof-integrity; uncommitted scoped patch plus preserved user changes.

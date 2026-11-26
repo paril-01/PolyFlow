@@ -35,6 +35,7 @@ from provenance import (
     collect_input_hashes,
     compute_run_identity,
     hash_file,
+    matches_recorded_file_hash,
     validate_artifact_provenance,
 )
 
@@ -104,11 +105,21 @@ def evaluate_gates(
                 integrity_failures.append(
                     f"Manifest target_repository_commit mismatch: {manifest.get('target_repository_commit')} != {current_inputs['target_repo_commit']}"
                 )
-            if manifest.get("contract_hash") != current_inputs["contract_hash"]:
+            def input_hash_matches(label, path, recorded, raw):
+                if (isinstance(recorded, str) and len(recorded) == 64
+                        and recorded == raw and Path(path).is_file()):
+                    return True
+                if allow_historical and matches_recorded_file_hash(path, recorded, allow_legacy_crlf=True):
+                    print(f"  Historical input {label}: LEGACY_CRLF_RECONSTRUCTION_V1 "
+                          f"raw_sha256={raw} recorded_sha256={recorded}")
+                    return True
+                return False
+
+            if not input_hash_matches("contract", env.contract_path, manifest.get("contract_hash"), current_inputs["contract_hash"]):
                 integrity_failures.append(
                     f"Manifest contract_hash mismatch: {manifest.get('contract_hash')} != {current_inputs['contract_hash']}"
                 )
-            if manifest.get("graph_hash") != current_inputs["graph_hash"]:
+            if not input_hash_matches("graph", env.graph_path, manifest.get("graph_hash"), current_inputs["graph_hash"]):
                 integrity_failures.append(
                     f"Manifest graph_hash mismatch: {manifest.get('graph_hash')} != {current_inputs['graph_hash']}"
                 )
@@ -116,15 +127,21 @@ def evaluate_gates(
             # Validate dataset hashes
             m_datasets = manifest.get("dataset_hashes", {})
             for d_name, d_hash in current_inputs["dataset_hashes"].items():
-                if m_datasets.get(d_name) != d_hash:
+                if not input_hash_matches(f"dataset:{d_name}", env.dataset_root / f"{d_name}.json", m_datasets.get(d_name), d_hash):
                     integrity_failures.append(
                         f"Manifest dataset hash mismatch for '{d_name}': {m_datasets.get(d_name)} != {d_hash}"
                     )
 
             # Validate ground truth hashes
             m_gt = manifest.get("ground_truth_hashes", {})
+            gt_paths = {
+                "ground_truth": env.ground_truth_root / "ground_truth.json",
+                "edges": env.edge_ground_truth_root / "ground_truth_edges.json",
+                "receivers": env.receiver_ground_truth_root / "receiver_ground_truth.json",
+                "canonicalization": env.canonicalization_ground_truth_root / "canonicalization_corpus.json",
+            }
             for gt_name, gt_hash in current_inputs["ground_truth_hashes"].items():
-                if m_gt.get(gt_name) != gt_hash:
+                if not input_hash_matches(f"ground_truth:{gt_name}", gt_paths[gt_name], m_gt.get(gt_name), gt_hash):
                     integrity_failures.append(
                         f"Manifest ground truth hash mismatch for '{gt_name}': {m_gt.get(gt_name)} != {gt_hash}"
                     )

@@ -1,0 +1,326 @@
+﻿2026-11-26T05:56:33.3761153Z Current runner version: '2.338.2'
+2026-11-26T05:56:33.3781997Z ##[group]Runner Image Provisioner
+2026-11-26T05:56:33.3783014Z Hosted Compute Agent
+2026-11-26T05:56:33.3783682Z Version: 20261111.635
+2026-11-26T05:56:33.3784468Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-26T05:56:33.3785305Z Build Date: 2026-11-11T01:49:01Z
+2026-11-26T05:56:33.3786098Z Worker ID: {e69655b2-f529-4f9c-850b-b4c0d36b58f7}
+2026-11-26T05:56:33.3786816Z Region: eastus2
+2026-11-26T05:56:33.3787267Z Cloud: Azure
+2026-11-26T05:56:33.3787727Z ##[endgroup]
+2026-11-26T05:56:33.3788905Z ##[group]Operating System
+2026-11-26T05:56:33.3789442Z Ubuntu
+2026-11-26T05:56:33.3789990Z 26.04.1
+2026-11-26T05:56:33.3790417Z LTS
+2026-11-26T05:56:33.3790873Z ##[endgroup]
+2026-11-26T05:56:33.3791341Z ##[group]Runner Image
+2026-11-26T05:56:33.3792059Z Image: ubuntu-26.04
+2026-11-26T05:56:33.3792582Z Version: 20261116.202.1
+2026-11-26T05:56:33.3793632Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-26T05:56:33.3794889Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202
+2026-11-26T05:56:33.3795709Z ##[endgroup]
+2026-11-26T05:56:33.3796851Z ##[group]GITHUB_TOKEN Permissions
+2026-11-26T05:56:33.3798597Z Contents: read
+2026-11-26T05:56:33.3799414Z Metadata: read
+2026-11-26T05:56:33.3799907Z Packages: read
+2026-11-26T05:56:33.3800361Z ##[endgroup]
+2026-11-26T05:56:33.3802891Z Secret source: Actions
+2026-11-26T05:56:33.3803633Z Cache mode: write
+2026-11-26T05:56:33.3804447Z Prepare workflow directory
+2026-11-26T05:56:33.4327439Z Prepare all required actions
+2026-11-26T05:56:33.4382687Z Getting action download info
+2026-11-26T05:56:33.6182753Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-26T05:56:33.6980115Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-26T05:56:33.8886072Z Complete job name: validate-integrity (ubuntu-latest)
+2026-11-26T05:56:33.9573920Z ##[group]Run actions/checkout@v4
+2026-11-26T05:56:33.9574560Z with:
+2026-11-26T05:56:33.9574914Z   submodules: true
+2026-11-26T05:56:33.9575319Z   repository: paril-01/PolyFlow
+2026-11-26T05:56:33.9578346Z   token: ***
+2026-11-26T05:56:33.9578707Z   ssh-strict: true
+2026-11-26T05:56:33.9579070Z   ssh-user: git
+2026-11-26T05:56:33.9579441Z   persist-credentials: true
+2026-11-26T05:56:33.9579837Z   clean: true
+2026-11-26T05:56:33.9580204Z   sparse-checkout-cone-mode: true
+2026-11-26T05:56:33.9580627Z   fetch-depth: 1
+2026-11-26T05:56:33.9580979Z   fetch-tags: false
+2026-11-26T05:56:33.9581350Z   show-progress: true
+2026-11-26T05:56:33.9581742Z   lfs: false
+2026-11-26T05:56:33.9582246Z   set-safe-directory: true
+2026-11-26T05:56:33.9582675Z   allow-unsafe-pr-checkout: false
+2026-11-26T05:56:33.9583247Z ##[endgroup]
+2026-11-26T05:56:34.2504578Z Syncing repository: paril-01/PolyFlow
+2026-11-26T05:56:34.2506200Z ##[group]Getting Git version info
+2026-11-26T05:56:34.2506959Z Working directory is '/home/runner/work/PolyFlow/PolyFlow'
+2026-11-26T05:56:34.2507864Z [command]/usr/bin/git version
+2026-11-26T05:56:34.2523210Z git version 2.56.1
+2026-11-26T05:56:34.2538690Z ##[endgroup]
+2026-11-26T05:56:34.2553851Z Temporarily overriding HOME='/home/runner/work/_temp/4adc9ba1-9453-4f31-89e7-e6068f170062' before making global git config changes
+2026-11-26T05:56:34.2555951Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-26T05:56:34.2557597Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:56:34.2609254Z Deleting the contents of '/home/runner/work/PolyFlow/PolyFlow'
+2026-11-26T05:56:34.2613371Z ##[group]Initializing the repository
+2026-11-26T05:56:34.2617086Z [command]/usr/bin/git init /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:56:34.2728476Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-26T05:56:34.2729700Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-26T05:56:34.2731007Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-26T05:56:34.2731977Z hint: call:
+2026-11-26T05:56:34.2732780Z hint:
+2026-11-26T05:56:34.2733527Z hint: 	git config --global init.defaultBranch <name>
+2026-11-26T05:56:34.2734142Z hint:
+2026-11-26T05:56:34.2734666Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-26T05:56:34.2735484Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-26T05:56:34.2736135Z hint:
+2026-11-26T05:56:34.2736505Z hint: 	git branch -m <name>
+2026-11-26T05:56:34.2736940Z hint:
+2026-11-26T05:56:34.2737490Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-26T05:56:34.2741123Z Initialized empty Git repository in /home/runner/work/PolyFlow/PolyFlow/.git/
+2026-11-26T05:56:34.2750757Z [command]/usr/bin/git remote add origin https://github.com/paril-01/PolyFlow
+2026-11-26T05:56:34.2798835Z ##[endgroup]
+2026-11-26T05:56:34.2802602Z ##[group]Disabling automatic garbage collection
+2026-11-26T05:56:34.2803729Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-26T05:56:34.2833054Z ##[endgroup]
+2026-11-26T05:56:34.2834588Z ##[group]Setting up auth
+2026-11-26T05:56:34.2839144Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-26T05:56:34.2867621Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-26T05:56:34.3257496Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-26T05:56:34.3285929Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-26T05:56:34.3523884Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:34.3555757Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-26T05:56:34.3787961Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-26T05:56:34.3826690Z ##[endgroup]
+2026-11-26T05:56:34.3827896Z ##[group]Fetching the repository
+2026-11-26T05:56:34.3834770Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f6ee1024d7ec369e7eb7b22a1f9a75dca8251295:refs/remotes/origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:35.9945180Z From https://github.com/paril-01/PolyFlow
+2026-11-26T05:56:35.9946795Z  * [new ref]         f6ee1024d7ec369e7eb7b22a1f9a75dca8251295 -> origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:35.9950088Z ##[endgroup]
+2026-11-26T05:56:35.9951342Z ##[group]Determining the checkout info
+2026-11-26T05:56:35.9952778Z ##[endgroup]
+2026-11-26T05:56:35.9955576Z [command]/usr/bin/git sparse-checkout disable
+2026-11-26T05:56:36.0002286Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-26T05:56:36.0030868Z ##[group]Checking out the ref
+2026-11-26T05:56:36.0033323Z [command]/usr/bin/git checkout --progress --force -B work/pf-rp-01-proof-integrity refs/remotes/origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:36.3397740Z Switched to a new branch 'work/pf-rp-01-proof-integrity'
+2026-11-26T05:56:36.3402200Z branch 'work/pf-rp-01-proof-integrity' set up to track 'origin/work/pf-rp-01-proof-integrity'.
+2026-11-26T05:56:36.3453789Z ##[endgroup]
+2026-11-26T05:56:36.3454588Z ##[group]Setting up auth for fetching submodules
+2026-11-26T05:56:36.3459256Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-26T05:56:36.3496174Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-11-26T05:56:36.3520720Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-11-26T05:56:36.3547325Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-183269149@github.com:
+2026-11-26T05:56:36.3572801Z ##[endgroup]
+2026-11-26T05:56:36.3573274Z ##[group]Fetching submodules
+2026-11-26T05:56:36.3575616Z [command]/usr/bin/git submodule sync
+2026-11-26T05:56:36.3816720Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1
+2026-11-26T05:56:36.4047802Z Submodule 'experiments/nextcloud_validation/nextcloud-server' (https://github.com/nextcloud/server.git) registered for path 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:36.4053344Z Submodule 'repos/flask' (https://github.com/pallets/flask.git) registered for path 'repos/flask'
+2026-11-26T05:56:36.4060308Z Submodule 'repos/opentelemetry-demo' (https://github.com/open-telemetry/opentelemetry-demo.git) registered for path 'repos/opentelemetry-demo'
+2026-11-26T05:56:36.4066972Z Submodule 'repos/requests' (https://github.com/psf/requests.git) registered for path 'repos/requests'
+2026-11-26T05:56:36.4094929Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/experiments/nextcloud_validation/nextcloud-server'...
+2026-11-26T05:56:43.1723196Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/flask'...
+2026-11-26T05:56:43.4853898Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/opentelemetry-demo'...
+2026-11-26T05:56:43.9420578Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/requests'...
+2026-11-26T05:56:52.1401211Z From https://github.com/nextcloud/server
+2026-11-26T05:56:52.1402122Z  * branch              da57df078d0808a7235a0177bd99d23c010b472e -> FETCH_HEAD
+2026-11-26T05:56:53.3583892Z Submodule path 'experiments/nextcloud_validation/nextcloud-server': checked out 'da57df078d0808a7235a0177bd99d23c010b472e'
+2026-11-26T05:56:53.8883034Z From https://github.com/pallets/flask
+2026-11-26T05:56:53.8883954Z  * branch            d318b683471101618febed18996405ad26462110 -> FETCH_HEAD
+2026-11-26T05:56:53.9076602Z Submodule path 'repos/flask': checked out 'd318b683471101618febed18996405ad26462110'
+2026-11-26T05:56:54.6359931Z From https://github.com/open-telemetry/opentelemetry-demo
+2026-11-26T05:56:54.6360652Z  * branch            8c47d47c9ac27710d2b2a153bcd53e483bffe66d -> FETCH_HEAD
+2026-11-26T05:56:54.6885854Z Submodule path 'repos/opentelemetry-demo': checked out '8c47d47c9ac27710d2b2a153bcd53e483bffe66d'
+2026-11-26T05:56:55.1593725Z From https://github.com/psf/requests
+2026-11-26T05:56:55.1594146Z  * branch            dae7ef63b4df6eded86637f251fc4e3a06c3b479 -> FETCH_HEAD
+2026-11-26T05:56:55.1783746Z Submodule path 'repos/requests': checked out 'dae7ef63b4df6eded86637f251fc4e3a06c3b479'
+2026-11-26T05:56:55.1795991Z [command]/usr/bin/git submodule foreach git config --local gc.auto 0
+2026-11-26T05:56:55.2026102Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.2047965Z Entering 'repos/flask'
+2026-11-26T05:56:55.2069473Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.2090940Z Entering 'repos/requests'
+2026-11-26T05:56:55.2121332Z ##[endgroup]
+2026-11-26T05:56:55.2122034Z ##[group]Persisting credentials for submodules
+2026-11-26T05:56:55.2127173Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-11-26T05:56:55.2356160Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.2411009Z Entering 'repos/flask'
+2026-11-26T05:56:55.2449492Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.2489074Z Entering 'repos/requests'
+2026-11-26T05:56:55.2538337Z [command]/usr/bin/git submodule foreach sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-26T05:56:55.2763076Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.2799157Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config	remote.origin.url
+2026-11-26T05:56:55.2802675Z Entering 'repos/flask'
+2026-11-26T05:56:55.2837510Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config	remote.origin.url
+2026-11-26T05:56:55.2841648Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.3277834Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config	remote.origin.url
+2026-11-26T05:56:55.3280511Z Entering 'repos/requests'
+2026-11-26T05:56:55.3321388Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config	remote.origin.url
+2026-11-26T05:56:55.3363462Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-11-26T05:56:55.3588135Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.3610476Z Entering 'repos/flask'
+2026-11-26T05:56:55.3632544Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.3654642Z Entering 'repos/requests'
+2026-11-26T05:56:55.3686708Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'org-183269149@github.com:'
+2026-11-26T05:56:55.3912339Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.3935198Z Entering 'repos/flask'
+2026-11-26T05:56:55.3957439Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.3979490Z Entering 'repos/requests'
+2026-11-26T05:56:55.4007991Z ##[endgroup]
+2026-11-26T05:56:55.4052014Z [command]/usr/bin/git log -1 --format=%H
+2026-11-26T05:56:55.4079498Z f6ee1024d7ec369e7eb7b22a1f9a75dca8251295
+2026-11-26T05:56:55.4419426Z ##[group]Run actions/setup-python@v5
+2026-11-26T05:56:55.4420029Z with:
+2026-11-26T05:56:55.4420233Z   python-version: 3.11
+2026-11-26T05:56:55.4420436Z   check-latest: false
+2026-11-26T05:56:55.4423272Z   token: ***
+2026-11-26T05:56:55.4423495Z   update-environment: true
+2026-11-26T05:56:55.4423727Z   allow-prereleases: false
+2026-11-26T05:56:55.4423927Z   freethreaded: false
+2026-11-26T05:56:55.4424106Z ##[endgroup]
+2026-11-26T05:56:55.6358364Z ##[group]Installed versions
+2026-11-26T05:56:55.6499257Z (node:2602) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-26T05:56:55.6500001Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-26T05:56:55.6500506Z Successfully set up CPython (3.11.18)
+2026-11-26T05:56:55.6500944Z ##[endgroup]
+2026-11-26T05:56:55.6649846Z ##[group]Run python -m pip install --upgrade pip
+2026-11-26T05:56:55.6650373Z [36;1mpython -m pip install --upgrade pip[0m
+2026-11-26T05:56:55.6708683Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:56:55.6708986Z env:
+2026-11-26T05:56:55.6709319Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:55.6709927Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib/pkgconfig
+2026-11-26T05:56:55.6710563Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:55.6710987Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:55.6711466Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:55.6712059Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib
+2026-11-26T05:56:55.6712443Z ##[endgroup]
+2026-11-26T05:56:56.4143567Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/site-packages (26.3)
+2026-11-26T05:56:56.5553368Z ##[group]Run python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py
+2026-11-26T05:56:56.5553872Z [36;1mpython experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py[0m
+2026-11-26T05:56:56.5584881Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:56:56.5585093Z env:
+2026-11-26T05:56:56.5585314Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:56.5585665Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib/pkgconfig
+2026-11-26T05:56:56.5586173Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:56.5586470Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:56.5586760Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:56.5587054Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib
+2026-11-26T05:56:56.5587310Z ##[endgroup]
+2026-11-26T05:56:57.6953696Z ================================================================================
+2026-11-26T05:56:57.6954686Z RCIR v8.5 — Commit-Bound Ground-Truth Provenance Audit (PF-RC-CI-001)
+2026-11-26T05:56:57.6955163Z ================================================================================
+2026-11-26T05:56:57.6955591Z Auditing 16 ground truth tasks against Git object store...
+2026-11-26T05:56:57.6956157Z Auditing 25 edge ground truth tuples at commit da57df078d0808a7235a0177bd99d23c010b472e...
+2026-11-26T05:56:57.6956870Z Auditing 12 receiver ground truth call sites at commit da57df078d0808a7235a0177bd99d23c010b472e...
+2026-11-26T05:56:57.6957603Z Auditing 8 canonicalization corpus records at commit da57df078d0808a7235a0177bd99d23c010b472e...
+2026-11-26T05:56:57.6958260Z Side-effect free execution: results not written to tracked results/ directory.
+2026-11-26T05:56:57.6958787Z SUCCESS: All 16 tasks, commits, files, and hashes 100% verified!
+2026-11-26T05:56:57.7062788Z ##[group]Run python experiments/rcir_v8_5/scripts/validate_report_consistency.py
+2026-11-26T05:56:57.7063266Z [36;1mpython experiments/rcir_v8_5/scripts/validate_report_consistency.py[0m
+2026-11-26T05:56:57.7092437Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:56:57.7092642Z env:
+2026-11-26T05:56:57.7092862Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.7093220Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib/pkgconfig
+2026-11-26T05:56:57.7093581Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.7093875Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.7094179Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.7094474Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib
+2026-11-26T05:56:57.7094732Z ##[endgroup]
+2026-11-26T05:56:57.8049158Z ================================================================================
+2026-11-26T05:56:57.8050043Z RCIR v8.5 — Report Byte/Hash Invariance Validator
+2026-11-26T05:56:57.8050443Z ================================================================================
+2026-11-26T05:56:57.8050841Z ================================================================================
+2026-11-26T05:56:57.8051283Z RCIR v8.5 — Generating Reports in /tmp/tmp0g5qad6r
+2026-11-26T05:56:57.8051666Z ================================================================================
+2026-11-26T05:56:57.8052191Z Generated 14 reports in /tmp/tmp0g5qad6r
+2026-11-26T05:56:57.8052406Z 
+2026-11-26T05:56:57.8052551Z Checking SHA-256 byte consistency for 15 reports:
+2026-11-26T05:56:57.8052997Z   [PASSED] agent_validation_report.md (db69331b4b08...)
+2026-11-26T05:56:57.8053390Z   [PASSED] canonical_graph_report.md (e98bb63d01e9...)
+2026-11-26T05:56:57.8053771Z   [PASSED] context_planner_report.md (2f409cb48efd...)
+2026-11-26T05:56:57.8054123Z   [PASSED] failure_catalog.md (4a220c75c7c2...)
+2026-11-26T05:56:57.8054481Z   [PASSED] final_assessment.md (93464e9e87f0...)
+2026-11-26T05:56:57.8054841Z   [PASSED] generalization_readiness.md (4178b3168add...)
+2026-11-26T05:56:57.8055210Z   [PASSED] ground_truth_report.md (278327398780...)
+2026-11-26T05:56:57.8055570Z   [PASSED] impact_plane_report.md (13f262ca5d5e...)
+2026-11-26T05:56:57.8055927Z   [PASSED] integrity_report.md (f50ed7397cd9...)
+2026-11-26T05:56:57.8056277Z   [PASSED] performance_report.md (b0b64e12d276...)
+2026-11-26T05:56:57.8056621Z   [PASSED] ranking_report.md (5b1d52396919...)
+2026-11-26T05:56:57.8056959Z   [PASSED] reproduction.md (f01a8d1ef09d...)
+2026-11-26T05:56:57.8057301Z   [PASSED] type_flow_report.md (9527bc7cfa9c...)
+2026-11-26T05:56:57.8057884Z   [PASSED] typed_edge_report.md (fb1cd96a6370...)
+2026-11-26T05:56:57.8058265Z   [STATIC] v8_4_reassessment.md (historical audit baseline)
+2026-11-26T05:56:57.8058529Z 
+2026-11-26T05:56:57.8058684Z Report Consistency Result: PASSED (100% Byte Invariant)
+2026-11-26T05:56:57.8146063Z ##[group]Run python experiments/rcir_v8_5/scripts/evaluate_gates.py --allow-historical
+2026-11-26T05:56:57.8146564Z [36;1mpython experiments/rcir_v8_5/scripts/evaluate_gates.py --allow-historical[0m
+2026-11-26T05:56:57.8175269Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:56:57.8175472Z env:
+2026-11-26T05:56:57.8175687Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.8176030Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib/pkgconfig
+2026-11-26T05:56:57.8176366Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.8176658Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.8176954Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.18/x64
+2026-11-26T05:56:57.8177266Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.18/x64/lib
+2026-11-26T05:56:57.8177526Z ##[endgroup]
+2026-11-26T05:56:58.0491701Z ================================================================================
+2026-11-26T05:56:58.0492580Z RCIR v8.5.2 — Formal Contract Gate Evaluation
+2026-11-26T05:56:58.0492867Z ================================================================================
+2026-11-26T05:56:58.0493054Z 
+2026-11-26T05:56:58.0493170Z [STAGE 1] Evaluating Benchmark Integrity Gate...
+2026-11-26T05:56:58.0493416Z Integrity Gate Verdict: FAILED
+2026-11-26T05:56:58.0493547Z 
+2026-11-26T05:56:58.0493718Z [STAGE 2] Validating Contract Feasibility against Sparse Ground Truth Labels...
+2026-11-26T05:56:58.0493959Z 
+2026-11-26T05:56:58.0494073Z [STAGE 3] Evaluating Contract Gates against TEST split...
+2026-11-26T05:56:58.0494398Z   Impact Gate: PASSED (Macro: 91.0%, Worst: 75.0%, Silent Misses: 2)
+2026-11-26T05:56:58.0494776Z   Ranking Gate: PASSED (P@20_excl: 10.0%, P@50_excl: 4.0%, nDCG@50: 0.5213, MRR: 0.6167)
+2026-11-26T05:56:58.0495253Z   Context Gate: PASSED (CriticalSourceRecall@4k: 80.0%, BudgetViolations: 0, Determinism: True)
+2026-11-26T05:56:58.0495733Z   Type Flow Gate: PASSED (Coverage: 100.0%, Precision: 100.0%, WrongExact: 0.0%, InvalidGT: 0)
+2026-11-26T05:56:58.0496084Z   Canonicalization Gate: PASSED (Wrong Rate: 0.00%)
+2026-11-26T05:56:58.0496333Z   Agent Gate: NOT_VERIFIED
+2026-11-26T05:56:58.0496453Z 
+2026-11-26T05:56:58.0496554Z ================================================================================
+2026-11-26T05:56:58.0496827Z Formal Architecture Decision: NOT_EVALUATED
+2026-11-26T05:56:58.0497141Z Summary: Benchmark integrity gate failed with 9 violation(s). Run is invalid.
+2026-11-26T05:56:58.0497465Z ================================================================================
+2026-11-26T05:56:58.0497906Z Saved formal gate evaluation to: /home/runner/work/PolyFlow/PolyFlow/experiments/rcir_v8_5/results/gate_evaluation.json
+2026-11-26T05:56:58.0578336Z ##[error]Process completed with exit code 1.
+2026-11-26T05:56:58.0694656Z Post job cleanup.
+2026-11-26T05:56:58.1432588Z [command]/usr/bin/git version
+2026-11-26T05:56:58.1448306Z git version 2.56.1
+2026-11-26T05:56:58.1477630Z Temporarily overriding HOME='/home/runner/work/_temp/5a493121-74b4-4c94-bb51-65823b31e584' before making global git config changes
+2026-11-26T05:56:58.1478764Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-26T05:56:58.1481521Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:56:58.1514445Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-26T05:56:58.1544366Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-26T05:56:58.1799283Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:58.1855501Z Entering 'repos/flask'
+2026-11-26T05:56:58.1922811Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:58.1948637Z Entering 'repos/requests'
+2026-11-26T05:56:58.2022934Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-26T05:56:58.2048963Z http.https://github.com/.extraheader
+2026-11-26T05:56:58.2059854Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-26T05:56:58.2092162Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-26T05:56:58.2324948Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:58.2352446Z http.https://github.com/.extraheader
+2026-11-26T05:56:58.2396087Z Entering 'repos/flask'
+2026-11-26T05:56:58.2417657Z http.https://github.com/.extraheader
+2026-11-26T05:56:58.2448171Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:58.2469650Z http.https://github.com/.extraheader
+2026-11-26T05:56:58.2501600Z Entering 'repos/requests'
+2026-11-26T05:56:58.2522977Z http.https://github.com/.extraheader
+2026-11-26T05:56:58.2571690Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:58.2606293Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-26T05:56:58.2846938Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:58.2866191Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config	remote.origin.url
+2026-11-26T05:56:58.2899021Z Entering 'repos/flask'
+2026-11-26T05:56:58.2917727Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config	remote.origin.url
+2026-11-26T05:56:58.2935765Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:58.2954566Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config	remote.origin.url
+2026-11-26T05:56:58.2972833Z Entering 'repos/requests'
+2026-11-26T05:56:58.2991277Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config	remote.origin.url
+2026-11-26T05:56:58.3045380Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:58.3057683Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:58.3084940Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:58.3111176Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:58.3263642Z Cleaning up orphan processes
+2026-11-26T05:56:58.3574907Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

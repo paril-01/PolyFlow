@@ -27,6 +27,34 @@ def hash_file(file_path: Path | str) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def matches_recorded_file_hash(
+    file_path: Path | str, recorded_hash: str, *, allow_legacy_crlf: bool = False
+) -> bool:
+    """Verify raw bytes, with explicit legacy UTF-8 LF-to-CRLF replay only.
+
+    Current-run identities always use hash_file's raw digest. Historical replay
+    can reconstruct the exact CRLF bytes committed receipt writers hashed;
+    no expected digest is replaced and no substantive edit is normalized away.
+    Binary/non-UTF-8 data and mixed line endings never use reconstruction.
+    """
+    if (not isinstance(recorded_hash, str) or len(recorded_hash) != 64
+            or any(char not in "0123456789abcdef" for char in recorded_hash)):
+        return False
+    try:
+        content = Path(file_path).read_bytes()
+    except OSError:
+        return False
+    if hashlib.sha256(content).hexdigest() == recorded_hash:
+        return True
+    if not allow_legacy_crlf or b"\x00" in content or b"\r" in content:
+        return False
+    try:
+        content.decode("utf-8", errors="strict")
+    except UnicodeDecodeError:
+        return False
+    return hashlib.sha256(content.replace(b"\n", b"\r\n")).hexdigest() == recorded_hash
+
+
 def hash_dict(data: Dict[str, Any]) -> str:
     """Compute deterministic hex SHA-256 digest of dictionary data."""
     canonical = json.dumps(data, sort_keys=True, separators=(",", ":"))
