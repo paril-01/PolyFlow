@@ -1,5 +1,7 @@
 # RCIR implementation progress
 
+**Current state:** implementation and CI-recovery changes have been pushed. PF-RP-01 remains blocked by the original historical manifest's dirty-source release ineligibility; PF-RP-02 onward have not started. See [hosted CI closeout and exact remaining failure](./CI_CLOSEOUT.md). The owner has been asked to choose the evidence protocol; publishing permission is already granted.
+
 ## Owner-authorized continuation
 
 The owner has explicitly requested implementation of the complete master plan followed by pushing the changes. Publishing the scoped branch is now authorized; the earlier approval request below is historical. Required CI checkpoints will be published to this work branch, with no merge. No failed gate or unmeasured benchmark result is promoted to a pass. The first checkpoint publishes the existing PF-RP-01 repair and its prior provenance-fix parent for hosted verification. New CI receipts are saved under `experiments/runs/pf_rp_ci_20261126/`.
