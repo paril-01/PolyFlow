@@ -110,7 +110,7 @@ def evaluate_gates(
                         and recorded == raw and Path(path).is_file()):
                     return True
                 if allow_historical and matches_recorded_file_hash(path, recorded, allow_legacy_crlf=True):
-                    print(f"  Historical input {label}: LEGACY_CRLF_RECONSTRUCTION_V1 "
+                    print(f"  Historical input {label}: LEGACY_UNIFORM_EOL_RECONSTRUCTION_V1 "
                           f"raw_sha256={raw} recorded_sha256={recorded}")
                     return True
                 return False
@@ -277,6 +277,8 @@ def evaluate_gates(
     integrity_passed = len(integrity_failures) == 0
 
     print(f"Integrity Gate Verdict: {'PASSED' if integrity_passed else 'FAILED'}")
+    for reason in integrity_failures:
+        print(f"  INTEGRITY_FAILURE: {reason}")
 
     integrity_result = {
         **expected_envelope,

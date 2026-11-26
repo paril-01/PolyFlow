@@ -30,10 +30,10 @@ def hash_file(file_path: Path | str) -> str:
 def matches_recorded_file_hash(
     file_path: Path | str, recorded_hash: str, *, allow_legacy_crlf: bool = False
 ) -> bool:
-    """Verify raw bytes, with explicit legacy UTF-8 LF-to-CRLF replay only.
+    """Verify raw bytes, with explicit legacy UTF-8 uniform-EOL replay only.
 
     Current-run identities always use hash_file's raw digest. Historical replay
-    can reconstruct the exact CRLF bytes committed receipt writers hashed;
+    can reconstruct the exact LF or CRLF bytes receipt writers hashed;
     no expected digest is replaced and no substantive edit is normalized away.
     Binary/non-UTF-8 data and mixed line endings never use reconstruction.
     """
@@ -46,13 +46,22 @@ def matches_recorded_file_hash(
         return False
     if hashlib.sha256(content).hexdigest() == recorded_hash:
         return True
-    if not allow_legacy_crlf or b"\x00" in content or b"\r" in content:
+    if not allow_legacy_crlf or b"\x00" in content:
         return False
     try:
         content.decode("utf-8", errors="strict")
     except UnicodeDecodeError:
         return False
-    return hashlib.sha256(content.replace(b"\n", b"\r\n")).hexdigest() == recorded_hash
+    unpaired = content.replace(b"\r\n", b"")
+    if b"\r" in unpaired:
+        return False
+    if b"\r\n" in content:
+        if b"\n" in unpaired:
+            return False
+        reconstructed = content.replace(b"\r\n", b"\n")
+    else:
+        reconstructed = content.replace(b"\n", b"\r\n")
+    return hashlib.sha256(reconstructed).hexdigest() == recorded_hash
 
 
 def hash_dict(data: Dict[str, Any]) -> str:

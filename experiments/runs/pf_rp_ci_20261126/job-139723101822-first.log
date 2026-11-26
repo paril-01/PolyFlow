@@ -1,0 +1,736 @@
+﻿2026-11-26T05:56:33.4319309Z Current runner version: '2.338.2'
+2026-11-26T05:56:33.4343217Z ##[group]Runner Image Provisioner
+2026-11-26T05:56:33.4344117Z Hosted Compute Agent
+2026-11-26T05:56:33.4344744Z Version: 20261111.635
+2026-11-26T05:56:33.4345371Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-26T05:56:33.4346411Z Build Date: 2026-11-11T01:49:01Z
+2026-11-26T05:56:33.4347104Z Worker ID: {e2429e97-15bc-42a0-a317-a96f76457a4e}
+2026-11-26T05:56:33.4348036Z Region: us-east-1
+2026-11-26T05:56:33.4348607Z Cloud: AWS
+2026-11-26T05:56:33.4349118Z ##[endgroup]
+2026-11-26T05:56:33.4350705Z ##[group]Operating System
+2026-11-26T05:56:33.4351332Z Ubuntu
+2026-11-26T05:56:33.4351858Z 26.04.1
+2026-11-26T05:56:33.4352347Z LTS
+2026-11-26T05:56:33.4352849Z ##[endgroup]
+2026-11-26T05:56:33.4353384Z ##[group]Runner Image
+2026-11-26T05:56:33.4353962Z Image: ubuntu-26.04
+2026-11-26T05:56:33.4354571Z Version: 20261116.88.1
+2026-11-26T05:56:33.4356105Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.88/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-26T05:56:33.4357723Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.88
+2026-11-26T05:56:33.4358707Z ##[endgroup]
+2026-11-26T05:56:33.4359871Z ##[group]GITHUB_TOKEN Permissions
+2026-11-26T05:56:33.4362254Z Contents: read
+2026-11-26T05:56:33.4362799Z Metadata: read
+2026-11-26T05:56:33.4363395Z Packages: read
+2026-11-26T05:56:33.4363931Z ##[endgroup]
+2026-11-26T05:56:33.4367050Z Secret source: Actions
+2026-11-26T05:56:33.4367948Z Cache mode: write
+2026-11-26T05:56:33.4368574Z Prepare workflow directory
+2026-11-26T05:56:33.4703595Z Prepare all required actions
+2026-11-26T05:56:33.4749740Z Getting action download info
+2026-11-26T05:56:33.6220833Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-26T05:56:35.0168485Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-26T05:56:35.2583705Z Complete job name: Python Automated Validation Suite (ubuntu-latest)
+2026-11-26T05:56:35.3368548Z ##[group]Run actions/checkout@v4
+2026-11-26T05:56:35.3369974Z with:
+2026-11-26T05:56:35.3370811Z   submodules: true
+2026-11-26T05:56:35.3371598Z   repository: paril-01/PolyFlow
+2026-11-26T05:56:35.3378245Z   token: ***
+2026-11-26T05:56:35.3379002Z   ssh-strict: true
+2026-11-26T05:56:35.3379768Z   ssh-user: git
+2026-11-26T05:56:35.3380536Z   persist-credentials: true
+2026-11-26T05:56:35.3381348Z   clean: true
+2026-11-26T05:56:35.3382160Z   sparse-checkout-cone-mode: true
+2026-11-26T05:56:35.3383047Z   fetch-depth: 1
+2026-11-26T05:56:35.3383828Z   fetch-tags: false
+2026-11-26T05:56:35.3384597Z   show-progress: true
+2026-11-26T05:56:35.3385377Z   lfs: false
+2026-11-26T05:56:35.3386340Z   set-safe-directory: true
+2026-11-26T05:56:35.3387224Z   allow-unsafe-pr-checkout: false
+2026-11-26T05:56:35.3388348Z ##[endgroup]
+2026-11-26T05:56:38.3828410Z Syncing repository: paril-01/PolyFlow
+2026-11-26T05:56:38.3830452Z ##[group]Getting Git version info
+2026-11-26T05:56:38.3831308Z Working directory is '/home/runner/work/PolyFlow/PolyFlow'
+2026-11-26T05:56:38.3832142Z [command]/usr/bin/git version
+2026-11-26T05:56:38.3833222Z git version 2.56.1
+2026-11-26T05:56:38.3847325Z ##[endgroup]
+2026-11-26T05:56:38.3858027Z Temporarily overriding HOME='/home/runner/work/_temp/f35feb04-830e-48ff-a31a-cd0c27a0d85e' before making global git config changes
+2026-11-26T05:56:38.3859098Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-26T05:56:38.3861735Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:56:38.3961161Z Deleting the contents of '/home/runner/work/PolyFlow/PolyFlow'
+2026-11-26T05:56:38.3963737Z ##[group]Initializing the repository
+2026-11-26T05:56:38.3968894Z [command]/usr/bin/git init /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:56:38.5028500Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-26T05:56:38.5029269Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-26T05:56:38.5030306Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-26T05:56:38.5030790Z hint: call:
+2026-11-26T05:56:38.5031119Z hint:
+2026-11-26T05:56:38.5031664Z hint: 	git config --global init.defaultBranch <name>
+2026-11-26T05:56:38.5032086Z hint:
+2026-11-26T05:56:38.5032462Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-26T05:56:38.5032986Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-26T05:56:38.5033457Z hint:
+2026-11-26T05:56:38.5033774Z hint: 	git branch -m <name>
+2026-11-26T05:56:38.5034086Z hint:
+2026-11-26T05:56:38.5034429Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-26T05:56:38.5052988Z Initialized empty Git repository in /home/runner/work/PolyFlow/PolyFlow/.git/
+2026-11-26T05:56:38.5061203Z [command]/usr/bin/git remote add origin https://github.com/paril-01/PolyFlow
+2026-11-26T05:56:38.5122846Z ##[endgroup]
+2026-11-26T05:56:38.5123383Z ##[group]Disabling automatic garbage collection
+2026-11-26T05:56:38.5124641Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-26T05:56:38.5146097Z ##[endgroup]
+2026-11-26T05:56:38.5146622Z ##[group]Setting up auth
+2026-11-26T05:56:38.5150967Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-26T05:56:38.5171623Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-26T05:56:38.7875085Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-26T05:56:38.7917619Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-26T05:56:38.8073604Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:56:38.8094960Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-26T05:56:38.8268973Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-26T05:56:38.8292638Z ##[endgroup]
+2026-11-26T05:56:38.8293048Z ##[group]Fetching the repository
+2026-11-26T05:56:38.8299440Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f6ee1024d7ec369e7eb7b22a1f9a75dca8251295:refs/remotes/origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:39.4712360Z From https://github.com/paril-01/PolyFlow
+2026-11-26T05:56:39.4713249Z  * [new ref]         f6ee1024d7ec369e7eb7b22a1f9a75dca8251295 -> origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:39.4716890Z ##[endgroup]
+2026-11-26T05:56:39.4717525Z ##[group]Determining the checkout info
+2026-11-26T05:56:39.4718885Z ##[endgroup]
+2026-11-26T05:56:39.4723853Z [command]/usr/bin/git sparse-checkout disable
+2026-11-26T05:56:39.4786817Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-26T05:56:39.4801226Z ##[group]Checking out the ref
+2026-11-26T05:56:39.4805299Z [command]/usr/bin/git checkout --progress --force -B work/pf-rp-01-proof-integrity refs/remotes/origin/work/pf-rp-01-proof-integrity
+2026-11-26T05:56:39.7585339Z Switched to a new branch 'work/pf-rp-01-proof-integrity'
+2026-11-26T05:56:39.7593862Z branch 'work/pf-rp-01-proof-integrity' set up to track 'origin/work/pf-rp-01-proof-integrity'.
+2026-11-26T05:56:39.7619383Z ##[endgroup]
+2026-11-26T05:56:39.7619982Z ##[group]Setting up auth for fetching submodules
+2026-11-26T05:56:39.7622647Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-26T05:56:39.7650144Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-11-26T05:56:39.7671493Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-11-26T05:56:39.7694440Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-183269149@github.com:
+2026-11-26T05:56:39.7713704Z ##[endgroup]
+2026-11-26T05:56:39.7714271Z ##[group]Fetching submodules
+2026-11-26T05:56:39.7716934Z [command]/usr/bin/git submodule sync
+2026-11-26T05:56:39.7911152Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1
+2026-11-26T05:56:39.8089231Z Submodule 'experiments/nextcloud_validation/nextcloud-server' (https://github.com/nextcloud/server.git) registered for path 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:39.8090320Z Submodule 'repos/flask' (https://github.com/pallets/flask.git) registered for path 'repos/flask'
+2026-11-26T05:56:39.8092710Z Submodule 'repos/opentelemetry-demo' (https://github.com/open-telemetry/opentelemetry-demo.git) registered for path 'repos/opentelemetry-demo'
+2026-11-26T05:56:39.8094979Z Submodule 'repos/requests' (https://github.com/psf/requests.git) registered for path 'repos/requests'
+2026-11-26T05:56:39.8125012Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/experiments/nextcloud_validation/nextcloud-server'...
+2026-11-26T05:56:43.5536114Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/flask'...
+2026-11-26T05:56:43.8370518Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/opentelemetry-demo'...
+2026-11-26T05:56:44.2228659Z Cloning into '/home/runner/work/PolyFlow/PolyFlow/repos/requests'...
+2026-11-26T05:56:52.3776728Z From https://github.com/nextcloud/server
+2026-11-26T05:56:52.3777181Z  * branch              da57df078d0808a7235a0177bd99d23c010b472e -> FETCH_HEAD
+2026-11-26T05:56:53.4679982Z Submodule path 'experiments/nextcloud_validation/nextcloud-server': checked out 'da57df078d0808a7235a0177bd99d23c010b472e'
+2026-11-26T05:56:53.9392939Z From https://github.com/pallets/flask
+2026-11-26T05:56:53.9393595Z  * branch            d318b683471101618febed18996405ad26462110 -> FETCH_HEAD
+2026-11-26T05:56:53.9541634Z Submodule path 'repos/flask': checked out 'd318b683471101618febed18996405ad26462110'
+2026-11-26T05:56:54.5608207Z From https://github.com/open-telemetry/opentelemetry-demo
+2026-11-26T05:56:54.5608777Z  * branch            8c47d47c9ac27710d2b2a153bcd53e483bffe66d -> FETCH_HEAD
+2026-11-26T05:56:54.6052213Z Submodule path 'repos/opentelemetry-demo': checked out '8c47d47c9ac27710d2b2a153bcd53e483bffe66d'
+2026-11-26T05:56:55.0201554Z From https://github.com/psf/requests
+2026-11-26T05:56:55.0202096Z  * branch            dae7ef63b4df6eded86637f251fc4e3a06c3b479 -> FETCH_HEAD
+2026-11-26T05:56:55.0371826Z Submodule path 'repos/requests': checked out 'dae7ef63b4df6eded86637f251fc4e3a06c3b479'
+2026-11-26T05:56:55.0381688Z [command]/usr/bin/git submodule foreach git config --local gc.auto 0
+2026-11-26T05:56:55.0562717Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.0578501Z Entering 'repos/flask'
+2026-11-26T05:56:55.0597129Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.0614977Z Entering 'repos/requests'
+2026-11-26T05:56:55.0637596Z ##[endgroup]
+2026-11-26T05:56:55.0638086Z ##[group]Persisting credentials for submodules
+2026-11-26T05:56:55.0642992Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-11-26T05:56:55.0811566Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.0857893Z Entering 'repos/flask'
+2026-11-26T05:56:55.0888883Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.0919847Z Entering 'repos/requests'
+2026-11-26T05:56:55.0957700Z [command]/usr/bin/git submodule foreach sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-26T05:56:55.1127303Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.1155562Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config	remote.origin.url
+2026-11-26T05:56:55.1157276Z Entering 'repos/flask'
+2026-11-26T05:56:55.1185457Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config	remote.origin.url
+2026-11-26T05:56:55.1187371Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.1216845Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config	remote.origin.url
+2026-11-26T05:56:55.1219152Z Entering 'repos/requests'
+2026-11-26T05:56:55.1246896Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config	remote.origin.url
+2026-11-26T05:56:55.1281849Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-11-26T05:56:55.1446947Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.1463025Z Entering 'repos/flask'
+2026-11-26T05:56:55.1480108Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.1496634Z Entering 'repos/requests'
+2026-11-26T05:56:55.1520413Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'org-183269149@github.com:'
+2026-11-26T05:56:55.1686419Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:56:55.1702967Z Entering 'repos/flask'
+2026-11-26T05:56:55.1720345Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:56:55.1736507Z Entering 'repos/requests'
+2026-11-26T05:56:55.1758548Z ##[endgroup]
+2026-11-26T05:56:55.1803100Z [command]/usr/bin/git log -1 --format=%H
+2026-11-26T05:56:55.1820194Z f6ee1024d7ec369e7eb7b22a1f9a75dca8251295
+2026-11-26T05:56:55.2026757Z ##[group]Run actions/setup-python@v5
+2026-11-26T05:56:55.2027052Z with:
+2026-11-26T05:56:55.2027272Z   python-version: 3.12
+2026-11-26T05:56:55.2027524Z   check-latest: false
+2026-11-26T05:56:55.2029301Z   token: ***
+2026-11-26T05:56:55.2029512Z   update-environment: true
+2026-11-26T05:56:55.2029841Z   allow-prereleases: false
+2026-11-26T05:56:55.2030078Z   freethreaded: false
+2026-11-26T05:56:55.2030307Z ##[endgroup]
+2026-11-26T05:56:55.3026925Z ##[group]Installed versions
+2026-11-26T05:56:55.6684665Z (node:2746) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-26T05:56:55.6685511Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-26T05:56:55.6686274Z Successfully set up CPython (3.12.16)
+2026-11-26T05:56:55.6686972Z ##[endgroup]
+2026-11-26T05:56:55.6791080Z ##[group]Run python -m pip install --upgrade pip
+2026-11-26T05:56:55.6791504Z [36;1mpython -m pip install --upgrade pip[0m
+2026-11-26T05:56:55.6791915Z [36;1mpip install pytest pyyaml hypothesis dash fastapi uvicorn httpx pydantic[0m
+2026-11-26T05:56:55.7416804Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:56:55.7417096Z env:
+2026-11-26T05:56:55.7417418Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:56:55.7417839Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:56:55.7418212Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:56:55.7418588Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:56:55.7418919Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:56:55.7419280Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:56:55.7419580Z ##[endgroup]
+2026-11-26T05:56:58.9010119Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages (26.3)
+2026-11-26T05:57:00.1003896Z Collecting pytest
+2026-11-26T05:57:00.1712532Z   Downloading pytest-9.2.0-py3-none-any.whl.metadata (7.9 kB)
+2026-11-26T05:57:00.2137888Z Collecting pyyaml
+2026-11-26T05:57:00.2343188Z   Downloading pyyaml-6.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.3 kB)
+2026-11-26T05:57:00.5386987Z Collecting hypothesis
+2026-11-26T05:57:00.5594630Z   Downloading hypothesis-6.170.17-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.6 kB)
+2026-11-26T05:57:00.5908619Z Collecting dash
+2026-11-26T05:57:00.6111371Z   Downloading dash-4.5.1-py3-none-any.whl.metadata (11 kB)
+2026-11-26T05:57:00.6606870Z Collecting fastapi
+2026-11-26T05:57:00.6811388Z   Downloading fastapi-0.165.0-py3-none-any.whl.metadata (27 kB)
+2026-11-26T05:57:00.7211630Z Collecting uvicorn
+2026-11-26T05:57:00.7416666Z   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+2026-11-26T05:57:00.7682922Z Collecting httpx
+2026-11-26T05:57:00.7890597Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+2026-11-26T05:57:00.8641420Z Collecting pydantic
+2026-11-26T05:57:00.8845440Z   Downloading pydantic-2.14.4-py3-none-any.whl.metadata (143 kB)
+2026-11-26T05:57:00.9376363Z Collecting iniconfig>=2 (from pytest)
+2026-11-26T05:57:00.9582616Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-11-26T05:57:00.9816101Z Collecting packaging>=24 (from pytest)
+2026-11-26T05:57:01.0020366Z   Downloading packaging-26.4-py3-none-any.whl.metadata (3.5 kB)
+2026-11-26T05:57:01.0246079Z Collecting pluggy<2,>=1.6 (from pytest)
+2026-11-26T05:57:01.0452114Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-11-26T05:57:01.0864364Z Collecting pygments>=2.15 (from pytest)
+2026-11-26T05:57:01.1070099Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-11-26T05:57:01.1290188Z Collecting sortedcontainers<3.0.0,>=2.1.0 (from hypothesis)
+2026-11-26T05:57:01.1501125Z   Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+2026-11-26T05:57:01.1736799Z Collecting Flask<3.2,>=1.0.4 (from dash)
+2026-11-26T05:57:01.1939375Z   Downloading flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+2026-11-26T05:57:01.2203101Z Collecting Werkzeug<3.2 (from dash)
+2026-11-26T05:57:01.2413198Z   Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+2026-11-26T05:57:01.2740246Z Collecting plotly>=5.0.0 (from dash)
+2026-11-26T05:57:01.2946857Z   Downloading plotly-7.2.0-py3-none-any.whl.metadata (9.2 kB)
+2026-11-26T05:57:01.3266924Z Collecting importlib-metadata (from dash)
+2026-11-26T05:57:01.3471710Z   Downloading importlib_metadata-10.2.0-py3-none-any.whl.metadata (4.6 kB)
+2026-11-26T05:57:01.3712735Z Collecting typing_extensions>=4.1.1 (from dash)
+2026-11-26T05:57:01.3920863Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+2026-11-26T05:57:01.4205111Z Collecting requests (from dash)
+2026-11-26T05:57:01.4409985Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+2026-11-26T05:57:01.4621039Z Collecting retrying (from dash)
+2026-11-26T05:57:01.4828853Z   Downloading retrying-1.4.2-py3-none-any.whl.metadata (5.5 kB)
+2026-11-26T05:57:01.5065037Z Collecting nest-asyncio (from dash)
+2026-11-26T05:57:01.5271487Z   Downloading nest_asyncio-1.6.0-py3-none-any.whl.metadata (2.8 kB)
+2026-11-26T05:57:01.5962995Z Collecting setuptools (from dash)
+2026-11-26T05:57:01.6170123Z   Downloading setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+2026-11-26T05:57:01.6443337Z Collecting janus>=1.0.0 (from dash)
+2026-11-26T05:57:01.6651749Z   Downloading janus-2.1.1-py3-none-any.whl.metadata (5.2 kB)
+2026-11-26T05:57:01.6874181Z Collecting comm (from dash)
+2026-11-26T05:57:01.7086209Z   Downloading comm-0.2.3-py3-none-any.whl.metadata (3.7 kB)
+2026-11-26T05:57:01.7300515Z Collecting blinker>=1.9.0 (from Flask<3.2,>=1.0.4->dash)
+2026-11-26T05:57:01.7506691Z   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+2026-11-26T05:57:01.7741355Z Collecting click>=8.1.3 (from Flask<3.2,>=1.0.4->dash)
+2026-11-26T05:57:01.7948192Z   Downloading click-8.5.1-py3-none-any.whl.metadata (2.6 kB)
+2026-11-26T05:57:01.8158166Z Collecting itsdangerous>=2.2.0 (from Flask<3.2,>=1.0.4->dash)
+2026-11-26T05:57:01.8365110Z   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+2026-11-26T05:57:01.8586598Z Collecting jinja2>=3.1.2 (from Flask<3.2,>=1.0.4->dash)
+2026-11-26T05:57:01.8792015Z   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+2026-11-26T05:57:01.9246047Z Collecting markupsafe>=2.1.1 (from Flask<3.2,>=1.0.4->dash)
+2026-11-26T05:57:01.9449848Z   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+2026-11-26T05:57:01.9730232Z Collecting starlette>=1.6.0 (from fastapi)
+2026-11-26T05:57:01.9936606Z   Downloading starlette-1.10.0-py3-none-any.whl.metadata (6.6 kB)
+2026-11-26T05:57:02.0185377Z Collecting anyio>=4.1.0 (from fastapi)
+2026-11-26T05:57:02.0392411Z   Downloading anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+2026-11-26T05:57:02.0620543Z Collecting typing-inspection>=0.4.2 (from fastapi)
+2026-11-26T05:57:02.0825924Z   Downloading typing_inspection-0.4.5-py3-none-any.whl.metadata (2.6 kB)
+2026-11-26T05:57:02.1022740Z Collecting annotated-doc>=0.0.2 (from fastapi)
+2026-11-26T05:57:02.1230353Z   Downloading annotated_doc-0.0.7-py3-none-any.whl.metadata (6.4 kB)
+2026-11-26T05:57:02.1472455Z Collecting opentelemetry-api>=1.44.0 (from fastapi)
+2026-11-26T05:57:02.1678006Z   Downloading opentelemetry_api-1.45.2-py3-none-any.whl.metadata (1.4 kB)
+2026-11-26T05:57:02.1891556Z Collecting h11>=0.8 (from uvicorn)
+2026-11-26T05:57:02.2097906Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+2026-11-26T05:57:02.2350409Z Collecting certifi (from httpx)
+2026-11-26T05:57:02.2556256Z   Downloading certifi-2026.11.20-py3-none-any.whl.metadata (2.5 kB)
+2026-11-26T05:57:02.2779502Z Collecting httpcore==1.* (from httpx)
+2026-11-26T05:57:02.2986221Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+2026-11-26T05:57:02.3223229Z Collecting idna (from httpx)
+2026-11-26T05:57:02.3428966Z   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+2026-11-26T05:57:02.3653221Z Collecting annotated-types>=0.6.0 (from pydantic)
+2026-11-26T05:57:02.3858374Z   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+2026-11-26T05:57:02.8031122Z Collecting pydantic-core==2.50.5 (from pydantic)
+2026-11-26T05:57:02.8239588Z   Downloading pydantic_core-2.50.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.6 kB)
+2026-11-26T05:57:02.8637195Z Collecting narwhals>=1.15.1 (from plotly>=5.0.0->dash)
+2026-11-26T05:57:02.8845536Z   Downloading narwhals-2.29.0-py3-none-any.whl.metadata (15 kB)
+2026-11-26T05:57:02.9144118Z Collecting zipp>=3.20 (from importlib-metadata->dash)
+2026-11-26T05:57:02.9350704Z   Downloading zipp-4.1.2-py3-none-any.whl.metadata (3.6 kB)
+2026-11-26T05:57:02.9557505Z Collecting lazy-importer>=0.1 (from importlib-metadata->dash)
+2026-11-26T05:57:02.9764086Z   Downloading lazy_importer-0.1.0-py3-none-any.whl.metadata (7.3 kB)
+2026-11-26T05:57:03.0613282Z Collecting charset_normalizer<4,>=2 (from requests->dash)
+2026-11-26T05:57:03.0823627Z   Downloading charset_normalizer-3.5.3-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (43 kB)
+2026-11-26T05:57:03.1109168Z Collecting urllib3<3,>=1.26 (from requests->dash)
+2026-11-26T05:57:03.1313740Z   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+2026-11-26T05:57:03.1568890Z Downloading pytest-9.2.0-py3-none-any.whl (411 kB)
+2026-11-26T05:57:03.2053004Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-11-26T05:57:03.2459041Z Downloading pyyaml-6.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (849 kB)
+2026-11-26T05:57:03.3435488Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 849.2/849.2 kB 8.4 MB/s  0:00:00
+2026-11-26T05:57:03.3695249Z Downloading hypothesis-6.170.17-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+2026-11-26T05:57:03.5994694Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 4.8 MB/s  0:00:00
+2026-11-26T05:57:03.6202840Z Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+2026-11-26T05:57:03.6519627Z Downloading dash-4.5.1-py3-none-any.whl (9.3 MB)
+2026-11-26T05:57:11.7229428Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.3/9.3 MB 1.1 MB/s  0:00:08
+2026-11-26T05:57:11.7439746Z Downloading flask-3.1.3-py3-none-any.whl (103 kB)
+2026-11-26T05:57:11.8231007Z Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
+2026-11-26T05:57:12.0029512Z Downloading fastapi-0.165.0-py3-none-any.whl (159 kB)
+2026-11-26T05:57:12.1641077Z Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+2026-11-26T05:57:12.3005568Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+2026-11-26T05:57:12.4246032Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+2026-11-26T05:57:12.5253424Z Downloading pydantic-2.14.4-py3-none-any.whl (494 kB)
+2026-11-26T05:57:12.9783272Z Downloading pydantic_core-2.50.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+2026-11-26T05:57:14.5192624Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 1.5 MB/s  0:00:01
+2026-11-26T05:57:14.5402717Z Downloading annotated_doc-0.0.7-py3-none-any.whl (5.3 kB)
+2026-11-26T05:57:14.5643189Z Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+2026-11-26T05:57:14.5997755Z Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+2026-11-26T05:57:14.8078796Z Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+2026-11-26T05:57:14.8366100Z Downloading click-8.5.1-py3-none-any.whl (126 kB)
+2026-11-26T05:57:14.9868517Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+2026-11-26T05:57:15.0374102Z Downloading idna-3.20-py3-none-any.whl (69 kB)
+2026-11-26T05:57:15.1184306Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-11-26T05:57:15.1430245Z Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+2026-11-26T05:57:15.1754510Z Downloading janus-2.1.1-py3-none-any.whl (12 kB)
+2026-11-26T05:57:15.2196775Z Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+2026-11-26T05:57:15.4258317Z Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+2026-11-26T05:57:15.4760592Z Downloading opentelemetry_api-1.45.2-py3-none-any.whl (60 kB)
+2026-11-26T05:57:15.5654145Z Downloading packaging-26.4-py3-none-any.whl (140 kB)
+2026-11-26T05:57:15.7237290Z Downloading plotly-7.2.0-py3-none-any.whl (9.7 MB)
+2026-11-26T05:57:24.0980682Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.7/9.7 MB 1.2 MB/s  0:00:08
+2026-11-26T05:57:24.1190342Z Downloading narwhals-2.29.0-py3-none-any.whl (501 kB)
+2026-11-26T05:57:24.5284162Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-11-26T05:57:25.8181502Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 1.0 MB/s  0:00:01
+2026-11-26T05:57:25.8389815Z Downloading starlette-1.10.0-py3-none-any.whl (80 kB)
+2026-11-26T05:57:25.9608210Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-11-26T05:57:26.0267905Z Downloading typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+2026-11-26T05:57:26.0591753Z Downloading certifi-2026.11.20-py3-none-any.whl (127 kB)
+2026-11-26T05:57:26.1976233Z Downloading comm-0.2.3-py3-none-any.whl (7.3 kB)
+2026-11-26T05:57:26.2237730Z Downloading importlib_metadata-10.2.0-py3-none-any.whl (34 kB)
+2026-11-26T05:57:26.2707244Z Downloading lazy_importer-0.1.0-py3-none-any.whl (12 kB)
+2026-11-26T05:57:26.2997680Z Downloading zipp-4.1.2-py3-none-any.whl (10 kB)
+2026-11-26T05:57:26.3272768Z Downloading nest_asyncio-1.6.0-py3-none-any.whl (5.2 kB)
+2026-11-26T05:57:26.3503371Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+2026-11-26T05:57:26.4312723Z Downloading charset_normalizer-3.5.3-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (257 kB)
+2026-11-26T05:57:26.6498978Z Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+2026-11-26T05:57:26.9077409Z Downloading retrying-1.4.2-py3-none-any.whl (10 kB)
+2026-11-26T05:57:26.9436800Z Downloading setuptools-84.2.1-py3-none-any.whl (876 kB)
+2026-11-26T05:57:27.7267803Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 876.3/876.3 kB 1.2 MB/s  0:00:00
+2026-11-26T05:57:27.9507228Z Installing collected packages: sortedcontainers, zipp, urllib3, typing_extensions, setuptools, retrying, pyyaml, pygments, pluggy, packaging, nest-asyncio, narwhals, markupsafe, lazy-importer, janus, itsdangerous, iniconfig, idna, hypothesis, h11, comm, click, charset_normalizer, certifi, blinker, annotated-types, annotated-doc, Werkzeug, uvicorn, typing-inspection, requests, pytest, pydantic-core, plotly, opentelemetry-api, jinja2, importlib-metadata, httpcore, anyio, starlette, pydantic, httpx, Flask, fastapi, dash
+2026-11-26T05:57:32.0519822Z 
+2026-11-26T05:57:32.0546035Z Successfully installed Flask-3.1.3 Werkzeug-3.1.9 annotated-doc-0.0.7 annotated-types-0.8.0 anyio-4.16.0 blinker-1.9.0 certifi-2026.11.20 charset_normalizer-3.5.3 click-8.5.1 comm-0.2.3 dash-4.5.1 fastapi-0.165.0 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 hypothesis-6.170.17 idna-3.20 importlib-metadata-10.2.0 iniconfig-2.3.1 itsdangerous-2.2.0 janus-2.1.1 jinja2-3.1.6 lazy-importer-0.1.0 markupsafe-3.0.4 narwhals-2.29.0 nest-asyncio-1.6.0 opentelemetry-api-1.45.2 packaging-26.4 plotly-7.2.0 pluggy-1.7.0 pydantic-2.14.4 pydantic-core-2.50.5 pygments-2.21.0 pytest-9.2.0 pyyaml-6.0.4 requests-2.34.2 retrying-1.4.2 setuptools-84.2.1 sortedcontainers-2.4.0 starlette-1.10.0 typing-inspection-0.4.5 typing_extensions-4.16.0 urllib3-2.8.0 uvicorn-0.54.0 zipp-4.1.2
+2026-11-26T05:57:32.1774455Z ##[group]Run pytest tests/test_polyflow.py -v
+2026-11-26T05:57:32.1774868Z [36;1mpytest tests/test_polyflow.py -v[0m
+2026-11-26T05:57:32.1793770Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:32.1794113Z env:
+2026-11-26T05:57:32.1794372Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:32.1794727Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:32.1795118Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:32.1795444Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:32.1796069Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:32.1796404Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:32.1796685Z ##[endgroup]
+2026-11-26T05:57:34.0856107Z ============================= test session starts ==============================
+2026-11-26T05:57:34.0857147Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:34.0857689Z cachedir: .pytest_cache
+2026-11-26T05:57:34.0858338Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:34.0858976Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:34.0859340Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:34.1305916Z collecting ... collected 7 items
+2026-11-26T05:57:34.1306246Z 
+2026-11-26T05:57:34.1319311Z tests/test_polyflow.py::TestPolyFlowEngine::test_cell_runtime_execution PASSED [ 14%]
+2026-11-26T05:57:34.1325451Z tests/test_polyflow.py::TestPolyFlowEngine::test_error_map_translation PASSED [ 28%]
+2026-11-26T05:57:34.1335556Z tests/test_polyflow.py::TestPolyFlowEngine::test_fail_partial_resilience PASSED [ 42%]
+2026-11-26T05:57:34.1340754Z tests/test_polyflow.py::TestPolyFlowEngine::test_ide_guards PASSED       [ 57%]
+2026-11-26T05:57:34.1345842Z tests/test_polyflow.py::TestPolyFlowEngine::test_merkle_ledger_audit PASSED [ 71%]
+2026-11-26T05:57:34.1356744Z tests/test_polyflow.py::TestPolyFlowEngine::test_parser_basic PASSED     [ 85%]
+2026-11-26T05:57:34.1679293Z tests/test_polyflow.py::TestPolyFlowEngine::test_schema_validation PASSED [100%]
+2026-11-26T05:57:34.1679591Z 
+2026-11-26T05:57:34.1679756Z =============================== warnings summary ===============================
+2026-11-26T05:57:34.1680315Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:34.1681114Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:34.1681821Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:34.1682218Z    to configure the hooks.
+2026-11-26T05:57:34.1682897Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:34.1683328Z     @pytest.mark.tryfirst
+2026-11-26T05:57:34.1683477Z 
+2026-11-26T05:57:34.1683674Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:34.1684069Z ========================= 7 passed, 1 warning in 0.51s =========================
+2026-11-26T05:57:34.2471770Z ##[group]Run pytest tests/test_feature_closure.py -v
+2026-11-26T05:57:34.2472172Z [36;1mpytest tests/test_feature_closure.py -v[0m
+2026-11-26T05:57:34.2490168Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:34.2490489Z env:
+2026-11-26T05:57:34.2490760Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.2491137Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:34.2491522Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.2491865Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.2492246Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.2492571Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:34.2492861Z ##[endgroup]
+2026-11-26T05:57:34.7375576Z ============================= test session starts ==============================
+2026-11-26T05:57:34.7376610Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:34.7377058Z cachedir: .pytest_cache
+2026-11-26T05:57:34.7377524Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:34.7378013Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:34.7378333Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:34.7768449Z collecting ... collected 3 items
+2026-11-26T05:57:34.7768694Z 
+2026-11-26T05:57:34.7777522Z tests/test_feature_closure.py::test_sales_invoice_feature_closure SKIPPED [ 33%]
+2026-11-26T05:57:34.7781975Z tests/test_feature_closure.py::test_representative_features_validation_file PASSED [ 66%]
+2026-11-26T05:57:34.8085057Z tests/test_feature_closure.py::test_ui_data_polyflow_mapping_consistency PASSED [100%]
+2026-11-26T05:57:34.8085437Z 
+2026-11-26T05:57:34.8086077Z =============================== warnings summary ===============================
+2026-11-26T05:57:34.8086552Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:34.8087354Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:34.8088120Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:34.8088448Z    to configure the hooks.
+2026-11-26T05:57:34.8088893Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:34.8089319Z     @pytest.mark.tryfirst
+2026-11-26T05:57:34.8089482Z 
+2026-11-26T05:57:34.8089640Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:34.8090098Z =================== 2 passed, 1 skipped, 1 warning in 0.12s ====================
+2026-11-26T05:57:34.8804672Z ##[group]Run pytest tests/test_ui_claims.py tests/test_final_claim_consistency.py -v
+2026-11-26T05:57:34.8805458Z [36;1mpytest tests/test_ui_claims.py tests/test_final_claim_consistency.py -v[0m
+2026-11-26T05:57:34.8832449Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:34.8832826Z env:
+2026-11-26T05:57:34.8833287Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.8833792Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:34.8834334Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.8834853Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.8835515Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:34.8836336Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:34.8836774Z ##[endgroup]
+2026-11-26T05:57:35.3666572Z ============================= test session starts ==============================
+2026-11-26T05:57:35.3667471Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:35.3668156Z cachedir: .pytest_cache
+2026-11-26T05:57:35.3668826Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:35.3669650Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:35.3670149Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:35.3967679Z collecting ... collected 9 items
+2026-11-26T05:57:35.3968104Z 
+2026-11-26T05:57:35.3991765Z tests/test_ui_claims.py::test_banned_hardcoded_claims_absent PASSED      [ 11%]
+2026-11-26T05:57:35.3996790Z tests/test_ui_claims.py::test_five_primary_tabs_in_ui PASSED             [ 22%]
+2026-11-26T05:57:35.4007251Z tests/test_ui_claims.py::test_showcase_data_architecture_exists PASSED   [ 33%]
+2026-11-26T05:57:35.4056252Z tests/test_ui_claims.py::test_no_emojis_in_tabs_and_header PASSED        [ 44%]
+2026-11-26T05:57:35.4063675Z tests/test_final_claim_consistency.py::test_agent_success_count_consistency PASSED [ 55%]
+2026-11-26T05:57:35.4068477Z tests/test_final_claim_consistency.py::test_gate_consistency_agent_gate_not_satisfied PASSED [ 66%]
+2026-11-26T05:57:35.4072781Z tests/test_final_claim_consistency.py::test_ide_credits_not_measured PASSED [ 77%]
+2026-11-26T05:57:35.4078165Z tests/test_final_claim_consistency.py::test_doctype_and_scale_counts_consistency PASSED [ 88%]
+2026-11-26T05:57:35.4391024Z tests/test_final_claim_consistency.py::test_token_delta_recomputation PASSED [100%]
+2026-11-26T05:57:35.4391842Z 
+2026-11-26T05:57:35.4392131Z =============================== warnings summary ===============================
+2026-11-26T05:57:35.4393177Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:35.4395258Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:35.4397389Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:35.4398101Z    to configure the hooks.
+2026-11-26T05:57:35.4399054Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:35.4400003Z     @pytest.mark.tryfirst
+2026-11-26T05:57:35.4400317Z 
+2026-11-26T05:57:35.4400661Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:35.4401578Z ========================= 9 passed, 1 warning in 0.12s =========================
+2026-11-26T05:57:35.5121851Z ##[group]Run python -m pytest tests/test_backend_proof_server.py tests/test_evidence_registry.py -v
+2026-11-26T05:57:35.5122403Z [36;1mpython -m pytest tests/test_backend_proof_server.py tests/test_evidence_registry.py -v[0m
+2026-11-26T05:57:35.5140047Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:35.5140494Z env:
+2026-11-26T05:57:35.5140773Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:35.5141188Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:35.5141580Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:35.5141913Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:35.5142272Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:35.5142607Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:35.5142897Z ##[endgroup]
+2026-11-26T05:57:36.0021416Z ============================= test session starts ==============================
+2026-11-26T05:57:36.0022605Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:36.0023286Z cachedir: .pytest_cache
+2026-11-26T05:57:36.0024014Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:36.0024805Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:36.0025280Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:36.6335365Z collecting ... collected 54 items
+2026-11-26T05:57:36.6335585Z 
+2026-11-26T05:57:36.6395361Z tests/test_backend_proof_server.py::test_health_endpoint PASSED          [  1%]
+2026-11-26T05:57:36.6449294Z tests/test_backend_proof_server.py::test_features_native_vs_poly PASSED  [  3%]
+2026-11-26T05:57:36.9419470Z tests/test_backend_proof_server.py::test_interpreter_live_execution_normal PASSED [  5%]
+2026-11-26T05:57:37.2377580Z tests/test_backend_proof_server.py::test_interpreter_live_execution_controlled_failure PASSED [  7%]
+2026-11-26T05:57:37.2383017Z tests/test_backend_proof_server.py::test_proof_security_path_traversal_guard PASSED [  9%]
+2026-11-26T05:57:37.3539886Z tests/test_backend_proof_server.py::test_proofs_api_endpoints PASSED     [ 11%]
+2026-11-26T05:57:37.3547215Z tests/test_backend_proof_server.py::test_all_nine_derived_csvs_exist PASSED [ 12%]
+2026-11-26T05:57:37.3553457Z tests/test_backend_proof_server.py::test_valid_pairs_rule_zero_accounting PASSED [ 14%]
+2026-11-26T05:57:37.3677826Z tests/test_backend_proof_server.py::test_runs_endpoints_valid_and_404 PASSED [ 16%]
+2026-11-26T05:57:37.3704294Z tests/test_evidence_registry.py::test_raw_bytes_and_digest_are_preserved[proof\n] PASSED [ 18%]
+2026-11-26T05:57:37.3719047Z tests/test_evidence_registry.py::test_raw_bytes_and_digest_are_preserved[proof\r\n] PASSED [ 20%]
+2026-11-26T05:57:37.3733177Z tests/test_evidence_registry.py::test_raw_bytes_and_digest_are_preserved[\xcf\x80 \xe9\x9b\xaa\n] PASSED [ 22%]
+2026-11-26T05:57:37.3747349Z tests/test_evidence_registry.py::test_raw_bytes_and_digest_are_preserved[\x00\xff\n\r\n] PASSED [ 24%]
+2026-11-26T05:57:37.3760463Z tests/test_evidence_registry.py::test_legacy_lf_checkout_serves_exact_recorded_crlf_bytes PASSED [ 25%]
+2026-11-26T05:57:37.3775443Z tests/test_evidence_registry.py::test_non_utf8_binary_and_mixed_endings_are_not_reconstructed[\x00proof\n] PASSED [ 27%]
+2026-11-26T05:57:37.3788654Z tests/test_evidence_registry.py::test_non_utf8_binary_and_mixed_endings_are_not_reconstructed[\xffproof\n] PASSED [ 29%]
+2026-11-26T05:57:37.3801552Z tests/test_evidence_registry.py::test_non_utf8_binary_and_mixed_endings_are_not_reconstructed[mixed\r\nlines\n] PASSED [ 31%]
+2026-11-26T05:57:37.3819075Z tests/test_evidence_registry.py::test_same_length_tampering_is_unavailable PASSED [ 33%]
+2026-11-26T05:57:37.3828970Z tests/test_evidence_registry.py::test_missing_invalid_or_wrong_hash_never_served[None] PASSED [ 35%]
+2026-11-26T05:57:37.3838442Z tests/test_evidence_registry.py::test_missing_invalid_or_wrong_hash_never_served[] PASSED [ 37%]
+2026-11-26T05:57:37.3847800Z tests/test_evidence_registry.py::test_missing_invalid_or_wrong_hash_never_served[not-a-hash] PASSED [ 38%]
+2026-11-26T05:57:37.3861043Z tests/test_evidence_registry.py::test_missing_invalid_or_wrong_hash_never_served[0000000000000000000000000000000000000000000000000000000000000000] PASSED [ 40%]
+2026-11-26T05:57:37.3872609Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[../outside.txt-source_file] PASSED [ 42%]
+2026-11-26T05:57:37.3883902Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[../outside.txt-rel_path] PASSED [ 44%]
+2026-11-26T05:57:37.3895754Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[nested/../../outside.txt-source_file] PASSED [ 46%]
+2026-11-26T05:57:37.3907725Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[nested/../../outside.txt-rel_path] PASSED [ 48%]
+2026-11-26T05:57:37.3919061Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[/etc/passwd-source_file] PASSED [ 50%]
+2026-11-26T05:57:37.3930281Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[/etc/passwd-rel_path] PASSED [ 51%]
+2026-11-26T05:57:37.3942135Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[C:/secret.txt-source_file] PASSED [ 53%]
+2026-11-26T05:57:37.3953676Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[C:/secret.txt-rel_path] PASSED [ 55%]
+2026-11-26T05:57:37.3965097Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[C:secret.txt-source_file] PASSED [ 57%]
+2026-11-26T05:57:37.3976695Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[C:secret.txt-rel_path] PASSED [ 59%]
+2026-11-26T05:57:37.3988334Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[\\\\host\\share\\file-source_file] PASSED [ 61%]
+2026-11-26T05:57:37.3999661Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[\\\\host\\share\\file-rel_path] PASSED [ 62%]
+2026-11-26T05:57:37.4011304Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[\\secret.txt-source_file] PASSED [ 64%]
+2026-11-26T05:57:37.4022786Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[\\secret.txt-rel_path] PASSED [ 66%]
+2026-11-26T05:57:37.4036031Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[file.txt:stream-source_file] PASSED [ 68%]
+2026-11-26T05:57:37.4048227Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[file.txt:stream-rel_path] PASSED [ 70%]
+2026-11-26T05:57:37.4060390Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[-source_file] PASSED [ 72%]
+2026-11-26T05:57:37.4071847Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[-rel_path] PASSED [ 74%]
+2026-11-26T05:57:37.4083665Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[a\x00b-source_file] PASSED [ 75%]
+2026-11-26T05:57:37.4095076Z tests/test_evidence_registry.py::test_both_primary_and_fallback_paths_are_validated[a\x00b-rel_path] PASSED [ 77%]
+2026-11-26T05:57:37.4110194Z tests/test_evidence_registry.py::test_fallback_can_only_read_within_run PASSED [ 79%]
+2026-11-26T05:57:37.4126393Z tests/test_evidence_registry.py::test_missing_file_and_unknown_id_are_unavailable PASSED [ 81%]
+2026-11-26T05:57:37.4140127Z tests/test_evidence_registry.py::test_index_reload_clears_stale_records[None] PASSED [ 83%]
+2026-11-26T05:57:37.4154030Z tests/test_evidence_registry.py::test_index_reload_clears_stale_records[invalid-json] PASSED [ 85%]
+2026-11-26T05:57:37.4168606Z tests/test_evidence_registry.py::test_index_reload_clears_stale_records[{}] PASSED [ 87%]
+2026-11-26T05:57:37.4184411Z tests/test_evidence_registry.py::test_index_reload_clears_stale_records[{"proofs": [null]}] PASSED [ 88%]
+2026-11-26T05:57:37.4195277Z tests/test_evidence_registry.py::test_duplicate_ids_fail_closed PASSED   [ 90%]
+2026-11-26T05:57:37.4211697Z tests/test_evidence_registry.py::test_symlink_escape_is_rejected[source_file] PASSED [ 92%]
+2026-11-26T05:57:37.4228222Z tests/test_evidence_registry.py::test_symlink_escape_is_rejected[rel_path] PASSED [ 94%]
+2026-11-26T05:57:37.4268674Z tests/test_evidence_registry.py::test_download_uses_verified_bytes_after_disk_changes PASSED [ 96%]
+2026-11-26T05:57:37.4300914Z tests/test_evidence_registry.py::test_health_never_validates_missing_evidence PASSED [ 98%]
+2026-11-26T05:57:37.5196177Z tests/test_evidence_registry.py::test_every_frozen_proof_from_lf_git_blobs PASSED [100%]
+2026-11-26T05:57:37.5197054Z 
+2026-11-26T05:57:37.5197335Z =============================== warnings summary ===============================
+2026-11-26T05:57:37.5198620Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:37.5200983Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:37.5202771Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:37.5203528Z    to configure the hooks.
+2026-11-26T05:57:37.5204475Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:37.5205424Z     @pytest.mark.tryfirst
+2026-11-26T05:57:37.5206013Z 
+2026-11-26T05:57:37.5206624Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1
+2026-11-26T05:57:37.5208615Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+2026-11-26T05:57:37.5210451Z     from starlette.testclient import TestClient as TestClient  # noqa
+2026-11-26T05:57:37.5211042Z 
+2026-11-26T05:57:37.5211425Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:37.5212257Z ======================== 54 passed, 2 warnings in 1.54s ========================
+2026-11-26T05:57:37.6701623Z ##[group]Run python -m pytest tests/test_repo_tools.py tests/test_agent_loop.py -v
+2026-11-26T05:57:37.6702111Z [36;1mpython -m pytest tests/test_repo_tools.py tests/test_agent_loop.py -v[0m
+2026-11-26T05:57:37.6721100Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:37.6721416Z env:
+2026-11-26T05:57:37.6721712Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:37.6722154Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:37.6722545Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:37.6722887Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:37.6723243Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:37.6723588Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:37.6723901Z ##[endgroup]
+2026-11-26T05:57:38.1574639Z ============================= test session starts ==============================
+2026-11-26T05:57:38.1575925Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:38.1576580Z cachedir: .pytest_cache
+2026-11-26T05:57:38.1577344Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:38.1578087Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:38.1578553Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:38.1854496Z collecting ... collected 12 items
+2026-11-26T05:57:38.1854813Z 
+2026-11-26T05:57:38.1873087Z tests/test_repo_tools.py::TestRepoTools::test_edit_file_and_diff_and_revert PASSED [  8%]
+2026-11-26T05:57:38.1884033Z tests/test_repo_tools.py::TestRepoTools::test_edit_file_validation PASSED [ 16%]
+2026-11-26T05:57:38.1893370Z tests/test_repo_tools.py::TestRepoTools::test_inspect_file PASSED        [ 25%]
+2026-11-26T05:57:38.1903098Z tests/test_repo_tools.py::TestRepoTools::test_inspect_file_bounds_and_errors PASSED [ 33%]
+2026-11-26T05:57:38.1911945Z tests/test_repo_tools.py::TestRepoTools::test_list_dir PASSED            [ 41%]
+2026-11-26T05:57:38.1921112Z tests/test_repo_tools.py::TestRepoTools::test_path_traversal_protection PASSED [ 50%]
+2026-11-26T05:57:38.2025055Z tests/test_repo_tools.py::TestRepoTools::test_run_command PASSED         [ 58%]
+2026-11-26T05:57:38.2121065Z tests/test_repo_tools.py::TestRepoTools::test_run_command_quoted_interpreter_and_argument PASSED [ 66%]
+2026-11-26T05:57:38.2129057Z tests/test_repo_tools.py::TestRepoTools::test_run_command_still_rejects_chaining PASSED [ 75%]
+2026-11-26T05:57:38.2141919Z tests/test_repo_tools.py::TestRepoTools::test_search_code PASSED         [ 83%]
+2026-11-26T05:57:38.2151573Z tests/test_agent_loop.py::TestAgentLoop::test_extract_tool_call PASSED   [ 91%]
+2026-11-26T05:57:38.2586589Z tests/test_agent_loop.py::TestAgentLoop::test_react_loop_execution PASSED [100%]
+2026-11-26T05:57:38.2587271Z 
+2026-11-26T05:57:38.2587597Z =============================== warnings summary ===============================
+2026-11-26T05:57:38.2588608Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:38.2590689Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:38.2592500Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:38.2593235Z    to configure the hooks.
+2026-11-26T05:57:38.2594171Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:38.2595126Z     @pytest.mark.tryfirst
+2026-11-26T05:57:38.2595471Z 
+2026-11-26T05:57:38.2596126Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:38.2597825Z ======================== 12 passed, 1 warning in 0.15s =========================
+2026-11-26T05:57:38.3297375Z ##[group]Run pytest tests/benchmark_integrity/ -v
+2026-11-26T05:57:38.3297829Z [36;1mpytest tests/benchmark_integrity/ -v[0m
+2026-11-26T05:57:38.3316465Z shell: /usr/bin/bash -e {0}
+2026-11-26T05:57:38.3316762Z env:
+2026-11-26T05:57:38.3317060Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:38.3317442Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-26T05:57:38.3317825Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:38.3318150Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:38.3318511Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-26T05:57:38.3318845Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-26T05:57:38.3319145Z ##[endgroup]
+2026-11-26T05:57:38.8135549Z ============================= test session starts ==============================
+2026-11-26T05:57:38.8137136Z platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.16/x64/bin/python
+2026-11-26T05:57:38.8137982Z cachedir: .pytest_cache
+2026-11-26T05:57:38.8138750Z hypothesis profile 'ci' -> database=None, deadline=None, print_blob=True, derandomize=True, suppress_health_check=(HealthCheck.too_slow,)
+2026-11-26T05:57:38.8139616Z rootdir: /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:38.8140163Z plugins: hypothesis-6.170.17, anyio-4.16.0, dash-4.5.1
+2026-11-26T05:57:39.4379082Z collecting ... collected 37 items
+2026-11-26T05:57:39.4386614Z 
+2026-11-26T05:57:39.4387248Z tests/benchmark_integrity/test_agent_plumbing_and_tools.py::test_tool_json_parser_nested_braces PASSED [  2%]
+2026-11-26T05:57:39.4400877Z tests/benchmark_integrity/test_agent_plumbing_and_tools.py::test_apply_patch_has_nonempty_real_diff PASSED [  5%]
+2026-11-26T05:57:39.4409200Z tests/benchmark_integrity/test_agent_plumbing_and_tools.py::test_agent_finish_without_patch_rejected PASSED [  8%]
+2026-11-26T05:57:39.4491013Z tests/benchmark_integrity/test_backend_proofs_and_services.py::test_unknown_query_id_404 PASSED [ 10%]
+2026-11-26T05:57:39.4524946Z tests/benchmark_integrity/test_backend_proofs_and_services.py::test_health_not_equal_evidence_validity PASSED [ 13%]
+2026-11-26T05:57:39.4533173Z tests/benchmark_integrity/test_backend_proofs_and_services.py::test_proof_hash_tamper_rejected PASSED [ 16%]
+2026-11-26T05:57:40.1410467Z tests/benchmark_integrity/test_historical_provenance_gate.py::test_evaluate_gates_historical_success FAILED [ 18%]
+2026-11-26T05:57:40.3128258Z tests/benchmark_integrity/test_historical_provenance_gate.py::test_tampered_dataset_hash_fails_loudly PASSED [ 21%]
+2026-11-26T05:57:40.4799839Z tests/benchmark_integrity/test_historical_provenance_gate.py::test_tampered_ground_truth_hash_fails_loudly PASSED [ 24%]
+2026-11-26T05:57:40.6416446Z tests/benchmark_integrity/test_historical_provenance_gate.py::test_tampered_target_commit_fails_loudly PASSED [ 27%]
+2026-11-26T05:57:40.6423711Z tests/benchmark_integrity/test_isolation_and_worktree.py::test_missing_nextcloud_does_not_fallback_to_polyflow PASSED [ 29%]
+2026-11-26T05:57:40.6442663Z tests/benchmark_integrity/test_isolation_and_worktree.py::test_git_worktree_pinned_commit PASSED [ 32%]
+2026-11-26T05:57:40.6447007Z tests/benchmark_integrity/test_isolation_and_worktree.py::test_worktree_is_full_target_repository PASSED [ 35%]
+2026-11-26T05:57:40.6450946Z tests/benchmark_integrity/test_pair_and_metrics_accounting.py::test_pair_key_uses_task_model_budget_replicate_commit PASSED [ 37%]
+2026-11-26T05:57:40.6454574Z tests/benchmark_integrity/test_pair_and_metrics_accounting.py::test_pair_timeout_excluded PASSED [ 40%]
+2026-11-26T05:57:40.6458244Z tests/benchmark_integrity/test_pair_and_metrics_accounting.py::test_pair_partial_usage_is_not_successful_completion PASSED [ 43%]
+2026-11-26T05:57:40.6462613Z tests/benchmark_integrity/test_pair_and_metrics_accounting.py::test_report_metrics_recomputed_from_raw PASSED [ 45%]
+2026-11-26T05:57:40.6854909Z tests/benchmark_integrity/test_provenance_validator.py::test_read_repo_file_at_commit_success PASSED [ 48%]
+2026-11-26T05:57:40.7190327Z tests/benchmark_integrity/test_provenance_validator.py::test_read_repo_file_invalid_sha_format PASSED [ 51%]
+2026-11-26T05:57:40.7517746Z tests/benchmark_integrity/test_provenance_validator.py::test_read_repo_file_nonexistent_commit PASSED [ 54%]
+2026-11-26T05:57:40.7857919Z tests/benchmark_integrity/test_provenance_validator.py::test_read_repo_file_nonexistent_path PASSED [ 56%]
+2026-11-26T05:57:40.7862560Z tests/benchmark_integrity/test_provenance_validator.py::test_path_security_traversal_rejection[../secret.txt] PASSED [ 59%]
+2026-11-26T05:57:40.7866989Z tests/benchmark_integrity/test_provenance_validator.py::test_path_security_traversal_rejection[apps/../../secret.txt] PASSED [ 62%]
+2026-11-26T05:57:40.7870897Z tests/benchmark_integrity/test_provenance_validator.py::test_path_security_traversal_rejection[/etc/passwd] PASSED [ 64%]
+2026-11-26T05:57:40.7874949Z tests/benchmark_integrity/test_provenance_validator.py::test_path_security_traversal_rejection[C:\\Windows\\System32\\cmd.exe] PASSED [ 67%]
+2026-11-26T05:57:40.7879481Z tests/benchmark_integrity/test_provenance_validator.py::test_path_security_traversal_rejection[./../escape.php] PASSED [ 70%]
+2026-11-26T05:57:40.7882793Z tests/benchmark_integrity/test_provenance_validator.py::test_cross_platform_hash_verification_lf_and_crlf PASSED [ 72%]
+2026-11-26T05:57:40.8217441Z tests/benchmark_integrity/test_provenance_validator.py::test_negative_control_genuine_tampering_detected PASSED [ 75%]
+2026-11-26T05:57:41.2765244Z tests/benchmark_integrity/test_provenance_validator.py::test_negative_control_tampered_ground_truth_task_fails_loudly PASSED [ 78%]
+2026-11-26T05:57:41.7332052Z tests/benchmark_integrity/test_provenance_validator.py::test_negative_control_wrong_target_symbol_fails_loudly PASSED [ 81%]
+2026-11-26T05:57:42.1913296Z tests/benchmark_integrity/test_provenance_validator.py::test_negative_control_tampered_receiver_callsite_fails_loudly PASSED [ 83%]
+2026-11-26T05:57:42.6458502Z tests/benchmark_integrity/test_provenance_validator.py::test_side_effect_free_by_default PASSED [ 86%]
+2026-11-26T05:57:43.1037209Z tests/benchmark_integrity/test_provenance_validator.py::test_full_provenance_audit_passes PASSED [ 89%]
+2026-11-26T05:57:43.5379394Z tests/benchmark_integrity/test_rcir_live_retrieval.py::test_rcir_arm_uses_live_context_provider PASSED [ 91%]
+2026-11-26T05:57:43.5387442Z tests/benchmark_integrity/test_rcir_live_retrieval.py::test_rcir_missing_index_invalidates_trial PASSED [ 94%]
+2026-11-26T05:57:43.8785165Z tests/benchmark_integrity/test_rcir_live_retrieval.py::test_rcir_missing_context_never_returns_hint PASSED [ 97%]
+2026-11-26T05:57:43.9748196Z tests/benchmark_integrity/test_rcir_live_retrieval.py::test_baseline_has_no_rcir_context PASSED [100%]
+2026-11-26T05:57:43.9749187Z 
+2026-11-26T05:57:43.9749498Z =================================== FAILURES ===================================
+2026-11-26T05:57:43.9750548Z ____________________ test_evaluate_gates_historical_success ____________________
+2026-11-26T05:57:43.9751074Z 
+2026-11-26T05:57:43.9751362Z     def test_evaluate_gates_historical_success():
+2026-11-26T05:57:43.9752386Z         """Verify that evaluate_gates with allow_historical=True and allow_development_dirty=True succeeds on valid tree."""
+2026-11-26T05:57:43.9753534Z         env = get_default_environment()
+2026-11-26T05:57:43.9754336Z         result = evaluate_gates(allow_development_dirty=True, allow_historical=True, env=env)
+2026-11-26T05:57:43.9755288Z >       assert result["run_validity"] == "VALID"
+2026-11-26T05:57:43.9756229Z E       AssertionError: assert 'INVALID' == 'VALID'
+2026-11-26T05:57:43.9756819Z E         
+2026-11-26T05:57:43.9757376Z E         - VALID
+2026-11-26T05:57:43.9757787Z E         + INVALID
+2026-11-26T05:57:43.9758216Z E         ? ++
+2026-11-26T05:57:43.9758480Z 
+2026-11-26T05:57:43.9758903Z tests/benchmark_integrity/test_historical_provenance_gate.py:50: AssertionError
+2026-11-26T05:57:43.9760248Z ----------------------------- Captured stdout call -----------------------------
+2026-11-26T05:57:43.9761076Z ================================================================================
+2026-11-26T05:57:43.9762090Z RCIR v8.5.2 — Formal Contract Gate Evaluation
+2026-11-26T05:57:43.9762727Z ================================================================================
+2026-11-26T05:57:43.9763144Z 
+2026-11-26T05:57:43.9763404Z [STAGE 1] Evaluating Benchmark Integrity Gate...
+2026-11-26T05:57:43.9764035Z Integrity Gate Verdict: FAILED
+2026-11-26T05:57:43.9764378Z 
+2026-11-26T05:57:43.9764783Z [STAGE 2] Validating Contract Feasibility against Sparse Ground Truth Labels...
+2026-11-26T05:57:43.9765396Z 
+2026-11-26T05:57:43.9765906Z [STAGE 3] Evaluating Contract Gates against TEST split...
+2026-11-26T05:57:43.9768319Z   Impact Gate: PASSED (Macro: 91.0%, Worst: 75.0%, Silent Misses: 2)
+2026-11-26T05:57:43.9769068Z   Ranking Gate: PASSED (P@20_excl: 10.0%, P@50_excl: 4.0%, nDCG@50: 0.5213, MRR: 0.6167)
+2026-11-26T05:57:43.9769780Z   Context Gate: PASSED (CriticalSourceRecall@4k: 80.0%, BudgetViolations: 0, Determinism: True)
+2026-11-26T05:57:43.9770521Z   Type Flow Gate: PASSED (Coverage: 100.0%, Precision: 100.0%, WrongExact: 0.0%, InvalidGT: 0)
+2026-11-26T05:57:43.9771062Z   Canonicalization Gate: PASSED (Wrong Rate: 0.00%)
+2026-11-26T05:57:43.9771432Z   Agent Gate: NOT_VERIFIED
+2026-11-26T05:57:43.9771697Z 
+2026-11-26T05:57:43.9771879Z ================================================================================
+2026-11-26T05:57:43.9772316Z Formal Architecture Decision: NOT_EVALUATED
+2026-11-26T05:57:43.9772840Z Summary: Benchmark integrity gate failed with 8 violation(s). Run is invalid.
+2026-11-26T05:57:43.9773380Z ================================================================================
+2026-11-26T05:57:43.9774237Z Saved formal gate evaluation to: /tmp/pytest-of-runner/pytest-1/test_evaluate_gates_historical0/isolated-results/gate_evaluation.json
+2026-11-26T05:57:43.9775037Z =============================== warnings summary ===============================
+2026-11-26T05:57:43.9775920Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104
+2026-11-26T05:57:43.9777158Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/dash/testing/plugin.py:104: PytestRemovedIn10Warning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+2026-11-26T05:57:43.9778222Z   Please use the pytest.hookimpl(tryfirst=True) decorator instead
+2026-11-26T05:57:43.9778652Z    to configure the hooks.
+2026-11-26T05:57:43.9779287Z    See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+2026-11-26T05:57:43.9780164Z     @pytest.mark.tryfirst
+2026-11-26T05:57:43.9780367Z 
+2026-11-26T05:57:43.9780741Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1
+2026-11-26T05:57:43.9781917Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+2026-11-26T05:57:43.9782939Z     from starlette.testclient import TestClient as TestClient  # noqa
+2026-11-26T05:57:43.9783316Z 
+2026-11-26T05:57:43.9783637Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-26T05:57:43.9784182Z =========================== short test summary info ============================
+2026-11-26T05:57:43.9785070Z FAILED tests/benchmark_integrity/test_historical_provenance_gate.py::test_evaluate_gates_historical_success - AssertionError: assert 'INVALID' == 'VALID'
+2026-11-26T05:57:43.9786103Z   
+2026-11-26T05:57:43.9786372Z   - VALID
+2026-11-26T05:57:43.9786769Z   + INVALID
+2026-11-26T05:57:43.9787029Z   ? ++
+2026-11-26T05:57:43.9787421Z =================== 1 failed, 36 passed, 2 warnings in 5.15s ===================
+2026-11-26T05:57:44.1211219Z ##[error]Process completed with exit code 1.
+2026-11-26T05:57:44.1321419Z Post job cleanup.
+2026-11-26T05:57:44.1957337Z [command]/usr/bin/git version
+2026-11-26T05:57:44.1977682Z git version 2.56.1
+2026-11-26T05:57:44.2002231Z Temporarily overriding HOME='/home/runner/work/_temp/6eacb71d-0b59-4a2b-a288-c8628a8e5ac9' before making global git config changes
+2026-11-26T05:57:44.2003214Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-26T05:57:44.2005331Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/PolyFlow/PolyFlow
+2026-11-26T05:57:44.2033947Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-26T05:57:44.2058476Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-26T05:57:44.2238814Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:57:44.2287409Z Entering 'repos/flask'
+2026-11-26T05:57:44.2324507Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:57:44.2353078Z Entering 'repos/requests'
+2026-11-26T05:57:44.2396340Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-26T05:57:44.2413669Z http.https://github.com/.extraheader
+2026-11-26T05:57:44.2422087Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-26T05:57:44.2445597Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-26T05:57:44.2628208Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:57:44.2646582Z http.https://github.com/.extraheader
+2026-11-26T05:57:44.2681921Z Entering 'repos/flask'
+2026-11-26T05:57:44.2701026Z http.https://github.com/.extraheader
+2026-11-26T05:57:44.2723611Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:57:44.2742217Z http.https://github.com/.extraheader
+2026-11-26T05:57:44.2765631Z Entering 'repos/requests'
+2026-11-26T05:57:44.2783711Z http.https://github.com/.extraheader
+2026-11-26T05:57:44.2815464Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:57:44.2836727Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-26T05:57:44.3006919Z Entering 'experiments/nextcloud_validation/nextcloud-server'
+2026-11-26T05:57:44.3020979Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config	remote.origin.url
+2026-11-26T05:57:44.3045159Z Entering 'repos/flask'
+2026-11-26T05:57:44.3059941Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config	remote.origin.url
+2026-11-26T05:57:44.3071535Z Entering 'repos/opentelemetry-demo'
+2026-11-26T05:57:44.3085055Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config	remote.origin.url
+2026-11-26T05:57:44.3098962Z Entering 'repos/requests'
+2026-11-26T05:57:44.3112511Z file:/home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config	remote.origin.url
+2026-11-26T05:57:44.3133997Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/experiments/nextcloud_validation/nextcloud-server/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:57:44.3154831Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/flask/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:57:44.3173545Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/opentelemetry-demo/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:57:44.3192619Z [command]/usr/bin/git config --file /home/runner/work/PolyFlow/PolyFlow/.git/modules/repos/requests/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-26T05:57:44.3310996Z Cleaning up orphan processes
+2026-11-26T05:57:44.3554836Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

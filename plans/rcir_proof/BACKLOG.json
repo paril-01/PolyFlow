@@ -4,7 +4,7 @@
   "authority": "Owner authorized evaluation and local implementation. Later gates, paid resources, publishing, independent review and dataset freeze remain explicit decisions; status does not grant approval.",
   "tickets": [
     {"id":"PF-RP-00","depends_on":[],"status":"BASELINE_CAPTURED","deliverable":"BASELINE.md and saved raw receipts"},
-    {"id":"PF-RP-01","depends_on":["PF-RP-00"],"status":"LOCAL_PATCH_UNDER_REVIEW","deliverable":"Cross-platform provenance/proof integrity, test isolation, truthful report, Windows/Linux CI coverage"},
+    {"id":"PF-RP-01","depends_on":["PF-RP-00"],"status":"PUSHED_CI_RECOVERY_BLOCKED_BY_HISTORICAL_DIRTY_RELEASE_EVIDENCE","deliverable":"Cross-platform provenance/proof integrity, test isolation, truthful report, Windows/Linux CI coverage"},
     {"id":"PF-RP-02","depends_on":["PF-RP-01"],"status":"BLOCKED_BY_CI_REVIEW_GATE","deliverable":"Fail-closed fair deterministic harness and repaired R1, full delivery-budget metrics, DEV baseline"},
     {"id":"PF-RP-03","depends_on":["PF-RP-02"],"status":"NOT_STARTED","deliverable":"Source-bound lifecycle, recursive invalidation, hybrid candidate and validation selection"},
     {"id":"PF-RP-04","depends_on":["PF-RP-03"],"status":"NOT_STARTED","deliverable":"Real selected-provider ContextEvidenceBundle, SDK and stdio MCP client invocation"},

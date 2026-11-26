@@ -50,6 +50,16 @@ def test_legacy_lf_checkout_serves_exact_recorded_crlf_bytes(registry):
     assert path.read_bytes() == disk  # No rewrite of source evidence.
 
 
+def test_crlf_checkout_serves_exact_recorded_lf_bytes(registry):
+    historical = "π 雪\nline two\n".encode()
+    disk = historical.replace(b"\n", b"\r\n")
+    path, _ = publish(registry, disk, expected=hashlib.sha256(historical).hexdigest())
+    served, metadata, _ = registry.read_proof("sample")
+    assert served == historical
+    assert metadata["delivery_hash_policy"] == "LEGACY_LF_RECONSTRUCTION_V1"
+    assert path.read_bytes() == disk
+
+
 @pytest.mark.parametrize("content", [b"\x00proof\n", b"\xffproof\n", b"mixed\r\nlines\n"])
 def test_non_utf8_binary_and_mixed_endings_are_not_reconstructed(registry, content):
     publish(registry, content, expected=hashlib.sha256(content.replace(b"\n", b"\r\n")).hexdigest())

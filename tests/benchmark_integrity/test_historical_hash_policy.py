@@ -31,6 +31,15 @@ def test_reconstruction_requires_explicit_historical_policy(tmp_path):
     assert not matches_recorded_file_hash(path, historical, allow_legacy_crlf=True)
 
 
+def test_windows_checkout_can_verify_recorded_lf_bytes(tmp_path):
+    path = tmp_path / "evidence"
+    content = "π 雪\nsecond line\n".encode()
+    path.write_bytes(content.replace(b"\n", b"\r\n"))
+    digest = hashlib.sha256(content).hexdigest()
+    assert not matches_recorded_file_hash(path, digest)
+    assert matches_recorded_file_hash(path, digest, allow_legacy_crlf=True)
+
+
 @pytest.mark.parametrize("raw", [b"\x00binary\n", b"\xffinvalid\n", b"mixed\r\nlines\n"])
 def test_binary_and_mixed_ending_transform_is_rejected(tmp_path, raw):
     path = tmp_path / "evidence"

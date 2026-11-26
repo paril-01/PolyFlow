@@ -102,19 +102,28 @@ class EvidenceRegistry:
         raw_hash = hashlib.sha256(content).hexdigest()
         policy = "RAW_SHA256_V1"
         if raw_hash != expected_hash:
-            # The frozen 20261009 index recorded CRLF checkout bytes. Reconstruct
-            # exactly those bytes from UTF-8 LF text, never replace its digest or
+            # Frozen records contain both LF and CRLF checkout digests. Reconstruct
+            # exactly those bytes from uniform UTF-8 text, never replace its digest or
             # claim a canonicalized file's raw bytes matched the historical hash.
-            if b"\x00" in content or b"\r" in content:
+            if b"\x00" in content:
                 return None
             try:
                 content.decode("utf-8", errors="strict")
             except UnicodeDecodeError:
                 return None
-            content = content.replace(b"\n", b"\r\n")
+            unpaired = content.replace(b"\r\n", b"")
+            if b"\r" in unpaired:
+                return None
+            if b"\r\n" in content:
+                if b"\n" in unpaired:
+                    return None
+                content = content.replace(b"\r\n", b"\n")
+                policy = "LEGACY_LF_RECONSTRUCTION_V1"
+            else:
+                content = content.replace(b"\n", b"\r\n")
+                policy = "LEGACY_CRLF_RECONSTRUCTION_V1"
             if hashlib.sha256(content).hexdigest() != expected_hash:
                 return None
-            policy = "LEGACY_CRLF_RECONSTRUCTION_V1"
         metadata = {**proof, "availability_status": "AVAILABLE",
                     "raw_sha256": raw_hash, "delivery_hash_policy": policy}
         return file_path, content, metadata

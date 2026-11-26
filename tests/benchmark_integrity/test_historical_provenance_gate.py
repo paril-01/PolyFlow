@@ -52,6 +52,21 @@ def test_evaluate_gates_historical_success():
     assert result["architecture_decision"] == "OPTION_B_ACCEPTED"
 
 
+def test_historical_dirty_source_is_not_release_eligible(tmp_path):
+    """Historical replay must never silently waive the clean-release gate."""
+    env = copy.copy(get_default_environment())
+    manifest = json.loads((env.manifests_root / "benchmark_run_manifest.json").read_text())
+    manifest["polyflow_dirty"] = True
+    manifests = tmp_path / "dirty-historical-manifest"
+    manifests.mkdir()
+    (manifests / "benchmark_run_manifest.json").write_text(json.dumps(manifest))
+    env.manifests_root = manifests
+    result = evaluate_gates(allow_development_dirty=False, allow_historical=True, env=env)
+    assert result["run_validity"] == "INVALID"
+    assert result["architecture_decision"] == "NOT_EVALUATED"
+    assert any("working tree was dirty" in reason for reason in result["integrity_gate"]["failures"])
+
+
 def test_tampered_dataset_hash_fails_loudly(tmp_path: Path):
     """Verify that a tampered dataset hash in manifest is detected and fails the integrity gate."""
     env = get_default_environment()
