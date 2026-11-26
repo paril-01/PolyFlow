@@ -122,5 +122,8 @@
     "No locked trial or native IDE usage/credit savings measured",
     "Development package has no independent release acceptance"
   ],
-  "coverage_detail": "IMPLEMENTATION_STATUS.md"
+  "coverage_detail": "IMPLEMENTATION_STATUS.md",
+  "tested_pushed_source_sha": "f05fd897be1c632e95b58c1f528d8c8aec7eea47",
+  "hosted_ci_status": "FIVE_WORKFLOWS_SUCCESS",
+  "master_plan_complete": false
 }

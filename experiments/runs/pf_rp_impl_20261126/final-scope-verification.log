@@ -1,0 +1,11 @@
+{
+  "status": "OWNED_COMMITS_AND_FROZEN_PATHS_VERIFIED",
+  "head_sha": "f05fd897be1c632e95b58c1f528d8c8aec7eea47",
+  "changed_owned_files": 72,
+  "outside_owned": [],
+  "forbidden_changes": [],
+  "preserved_owner_staged_document": [
+    "plans/PolyFlow_CI_Architecture_Recovery_Execution_Pack_v4 (1).md"
+  ],
+  "unrelated_target_worktree_changes": "PRESERVED"
+}

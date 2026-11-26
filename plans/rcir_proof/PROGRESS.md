@@ -1,6 +1,20 @@
 # RCIR implementation progress
 
-**Current state:** owner-authorized software implementation is tested and being published on `work/pf-rp-01-proof-integrity`. The service, real MCP transport, strict budgets, study/control/evaluator tooling and development package are implemented. **The full master plan is not complete:** independent datasets, real validation/locked/native-IDE studies, Headroom integration and release acceptance remain pending. [Exact requirement-by-requirement coverage, commands, failures and blockers](./IMPLEMENTATION_STATUS.md).
+**Current state:** owner-authorized software implementation is pushed and hosted-CI verified on `work/pf-rp-01-proof-integrity`. The service, real MCP transport, strict budgets, study/control/evaluator tooling and development package are implemented. **The full master plan is not complete:** independent datasets, real validation/locked/native-IDE studies, Headroom integration and release acceptance remain pending. [Exact requirement-by-requirement coverage, commands, failures and blockers](./IMPLEMENTATION_STATUS.md).
+
+## Published source and hosted verification
+
+Implementation commits `c27331ac30a53b75c91479546736feec7cb9560b`, `68fad0d81377a1a981a9deb5e977f29adef5df8f`, and `f05fd897be1c632e95b58c1f528d8c8aec7eea47` were pushed to the work branch. The final source SHA above has five successful hosted workflows; the following audit commit changes receipts/documentation only. This is source CI acceptance, not completion of the master plan or a successful current benchmark.
+
+| Hosted workflow at final source SHA | Actual conclusion | Native run |
+|---|---|---|
+| RCIR Benchmark Smoke Test | SUCCESS | [run 45773097080](https://github.com/paril-01/PolyFlow/actions/runs/45773097080) |
+| RCIR Unit Tests & Static Verification | SUCCESS | [run 45773097113](https://github.com/paril-01/PolyFlow/actions/runs/45773097113) |
+| RCIR Source Service and Study Tooling | SUCCESS | [run 45773097170](https://github.com/paril-01/PolyFlow/actions/runs/45773097170) |
+| RCIR Artifact Integrity & Report Consistency | SUCCESS | [run 45773097162](https://github.com/paril-01/PolyFlow/actions/runs/45773097162) |
+| PolyFlow Continuous Integration | SUCCESS | [run 45773097096](https://github.com/paril-01/PolyFlow/actions/runs/45773097096) |
+
+Raw native workflow/job/step receipts: [hosted-source-ci-final.json](../../experiments/runs/pf_rp_impl_20261126/hosted-source-ci-final.json). Capture command exited 0; [capture log](../../experiments/runs/pf_rp_impl_20261126/hosted-source-ci-final.log). Source/ownership check exited 0; [scope log](../../experiments/runs/pf_rp_impl_20261126/final-scope-verification.log). Additional source-only Git-isolation tests exited 0 (2 passed); malformed inventory checks exited 0 (5 passed, 25 deselected). Exact commands are retained in the command ledger. No owner-staged document or target checkout changes were included.
 
 ## Current implementation checkpoint (supersedes earlier pending-decision text)
 

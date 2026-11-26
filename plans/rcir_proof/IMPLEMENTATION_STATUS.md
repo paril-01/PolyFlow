@@ -108,3 +108,16 @@ curation and canonical graph identity, qualify a real DEV toolchain/model,
 then execute the approved pilot before freezing any locked study. The remaining
 software and evidence work is explicitly tracked above; no new push permission
 is required.
+
+## Hosted source closeout
+
+Source commit `f05fd897be1c632e95b58c1f528d8c8aec7eea47` is pushed.
+All five hosted workflows concluded success, including both OS product jobs,
+Python 3.10/3.11/3.12 units, both OS artifact replay jobs, general CI and React.
+[Native raw workflow/job receipts](../../experiments/runs/pf_rp_impl_20261126/hosted-source-ci-final.json)
+were captured with exit 0 in
+[hosted-source-ci-final.log](../../experiments/runs/pf_rp_impl_20261126/hosted-source-ci-final.log).
+The strict manual release workflow was NOT_RUN; dirty-source rejection was
+verified by the saved negative-control tests, not converted to a clean release.
+The final audit commit only publishes these receipts/docs and their capture
+helpers. Full-plan and release status remain INCOMPLETE/BLOCKED as mapped above.
