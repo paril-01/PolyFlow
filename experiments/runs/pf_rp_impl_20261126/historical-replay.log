@@ -1,0 +1,10 @@
+{
+  "status": "HISTORICAL_REPLAY_CONSISTENT",
+  "recorded_run_id": "rcir-v8.5.2-2bbf710f61db8971",
+  "historical_source_dirty": true,
+  "release_eligible": false,
+  "fresh_benchmark": false,
+  "architecture_approval": false,
+  "release_status": "NOT_EVALUATED_HERE_USE_STRICT_RELEASE_GATE",
+  "failures": []
+}

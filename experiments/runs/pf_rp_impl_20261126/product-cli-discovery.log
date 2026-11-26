@@ -1,0 +1,14 @@
+usage: run_product_study.py [-h]
+                            {validate,export-base,summarize,check-sandbox,qualify,run-dev,evaluate}
+                            ...
+
+Validate study inputs, export isolated base trees, or summarize raw trials.
+Live trials require independent qualified data and an external agent
+controller. This command deliberately cannot invent trials or native IDE
+usage.
+
+positional arguments:
+  {validate,export-base,summarize,check-sandbox,qualify,run-dev,evaluate}
+
+options:
+  -h, --help            show this help message and exit

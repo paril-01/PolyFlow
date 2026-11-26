@@ -1,0 +1,53 @@
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'D:\flutter_sdk\flutter\bin'
+{
+  "scope": "SYNTHETIC_SOFTWARE_INTEGRATION_ONLY",
+  "model_calls": 0,
+  "controls": {
+    "status": "CONTROL_EXECUTION_QUALIFIED",
+    "base_sha": "04c8e20cd4898c97f61e500e91835164655cdb48",
+    "fix_sha": "acf12b70445333d7afc75813be818831d120c505",
+    "command": [
+      "/usr/bin/python3",
+      "/oracle/check.py"
+    ],
+    "oracle_inventory": {
+      "check.py": "db7ffc3bacda828c97189aa96cbd4451e7e48cebfb9d1f6a1ed404ad281014c9"
+    },
+    "independent_curator_review": "NOT_PERFORMED_BY_THIS_TOOL",
+    "release_eligible": false
+  },
+  "evaluation": {
+    "status": "TESTS_PASSED",
+    "success": true,
+    "base_sha": "04c8e20cd4898c97f61e500e91835164655cdb48",
+    "changes_sha256": "3298cbb1239a0e2739a83669baf64db61a38ac4532d8a20046a33a4f4484cce2",
+    "qualified_controls_sha256": "7fff16d52b895ca295998504cf45b3438499811dddd1fa9b79486147a170da57",
+    "verifier": {
+      "command": [
+        "/usr/bin/python3",
+        "/oracle/check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "output_file_limit_bytes": 8000000,
+      "address_space_limit_bytes": 2000000000,
+      "sandbox": "BWRAP_UNSHARED_NETWORK_PID_FILESYSTEM"
+    },
+    "independent_acceptance": false
+  },
+  "changed_files": 2,
+  "raw_artifact_directory": "/tmp/rcir-controller-test-51jwr5hi"
+}

@@ -8,7 +8,14 @@ from rcir.context.compiler import (
 )
 
 from rcir.context.models import ContextRetrievalResult
-from rcir.context.provider import RCIRContextProvider, LiveRCIRContextProvider, RCIRContextError
+
+def __getattr__(name):
+    # The optional legacy graph provider depends on the source checkout's
+    # orchestrator. Token counting and the standalone SDK must not import it.
+    if name in {"RCIRContextProvider", "LiveRCIRContextProvider", "RCIRContextError"}:
+        from rcir.context import provider
+        return getattr(provider, name)
+    raise AttributeError(name)
 
 __all__ = [
     "CompiledContext",

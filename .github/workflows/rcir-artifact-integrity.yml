@@ -37,6 +37,6 @@ jobs:
       run: |
         python experiments/rcir_v8_5/scripts/validate_report_consistency.py
 
-    - name: Verify Gate Evaluator Consistency
+    - name: Verify Frozen Historical Replay (Not Release Eligibility)
       run: |
-        python experiments/rcir_v8_5/scripts/evaluate_gates.py --allow-historical
+        python experiments/rcir_v8_5/scripts/verify_historical_replay.py

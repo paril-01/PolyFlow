@@ -1,0 +1,492 @@
+{"argv": ["C:\\Users\\Paril Rupani\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "-m", "build", "--wheel", "--outdir", "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\wheels", "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\rcir"], "cwd": "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc"}
+running egg_info
+creating src\rcir.egg-info
+writing src\rcir.egg-info\PKG-INFO
+writing dependency_links to src\rcir.egg-info\dependency_links.txt
+writing entry points to src\rcir.egg-info\entry_points.txt
+writing requirements to src\rcir.egg-info\requires.txt
+writing top-level names to src\rcir.egg-info\top_level.txt
+writing manifest file 'src\rcir.egg-info\SOURCES.txt'
+reading manifest file 'src\rcir.egg-info\SOURCES.txt'
+writing manifest file 'src\rcir.egg-info\SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+creating build\lib\rcir
+copying src\rcir\dataset.py -> build\lib\rcir
+copying src\rcir\impact.py -> build\lib\rcir
+copying src\rcir\manifest.py -> build\lib\rcir
+copying src\rcir\verify.py -> build\lib\rcir
+copying src\rcir\__init__.py -> build\lib\rcir
+copying src\rcir\__main__.py -> build\lib\rcir
+creating build\lib\rcir\adapters
+copying src\rcir\adapters\frappe_erpnext.py -> build\lib\rcir\adapters
+copying src\rcir\adapters\nextcloud.py -> build\lib\rcir\adapters
+copying src\rcir\adapters\__init__.py -> build\lib\rcir\adapters
+creating build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\benchmark_ab.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\formal_benchmark.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\generalized_evaluator.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\online_boutique.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\synthetic_mutations.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\task_harness.py -> build\lib\rcir\benchmarks
+copying src\rcir\benchmarks\__init__.py -> build\lib\rcir\benchmarks
+creating build\lib\rcir\context
+copying src\rcir\context\compiler.py -> build\lib\rcir\context
+copying src\rcir\context\models.py -> build\lib\rcir\context
+copying src\rcir\context\planner.py -> build\lib\rcir\context
+copying src\rcir\context\provider.py -> build\lib\rcir\context
+copying src\rcir\context\source_resolver.py -> build\lib\rcir\context
+copying src\rcir\context\spans.py -> build\lib\rcir\context
+copying src\rcir\context\summarizer.py -> build\lib\rcir\context
+copying src\rcir\context\tokenizer.py -> build\lib\rcir\context
+copying src\rcir\context\__init__.py -> build\lib\rcir\context
+creating build\lib\rcir\contract
+copying src\rcir\contract\schema.py -> build\lib\rcir\contract
+copying src\rcir\contract\__init__.py -> build\lib\rcir\contract
+creating build\lib\rcir\entities
+copying src\rcir\entities\canonical.py -> build\lib\rcir\entities
+copying src\rcir\entities\entity.py -> build\lib\rcir\entities
+copying src\rcir\entities\legacy_normalizer.py -> build\lib\rcir\entities
+copying src\rcir\entities\module.py -> build\lib\rcir\entities
+copying src\rcir\entities\registry.py -> build\lib\rcir\entities
+copying src\rcir\entities\resolver.py -> build\lib\rcir\entities
+copying src\rcir\entities\__init__.py -> build\lib\rcir\entities
+creating build\lib\rcir\evaluation
+copying src\rcir\evaluation\ground_truth.py -> build\lib\rcir\evaluation
+copying src\rcir\evaluation\__init__.py -> build\lib\rcir\evaluation
+creating build\lib\rcir\graph
+copying src\rcir\graph\canonical_graph.py -> build\lib\rcir\graph
+copying src\rcir\graph\config_discovery.py -> build\lib\rcir\graph
+copying src\rcir\graph\edges.py -> build\lib\rcir\graph
+copying src\rcir\graph\extractor.py -> build\lib\rcir\graph
+copying src\rcir\graph\http_routes.py -> build\lib\rcir\graph
+copying src\rcir\graph\multi_view.py -> build\lib\rcir\graph
+copying src\rcir\graph\php_config.py -> build\lib\rcir\graph
+copying src\rcir\graph\php_routes.py -> build\lib\rcir\graph
+copying src\rcir\graph\php_scanner.py -> build\lib\rcir\graph
+copying src\rcir\graph\polyglot_route_linker.py -> build\lib\rcir\graph
+copying src\rcir\graph\polyglot_scanner.py -> build\lib\rcir\graph
+copying src\rcir\graph\proto_parser.py -> build\lib\rcir\graph
+copying src\rcir\graph\scc.py -> build\lib\rcir\graph
+copying src\rcir\graph\traversal_policy.py -> build\lib\rcir\graph
+copying src\rcir\graph\__init__.py -> build\lib\rcir\graph
+creating build\lib\rcir\hierarchy
+copying src\rcir\hierarchy\builder.py -> build\lib\rcir\hierarchy
+copying src\rcir\hierarchy\granularity.py -> build\lib\rcir\hierarchy
+copying src\rcir\hierarchy\hubs.py -> build\lib\rcir\hierarchy
+copying src\rcir\hierarchy\__init__.py -> build\lib\rcir\hierarchy
+creating build\lib\rcir\mcp
+copying src\rcir\mcp\tool_adapter.py -> build\lib\rcir\mcp
+creating build\lib\rcir\query
+copying src\rcir\query\change_spec.py -> build\lib\rcir\query
+copying src\rcir\query\intent_parser.py -> build\lib\rcir\query
+copying src\rcir\query\__init__.py -> build\lib\rcir\query
+creating build\lib\rcir\retrieval
+copying src\rcir\retrieval\bm25.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\candidate_generator.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\evidence_vector.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\hybrid.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\ranker.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\scorer.py -> build\lib\rcir\retrieval
+copying src\rcir\retrieval\__init__.py -> build\lib\rcir\retrieval
+creating build\lib\rcir\service
+copying src\rcir\service\api.py -> build\lib\rcir\service
+copying src\rcir\service\cli.py -> build\lib\rcir\service
+copying src\rcir\service\delivery.py -> build\lib\rcir\service
+copying src\rcir\service\index.py -> build\lib\rcir\service
+copying src\rcir\service\mcp_server.py -> build\lib\rcir\service
+copying src\rcir\service\proof.py -> build\lib\rcir\service
+copying src\rcir\service\snapshot.py -> build\lib\rcir\service
+copying src\rcir\service\__init__.py -> build\lib\rcir\service
+creating build\lib\rcir\state
+copying src\rcir\state\diff.py -> build\lib\rcir\state
+copying src\rcir\state\propagate.py -> build\lib\rcir\state
+copying src\rcir\state\versioning.py -> build\lib\rcir\state
+copying src\rcir\state\__init__.py -> build\lib\rcir\state
+creating build\lib\rcir\types
+copying src\rcir\types\php_type_flow.py -> build\lib\rcir\types
+copying src\rcir\types\type_flow.py -> build\lib\rcir\types
+creating build\lib\rcir\utils
+copying src\rcir\utils\fingerprint.py -> build\lib\rcir\utils
+running egg_info
+writing src\rcir.egg-info\PKG-INFO
+writing dependency_links to src\rcir.egg-info\dependency_links.txt
+writing entry points to src\rcir.egg-info\entry_points.txt
+writing requirements to src\rcir.egg-info\requires.txt
+writing top-level names to src\rcir.egg-info\top_level.txt
+reading manifest file 'src\rcir.egg-info\SOURCES.txt'
+writing manifest file 'src\rcir.egg-info\SOURCES.txt'
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\rcir
+creating build\bdist.win-amd64\wheel\rcir\adapters
+copying build\lib\rcir\adapters\frappe_erpnext.py -> build\bdist.win-amd64\wheel\.\rcir\adapters
+copying build\lib\rcir\adapters\nextcloud.py -> build\bdist.win-amd64\wheel\.\rcir\adapters
+copying build\lib\rcir\adapters\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\adapters
+creating build\bdist.win-amd64\wheel\rcir\benchmarks
+copying build\lib\rcir\benchmarks\benchmark_ab.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\formal_benchmark.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\generalized_evaluator.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\online_boutique.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\synthetic_mutations.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\task_harness.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+copying build\lib\rcir\benchmarks\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\benchmarks
+creating build\bdist.win-amd64\wheel\rcir\context
+copying build\lib\rcir\context\compiler.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\models.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\planner.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\provider.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\source_resolver.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\spans.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\summarizer.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\tokenizer.py -> build\bdist.win-amd64\wheel\.\rcir\context
+copying build\lib\rcir\context\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\context
+creating build\bdist.win-amd64\wheel\rcir\contract
+copying build\lib\rcir\contract\schema.py -> build\bdist.win-amd64\wheel\.\rcir\contract
+copying build\lib\rcir\contract\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\contract
+copying build\lib\rcir\dataset.py -> build\bdist.win-amd64\wheel\.\rcir
+creating build\bdist.win-amd64\wheel\rcir\entities
+copying build\lib\rcir\entities\canonical.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\entity.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\legacy_normalizer.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\module.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\registry.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\resolver.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+copying build\lib\rcir\entities\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\entities
+creating build\bdist.win-amd64\wheel\rcir\evaluation
+copying build\lib\rcir\evaluation\ground_truth.py -> build\bdist.win-amd64\wheel\.\rcir\evaluation
+copying build\lib\rcir\evaluation\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\evaluation
+creating build\bdist.win-amd64\wheel\rcir\graph
+copying build\lib\rcir\graph\canonical_graph.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\config_discovery.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\edges.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\extractor.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\http_routes.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\multi_view.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\php_config.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\php_routes.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\php_scanner.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\polyglot_route_linker.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\polyglot_scanner.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\proto_parser.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\scc.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\traversal_policy.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+copying build\lib\rcir\graph\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\graph
+creating build\bdist.win-amd64\wheel\rcir\hierarchy
+copying build\lib\rcir\hierarchy\builder.py -> build\bdist.win-amd64\wheel\.\rcir\hierarchy
+copying build\lib\rcir\hierarchy\granularity.py -> build\bdist.win-amd64\wheel\.\rcir\hierarchy
+copying build\lib\rcir\hierarchy\hubs.py -> build\bdist.win-amd64\wheel\.\rcir\hierarchy
+copying build\lib\rcir\hierarchy\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\hierarchy
+copying build\lib\rcir\impact.py -> build\bdist.win-amd64\wheel\.\rcir
+copying build\lib\rcir\manifest.py -> build\bdist.win-amd64\wheel\.\rcir
+creating build\bdist.win-amd64\wheel\rcir\mcp
+copying build\lib\rcir\mcp\tool_adapter.py -> build\bdist.win-amd64\wheel\.\rcir\mcp
+creating build\bdist.win-amd64\wheel\rcir\query
+copying build\lib\rcir\query\change_spec.py -> build\bdist.win-amd64\wheel\.\rcir\query
+copying build\lib\rcir\query\intent_parser.py -> build\bdist.win-amd64\wheel\.\rcir\query
+copying build\lib\rcir\query\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\query
+creating build\bdist.win-amd64\wheel\rcir\retrieval
+copying build\lib\rcir\retrieval\bm25.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\candidate_generator.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\evidence_vector.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\hybrid.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\ranker.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\scorer.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+copying build\lib\rcir\retrieval\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\retrieval
+creating build\bdist.win-amd64\wheel\rcir\service
+copying build\lib\rcir\service\api.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\cli.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\delivery.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\index.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\mcp_server.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\proof.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\snapshot.py -> build\bdist.win-amd64\wheel\.\rcir\service
+copying build\lib\rcir\service\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\service
+creating build\bdist.win-amd64\wheel\rcir\state
+copying build\lib\rcir\state\diff.py -> build\bdist.win-amd64\wheel\.\rcir\state
+copying build\lib\rcir\state\propagate.py -> build\bdist.win-amd64\wheel\.\rcir\state
+copying build\lib\rcir\state\versioning.py -> build\bdist.win-amd64\wheel\.\rcir\state
+copying build\lib\rcir\state\__init__.py -> build\bdist.win-amd64\wheel\.\rcir\state
+creating build\bdist.win-amd64\wheel\rcir\types
+copying build\lib\rcir\types\php_type_flow.py -> build\bdist.win-amd64\wheel\.\rcir\types
+copying build\lib\rcir\types\type_flow.py -> build\bdist.win-amd64\wheel\.\rcir\types
+creating build\bdist.win-amd64\wheel\rcir\utils
+copying build\lib\rcir\utils\fingerprint.py -> build\bdist.win-amd64\wheel\.\rcir\utils
+copying build\lib\rcir\verify.py -> build\bdist.win-amd64\wheel\.\rcir
+copying build\lib\rcir\__init__.py -> build\bdist.win-amd64\wheel\.\rcir
+copying build\lib\rcir\__main__.py -> build\bdist.win-amd64\wheel\.\rcir
+running install_egg_info
+Copying src\rcir.egg-info to build\bdist.win-amd64\wheel\.\rcir-0.2.0.dev0-py3.12.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\rcir-0.2.0.dev0.dist-info\WHEEL
+creating 'C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\wheels\\.tmp-lskm83_h\\rcir-0.2.0.dev0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'rcir/__init__.py'
+adding 'rcir/__main__.py'
+adding 'rcir/dataset.py'
+adding 'rcir/impact.py'
+adding 'rcir/manifest.py'
+adding 'rcir/verify.py'
+adding 'rcir/adapters/__init__.py'
+adding 'rcir/adapters/frappe_erpnext.py'
+adding 'rcir/adapters/nextcloud.py'
+adding 'rcir/benchmarks/__init__.py'
+adding 'rcir/benchmarks/benchmark_ab.py'
+adding 'rcir/benchmarks/formal_benchmark.py'
+adding 'rcir/benchmarks/generalized_evaluator.py'
+adding 'rcir/benchmarks/online_boutique.py'
+adding 'rcir/benchmarks/synthetic_mutations.py'
+adding 'rcir/benchmarks/task_harness.py'
+adding 'rcir/context/__init__.py'
+adding 'rcir/context/compiler.py'
+adding 'rcir/context/models.py'
+adding 'rcir/context/planner.py'
+adding 'rcir/context/provider.py'
+adding 'rcir/context/source_resolver.py'
+adding 'rcir/context/spans.py'
+adding 'rcir/context/summarizer.py'
+adding 'rcir/context/tokenizer.py'
+adding 'rcir/contract/__init__.py'
+adding 'rcir/contract/schema.py'
+adding 'rcir/entities/__init__.py'
+adding 'rcir/entities/canonical.py'
+adding 'rcir/entities/entity.py'
+adding 'rcir/entities/legacy_normalizer.py'
+adding 'rcir/entities/module.py'
+adding 'rcir/entities/registry.py'
+adding 'rcir/entities/resolver.py'
+adding 'rcir/evaluation/__init__.py'
+adding 'rcir/evaluation/ground_truth.py'
+adding 'rcir/graph/__init__.py'
+adding 'rcir/graph/canonical_graph.py'
+adding 'rcir/graph/config_discovery.py'
+adding 'rcir/graph/edges.py'
+adding 'rcir/graph/extractor.py'
+adding 'rcir/graph/http_routes.py'
+adding 'rcir/graph/multi_view.py'
+adding 'rcir/graph/php_config.py'
+adding 'rcir/graph/php_routes.py'
+adding 'rcir/graph/php_scanner.py'
+adding 'rcir/graph/polyglot_route_linker.py'
+adding 'rcir/graph/polyglot_scanner.py'
+adding 'rcir/graph/proto_parser.py'
+adding 'rcir/graph/scc.py'
+adding 'rcir/graph/traversal_policy.py'
+adding 'rcir/hierarchy/__init__.py'
+adding 'rcir/hierarchy/builder.py'
+adding 'rcir/hierarchy/granularity.py'
+adding 'rcir/hierarchy/hubs.py'
+adding 'rcir/mcp/tool_adapter.py'
+adding 'rcir/query/__init__.py'
+adding 'rcir/query/change_spec.py'
+adding 'rcir/query/intent_parser.py'
+adding 'rcir/retrieval/__init__.py'
+adding 'rcir/retrieval/bm25.py'
+adding 'rcir/retrieval/candidate_generator.py'
+adding 'rcir/retrieval/evidence_vector.py'
+adding 'rcir/retrieval/hybrid.py'
+adding 'rcir/retrieval/ranker.py'
+adding 'rcir/retrieval/scorer.py'
+adding 'rcir/service/__init__.py'
+adding 'rcir/service/api.py'
+adding 'rcir/service/cli.py'
+adding 'rcir/service/delivery.py'
+adding 'rcir/service/index.py'
+adding 'rcir/service/mcp_server.py'
+adding 'rcir/service/proof.py'
+adding 'rcir/service/snapshot.py'
+adding 'rcir/state/__init__.py'
+adding 'rcir/state/diff.py'
+adding 'rcir/state/propagate.py'
+adding 'rcir/state/versioning.py'
+adding 'rcir/types/php_type_flow.py'
+adding 'rcir/types/type_flow.py'
+adding 'rcir/utils/fingerprint.py'
+adding 'rcir-0.2.0.dev0.dist-info/METADATA'
+adding 'rcir-0.2.0.dev0.dist-info/WHEEL'
+adding 'rcir-0.2.0.dev0.dist-info/entry_points.txt'
+adding 'rcir-0.2.0.dev0.dist-info/top_level.txt'
+adding 'rcir-0.2.0.dev0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built rcir-0.2.0.dev0-py3-none-any.whl
+
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=68.0
+  - wheel
+* Getting build dependencies for wheel...
+WARNING `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+* Installed build dependency versions:
+  - setuptools==84.2.1
+  - wheel==0.48.0
+* Building wheel...
+WARNING `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+
+{"argv": ["C:\\Users\\Paril Rupani\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "-m", "venv", "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\venv"], "cwd": "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc"}
+
+{"argv": ["C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\venv\\Scripts\\python.exe", "-m", "pip", "install", "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\wheels\\rcir-0.2.0.dev0-py3-none-any.whl", "tiktoken==0.14.0", "mcp==2.3.0"], "cwd": "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc"}
+Processing c:\users\paril rupani\appdata\local\temp\vscode-agent-codex-sandbox-jku3r6\rcir-wheel-cgf_3vwc\wheels\rcir-0.2.0.dev0-py3-none-any.whl
+Collecting tiktoken==0.14.0
+  Using cached tiktoken-0.14.0-cp312-cp312-win_amd64.whl.metadata (6.8 kB)
+Collecting mcp==2.3.0
+  Using cached mcp-2.3.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting regex (from tiktoken==0.14.0)
+  Using cached regex-2026.11.25-cp312-cp312-win_amd64.whl.metadata (41 kB)
+Collecting requests (from tiktoken==0.14.0)
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting anyio>=4.9 (from mcp==2.3.0)
+  Downloading anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+Collecting httpx2>=2.10.0 (from mcp==2.3.0)
+  Using cached httpx2-2.16.2-py3-none-any.whl.metadata (10.0 kB)
+Collecting jsonschema>=4.20.0 (from mcp==2.3.0)
+  Using cached jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+Collecting mcp-types==2.3.0 (from mcp==2.3.0)
+  Using cached mcp_types-2.3.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting opentelemetry-api>=1.28.0 (from mcp==2.3.0)
+  Using cached opentelemetry_api-1.45.2-py3-none-any.whl.metadata (1.4 kB)
+Collecting pydantic>=2.12.0 (from mcp==2.3.0)
+  Downloading pydantic-2.14.4-py3-none-any.whl.metadata (143 kB)
+     ------------------------------------ 144.0/144.0 kB 502.8 kB/s eta 0:00:00
+Collecting pyjwt>=2.10.1 (from pyjwt[crypto]>=2.10.1->mcp==2.3.0)
+  Using cached pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting python-multipart>=0.0.9 (from mcp==2.3.0)
+  Using cached python_multipart-0.0.34-py3-none-any.whl.metadata (6.3 kB)
+Collecting pywin32>=311 (from mcp==2.3.0)
+  Using cached pywin32-312-cp312-cp312-win_amd64.whl.metadata (11 kB)
+Collecting sse-starlette>=3.0.0 (from mcp==2.3.0)
+  Using cached sse_starlette-3.7.1-py3-none-any.whl.metadata (15 kB)
+Collecting starlette>=0.27 (from mcp==2.3.0)
+  Downloading starlette-1.10.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.13.0 (from mcp==2.3.0)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.1 (from mcp==2.3.0)
+  Downloading typing_inspection-0.4.5-py3-none-any.whl.metadata (2.6 kB)
+Collecting uvicorn>=0.31.1 (from mcp==2.3.0)
+  Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting idna>=2.8 (from anyio>=4.9->mcp==2.3.0)
+  Using cached idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting httpcore2==2.16.2 (from httpx2>=2.10.0->mcp==2.3.0)
+  Using cached httpcore2-2.16.2-py3-none-any.whl.metadata (28 kB)
+Collecting truststore>=0.10 (from httpx2>=2.10.0->mcp==2.3.0)
+  Using cached truststore-0.10.5-py3-none-any.whl.metadata (4.5 kB)
+Collecting h11>=0.16 (from httpcore2==2.16.2->httpx2>=2.10.0->mcp==2.3.0)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting attrs>=22.2.0 (from jsonschema>=4.20.0->mcp==2.3.0)
+  Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.20.0->mcp==2.3.0)
+  Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+Collecting referencing>=0.28.4 (from jsonschema>=4.20.0->mcp==2.3.0)
+  Using cached referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting rpds-py>=0.25.0 (from jsonschema>=4.20.0->mcp==2.3.0)
+  Using cached rpds_py-2026.9.1-cp312-cp312-win_amd64.whl.metadata (4.2 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.12.0->mcp==2.3.0)
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.5 (from pydantic>=2.12.0->mcp==2.3.0)
+  Downloading pydantic_core-2.50.5-cp312-cp312-win_amd64.whl.metadata (6.7 kB)
+Collecting cryptography>=3.4.0 (from pyjwt[crypto]>=2.10.1->mcp==2.3.0)
+  Using cached cryptography-50.0.2-cp311-abi3-win_amd64.whl.metadata (4.4 kB)
+Collecting click>=7.0 (from uvicorn>=0.31.1->mcp==2.3.0)
+  Downloading click-8.5.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting charset_normalizer<4,>=2 (from requests->tiktoken==0.14.0)
+  Downloading charset_normalizer-3.5.3-cp312-cp312-win_amd64.whl.metadata (44 kB)
+     ---------------------------------------- 44.2/44.2 kB 2.1 MB/s eta 0:00:00
+Collecting urllib3<3,>=1.26 (from requests->tiktoken==0.14.0)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests->tiktoken==0.14.0)
+  Downloading certifi-2026.11.20-py3-none-any.whl.metadata (2.5 kB)
+Collecting cffi>=2.0.0 (from cryptography>=3.4.0->pyjwt[crypto]>=2.10.1->mcp==2.3.0)
+  Downloading cffi-2.1.1-cp312-cp312-win_amd64.whl.metadata (2.6 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography>=3.4.0->pyjwt[crypto]>=2.10.1->mcp==2.3.0)
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Using cached tiktoken-0.14.0-cp312-cp312-win_amd64.whl (941 kB)
+Using cached mcp-2.3.0-py3-none-any.whl (368 kB)
+Using cached mcp_types-2.3.0-py3-none-any.whl (69 kB)
+Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+   ---------------------------------------- 134.5/134.5 kB 7.8 MB/s eta 0:00:00
+Using cached httpx2-2.16.2-py3-none-any.whl (97 kB)
+Using cached httpcore2-2.16.2-py3-none-any.whl (85 kB)
+Using cached jsonschema-4.26.0-py3-none-any.whl (90 kB)
+Using cached opentelemetry_api-1.45.2-py3-none-any.whl (60 kB)
+Downloading pydantic-2.14.4-py3-none-any.whl (494 kB)
+   --------------------------------------- 494.9/494.9 kB 10.3 MB/s eta 0:00:00
+Downloading pydantic_core-2.50.5-cp312-cp312-win_amd64.whl (2.3 MB)
+   ---------------------------------------- 2.3/2.3 MB 3.8 MB/s eta 0:00:00
+Using cached pyjwt-2.15.1-py3-none-any.whl (33 kB)
+Using cached python_multipart-0.0.34-py3-none-any.whl (32 kB)
+Using cached pywin32-312-cp312-cp312-win_amd64.whl (6.9 MB)
+Using cached sse_starlette-3.7.1-py3-none-any.whl (18 kB)
+Downloading starlette-1.10.0-py3-none-any.whl (80 kB)
+   ---------------------------------------- 80.6/80.6 kB 2.3 MB/s eta 0:00:00
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+   ---------------------------------------- 87.4/87.4 kB 4.8 MB/s eta 0:00:00
+Using cached regex-2026.11.25-cp312-cp312-win_amd64.whl (282 kB)
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Using cached attrs-26.1.0-py3-none-any.whl (67 kB)
+Downloading certifi-2026.11.20-py3-none-any.whl (127 kB)
+   ---------------------------------------- 127.9/127.9 kB 3.8 MB/s eta 0:00:00
+Downloading charset_normalizer-3.5.3-cp312-cp312-win_amd64.whl (214 kB)
+   ---------------------------------------- 214.5/214.5 kB 6.6 MB/s eta 0:00:00
+Downloading click-8.5.1-py3-none-any.whl (126 kB)
+   ---------------------------------------- 126.2/126.2 kB 7.7 MB/s eta 0:00:00
+Using cached cryptography-50.0.2-cp311-abi3-win_amd64.whl (3.8 MB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached idna-3.20-py3-none-any.whl (69 kB)
+Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Using cached referencing-0.37.0-py3-none-any.whl (26 kB)
+Using cached rpds_py-2026.9.1-cp312-cp312-win_amd64.whl (222 kB)
+Using cached truststore-0.10.5-py3-none-any.whl (19 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+   ---------------------------------------- 135.7/135.7 kB 3.9 MB/s eta 0:00:00
+Downloading cffi-2.1.1-cp312-cp312-win_amd64.whl (185 kB)
+   ---------------------------------------- 185.9/185.9 kB 5.7 MB/s eta 0:00:00
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+   ---------------------------------------- 62.6/62.6 kB 3.3 MB/s eta 0:00:00
+Installing collected packages: urllib3, typing-extensions, truststore, rpds-py, regex, pywin32, python-multipart, pyjwt, pycparser, idna, h11, click, charset_normalizer, certifi, attrs, annotated-types, uvicorn, typing-inspection, requests, referencing, pydantic-core, opentelemetry-api, httpcore2, cffi, anyio, tiktoken, starlette, pydantic, jsonschema-specifications, httpx2, cryptography, sse-starlette, rcir, mcp-types, jsonschema, mcp
+Successfully installed annotated-types-0.8.0 anyio-4.16.0 attrs-26.1.0 certifi-2026.11.20 cffi-2.1.1 charset_normalizer-3.5.3 click-8.5.1 cryptography-50.0.2 h11-0.16.0 httpcore2-2.16.2 httpx2-2.16.2 idna-3.20 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 mcp-2.3.0 mcp-types-2.3.0 opentelemetry-api-1.45.2 pycparser-3.12 pydantic-2.14.4 pydantic-core-2.50.5 pyjwt-2.15.1 python-multipart-0.0.34 pywin32-312 rcir-0.2.0.dev0 referencing-0.37.0 regex-2026.11.25 requests-2.34.2 rpds-py-2026.9.1 sse-starlette-3.7.1 starlette-1.10.0 tiktoken-0.14.0 truststore-0.10.5 typing-extensions-4.16.0 typing-inspection-0.4.5 urllib3-2.8.0 uvicorn-0.54.0
+
+
+[notice] A new release of pip is available: 24.0 -> 26.3
+[notice] To update, run: C:\Users\Paril Rupani\AppData\Local\Temp\vscode-agent-codex-sandbox-jku3r6\rcir-wheel-cgf_3vwc\venv\Scripts\python.exe -m pip install --upgrade pip
+
+{"argv": ["C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\venv\\Scripts\\python.exe", "-m", "pip", "check"], "cwd": "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc"}
+No broken requirements found.
+
+{"argv": ["C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\venv\\Scripts\\python.exe", "-m", "rcir.service.cli", "--help"], "cwd": "C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc"}
+Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\runs\pf_rp_impl_20261126\package_smoke.py", line 31, in <module>
+    run([python, "-m", "rcir.service.cli", "--help"], work, env)
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\runs\pf_rp_impl_20261126\package_smoke.py", line 14, in run
+    result = subprocess.run([str(a) for a in argv], cwd=cwd, env=env, check=True, capture_output=True, text=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['C:\\Users\\Paril Rupani\\AppData\\Local\\Temp\\vscode-agent-codex-sandbox-jku3r6\\rcir-wheel-cgf_3vwc\\venv\\Scripts\\python.exe', '-m', 'rcir.service.cli', '--help']' returned non-zero exit status 1.

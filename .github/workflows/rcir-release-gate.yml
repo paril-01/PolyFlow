@@ -1,0 +1,15 @@
+name: RCIR Strict Release Eligibility
+on:
+  workflow_dispatch:
+jobs:
+  release-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require Current Clean Source and Current Benchmark Provenance
+        run: python experiments/rcir_v8_5/scripts/evaluate_gates.py

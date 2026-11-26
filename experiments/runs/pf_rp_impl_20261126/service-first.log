@@ -1,0 +1,51 @@
+....................s.....F.....
+================================== FAILURES ===================================
+___________________________ test_real_stdio_client ____________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 46, in test_real_stdio_client
+  |     asyncio.run(asyncio.wait_for(flow(), timeout=45))
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ^^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 685, in run_until_complete
+  |     return future.result()
+  |            ^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 25, in flow
+  |     async with stdio_client(parameters) as (read, write):
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 231, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\stdio.py", line 201, in stdio_client
+  |     async with anyio.create_task_group() as tg:
+  |   File "c:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\_backends\_asyncio.py", line 783, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\stdio.py", line 205, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 26, in flow
+    |     async with ClientSession(read, write) as client:
+    |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\session.py", line 514, in __aexit__
+    |     result = await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "c:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\_backends\_asyncio.py", line 783, in __aexit__
+    |     raise BaseExceptionGroup(
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 31, in flow
+      |     data = receipt.structuredContent
+      |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+      |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\pydantic\main.py", line 1026, in __getattr__
+      |     raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+      | AttributeError: 'CallToolResult' object has no attribute 'structuredContent'. Did you mean: 'structured_content'?
+      +------------------------------------
+=========================== short test summary info ===========================
+FAILED tests/test_rcir_service_mcp.py::test_real_stdio_client - AttributeErro...
+1 failed, 30 passed, 1 skipped in 56.45s

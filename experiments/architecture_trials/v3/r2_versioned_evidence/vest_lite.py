@@ -120,20 +120,25 @@ class VestLiteEvidenceStore:
         return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
     def _safe_read_file(self, rel_path: str) -> Optional[str]:
-        full_path = (self.repo_root / rel_path).resolve()
-        # Security Guard: Path traversal prevention
-        if not str(full_path).startswith(str(self.repo_root)):
-            return None
-        if not full_path.is_file():
-            return None
+        from rcir.service.snapshot import read_stable, ServiceError
         try:
-            return full_path.read_text(encoding="utf-8", errors="replace")
-        except Exception:
+            return read_stable(self.repo_root, rel_path).decode("utf-8")
+        except (OSError, UnicodeError, ServiceError):
             return None
+
+    def _rebuild_reverse(self):
+        self.impact_graph = ReverseImpactGraph()
+        for fact in self.facts.values():
+            self.impact_graph.register_fact(fact)
 
     def index_file(self, rel_path: str):
         """Index a single file into versioned fact records."""
         content = self._safe_read_file(rel_path)
+        if rel_path in self.file_hashes:
+            self.invalidate_file(rel_path, "reparse_or_delete")
+        self.facts = {fid: f for fid, f in self.facts.items() if f.file_path != rel_path}
+        self.file_hashes.pop(rel_path, None)
+        self._rebuild_reverse()
         if content is None:
             return
 
@@ -165,7 +170,7 @@ class VestLiteEvidenceStore:
                     start_line=idx,
                     end_line=end_l,
                     content=snippet,
-                    resolution_class=ResolutionClass.STATIC_EXACT,
+                    resolution_class=ResolutionClass.INFERRED,
                     confidence=1.0,
                     dependencies=deps,
                 )
@@ -192,7 +197,7 @@ class VestLiteEvidenceStore:
                     start_line=idx,
                     end_line=end_l,
                     content=snippet,
-                    resolution_class=ResolutionClass.STATIC_EXACT,
+                    resolution_class=ResolutionClass.INFERRED,
                     confidence=0.95,
                     dependencies=[],
                 )
@@ -222,12 +227,22 @@ class VestLiteEvidenceStore:
         direct_facts = self.impact_graph.file_to_facts.get(rel_path, set())
         to_invalidate: Set[str] = set(direct_facts)
 
-        # Transitive propagation via reverse dependencies
-        for fid in direct_facts:
-            f = self.facts.get(fid)
-            if f:
-                deps = self.impact_graph.find_dependents(f.symbol_name)
-                to_invalidate.update(deps)
+        # Cycle-safe conservative FILE closure: inheritance inferred for one
+        # declaration invalidates the dependent file's methods as well.
+        pending = list(direct_facts)
+        while pending:
+            fid = pending.pop()
+            fact = self.facts.get(fid)
+            if fact is None:
+                continue
+            dependents = self.impact_graph.find_dependents(fact.symbol_name) | self.impact_graph.find_dependents(fact.entity_uri)
+            for dependent in dependents:
+                target = self.facts.get(dependent)
+                if target:
+                    for affected in self.impact_graph.file_to_facts.get(target.file_path, set()):
+                        if affected not in to_invalidate:
+                            to_invalidate.add(affected)
+                            pending.append(affected)
 
         for fid in to_invalidate:
             if fid in self.facts:
@@ -248,6 +263,10 @@ class VestLiteEvidenceStore:
         Retrieve ContextEvidenceBundle bounded by max_tokens:
         Filters out STALE facts, scores by exact symbol match & reverse impact.
         """
+        for path, recorded in list(self.file_hashes.items()):
+            current = self._safe_read_file(path)
+            if current is None or self._hash_str(current) != recorded:
+                self.invalidate_file(path, "source_changed_before_query")
         q_tokens = [w.lower() for w in re.findall(r"[A-Za-z0-9_]+", query)]
         matched_facts: List[Tuple[float, FactRecord]] = []
 
@@ -277,7 +296,7 @@ class VestLiteEvidenceStore:
                 matched_facts.append((score * f.confidence, f))
 
         # Sort descending by score
-        matched_facts.sort(key=lambda x: x[0], reverse=True)
+        matched_facts.sort(key=lambda x: (-x[0], x[1].file_path, x[1].start_line, x[1].fact_id))
 
         budget_chars = max_tokens * 4
         consumed_chars = 0
@@ -311,6 +330,8 @@ class VestLiteEvidenceStore:
             "spans_count": len(packed_items),
             "evidence_items": packed_items,
             "omitted_targets": omitted_targets,
-            "target_files": list({item["file_path"] for item in packed_items}),
-            "freshness_ratio": 1.0,  # 100% fresh, stale filtered
+            "target_files": sorted({item["file_path"] for item in packed_items}),
+            "freshness_ratio": 1.0 if packed_items else None,
+            "token_count_type": "estimated_legacy_only",
+            "invalidation_scope": "CONSERVATIVE_REGEX_FILE_DEPENDENCIES",
         }

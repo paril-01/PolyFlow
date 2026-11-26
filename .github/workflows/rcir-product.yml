@@ -1,0 +1,27 @@
+name: RCIR Source Service and Study Tooling
+on:
+  push:
+    branches: [main, work/pf-rp-01-proof-integrity]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  product:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and real MCP SDK
+        run: python -m pip install -e "rcir[mcp]" pytest pyyaml
+      - name: Service, transport, study and legacy compatibility
+        env:
+          PYTHONPATH: rcir/src
+        run: python -m pytest tests/test_rcir_service.py tests/test_rcir_service_mcp.py tests/test_product_study.py tests/test_rcir_c0_mcp_and_bundle.py experiments/architecture_trials/v3/tests/ -v
+      - name: CLI discovery
+        run: rcir --help

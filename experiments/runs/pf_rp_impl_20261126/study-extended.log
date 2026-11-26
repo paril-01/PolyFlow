@@ -1,0 +1,126 @@
+..........F.                                                             [100%]
+================================== FAILURES ===================================
+________________ test_canonical_entries_and_hybrid_no_fallback ________________
+
+tmp_path = WindowsPath('C:/Users/Paril Rupani/AppData/Local/Temp/vscode-agent-codex-sandbox-jku3r6/pytest-of-Paril Rupani/pytest-16/test_canonical_entries_and_hyb0')
+
+    def test_canonical_entries_and_hybrid_no_fallback(tmp_path):
+        root = tmp_path / "repo"
+        commit, _ = make_repo(root)
+        public, gold, graph = [tmp_path / name for name in ["public.json", "gold.json", "graph.json"]]
+        public.write_text(json.dumps({"tasks": [{"task_id": "dev", "query": "target"}]}))
+        gold.write_text(json.dumps({"dev": [{"path": "worker.py", "start_line": 1, "end_line": 2,
+                                             "file_sha256": digest((root / "worker.py").read_bytes())}]}))
+        data = {"metadata": {"target_commit": commit}, "nodes": {"worker.py::target": {"file": "worker.py", "line": 1, "end_line": 2}}, "edges": []}
+        graph.write_text(json.dumps(data))
+>       receipt = run_study(root, commit, public, gold, tmp_path / "canonical", arms=["R0", "R1", "R2", "R3"], graph=graph)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_product_study.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+experiments\benchmark_core\retrieval_study.py:113: in run_study
+    delivered = providers[arm].retrieve(task["query"], budget)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiments\architecture_trials\v3\r1_adapter\adapter.py:51: in retrieve
+    return self.service.retrieve(query, max_tokens)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rcir\src\rcir\service\api.py:72: in retrieve
+    candidates = self.candidate_provider(query) if self.candidate_provider else self.index.candidates(query)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiments\architecture_trials\v3\r1_adapter\adapter.py:30: in candidates
+    result = self.provider.retrieve(symbol=query.split()[0], query=query, token_budget=50000)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rcir\src\rcir\context\provider.py:84: in retrieve
+    res = self.registry.resolve(symbol)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <rcir.entities.canonical.CanonicalEntityRegistry object at 0x0000025F7B9E2060>
+symbol_or_alias = 'target', target_file_hint = None
+
+    def resolve(
+        self,
+        symbol_or_alias: str,
+        target_file_hint: str | None = None,
+    ) -> ResolutionResult:
+        """Resolve a requested symbol or alias with optional file disambiguation hint."""
+        if not symbol_or_alias:
+            return ResolutionResult(canonical_id=None, resolution=AliasResolution.UNRESOLVED)
+    
+        cache_key = (symbol_or_alias, target_file_hint)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+    
+        # Direct canonical URI match
+        if symbol_or_alias in self.entities:
+            res = ResolutionResult(
+                canonical_id=symbol_or_alias,
+                resolution=AliasResolution.EXACT,
+                evidence=["direct_uri_match"],
+            )
+            self._cache[cache_key] = res
+            return res
+    
+        sym_norm = re.sub(r'\\+', r'\\', symbol_or_alias.strip())
+        matches = (
+            self.alias_to_uris.get(symbol_or_alias)
+            or self.alias_to_uris.get(sym_norm)
+            or self.alias_to_uris.get(sym_norm.replace("\\", "/"))
+            or self.alias_to_uris.get(sym_norm.replace("/", "\\"))
+            or self.alias_to_uris.get(symbol_or_alias.lower())
+            or self.alias_to_uris.get(sym_norm.lower())
+        )
+    
+        if not matches:
+            matches = self.tail_to_uris.get(symbol_or_alias) or self.tail_to_uris.get(sym_norm)
+    
+        if not matches:
+            res = ResolutionResult(
+                canonical_id=None,
+                resolution=AliasResolution.UNRESOLVED,
+                evidence=["no_alias_registered"],
+            )
+            self._cache[cache_key] = res
+            return res
+    
+        # Disambiguation passes
+        if len(matches) > 1:
+            # 1. Prefer internal entities over external://
+            internals = {u for u in matches if not u.startswith("external://")}
+            if internals:
+                matches = internals
+    
+        if len(matches) > 1 and target_file_hint:
+            norm_hint = target_file_hint.replace("\\", "/").strip("/")
+            file_filtered = {
+                uri for uri in matches
+                if self.entities[uri].file.replace("\\", "/").strip("/") == norm_hint
+            }
+            if file_filtered:
+                matches = file_filtered
+    
+        if len(matches) > 1:
+            # 2. Prefer FILE kind if querying a file path
+            if symbol_or_alias.endswith((".php", ".ts", ".js", ".py")):
+                f_matches = {u for u in matches if self.entities[u].kind == EntityKind.FILE}
+                if f_matches:
+                    matches = f_matches
+            # 3. Prefer CLASS/INTERFACE/TRAIT kind if querying a type name
+            elif "::" not in symbol_or_alias and not symbol_or_alias.endswith("()"):
+                t_matches = {
+                    u for u in matches
+                    if self.entities[u].kind in (EntityKind.CLASS, EntityKind.INTERFACE, EntityKind.TRAIT, EntityKind.ENUM)
+                }
+                if t_matches:
+                    matches = t_matches
+    
+        if len(matches) == 1:
+            chosen = next(iter(matches))
+>           ent = self.entities[chosen]
+                  ^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'worker.py::target'
+
+rcir\src\rcir\entities\canonical.py:420: KeyError
+=========================== short test summary info ===========================
+FAILED tests/test_product_study.py::test_canonical_entries_and_hybrid_no_fallback
+1 failed, 11 passed in 15.54s

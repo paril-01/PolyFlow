@@ -1,0 +1,57 @@
+{
+  "id": "PF-RP-02-10",
+  "phase": "OWNER_AUTHORIZED_COMPLETE_LOCAL_IMPLEMENTATION",
+  "repo": "paril-01/PolyFlow",
+  "repo_sha": "8563118c5b7d69820749394f6b6f4a30f941a0c2",
+  "branch": "work/pf-rp-01-proof-integrity",
+  "mode": "SCOPED_CODE",
+  "authorization": "Owner explicitly repeated: do the complete implementation and then push all the changes. This authorizes continuing local development and publishing without repeated permission requests. Historical replay is separated from strict release eligibility; no historical source flag or failed release criterion is waived.",
+  "objective": "Implement source-bound repository service, exact-budget retrieval, SDK/CLI/stdio MCP, fair deterministic study, supplementary delivery, isolated study/proof tooling and regression coverage.",
+  "observable_behavior": "Actual source bytes, resolved identities, honest resolver status, strict serialized budgets, stale-handle rejection, real MCP client transport and fail-closed benchmark preflight.",
+  "owned_paths": [
+    "rcir/src/rcir/service/**",
+    "rcir/src/rcir/mcp/**",
+    "rcir/pyproject.toml",
+    "rcir/README.md",
+    "experiments/architecture_trials/v3/**",
+    "experiments/benchmark_core/**",
+    "experiments/rcir_v8_5/scripts/verify_historical_replay.py",
+    "scripts/run_retrieval_study.py",
+    "scripts/run_product_study.py",
+    "tests/test_rcir_service*.py",
+    "tests/test_product_study.py",
+    ".github/workflows/rcir-*.yml",
+    ".gitattributes",
+    "plans/rcir_proof/**",
+    "experiments/runs/pf_rp_impl_20261126/**",
+    "rcir/src/rcir/__init__.py",
+    "rcir/src/rcir/context/__init__.py"
+  ],
+  "forbidden_paths": [
+    "polyflow/**",
+    "polyflow-sdk/**",
+    "repos/**",
+    "agents/**",
+    "experiments/rcir_v8_5/results/**",
+    "experiments/rcir_v8_5/manifests/**",
+    "experiments/runs/run_20261009_blind_verified/**"
+  ],
+  "acceptance_tests": [
+    "Focused service/study/adversarial tests",
+    "Existing interpreter, contracts and benchmark integrity regressions",
+    "Actual MCP SDK client initialize/list/call over stdio",
+    "Clean wheel install and CLI smoke",
+    "Hosted Windows/Linux CI"
+  ],
+  "negative_controls": [
+    "Traversal and symlinks",
+    "Changed source and stale handles",
+    "Too-small budget and missing exact tokenizer",
+    "Missing target/graph/zero tasks",
+    "Missing usage/oracle leakage/sandbox",
+    "Dirty historical records remain release-ineligible"
+  ],
+  "rollback": "Scoped commits only; preserve raw receipts and user-owned staged changes. Default-off supplementary routing. Do not merge.",
+  "release_conditions": "Independently curated/frozen tasks, qualified controls, real model trials, declared budgets, native telemetry and external acceptance are evidence gates. Implemented tooling is not measured product benefit. Missing resources are NOT_RUN/BLOCKED rather than synthetic success.",
+  "approval": "EXPLICIT_OWNER_COMPLETE_IMPLEMENTATION_AND_PUSH"
+}

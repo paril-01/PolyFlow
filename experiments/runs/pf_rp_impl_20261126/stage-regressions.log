@@ -1,0 +1,61 @@
+........................................................................ [ 85%]
+.......F..F.                                                             [100%]
+================================== FAILURES ===================================
+__________________ TestPolyFlowRuntimeReal.test_go_real_cell __________________
+
+self = <tests.test_polyflow_runtime_real.TestPolyFlowRuntimeReal testMethod=test_go_real_cell>
+
+        def test_go_real_cell(self):
+            code = """
+    package main
+    
+    import "fmt"
+    
+    func main() {
+    \tfmt.Println("Go 1.27.1 execution verified")
+    }
+    """
+            block = LanguageBlock(
+                language="go",
+                tag="go_test",
+                code=code
+            )
+            res = self.runtime.execute_cell(block, {"engine": "go"}, timeout_ms=15000)
+>           self.assertEqual(res.status, "success", f"Failed with: {res.error}")
+E           AssertionError: 'timeout' != 'success'
+E           - timeout
+E           + success
+E            : Failed with: Go execution timed out after 15.0s
+
+tests\test_polyflow_runtime_real.py:70: AssertionError
+_________________ TestPolyFlowRuntimeReal.test_php_real_cell __________________
+
+self = <tests.test_polyflow_runtime_real.TestPolyFlowRuntimeReal testMethod=test_php_real_cell>
+
+        def test_php_real_cell(self):
+            code = """
+    function process($req) {
+        return [
+            'status' => 'ok',
+            'received_id' => $req['id'] ?? 0,
+            'doubled' => ($req['id'] ?? 0) * 2
+        ];
+    }
+    """
+            block = LanguageBlock(
+                language="php",
+                tag="php_test",
+                code=code
+            )
+            res = self.runtime.execute_cell(block, {"id": 21})
+>           self.assertEqual(res.status, "success", f"Failed with: {res.error}")
+E           AssertionError: 'timeout' != 'success'
+E           - timeout
+E           + success
+E            : Failed with: PHP execution timed out after 5.0s
+
+tests\test_polyflow_runtime_real.py:89: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_polyflow_runtime_real.py::TestPolyFlowRuntimeReal::test_go_real_cell
+FAILED tests/test_polyflow_runtime_real.py::TestPolyFlowRuntimeReal::test_php_real_cell
+2 failed, 82 passed in 124.32s (0:02:04)

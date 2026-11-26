@@ -1,6 +1,16 @@
 # RCIR implementation progress
 
-**Current state:** implementation and CI-recovery changes have been pushed. PF-RP-01 remains blocked by the original historical manifest's dirty-source release ineligibility; PF-RP-02 onward have not started. See [hosted CI closeout and exact remaining failure](./CI_CLOSEOUT.md). The owner has been asked to choose the evidence protocol; publishing permission is already granted.
+**Current state:** owner-authorized software implementation is tested and being published on `work/pf-rp-01-proof-integrity`. The service, real MCP transport, strict budgets, study/control/evaluator tooling and development package are implemented. **The full master plan is not complete:** independent datasets, real validation/locked/native-IDE studies, Headroom integration and release acceptance remain pending. [Exact requirement-by-requirement coverage, commands, failures and blockers](./IMPLEMENTATION_STATUS.md).
+
+## Current implementation checkpoint (supersedes earlier pending-decision text)
+
+The repeated complete-implementation request authorizes continuing software work and pushing this branch. Historical replay and fresh release eligibility are now checked separately according to [the recorded decision](./ADR_HISTORICAL_REPLAY.md). Original dirty provenance is unchanged and strict release negative controls pass. This is not a waiver of release eligibility.
+
+Implemented source identity and byte spans, AST Python definitions, static import closure, exact compact JSON/MCP budgets, stale/evicted expansion, read-only stdio MCP, CLI/SDK, repaired experimental R1/R2 and explicit non-overwriting R0/R1/R2/R3 study entrypoints. Independent DEV/controller and evaluator tooling runs commands only in a Linux namespace sandbox, exports base-only history, captures all changed bytes/modes and keeps missing usage null. Optional deterministic supplementary delivery stays off.
+
+Observed tests: service/study/legacy/adversarial suite exit 0 (50 passed, 1 Windows symlink skip); later study/ITT checks exit 0 (13 passed); interpreter/proof/claims exit 0 (72 passed, 2 Windows symlink skips); existing integrity suite exit 0 (51 passed); strict historical negative controls exit 0 (18 passed). Overlapping suites are not summed. Two real-runtime timeouts in the broader stage run passed on focused recheck without runtime changes. Clean wheel install and installed CLI query passed. WSL sandbox negative controls and a synthetic control/patch/evaluator integration passed with zero model calls. [Exact argv, exit codes, durations and raw logs](../../experiments/runs/pf_rp_impl_20261126/commands.jsonl).
+
+No real historical DEV model task, independent locked cohort, native IDE savings or architecture winner is claimed. [Remaining implementation and acceptance work](./IMPLEMENTATION_STATUS.md) is explicit.
 
 ## Owner-authorized continuation
 

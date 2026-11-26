@@ -1,20 +1,102 @@
 {
   "source": "../../PolyFlow_RCIR_Master_Implementation_and_Proof_Plan.md",
-  "current_ticket": "PF-RP-01",
-  "authority": "Owner authorized evaluation and local implementation. Later gates, paid resources, publishing, independent review and dataset freeze remain explicit decisions; status does not grant approval.",
+  "current_ticket": "PF-RP-02-10",
+  "authority": "Owner repeatedly authorized complete implementation and work-branch push. Independent dataset, experiment freeze and release acceptance remain evidence gates; no self-approval.",
   "tickets": [
-    {"id":"PF-RP-00","depends_on":[],"status":"BASELINE_CAPTURED","deliverable":"BASELINE.md and saved raw receipts"},
-    {"id":"PF-RP-01","depends_on":["PF-RP-00"],"status":"PUSHED_CI_RECOVERY_BLOCKED_BY_HISTORICAL_DIRTY_RELEASE_EVIDENCE","deliverable":"Cross-platform provenance/proof integrity, test isolation, truthful report, Windows/Linux CI coverage"},
-    {"id":"PF-RP-02","depends_on":["PF-RP-01"],"status":"BLOCKED_BY_CI_REVIEW_GATE","deliverable":"Fail-closed fair deterministic harness and repaired R1, full delivery-budget metrics, DEV baseline"},
-    {"id":"PF-RP-03","depends_on":["PF-RP-02"],"status":"NOT_STARTED","deliverable":"Source-bound lifecycle, recursive invalidation, hybrid candidate and validation selection"},
-    {"id":"PF-RP-04","depends_on":["PF-RP-03"],"status":"NOT_STARTED","deliverable":"Real selected-provider ContextEvidenceBundle, SDK and stdio MCP client invocation"},
-    {"id":"PF-RP-05","depends_on":["PF-RP-04"],"status":"NOT_STARTED","deliverable":"Repository-neutral isolated trial harness, qualified evaluator and native telemetry"},
-    {"id":"PF-RP-06","depends_on":["PF-RP-05"],"status":"OPTIONAL_NOT_STARTED","deliverable":"Default-off reversible supplementary-content compression"},
-    {"id":"PF-RP-07","depends_on":["PF-RP-05"],"status":"NOT_STARTED_REQUIRES_INDEPENDENT_CURATOR","deliverable":"Qualified historical-change dataset, DEV/VALIDATION/LOCKED splits and frozen study protocol"},
-    {"id":"PF-RP-08","depends_on":["PF-RP-07"],"status":"NOT_STARTED_REQUIRES_RESOURCE_APPROVAL","deliverable":"DEV ladder, ablations, native receipts and frozen candidate"},
-    {"id":"PF-RP-09","depends_on":["PF-RP-08"],"status":"NOT_STARTED_REQUIRES_FREEZE_AND_BUDGET_APPROVAL","deliverable":"Locked A/B or approved factorial study and native IDE trial, independent recomputation"},
-    {"id":"PF-RP-10","depends_on":["PF-RP-09"],"status":"NOT_STARTED_REQUIRES_EVIDENCE_ACCEPTANCE","deliverable":"Installable package, reproducibility and approved evidence-based claims"},
-    {"id":"PF-RP-11","depends_on":["PF-RP-10"],"status":"OPTIONAL_NOT_STARTED","deliverable":"DEV-only learned retrieval/native optimization if measured benefit exists"}
+    {
+      "id": "PF-RP-00",
+      "depends_on": [],
+      "status": "BASELINE_CAPTURED",
+      "deliverable": "BASELINE.md and saved raw receipts"
+    },
+    {
+      "id": "PF-RP-01",
+      "depends_on": [
+        "PF-RP-00"
+      ],
+      "status": "REPLAY_RELEASE_SEPARATED_STRICT_DIRTY_GUARD_PRESERVED",
+      "deliverable": "Cross-platform provenance/proof integrity, test isolation, truthful report, Windows/Linux CI coverage"
+    },
+    {
+      "id": "PF-RP-02",
+      "depends_on": [
+        "PF-RP-01"
+      ],
+      "status": "HARNESS_ADAPTERS_IMPLEMENTED_REAL_DEV_VALIDATION_PENDING",
+      "deliverable": "Fail-closed fair deterministic harness and repaired R1, full delivery-budget metrics, DEV baseline"
+    },
+    {
+      "id": "PF-RP-03",
+      "depends_on": [
+        "PF-RP-02"
+      ],
+      "status": "SOURCE_LIFECYCLE_IMPLEMENTED_INCREMENTAL_HYBRID_VALIDATION_INCOMPLETE",
+      "deliverable": "Source-bound lifecycle, recursive invalidation, hybrid candidate and validation selection"
+    },
+    {
+      "id": "PF-RP-04",
+      "depends_on": [
+        "PF-RP-03"
+      ],
+      "status": "SDK_CLI_REAL_STDIO_TESTED_NATIVE_IDE_PENDING",
+      "deliverable": "Real selected-provider ContextEvidenceBundle, SDK and stdio MCP client invocation"
+    },
+    {
+      "id": "PF-RP-05",
+      "depends_on": [
+        "PF-RP-04"
+      ],
+      "status": "ISOLATED_CONTROLLER_CONTROLS_EVALUATOR_IMPLEMENTED_REAL_TASK_PENDING",
+      "deliverable": "Repository-neutral isolated trial harness, qualified evaluator and native telemetry"
+    },
+    {
+      "id": "PF-RP-06",
+      "depends_on": [
+        "PF-RP-05"
+      ],
+      "status": "DETERMINISTIC_ROUTER_DEFAULT_OFF_HEADROOM_NOT_IMPLEMENTED",
+      "deliverable": "Default-off reversible supplementary-content compression"
+    },
+    {
+      "id": "PF-RP-07",
+      "depends_on": [
+        "PF-RP-05"
+      ],
+      "status": "BLOCKED_INDEPENDENT_DATASET_CURATOR_REQUIRED",
+      "deliverable": "Qualified historical-change dataset, DEV/VALIDATION/LOCKED splits and frozen study protocol"
+    },
+    {
+      "id": "PF-RP-08",
+      "depends_on": [
+        "PF-RP-07"
+      ],
+      "status": "NOT_RUN_REAL_DEV_CALIBRATION_AND_QUALIFICATION_REQUIRED",
+      "deliverable": "DEV ladder, ablations, native receipts and frozen candidate"
+    },
+    {
+      "id": "PF-RP-09",
+      "depends_on": [
+        "PF-RP-08"
+      ],
+      "status": "NOT_RUN_LOCKED_FREEZE_AND_NATIVE_IDE_EVIDENCE_REQUIRED",
+      "deliverable": "Locked A/B or approved factorial study and native IDE trial, independent recomputation"
+    },
+    {
+      "id": "PF-RP-10",
+      "depends_on": [
+        "PF-RP-09"
+      ],
+      "status": "DEV_PACKAGE_CLEAN_INSTALL_TESTED_RELEASE_BLOCKED",
+      "deliverable": "Installable package, reproducibility and approved evidence-based claims"
+    },
+    {
+      "id": "PF-RP-11",
+      "depends_on": [
+        "PF-RP-10"
+      ],
+      "status": "OPTIONAL_DEFERRED_NO_MEASURED_NEED",
+      "deliverable": "DEV-only learned retrieval/native optimization if measured benefit exists"
+    }
   ],
   "next_scope_candidates": [
     "experiments/architecture_trials/v3/runners/bakeoff_runner.py",
@@ -22,6 +104,23 @@
     "experiments/architecture_trials/v3/r1_adapter/adapter.py",
     "experiments/architecture_trials/v3/tests/"
   ],
-  "next_acceptance": ["Reject missing targets, zero tasks and wrong graph identity", "Remove evaluator target hints from retrieval queries", "No graph-arm silent fallback", "All returned spans and full serialized budget accounting at each budget", "Exact source/path scoring and reproducible DEV rankings", "No architecture selection before independent review"],
-  "known_later_blockers": ["Existing R2 adversarial invalidation test fails", "No verified calibrated coding model yet", "Composer absent on PATH", "Docker engine unavailable", "No sealed independent locked dataset", "No native IDE or live token savings measured"]
+  "next_acceptance": [
+    "Reject missing targets, zero tasks and wrong graph identity",
+    "Remove evaluator target hints from retrieval queries",
+    "No graph-arm silent fallback",
+    "All returned spans and full serialized budget accounting at each budget",
+    "Exact source/path scoring and reproducible DEV rankings",
+    "No architecture selection before independent review"
+  ],
+  "known_later_blockers": [
+    "No independently qualified historical-change task corpus/frozen protocol",
+    "No real DEV model/controller task executed",
+    "Current raw extractor graph needs explicit verified canonical normalization",
+    "Incremental index, bounded typed hybrid traversal and validation frontier incomplete",
+    "Headroom audit/integration/comparison not implemented; feature remains off",
+    "Composer absent; dependency-heavy target toolchain adapter incomplete",
+    "No locked trial or native IDE usage/credit savings measured",
+    "Development package has no independent release acceptance"
+  ],
+  "coverage_detail": "IMPLEMENTATION_STATUS.md"
 }

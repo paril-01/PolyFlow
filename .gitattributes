@@ -1,3 +1,4 @@
 # Preserve audit receipts and their SHA-256 identities across checkouts.
 experiments/runs/pf_rp_01_20261126T014922/** -text
 experiments/runs/pf_rp_ci_20261126/** -text
+experiments/runs/pf_rp_impl_20261126/** -text

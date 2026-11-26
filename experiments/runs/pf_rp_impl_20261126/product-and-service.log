@@ -1,0 +1,108 @@
+....................s.....Traceback (most recent call last):
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\utilities\func_metadata.py", line 322, in func_metadata
+    sig = inspect.signature(func, eval_str=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3327, in signature
+    return Signature.from_callable(obj, follow_wrapped=follow_wrapped,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3071, in from_callable
+    return _signature_from_callable(obj, sigcls=cls,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 2559, in _signature_from_callable
+    return _signature_from_function(sigcls, obj,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 2395, in _signature_from_function
+    annotations = get_annotations(func, globals=globals, locals=locals, eval_str=eval_str)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 285, in get_annotations
+    value if not isinstance(value, str) else eval(value, globals, locals)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 1, in <module>
+NameError: name 'CallToolResult' is not defined
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\rcir\src\rcir\service\cli.py", line 61, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\rcir\src\rcir\service\cli.py", line 40, in main
+    serve(service)
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\rcir\src\rcir\service\mcp_server.py", line 76, in serve
+    create_server(service).run(transport="stdio")
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\rcir\src\rcir\service\mcp_server.py", line 48, in create_server
+    @server.tool()
+     ^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\server.py", line 725, in decorator
+    self.add_tool(
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\server.py", line 647, in add_tool
+    self._tool_manager.add_tool(
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\tools\tool_manager.py", line 51, in add_tool
+    tool = Tool.from_function(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\tools\base.py", line 102, in from_function
+    func_arg_metadata = func_metadata(
+                        ^^^^^^^^^^^^^^
+  File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\server\mcpserver\utilities\func_metadata.py", line 326, in func_metadata
+    raise InvalidSignature(f"Unable to evaluate type annotations for callable {func.__name__!r}") from e
+mcp.server.mcpserver.exceptions.InvalidSignature: Unable to evaluate type annotations for callable 'rcir_context_retrieve'
+F...................
+================================== FAILURES ===================================
+___________________________ test_real_stdio_client ____________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 50, in test_real_stdio_client
+  |     asyncio.run(asyncio.wait_for(flow(), timeout=45))
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ^^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 685, in run_until_complete
+  |     return future.result()
+  |            ^^^^^^^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py", line 520, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 25, in flow
+  |     async with stdio_client(parameters) as (read, write):
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 231, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\stdio.py", line 201, in stdio_client
+  |     async with anyio.create_task_group() as tg:
+  |   File "c:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\_backends\_asyncio.py", line 783, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\stdio.py", line 205, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 26, in flow
+    |     async with ClientSession(read, write) as client:
+    |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\session.py", line 514, in __aexit__
+    |     result = await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "c:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\_backends\_asyncio.py", line 783, in __aexit__
+    |     raise BaseExceptionGroup(
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\tests\test_rcir_service_mcp.py", line 27, in flow
+      |     initialized = await client.initialize()
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+      |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\session.py", line 654, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\client\session.py", line 586, in send_request
+      |     raw = await self._dispatcher.send_raw_request(method, data.get("params"), opts)
+      |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      |   File "C:\Users\Paril Rupani\AppData\Local\Programs\Python\Python312\Lib\site-packages\mcp\shared\jsonrpc_dispatcher.py", line 461, in send_raw_request
+      |     raise MCPError(code=outcome.code, message=outcome.message, data=outcome.data)
+      | mcp.shared.exceptions.MCPError: Connection closed
+      +------------------------------------
+=========================== short test summary info ===========================
+FAILED tests/test_rcir_service_mcp.py::test_real_stdio_client - MCPError(-320...
+1 failed, 44 passed, 1 skipped in 63.95s (0:01:03)
