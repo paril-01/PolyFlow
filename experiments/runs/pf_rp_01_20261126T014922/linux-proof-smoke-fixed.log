@@ -1,0 +1,39 @@
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'D:\flutter_sdk\flutter\bin'
+PLATFORM linux 3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]
+PASS LF_GIT_BLOB proof_001_agent_trials LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_002_coverage_ledger LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_003_feature_closure LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_004_interpreter_events LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_005_paired_token_usage LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_006_retrieved_files LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_007_runtime_receipts LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_008_run_summary LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_009_source_mappings LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_010_source_inventory LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_011_test_design RAW_SHA256_V1
+PASS LF_GIT_BLOB proof_012_AUDIT_FINDINGS RAW_SHA256_V1
+PASS LF_GIT_BLOB proof_013_BLIND_AFTER_FIX_REPORT LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_014_FINAL_SYSTEM_ASSESSMENT RAW_SHA256_V1
+PASS LF_GIT_BLOB proof_015_blind_after_fix LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_016_blind_baseline LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_017_blind_delta LEGACY_CRLF_RECONSTRUCTION_V1
+PASS LF_GIT_BLOB proof_018_feature_closure_validation LEGACY_CRLF_RECONSTRUCTION_V1
+PASS SAME_LENGTH_TAMPER_REJECTED
+PASS TRAVERSAL_REJECTED source_file
+PASS TRAVERSAL_REJECTED rel_path
+PASS SYMLINK_REJECTED source_file
+PASS SYMLINK_REJECTED rel_path
+PASS DELETED_INDEX_CLEARS_STATE
+LINUX_PROOF_SMOKE_COMPLETE: 18 frozen proofs and 6 negative checks

@@ -1,0 +1,2 @@
+3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]
+{'pytest': '9.0.2', 'fastapi': '0.135.1', 'httpx': '0.28.1', 'pydantic': '2.12.5', 'hypothesis': '6.151.9', 'dash': 'NOT_INSTALLED_OR_UNMAPPED', 'pyyaml': 'NOT_INSTALLED_OR_UNMAPPED', 'psutil': 'NOT_INSTALLED_OR_UNMAPPED', 'tiktoken': 'NOT_INSTALLED_OR_UNMAPPED'}

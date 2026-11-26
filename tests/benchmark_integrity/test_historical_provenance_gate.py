@@ -12,6 +12,7 @@ Validates:
 from __future__ import annotations
 
 import json
+import copy
 import shutil
 import subprocess
 import sys
@@ -24,6 +25,22 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 from evaluate_gates import evaluate_gates
 from environment import get_default_environment
+
+
+@pytest.fixture(autouse=True)
+def isolated_gate_results(tmp_path, monkeypatch):
+    """Gate evaluation writes files: never use the frozen results as output."""
+    env = copy.copy(get_default_environment())
+    original_root = env.results_root
+    protected = {name: (original_root / name).read_bytes()
+                 for name in ("gate_evaluation.json", "integrity_evaluation.json")}
+    sandbox_results = tmp_path / "isolated-results"
+    shutil.copytree(original_root, sandbox_results)
+    env.results_root = sandbox_results
+    monkeypatch.setattr(sys.modules[__name__], "get_default_environment", lambda: env)
+    yield
+    for name, original in protected.items():
+        assert (original_root / name).read_bytes() == original, name
 
 
 def test_evaluate_gates_historical_success():

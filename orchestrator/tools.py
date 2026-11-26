@@ -486,6 +486,15 @@ class RepoToolEnvironment:
 
         try:
             cmd_args = shlex.split(command, posix=(os.name != "nt"))
+            if os.name == "nt":
+                # Non-POSIX shlex retains enclosing quotes. subprocess receives
+                # an argv list and applies Windows quoting itself; retaining them
+                # makes python -c execute a string literal instead of its code.
+                cmd_args = [
+                    arg[1:-1] if len(arg) >= 2 and arg[0] == arg[-1]
+                    and arg[0] in ("'", '"') else arg
+                    for arg in cmd_args
+                ]
         except Exception as e:
             return {
                 "exit_code": -1,

@@ -1,0 +1,43 @@
+{
+  "id": "PF-RP-01",
+  "phase": "CI_AND_PROOF_INTEGRITY",
+  "repo": "paril-01/PolyFlow",
+  "repo_sha": "6a586e16007cb1bed123619b4494067f99eccf2f",
+  "branch": "work/pf-rp-01-proof-integrity",
+  "mode": "SCOPED_CODE_AFTER_BASELINE",
+  "authorization": "Owner initially authorized checks followed by local implementation. Owner's subsequent explicit request authorizes implementing all items in the master plan and pushing the changes. This now authorizes scoped commits and publication to the work branch, including CI checkpoints necessary to verify gates. It does not authorize merge, unsupported benchmark claims, paid calls without a budget, or self-approval of failed gates.",
+  "objective": "Reproduce current failures and minimally repair proof resolution, truthful availability, and CI coverage without replacing historical evidence.",
+  "observable_behavior": "Only contained files with verified byte digests are downloadable. Missing or mismatched evidence is unavailable. Health does not assert benchmark validation. Windows and Linux integrity checks remain required.",
+  "owned_paths": [
+    ".gitattributes",
+    "plans/rcir_proof/**",
+    "PolyFlow_RCIR_Master_Implementation_and_Proof_Plan.md",
+    "experiments/runs/pf_rp_ci_20261126/**",
+    "experiments/runs/pf_rp_01_20261126T014922/**",
+    "showcase_app/backend/services/evidence_registry.py",
+    "showcase_app/backend/api/health.py",
+    "showcase_app/backend/schemas.py",
+    "showcase_app/backend/api/proofs.py",
+    "tests/test_backend_proof_server.py",
+    "tests/test_evidence_registry.py",
+    "tests/benchmark_integrity/test_historical_provenance_gate.py",
+    "orchestrator/tools.py",
+    "tests/test_repo_tools.py",
+    "experiments/rcir_v8_5/reports/final_assessment.md",
+    ".github/workflows/ci.yml",
+    ".github/workflows/rcir-artifact-integrity.yml",
+    ".github/workflows/rcir-unit.yml"
+  ],
+  "forbidden_paths": ["polyflow/**", "polyflow-sdk/**", "repos/**", "agents/**", "experiments/**/ground_truth/**", "experiments/**/results/**", "experiments/runs/run_20261009_blind_verified/**", "templates/PHASE_STATE.json"],
+  "acceptance_tests": [
+    "python -m pytest tests/benchmark_integrity/ -q",
+    "python -m pytest tests/test_backend_proof_server.py tests/test_evidence_registry.py -q",
+    "python experiments/rcir_v8_5/scripts/validate_ground_truth_provenance.py",
+    "python experiments/rcir_v8_5/scripts/validate_report_consistency.py",
+    "CI-equivalent core, claims, stages 1-14 and tools tests"
+  ],
+  "negative_controls": ["unknown ID", "missing file", "tampered bytes", "missing digest", "absolute paths", "fallback traversal", "symlink escape", "corrupt index", "missing evidence cannot yield VALIDATED health"],
+  "baseline_scope_refinement": "Execution reproduced a Windows CI command-quoting defect, historical gate tests overwriting tracked result files, and a stale final assessment inconsistent with its stored INVALID gate input. Minimal CI repairs include test output isolation, Windows argv quote removal, and regeneration of only the derived final assessment after preserving its original bytes in this run. Historical result JSON and manifest hashes remain untouched. Paths were explicitly added before editing under the owner's current implementation authorization. No retrieval optimization or live experiment is included.",
+  "rollback": "Revert only this ticket's source diff after review; retain new logs and historical receipts. Never reset or discard pre-existing user changes.",
+  "gate": "INCOMPLETE: local verification is preliminary; all four required workflows and independent review are needed before PF-RP-02."
+}

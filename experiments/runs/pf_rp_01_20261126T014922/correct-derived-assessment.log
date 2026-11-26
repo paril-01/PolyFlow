@@ -1,0 +1,5 @@
+================================================================================
+RCIR v8.5 — Generating Reports in C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\runs\pf_rp_01_20261126T014922\derived-reports
+================================================================================
+Generated 14 reports in C:\Users\Paril Rupani\OneDrive - Shri Vile Parle Kelavani Mandal\Desktop\project\PolyFlow\experiments\runs\pf_rp_01_20261126T014922\derived-reports
+{"action": "SUPERSEDE_STALE_DERIVED_REPORT", "old_sha256": "002419ec15cb788bb40715c673e3d5ea94a51994805ec3397d260031174057e7", "new_sha256": "25a076fa0f9b2fa5a8c3b7e5921febe1c644d40b6d1c0ef2032e372448c50576", "old_bytes_preserved_at": "experiments\\runs\\pf_rp_01_20261126T014922\\superseded-final_assessment.md", "source_gate_status": "HISTORICAL_REPORTED_INVALID", "fresh_benchmark_run": false, "raw_results_unchanged": true}

@@ -1,0 +1,12 @@
+usage: run_final_benchmark.py [-h] [--mode {validate-reports,run-live}]
+
+PolyFlow Report Validation and Artifact Verification Tool. Validates test
+suites and exports from raw run receipts. NOTE: To execute live paired model
+trials, use scripts/run_benchmark.py.
+
+options:
+  -h, --help            show this help message and exit
+  --mode {validate-reports,run-live}
+                        Execution mode: 'validate-reports' verifies test
+                        suites and exports; 'run-live' dispatches to
+                        scripts/run_benchmark.py for live agent trials.

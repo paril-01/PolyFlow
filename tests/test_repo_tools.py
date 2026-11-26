@@ -107,6 +107,17 @@ class TestRepoTools(unittest.TestCase):
         self.assertEqual(res["exit_code"], 0)
         self.assertIn("Hello from Sandbox", res["stdout"])
 
+    def test_run_command_quoted_interpreter_and_argument(self):
+        command = f'"{sys.executable}" -c "print(12345)"'
+        res = self.env.run_command(command)
+        self.assertEqual(res["exit_code"], 0, res["stderr"])
+        self.assertEqual(res["stdout"].strip(), "12345")
+
+    def test_run_command_still_rejects_chaining(self):
+        res = self.env.run_command('python -c "print(12345)" && echo forbidden')
+        self.assertEqual(res["status"], "TOOL_DENIED")
+        self.assertEqual(res["stdout"], "")
+
 
 if __name__ == "__main__":
     unittest.main()

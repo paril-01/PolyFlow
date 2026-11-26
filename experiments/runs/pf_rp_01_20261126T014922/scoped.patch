@@ -1,0 +1,610 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 0e4fb74..1377ed7 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -10,10 +10,16 @@ on:
+ jobs:
+   python-tests:
+     name: Python Automated Validation Suite
+-    runs-on: ubuntu-latest
++    runs-on: ${{ matrix.os }}
++    strategy:
++      fail-fast: false
++      matrix:
++        os: [ubuntu-latest, windows-latest]
+     steps:
+       - name: Checkout Code
+         uses: actions/checkout@v4
++        with:
++          submodules: true
+ 
+       - name: Set up Python 3.12
+         uses: actions/setup-python@v5
+@@ -39,7 +45,11 @@ jobs:
+ 
+       - name: Run Backend Proof Server Tests
+         run: |
+-          pytest tests/test_backend_proof_server.py -v
++          python -m pytest tests/test_backend_proof_server.py tests/test_evidence_registry.py -v
++
++      - name: Run Repository Tool Command Tests
++        run: |
++          python -m pytest tests/test_repo_tools.py tests/test_agent_loop.py -v
+ 
+       - name: Run Benchmark Integrity & Anti-Fabrication Suite
+         run: |
+diff --git a/.github/workflows/rcir-artifact-integrity.yml b/.github/workflows/rcir-artifact-integrity.yml
+index 32a4b32..e3ff7dd 100644
+--- a/.github/workflows/rcir-artifact-integrity.yml
++++ b/.github/workflows/rcir-artifact-integrity.yml
+@@ -9,7 +9,11 @@ on:
+ 
+ jobs:
+   validate-integrity:
+-    runs-on: ubuntu-latest
++    runs-on: ${{ matrix.os }}
++    strategy:
++      fail-fast: false
++      matrix:
++        os: [ubuntu-latest, windows-latest]
+ 
+     steps:
+     - uses: actions/checkout@v4
+diff --git a/experiments/rcir_v8_5/reports/final_assessment.md b/experiments/rcir_v8_5/reports/final_assessment.md
+index 7d4062a..52c81ea 100644
+--- a/experiments/rcir_v8_5/reports/final_assessment.md
++++ b/experiments/rcir_v8_5/reports/final_assessment.md
+@@ -1,13 +1,13 @@
+ # RCIR v8.5 — Formal Architecture Decision & Final Assessment
+ 
+ ## Formal Gate Decision
+-- **Run Validity**: `VALID`
+-- **Architecture Decision**: `OPTION_B_ACCEPTED`
++- **Run Validity**: `INVALID`
++- **Architecture Decision**: `NOT_EVALUATED`
+ - **Contract Feasibility**: `VALID_CONTRACT`
+-- **Integrity Gate**: **PASSED**
++- **Integrity Gate**: **FAILED**
+ 
+ ## Decision Summary
+-Option B accepted: Substantial architectural progress demonstrated on real Nextcloud Server TEST split (Macro Recall 91.0%, Worst Task 75.0%, Determinism: True, Type Flow 100.0% cov / 100.0% prec, 0 budget violations, Current dependency_mrr = 0.6167 vs Baseline = 0.4728 => Relative improvement = 30.44% (required >= 5.0%)).
++Benchmark integrity gate failed with 10 violation(s). Run is invalid.
+ 
+ ## Primary Gate Compliance
+ - **Impact Gate**: **PASSED** (Macro Recall: 91.0%, Worst Task: 75.0%, Silent Misses: 2)
+diff --git a/orchestrator/tools.py b/orchestrator/tools.py
+index 069c4f4..6cdb059 100644
+--- a/orchestrator/tools.py
++++ b/orchestrator/tools.py
+@@ -486,6 +486,15 @@ class RepoToolEnvironment:
+ 
+         try:
+             cmd_args = shlex.split(command, posix=(os.name != "nt"))
++            if os.name == "nt":
++                # Non-POSIX shlex retains enclosing quotes. subprocess receives
++                # an argv list and applies Windows quoting itself; retaining them
++                # makes python -c execute a string literal instead of its code.
++                cmd_args = [
++                    arg[1:-1] if len(arg) >= 2 and arg[0] == arg[-1]
++                    and arg[0] in ("'", '"') else arg
++                    for arg in cmd_args
++                ]
+         except Exception as e:
+             return {
+                 "exit_code": -1,
+diff --git a/showcase_app/backend/api/health.py b/showcase_app/backend/api/health.py
+index 87a7f7b..0d0f32a 100644
+--- a/showcase_app/backend/api/health.py
++++ b/showcase_app/backend/api/health.py
+@@ -16,7 +16,7 @@ def get_health():
+         service="PolyFlow Evidence & Showcase Server",
+         version="1.0.0",
+         process_liveness="UP",
+-        evidence_status="VALIDATED",
++        evidence_status="NOT_EVALUATED_BY_HEALTH",
+         benchmarks_gate="NOT_EVALUATED_BY_HEALTH",
+         timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+     )
+diff --git a/showcase_app/backend/api/proofs.py b/showcase_app/backend/api/proofs.py
+index 690146f..7fc8555 100644
+--- a/showcase_app/backend/api/proofs.py
++++ b/showcase_app/backend/api/proofs.py
+@@ -5,6 +5,7 @@ Enforces Rule 0: Allow-listed proof registry, SHA-256 integrity, path-traversal
+ """
+ 
+ from pathlib import Path
++from urllib.parse import quote
+ from fastapi import APIRouter, HTTPException, Response
+ from fastapi.responses import FileResponse, PlainTextResponse
+ from showcase_app.backend.services.evidence_registry import evidence_registry
+@@ -122,24 +123,24 @@ def list_proofs():
+ 
+ @router.get("/proofs/{proof_id}")
+ def get_proof_content(proof_id: str):
+-    resolved = evidence_registry.resolve_proof_file(proof_id)
++    resolved = evidence_registry.read_proof(proof_id)
+     if not resolved:
+         raise HTTPException(status_code=404, detail="Proof not found or integrity check failed")
+     
+-    file_path, proof_meta = resolved
++    content, proof_meta, _ = resolved
+     mime = proof_meta.get("mime_type", "text/plain")
+-    return FileResponse(path=str(file_path), media_type=mime)
++    return Response(content=content, media_type=mime)
+ 
+ 
+ @router.get("/proofs/{proof_id}/download")
+ def download_proof(proof_id: str):
+-    resolved = evidence_registry.resolve_proof_file(proof_id)
++    resolved = evidence_registry.read_proof(proof_id)
+     if not resolved:
+         raise HTTPException(status_code=404, detail="Proof not found or integrity check failed")
+ 
+-    file_path, proof_meta = resolved
+-    return FileResponse(
+-        path=str(file_path),
++    content, proof_meta, filename = resolved
++    return Response(
++        content=content,
+         media_type=proof_meta.get("mime_type", "application/octet-stream"),
+-        filename=file_path.name,
++        headers={"Content-Disposition": "attachment; filename*=UTF-8''" + quote(filename, safe="")},
+     )
+diff --git a/showcase_app/backend/schemas.py b/showcase_app/backend/schemas.py
+index 21a253e..d30fa41 100644
+--- a/showcase_app/backend/schemas.py
++++ b/showcase_app/backend/schemas.py
+@@ -13,7 +13,7 @@ class HealthResponse(BaseModel):
+     service: str = "PolyFlow Evidence & Showcase Server"
+     version: str = "1.0.0"
+     process_liveness: str = "UP"
+-    evidence_status: str = "VALIDATED"
++    evidence_status: str = "NOT_EVALUATED_BY_HEALTH"
+     benchmarks_gate: str = "NOT_EVALUATED_BY_HEALTH"
+     timestamp: str
+ 
+diff --git a/showcase_app/backend/services/evidence_registry.py b/showcase_app/backend/services/evidence_registry.py
+index 30dabbe..7ac15b1 100644
+--- a/showcase_app/backend/services/evidence_registry.py
++++ b/showcase_app/backend/services/evidence_registry.py
+@@ -9,15 +9,15 @@ from __future__ import annotations
+ 
+ import hashlib
+ import json
+-from pathlib import Path
++from pathlib import Path, PurePosixPath, PureWindowsPath
+ from typing import Any, Dict, List, Optional
+ 
+ REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+ 
+ 
+ class EvidenceRegistry:
+-    def __init__(self):
+-        self.repo_root = REPO_ROOT
++    def __init__(self, repo_root: Optional[Path] = None):
++        self.repo_root = (repo_root or REPO_ROOT).resolve()
+         self.run_id = "run_20261009_blind_verified"
+         self.proof_index_file = self.repo_root / "experiments" / "runs" / self.run_id / "proof_index.json"
+         if not self.proof_index_file.exists():
+@@ -27,53 +27,123 @@ class EvidenceRegistry:
+         self.reload_proofs()
+ 
+     def reload_proofs(self) -> None:
+-        if self.proof_index_file.exists():
+-            try:
+-                data = json.loads(self.proof_index_file.read_text(encoding="utf-8"))
+-                self.proofs_by_id = {p["proof_id"]: p for p in data.get("proofs", [])}
+-            except Exception:
+-                self.proofs_by_id = {}
++        # Never retain previously loaded evidence after index deletion or corruption.
++        self.proofs_by_id = {}
++        try:
++            data = json.loads(self.proof_index_file.read_text(encoding="utf-8"))
++            proofs = data["proofs"]
++            if data.get("run_id") != self.run_id or not isinstance(proofs, list):
++                return
++            loaded = {}
++            for proof in proofs:
++                if not isinstance(proof, dict):
++                    return
++                proof_id = proof.get("proof_id")
++                if not isinstance(proof_id, str) or not proof_id or proof_id in loaded:
++                    return
++                loaded[proof_id] = proof
++            self.proofs_by_id = loaded
++        except (OSError, ValueError, KeyError, TypeError):
++            return
+ 
+     def get_all_proofs(self) -> List[Dict[str, Any]]:
+         self.reload_proofs()
+-        return list(self.proofs_by_id.values())
++        listed = []
++        for proof in self.proofs_by_id.values():
++            verified = self._read_verified(proof)
++            if verified is None:
++                listed.append({**proof, "availability_status": "UNAVAILABLE",
++                               "availability_reason": "MISSING_OR_INVALID_EVIDENCE",
++                               "validity_status": "UNAVAILABLE"})
++            else:
++                listed.append(verified[2])
++        return listed
+ 
+-    def resolve_proof_file(self, proof_id: str) -> Optional[tuple[Path, Dict[str, Any]]]:
+-        self.reload_proofs()
+-        proof = self.proofs_by_id.get(proof_id)
+-        if not proof:
++    def _contained_path(self, base: Path, value: Any) -> Optional[Path]:
++        if not isinstance(value, str) or not value or "\x00" in value or ":" in value:
+             return None
+-
+-        # Guard against path traversal in source_file or rel_path
+-        rel_path = proof.get("source_file", "")
+-        if ".." in rel_path or rel_path.startswith("/") or rel_path.startswith("\\"):
++        normalized = value.replace("\\", "/")
++        if (PurePosixPath(normalized).is_absolute()
++                or PureWindowsPath(value).anchor
++                or any(part in ("", ".", "..") for part in normalized.split("/"))):
+             return None
+-
+-        file_path = (self.repo_root / rel_path).resolve()
+-        # Verify file is strictly within repo_root
++        candidate = base / normalized
+         try:
+-            file_path.relative_to(self.repo_root)
+-        except ValueError:
++            candidate.resolve().relative_to(base.resolve())
++            candidate.resolve().relative_to(self.repo_root)
++            # Proofs are ordinary files; symlink aliases are not evidence authority.
++            for component in (candidate, *candidate.parents):
++                if component == self.repo_root:
++                    break
++                if component.is_symlink():
++                    return None
++        except (OSError, ValueError, RuntimeError):
+             return None
++        return candidate
+ 
+-        if not file_path.exists() or not file_path.is_file():
+-            # Try within run directory
+-            run_rel = proof.get("rel_path", "")
+-            alt_path = (self.repo_root / "experiments" / "runs" / self.run_id / run_rel).resolve()
+-            if alt_path.exists() and alt_path.is_file():
+-                file_path = alt_path
+-            else:
++    def _read_verified(self, proof: Dict[str, Any]) -> Optional[tuple[Path, bytes, Dict[str, Any]]]:
++        expected_hash = proof.get("sha256")
++        if (not isinstance(expected_hash, str) or len(expected_hash) != 64
++                or any(char not in "0123456789abcdef" for char in expected_hash)):
++            return None
++        primary = self._contained_path(self.repo_root, proof.get("source_file"))
++        run_root = self.repo_root / "experiments" / "runs" / self.run_id
++        fallback = self._contained_path(run_root, proof.get("rel_path"))
++        # Validate BOTH paths, including fallback, before opening either file.
++        if primary is None or fallback is None:
++            return None
++        file_path = primary if primary.is_file() else fallback
++        try:
++            if not file_path.is_file():
++                return None
++            content = file_path.read_bytes()
++        except OSError:
++            return None
++        raw_hash = hashlib.sha256(content).hexdigest()
++        policy = "RAW_SHA256_V1"
++        if raw_hash != expected_hash:
++            # The frozen 20261009 index recorded CRLF checkout bytes. Reconstruct
++            # exactly those bytes from UTF-8 LF text, never replace its digest or
++            # claim a canonicalized file's raw bytes matched the historical hash.
++            if b"\x00" in content or b"\r" in content:
++                return None
++            try:
++                content.decode("utf-8", errors="strict")
++            except UnicodeDecodeError:
++                return None
++            content = content.replace(b"\n", b"\r\n")
++            if hashlib.sha256(content).hexdigest() != expected_hash:
+                 return None
++            policy = "LEGACY_CRLF_RECONSTRUCTION_V1"
++        metadata = {**proof, "availability_status": "AVAILABLE",
++                    "raw_sha256": raw_hash, "delivery_hash_policy": policy}
++        return file_path, content, metadata
++
++    def read_proof(self, proof_id: str) -> Optional[tuple[bytes, Dict[str, Any], str]]:
++        """Return the verified bytes themselves so HTTP never reopens the file."""
++        self.reload_proofs()
++        proof = self.proofs_by_id.get(proof_id)
++        verified = self._read_verified(proof) if proof else None
++        if verified is None:
++            return None
++        path, content, metadata = verified
++        return content, metadata, path.name
++
++    def resolve_proof_file(self, proof_id: str) -> Optional[tuple[Path, Dict[str, Any]]]:
++        """Compatibility lookup; use read_proof for hash-verified delivery bytes.
+ 
+-        # Verify hash integrity
+-        content = file_path.read_bytes()
+-        current_hash = hashlib.sha256(content).hexdigest()
+-        expected_hash = proof.get("sha256", "")
+-        if expected_hash and current_hash != expected_hash:
+-            # File was tampered with or modified
++        For legacy LF checkouts, metadata explicitly distinguishes raw_sha256
++        from the recorded digest of the reconstructed CRLF delivery.
++        """
++        self.reload_proofs()
++        proof = self.proofs_by_id.get(proof_id)
++        if not proof:
+             return None
+ 
+-        return file_path, proof
++        verified = self._read_verified(proof)
++        if verified is None:
++            return None
++        return verified[0], verified[2]
+ 
+ 
+ evidence_registry = EvidenceRegistry()
+diff --git a/tests/benchmark_integrity/test_historical_provenance_gate.py b/tests/benchmark_integrity/test_historical_provenance_gate.py
+index 7cc74d0..35a3592 100644
+--- a/tests/benchmark_integrity/test_historical_provenance_gate.py
++++ b/tests/benchmark_integrity/test_historical_provenance_gate.py
+@@ -12,6 +12,7 @@ Validates:
+ from __future__ import annotations
+ 
+ import json
++import copy
+ import shutil
+ import subprocess
+ import sys
+@@ -26,6 +27,22 @@ from evaluate_gates import evaluate_gates
+ from environment import get_default_environment
+ 
+ 
++@pytest.fixture(autouse=True)
++def isolated_gate_results(tmp_path, monkeypatch):
++    """Gate evaluation writes files: never use the frozen results as output."""
++    env = copy.copy(get_default_environment())
++    original_root = env.results_root
++    protected = {name: (original_root / name).read_bytes()
++                 for name in ("gate_evaluation.json", "integrity_evaluation.json")}
++    sandbox_results = tmp_path / "isolated-results"
++    shutil.copytree(original_root, sandbox_results)
++    env.results_root = sandbox_results
++    monkeypatch.setattr(sys.modules[__name__], "get_default_environment", lambda: env)
++    yield
++    for name, original in protected.items():
++        assert (original_root / name).read_bytes() == original, name
++
++
+ def test_evaluate_gates_historical_success():
+     """Verify that evaluate_gates with allow_historical=True and allow_development_dirty=True succeeds on valid tree."""
+     env = get_default_environment()
+diff --git a/tests/test_backend_proof_server.py b/tests/test_backend_proof_server.py
+index fd801dd..d5fe09f 100644
+--- a/tests/test_backend_proof_server.py
++++ b/tests/test_backend_proof_server.py
+@@ -2,7 +2,7 @@
+ tests/test_backend_proof_server.py — Automated verification for FastAPI Backend & Proof Server.
+ 
+ Validates:
+-1. Health endpoint returns 200 with VALIDATED evidence status.
++1. Health endpoint reports liveness without claiming evidence validation.
+ 2. Feature service loads real Sales Invoice 12-to-1 mappings.
+ 3. Live interpreter executes real PolyCellRuntime in normal and controlled failure modes.
+ 4. Security: Proof resolver strictly denies path traversal (../, absolute paths, missing files).
+@@ -32,7 +32,7 @@ def test_health_endpoint(client):
+     assert res.status_code == 200
+     data = res.json()
+     assert data["status"] == "healthy"
+-    assert data["evidence_status"] == "VALIDATED"
++    assert data["evidence_status"] == "NOT_EVALUATED_BY_HEALTH"
+ 
+ 
+ def test_features_native_vs_poly(client):
+diff --git a/tests/test_repo_tools.py b/tests/test_repo_tools.py
+index 1ce576b..baa6589 100644
+--- a/tests/test_repo_tools.py
++++ b/tests/test_repo_tools.py
+@@ -107,6 +107,17 @@ class TestRepoTools(unittest.TestCase):
+         self.assertEqual(res["exit_code"], 0)
+         self.assertIn("Hello from Sandbox", res["stdout"])
+ 
++    def test_run_command_quoted_interpreter_and_argument(self):
++        command = f'"{sys.executable}" -c "print(12345)"'
++        res = self.env.run_command(command)
++        self.assertEqual(res["exit_code"], 0, res["stderr"])
++        self.assertEqual(res["stdout"].strip(), "12345")
++
++    def test_run_command_still_rejects_chaining(self):
++        res = self.env.run_command('python -c "print(12345)" && echo forbidden')
++        self.assertEqual(res["status"], "TOOL_DENIED")
++        self.assertEqual(res["stdout"], "")
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_evidence_registry.py b/tests/test_evidence_registry.py
+new file mode 100644
+index 0000000..c664266
+--- /dev/null
++++ b/tests/test_evidence_registry.py
+@@ -0,0 +1,179 @@
++"""Synthetic adversarial fixtures for proof integrity, not benchmark evidence."""
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++
++import pytest
++
++from showcase_app.backend.services.evidence_registry import EvidenceRegistry
++
++
++@pytest.fixture
++def registry(tmp_path):
++    run = tmp_path / "experiments/runs/run_20261009_blind_verified"
++    run.mkdir(parents=True)
++    registry = EvidenceRegistry(tmp_path)
++    registry.proof_index_file = run / "proof_index.json"
++    return registry
++
++
++def publish(registry, content=b"proof\n", expected=None, **updates):
++    path = registry.proof_index_file.parent / "proof.txt"
++    path.write_bytes(content)
++    proof = dict(proof_id="sample", source_file=path.relative_to(registry.repo_root).as_posix(),
++                 rel_path="proof.txt", sha256=expected or hashlib.sha256(content).hexdigest(),
++                 mime_type="text/plain", validity_status="VALIDATED")
++    proof.update(updates)
++    registry.proof_index_file.write_text(json.dumps(dict(run_id=registry.run_id, proofs=[proof])), encoding="utf-8")
++    return path, proof
++
++
++@pytest.mark.parametrize("content", [b"proof\n", b"proof\r\n", "π 雪\n".encode(), b"\x00\xff\n\r\n"])
++def test_raw_bytes_and_digest_are_preserved(registry, content):
++    publish(registry, content)
++    served, metadata, name = registry.read_proof("sample")
++    assert served == content
++    assert hashlib.sha256(served).hexdigest() == metadata["sha256"]
++    assert metadata["delivery_hash_policy"] == "RAW_SHA256_V1"
++    assert name == "proof.txt"
++
++
++def test_legacy_lf_checkout_serves_exact_recorded_crlf_bytes(registry):
++    disk = "π 雪\nline two\n".encode()
++    historical = disk.replace(b"\n", b"\r\n")
++    path, _ = publish(registry, disk, expected=hashlib.sha256(historical).hexdigest())
++    served, metadata, _ = registry.read_proof("sample")
++    assert served == historical
++    assert metadata["delivery_hash_policy"] == "LEGACY_CRLF_RECONSTRUCTION_V1"
++    assert metadata["raw_sha256"] == hashlib.sha256(disk).hexdigest()
++    assert path.read_bytes() == disk  # No rewrite of source evidence.
++
++
++@pytest.mark.parametrize("content", [b"\x00proof\n", b"\xffproof\n", b"mixed\r\nlines\n"])
++def test_non_utf8_binary_and_mixed_endings_are_not_reconstructed(registry, content):
++    publish(registry, content, expected=hashlib.sha256(content.replace(b"\n", b"\r\n")).hexdigest())
++    assert registry.read_proof("sample") is None
++
++
++def test_same_length_tampering_is_unavailable(registry):
++    path, _ = publish(registry, b"original\n")
++    path.write_bytes(b"tampered\n")
++    assert registry.read_proof("sample") is None
++    listed = registry.get_all_proofs()[0]
++    assert listed["availability_status"] == "UNAVAILABLE"
++    assert listed["validity_status"] == "UNAVAILABLE"
++
++
++@pytest.mark.parametrize("digest", [None, "", "not-a-hash", "0" * 64])
++def test_missing_invalid_or_wrong_hash_never_served(registry, digest):
++    publish(registry, sha256=digest)
++    assert registry.read_proof("sample") is None
++
++
++@pytest.mark.parametrize("field", ["source_file", "rel_path"])
++@pytest.mark.parametrize("unsafe", ["../outside.txt", "nested/../../outside.txt", "/etc/passwd", "C:/secret.txt", "C:secret.txt", "\\\\host\\share\\file", "\\secret.txt", "file.txt:stream", "", "a\x00b"])
++def test_both_primary_and_fallback_paths_are_validated(registry, field, unsafe):
++    publish(registry, **{field: unsafe})
++    assert registry.read_proof("sample") is None
++
++
++def test_fallback_can_only_read_within_run(registry):
++    _, proof = publish(registry, source_file="missing/proof.txt")
++    assert registry.read_proof("sample")[0] == b"proof\n"
++    assert registry.resolve_proof_file("sample")[1]["sha256"] == proof["sha256"]
++
++
++def test_missing_file_and_unknown_id_are_unavailable(registry):
++    path, _ = publish(registry)
++    path.unlink()
++    assert registry.read_proof("sample") is None
++    assert registry.read_proof("unknown") is None
++    assert registry.resolve_proof_file("../../secret") is None
++    assert registry.get_all_proofs()[0]["availability_status"] == "UNAVAILABLE"
++
++
++@pytest.mark.parametrize("replacement", [None, "invalid-json", '{}', '{"proofs": [null]}'])
++def test_index_reload_clears_stale_records(registry, replacement):
++    publish(registry)
++    assert registry.read_proof("sample")
++    if replacement is None:
++        registry.proof_index_file.unlink()
++    else:
++        registry.proof_index_file.write_text(replacement)
++    assert registry.read_proof("sample") is None
++    assert registry.get_all_proofs() == []
++
++
++def test_duplicate_ids_fail_closed(registry):
++    _, proof = publish(registry)
++    registry.proof_index_file.write_text(json.dumps(dict(run_id=registry.run_id, proofs=[proof, proof])))
++    assert registry.get_all_proofs() == []
++
++
++@pytest.mark.parametrize("field", ["source_file", "rel_path"])
++def test_symlink_escape_is_rejected(registry, tmp_path, field):
++    path, _ = publish(registry)
++    outside = tmp_path.parent / (tmp_path.name + "-outside.txt")
++    outside.write_bytes(path.read_bytes())
++    link = registry.proof_index_file.parent / "link.txt"
++    try:
++        try:
++            link.symlink_to(outside)
++        except OSError as exc:
++            pytest.skip(f"Symlinks unavailable on this host: {exc}")
++        value = link.relative_to(registry.repo_root).as_posix() if field == "source_file" else "link.txt"
++        publish(registry, **{field: value})
++        assert registry.read_proof("sample") is None
++    finally:
++        outside.unlink(missing_ok=True)
++
++
++def test_download_uses_verified_bytes_after_disk_changes(registry, monkeypatch):
++    from fastapi.testclient import TestClient
++    from showcase_app.backend.app import app
++    from showcase_app.backend.api import proofs
++
++    path, _ = publish(registry)
++    original_reader = registry.read_proof
++
++    def read_then_change(proof_id):
++        result = original_reader(proof_id)
++        path.write_bytes(b"tampered after verification")
++        return result
++
++    monkeypatch.setattr(registry, "read_proof", read_then_change)
++    monkeypatch.setattr(proofs, "evidence_registry", registry)
++    response = TestClient(app).get("/api/proofs/sample/download")
++    assert response.status_code == 200
++    assert response.content == b"proof\n"
++
++
++def test_health_never_validates_missing_evidence(registry, monkeypatch):
++    from fastapi.testclient import TestClient
++    from showcase_app.backend.app import app
++    from showcase_app.backend.api import proofs
++
++    monkeypatch.setattr(proofs, "evidence_registry", registry)
++    assert TestClient(app).get("/api/health").json()["evidence_status"] == "NOT_EVALUATED_BY_HEALTH"
++
++
++def test_every_frozen_proof_from_lf_git_blobs(registry):
++    """Reproduce LF checkout bytes on Windows without modifying frozen evidence."""
++    root = Path(__file__).resolve().parents[1]
++    index_path = "experiments/runs/run_20261009_blind_verified/proof_index.json"
++    index = json.loads(subprocess.run(["git", "show", f"HEAD:{index_path}"], cwd=root,
++                                     capture_output=True, check=True).stdout)
++    registry.proof_index_file.write_text(json.dumps(index))
++    for proof in index["proofs"]:
++        blob = subprocess.run(["git", "show", f"HEAD:{proof['source_file']}"],
++                              cwd=root, capture_output=True, check=True).stdout
++        target = registry.repo_root / proof["source_file"]
++        target.parent.mkdir(parents=True, exist_ok=True)
++        target.write_bytes(blob)
++        result = registry.read_proof(proof["proof_id"])
++        assert result is not None, proof["proof_id"]
++        content, metadata, _ = result
++        assert hashlib.sha256(content).hexdigest() == proof["sha256"]
++        assert metadata["sha256"] == proof["sha256"]
++        assert target.read_bytes() == blob

@@ -13,7 +13,7 @@ class HealthResponse(BaseModel):
     service: str = "PolyFlow Evidence & Showcase Server"
     version: str = "1.0.0"
     process_liveness: str = "UP"
-    evidence_status: str = "VALIDATED"
+    evidence_status: str = "NOT_EVALUATED_BY_HEALTH"
     benchmarks_gate: str = "NOT_EVALUATED_BY_HEALTH"
     timestamp: str
 

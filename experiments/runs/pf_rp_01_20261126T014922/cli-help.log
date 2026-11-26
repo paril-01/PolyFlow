@@ -1,0 +1,26 @@
+usage: run_benchmark.py [-h] [--target TARGET] [--target-sha TARGET_SHA]
+                        [--mode {dev,test}] [--tasks TASKS] [--model MODEL]
+                        [--provider PROVIDER] [--turn-budget TURN_BUDGET]
+                        [--replicates REPLICATES] [--run-root RUN_ROOT]
+                        [--dry-run] [--verify-only] [--worktree WORKTREE]
+
+Run live PolyFlow/RCIR benchmark experiments.
+
+options:
+  -h, --help            show this help message and exit
+  --target TARGET       Target repository identifier.
+  --target-sha TARGET_SHA
+                        Pinned target commit SHA.
+  --mode {dev,test}     Experiment mode (dev or test).
+  --tasks TASKS         Path to public tasks manifest JSON.
+  --model MODEL         LLM model name.
+  --provider PROVIDER   LLM provider name.
+  --turn-budget TURN_BUDGET
+                        Max agent turns per trial.
+  --replicates REPLICATES
+                        Replication count per task.
+  --run-root RUN_ROOT   Output directory for immutable runs.
+  --dry-run             Validate setup, task oracles, and provider without
+                        executing agent.
+  --verify-only         Run multi-tier evaluation on an existing worktree.
+  --worktree WORKTREE   Worktree path for --verify-only mode.

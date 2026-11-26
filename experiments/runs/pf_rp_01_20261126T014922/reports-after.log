@@ -1,0 +1,26 @@
+================================================================================
+RCIR v8.5 — Report Byte/Hash Invariance Validator
+================================================================================
+================================================================================
+RCIR v8.5 — Generating Reports in C:\Users\Paril Rupani\AppData\Local\Temp\vscode-agent-codex-sandbox-jku3r6\tmpqomty41u
+================================================================================
+Generated 14 reports in C:\Users\Paril Rupani\AppData\Local\Temp\vscode-agent-codex-sandbox-jku3r6\tmpqomty41u
+
+Checking SHA-256 byte consistency for 15 reports:
+  [PASSED] agent_validation_report.md (fe15f478f55c...)
+  [PASSED] canonical_graph_report.md (3f21e5ed3cb3...)
+  [PASSED] context_planner_report.md (768330981aa1...)
+  [PASSED] failure_catalog.md (cbd4829d449d...)
+  [PASSED] final_assessment.md (25a076fa0f9b...)
+  [PASSED] generalization_readiness.md (3d8b5b952195...)
+  [PASSED] ground_truth_report.md (38ef754a8010...)
+  [PASSED] impact_plane_report.md (e31ef78ecb07...)
+  [PASSED] integrity_report.md (143354cea36b...)
+  [PASSED] performance_report.md (f874f513d803...)
+  [PASSED] ranking_report.md (22077eecac68...)
+  [PASSED] reproduction.md (86d9d7e311c0...)
+  [PASSED] type_flow_report.md (dd49e51c2a40...)
+  [PASSED] typed_edge_report.md (42bd52f54ac6...)
+  [STATIC] v8_4_reassessment.md (historical audit baseline)
+
+Report Consistency Result: PASSED (100% Byte Invariant)

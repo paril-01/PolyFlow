@@ -1,0 +1,33 @@
+........................F...                                             [100%]
+================================== FAILURES ===================================
+__________________ test_r2_transitive_invalidation_on_change __________________
+
+sample_repo = WindowsPath('C:/Users/Paril Rupani/AppData/Local/Temp/vscode-agent-codex-sandbox-jku3r6/pytest-of-Paril Rupani/pytest-2/test_r2_transitive_invalidatio0/repo')
+
+    def test_r2_transitive_invalidation_on_change(sample_repo: Path):
+        """Verify that editing BaseController invalidates UserController transitively."""
+        store = VestLiteEvidenceStore(sample_repo)
+        store.scan_repository()
+    
+        # Initial state: all facts fresh
+        res_initial = store.retrieve("UserController", max_tokens=2000)
+        assert res_initial["spans_count"] >= 1
+        assert any(item["symbol"] == "UserController" for item in res_initial["evidence_items"])
+    
+        # Simulate modifying BaseController.php
+        invalidated_count = store.invalidate_file("BaseController.php", reason="commit_flip")
+        assert invalidated_count >= 2  # BaseController and its dependent UserController
+    
+        # After invalidation: UserController facts depending on BaseController are STALE and excluded from retrieval
+        res_after = store.retrieve("UserController", max_tokens=2000)
+        # The child class depending on BaseController must be excluded because it's STALE
+        child_items = [it for it in res_after["evidence_items"] if it["file_path"] == "UserController.php"]
+>       assert len(child_items) == 0  # Transitive invalidation excluded stale facts
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 1 == 0
+E        +  where 1 = len([{'end_line': 5, 'entity_uri': 'UserController.php::getUser', 'file_path': 'UserController.php', 'freshness': 'FRESH', ...}])
+
+experiments\architecture_trials\v3\tests\test_adversarial_properties.py:71: AssertionError
+=========================== short test summary info ===========================
+FAILED experiments/architecture_trials/v3/tests/test_adversarial_properties.py::test_r2_transitive_invalidation_on_change
+1 failed, 27 passed in 5.89s

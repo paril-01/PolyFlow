@@ -1,0 +1,179 @@
+{
+  "run_id": "rcir-v8.5.2-2bbf710f61db8971",
+  "manifest_hash": "c433927194b7f413d73e31e4aba06724d280ad54536a46daba3fea84a8449f85",
+  "polyflow_commit": "989249cfbaf003f329d53e93f4b299ad81aaebec",
+  "polyflow_dirty": true,
+  "polyflow_worktree_diff_hash": "08b9e33611f4bb4e857fe96618bc8b680aa2e80320344951846d8e25d9a2df86",
+  "target_repo_commit": "badcommit1234567890abcdef1234567890abcdef",
+  "target_repo_dirty": false,
+  "target_repo_diff_hash": "",
+  "contract_hash": "3acab3058b2a4f83cc06ab5da5c5b145a4fbf95ff33a2a3891357414607cc61e",
+  "dataset_hashes": {
+    "dev": "3cbf592d0f89833398987b8e2d735fe6591757333afa3ad834e0029038e98215",
+    "validation": "23e760823e664205c83f9a96111787826eab0b1e15d0d7464c20aa5de14b2db6",
+    "test": "1353982f387eefb954bcb33dd5b2074b31180c1db063240abe67950ea16cbde8"
+  },
+  "ground_truth_hash": "f17b3c00155ccef829b1bdf447aa0ac1d8da614e20f3ef99f421c5dc321d96b8",
+  "edge_ground_truth_hash": "93650deeee34499836853f34aa6f77f43c28176aaa933e81921da78e5daa548d",
+  "receiver_ground_truth_hash": "83d0440f63833741d63359931557cb6ddf661bdd11d1557aab3ab0b4914c6980",
+  "canonicalization_ground_truth_hash": "d2cd07e5d164fc6078f84c7b621a7f883ad5caaa98d2f90603e1315a4cf82eac",
+  "graph_hash": "d05dfe4cf2f160ebf7f9951fbad47556bb8c06ef5ac870dc5299c2f0b2f1c29d",
+  "config_hashes": {
+    "candidate_config": "d0ef69ae8d04eff1b17b280006e9a904e0e050b557b9cdcb3f27d3dcc8bf5ba3",
+    "ranker_config": "1cd7477fa3d22e383240d59b84ba9ea5e69f837d4ba3b0bdeb4c0e2148608af6",
+    "objective_config": "14e284ef76d9be75c2bb61f2417e5fc7e5615f05cc988082e143194dda6e915e",
+    "context_config": "571494d76da2979a25eab731c79b2f11ce134f76d627741970c8ca5aa7cf2e03",
+    "typeflow_config": "e21f671d87afa3e1a2c967716a114904117858a911c1a1e71247fa2c61be1a26",
+    "retrieval_runner_code": "70735252f4f02d983fdd27c6c192f881aa22ec74170f166d6eed395413982528",
+    "ranker_code": "5ea6fd32092cc17f18c7e1d935a5d46fba04e9cecd44091f82dc85e9f67ff9b2",
+    "adapter_code": "8840427aaf18dba032ca6dbbab552f3f49efdc2f24e15b3e8a101867752e7672",
+    "compiler_code": "3fd5b812df4ae2d7f69f5a35c0a8271dab12740e9edd4eb6d9c8d989c8ae1288",
+    "typeflow_code": "8bb811b040cfa5810d884d877b2adacacdc9a5b59ed3addcf0b1e8b013f39c3e"
+  },
+  "created_at": "2026-10-08T06:25:17Z",
+  "evaluated_at": "2026-11-25T20:25:30Z",
+  "run_validity": "INVALID",
+  "architecture_decision": "NOT_EVALUATED",
+  "decision_summary": "Benchmark integrity gate failed with 10 violation(s). Run is invalid.",
+  "contract_version": "8.5.2",
+  "contract_feasibility": {
+    "status": "VALID_CONTRACT",
+    "theoretical_ceilings": {
+      "precision_at_20_excluding_target": 0.15,
+      "precision_at_50_excluding_target": 0.06
+    },
+    "contract_thresholds": {
+      "precision_at_20_excluding_target_min": null,
+      "precision_at_50_excluding_target_min": null,
+      "blocking_metrics": {
+        "ndcg_at_50_graded_min": 0.2,
+        "dependency_mrr_min": 0.2
+      }
+    },
+    "violations": []
+  },
+  "integrity_gate": {
+    "passed": false,
+    "failures": [
+      "Manifest target_repository_commit mismatch: badcommit1234567890abcdef1234567890abcdef != da57df078d0808a7235a0177bd99d23c010b472e",
+      "Artifact ground_truth_provenance.json: target_repo_commit mismatch",
+      "Artifact canonical_graph_integrity.json: target_repo_commit mismatch",
+      "Artifact canonicalization_evaluation.json: target_repo_commit mismatch",
+      "Artifact edge_evaluation.json: target_repo_commit mismatch",
+      "Artifact type_flow_evaluation.json: target_repo_commit mismatch",
+      "Artifact impact_test.json: target_repo_commit mismatch",
+      "Artifact ranker_test.json: target_repo_commit mismatch",
+      "Artifact context_test.json: target_repo_commit mismatch",
+      "Artifact determinism_evaluation.json: target_repo_commit mismatch"
+    ]
+  },
+  "impact_gate": {
+    "macro_recall": 0.91,
+    "macro_recall_threshold": 0.65,
+    "macro_passed": true,
+    "worst_task_recall": 0.75,
+    "worst_task_floor": 0.3,
+    "worst_task_passed": true,
+    "silent_misses": 2,
+    "max_silent_misses": 10,
+    "silent_misses_passed": true,
+    "passed": true
+  },
+  "ranking_gate": {
+    "p20_excluding_target": 0.1,
+    "p20_passed": true,
+    "p50_excluding_target": 0.04,
+    "p50_passed": true,
+    "ndcg_at_50": 0.5213,
+    "ndcg_min": 0.2,
+    "ndcg_passed": true,
+    "dependency_mrr": 0.6167,
+    "dependency_mrr_min": 0.2,
+    "dependency_mrr_passed": true,
+    "contract_feasible": true,
+    "theoretical_ceilings": {
+      "precision_at_20_excluding_target": 0.15,
+      "precision_at_50_excluding_target": 0.06
+    },
+    "passed": true
+  },
+  "context_gate": {
+    "critical_source_recall_at_4k": 0.8,
+    "critical_source_recall_min": 0.6,
+    "source_recall_passed": true,
+    "budget_violations": 0,
+    "budget_invariant_passed": true,
+    "is_deterministic": true,
+    "determinism_passed": true,
+    "passed": true
+  },
+  "type_flow_gate": {
+    "coverage": 1.0,
+    "coverage_min": 0.6,
+    "coverage_passed": true,
+    "resolved_precision": 1.0,
+    "resolved_precision_min": 0.85,
+    "precision_passed": true,
+    "wrong_exact_rate": 0.0,
+    "wrong_exact_max": 0.05,
+    "wrong_exact_passed": true,
+    "invalid_gt_count": 0,
+    "ground_truth_valid": true,
+    "passed": true
+  },
+  "canonicalization_gate": {
+    "wrong_canonical_rate": 0.0,
+    "wrong_canonical_max": 0.01,
+    "passed": true
+  },
+  "edge_gate": {
+    "status": "ADVISORY_ONLY",
+    "rationale": "Edge precision methodology requires complete prediction adjudication before promoting to formal gate (PHASE 85)."
+  },
+  "agent_gate": {
+    "status": "MEASURED_AGENT_VALIDATION",
+    "live_inference_verified": true,
+    "trials_evidence_verified": false,
+    "simulation_forbidden": true,
+    "rcir_completion_rate": 0.0,
+    "trials_count": 1,
+    "passed": false
+  },
+  "option_b_evaluation": {
+    "evaluable": true,
+    "passed": true,
+    "requirements": {
+      "macro_recall": {
+        "passed": true,
+        "observed": 0.91,
+        "threshold": 0.65
+      },
+      "worst_task_recall": {
+        "passed": true,
+        "observed": 0.75,
+        "threshold": 0.3
+      },
+      "determinism": {
+        "passed": true,
+        "observed": true
+      },
+      "type_flow": {
+        "passed": true,
+        "gate_verdict": true
+      },
+      "canonicalization": {
+        "passed": true,
+        "observed": 0.0
+      },
+      "budget_invariant": {
+        "passed": true,
+        "violations": 0
+      },
+      "ranking_improvement": {
+        "evaluable": true,
+        "passed": true,
+        "details": "Current dependency_mrr = 0.6167 vs Baseline = 0.4728 => Relative improvement = 30.44% (required >= 5.0%)"
+      }
+    }
+  }
+}

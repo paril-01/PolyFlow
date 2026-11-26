@@ -5,6 +5,7 @@ Enforces Rule 0: Allow-listed proof registry, SHA-256 integrity, path-traversal 
 """
 
 from pathlib import Path
+from urllib.parse import quote
 from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import FileResponse, PlainTextResponse
 from showcase_app.backend.services.evidence_registry import evidence_registry
@@ -122,24 +123,24 @@ def list_proofs():
 
 @router.get("/proofs/{proof_id}")
 def get_proof_content(proof_id: str):
-    resolved = evidence_registry.resolve_proof_file(proof_id)
+    resolved = evidence_registry.read_proof(proof_id)
     if not resolved:
         raise HTTPException(status_code=404, detail="Proof not found or integrity check failed")
     
-    file_path, proof_meta = resolved
+    content, proof_meta, _ = resolved
     mime = proof_meta.get("mime_type", "text/plain")
-    return FileResponse(path=str(file_path), media_type=mime)
+    return Response(content=content, media_type=mime)
 
 
 @router.get("/proofs/{proof_id}/download")
 def download_proof(proof_id: str):
-    resolved = evidence_registry.resolve_proof_file(proof_id)
+    resolved = evidence_registry.read_proof(proof_id)
     if not resolved:
         raise HTTPException(status_code=404, detail="Proof not found or integrity check failed")
 
-    file_path, proof_meta = resolved
-    return FileResponse(
-        path=str(file_path),
+    content, proof_meta, filename = resolved
+    return Response(
+        content=content,
         media_type=proof_meta.get("mime_type", "application/octet-stream"),
-        filename=file_path.name,
+        headers={"Content-Disposition": "attachment; filename*=UTF-8''" + quote(filename, safe="")},
     )

@@ -10,10 +10,16 @@ on:
 jobs:
   python-tests:
     name: Python Automated Validation Suite
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -39,7 +45,11 @@ jobs:
 
       - name: Run Backend Proof Server Tests
         run: |
-          pytest tests/test_backend_proof_server.py -v
+          python -m pytest tests/test_backend_proof_server.py tests/test_evidence_registry.py -v
+
+      - name: Run Repository Tool Command Tests
+        run: |
+          python -m pytest tests/test_repo_tools.py tests/test_agent_loop.py -v
 
       - name: Run Benchmark Integrity & Anti-Fabrication Suite
         run: |

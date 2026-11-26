@@ -1,0 +1,415 @@
+﻿{
+    "schema":  "polyflow.local_review_integrity.v1",
+    "created_at":  "2026-11-25T20:40:22.0263866Z",
+    "source_sha":  "6a586e16007cb1bed123619b4494067f99eccf2f",
+    "branch":  "work/pf-rp-01-proof-integrity",
+    "kind":  "LOCAL_PATCH_AND_AUDIT_NOT_BENCHMARK",
+    "integrity_method":  "SHA256_NOT_SIGNATURE",
+    "files":  [
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/backend-baseline.log",
+                      "sha256":  "932bac739c29c261dd9055a56285d459d278b9cf866c82222bafecfec3f37d24",
+                      "bytes":  1698
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/backend-before.log",
+                      "sha256":  "7b5f5bf841e98247df6d644eb9d6a8b3c640fbd844eee0d4894119fbbdd0226b",
+                      "bytes":  1698
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/build_review_packet.py",
+                      "sha256":  "e9df8f614f4d129624804763e23e1925b90cb051d8a7565ed9843b7aca59b356",
+                      "bytes":  7817
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/check.py",
+                      "sha256":  "bc69006aaaf85657d3d35c8bf350a7b9358b8d518b6c41b5d9391f2395ea3614",
+                      "bytes":  2364
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/cli-help.log",
+                      "sha256":  "c8afbac12c62cb82e104511ad7548a7d4e8dd1fe5257971aca9c04805d36f1ae",
+                      "bytes":  1307
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/commands.jsonl",
+                      "sha256":  "9032e4f8014c0473db83d6489a7c38fd2902a0538317b72993a68db433d5a4c2",
+                      "bytes":  19787
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/core-after.log",
+                      "sha256":  "7c41f73a9c3b54db0f0b61cd5593050d8fb236161be61ded5e43147c1957e647",
+                      "bytes":  2214
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/core-baseline.log",
+                      "sha256":  "31078bf6ef50e2f49c3742bc6abd0632812bccb26415633527db5dab696669fd",
+                      "bytes":  1266
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/core-ci-final.log",
+                      "sha256":  "9a8589ccae960330809b33498aaa9bd789a71a8bd5a4936e24e680d1bf4725e5",
+                      "bytes":  101
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/correct-derived-assessment.log",
+                      "sha256":  "477ebb463a0a58e3286704f695b27e1963bc2dfbd037b374452a9319fb40e00e",
+                      "bytes":  951
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/correct_derived_assessment.py",
+                      "sha256":  "fa95b38ae29f8847f925df1f4d9a633ec8096d98519729733994ce98aaa5d972",
+                      "bytes":  1395
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/dependencies.log",
+                      "sha256":  "6acb4dffe6a0b3a8a2e41084deae91c211a8bbde385dd4d6249a73c3d29fdb94",
+                      "bytes":  347
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/environment-baseline.log",
+                      "sha256":  "ffdfbdb547d60f9f689edd075645260a452b712f3378eb8d146710ba6d430737",
+                      "bytes":  793
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/final-cli-help.log",
+                      "sha256":  "092e3dbdeb91daba7e690507f4b9d37d213157889c1b8e106a1e67d239532162",
+                      "bytes":  591
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/final-git-status.log",
+                      "sha256":  "02a0186f9f4a190af517608cd59d974f433373544ff7a12dd67c0ce26c74b92d",
+                      "bytes":  740
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/final-inventory.log",
+                      "sha256":  "0f82917a0f41a00e9d6eaeadbb30382b8f662f618c7e57f82c6e06b47d0b3998",
+                      "bytes":  14979
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/github-ci-40180868436.log",
+                      "sha256":  "4adeaf67c5a22e8dc8fe7c73d440ae20bb0eb6e7e8add24911512bc21dd6b86e",
+                      "bytes":  39711
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/github-job-121131460814.log",
+                      "sha256":  "4790a8e2b8f0f7d2e1659c96aaa238241572238bba4d19cba781afdec82f3d5a",
+                      "bytes":  27422
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/github-job-121131460817.log",
+                      "sha256":  "54c948539fa8a3e19db85dd1e8794d045573eff83b44ca7caa1bcedd162b0e75",
+                      "bytes":  28222
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/github-job-121131460830.log",
+                      "sha256":  "dde823af4bdc3e9de0743fe9f22c4ead52a0a739ea9ad1f7bbcaa30be8a89a26",
+                      "bytes":  24675
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/historical-gates-isolated.log",
+                      "sha256":  "b72b70b66fa6aad005ffe6526ecb1a1935c2877bc527336f61eeb08bcab3f871",
+                      "bytes":  100
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/install-test-deps.log",
+                      "sha256":  "addd42519b9f44fd046e702bfc05c425c759e9fb395380e6fbd4965c8facbc10",
+                      "bytes":  7355
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/integrity-after.log",
+                      "sha256":  "bb845b6ace8861db7ab2cff9a6e7fdb924823a612c059e2b657782952b1f3f74",
+                      "bytes":  113
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/integrity-baseline.log",
+                      "sha256":  "e0b735c433f8fa559fd8b6d68c1114b42c8c6c8a199aa1f9e15cd2daea1e6139",
+                      "bytes":  1782
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/integrity-before.log",
+                      "sha256":  "45d17f8515bf488add6fa23f01c8f874f8eba76375e6039f97ed8b9dfd0b7abf",
+                      "bytes":  1782
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/inventory.log",
+                      "sha256":  "f8067dc6bc7a92811f1d8b42bc11cb399fb19ea569aaa35ae7bcccd9ccd4a332",
+                      "bytes":  14498
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/inventory.py",
+                      "sha256":  "36905031ec2f3411331b2272a29da6786c5095dc31e66a472313cdc467f5bf2b",
+                      "bytes":  3596
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux-object-provenance.log",
+                      "sha256":  "263de21010c36168a29ecaefec2f448c8e532d658d372ec89e5b4b3c48839a2b",
+                      "bytes":  1500
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux-proof-smoke-fixed.log",
+                      "sha256":  "9aac0f37f926e8c7f1f22093e6379ab7a352617debbf9652a0216be2dc3425ce",
+                      "bytes":  2088
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux-proof-smoke.log",
+                      "sha256":  "4fe3de1871794a596860579dc9a30fb0d5c12e103971994d262067f2a02f5f91",
+                      "bytes":  1376
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux-provenance.log",
+                      "sha256":  "d46cfe7e6434789dce030e8960c3bd72f01ceeddcc7b50d6b5027385c5603a16",
+                      "bytes":  474
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux_object_provenance.py",
+                      "sha256":  "2eafa81a7c58ae301458ade662e6e74d8aa7a3c8c6eeaa622b2da1fe7606d49b",
+                      "bytes":  1173
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/linux_proof_smoke.py",
+                      "sha256":  "4dc9db27a24b054a6d23bf0d9af75e1a18b6257b1300544d3301b182f80e3aee",
+                      "bytes":  3007
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/proof-after.log",
+                      "sha256":  "2c21a5b62e41816ac0620dd08e19b8e51b58a3496c3d6f7dca4ff1b15c0029c0",
+                      "bytes":  112
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/proof-final.log",
+                      "sha256":  "e7fe0d9b5a05e853778ab9fcbcbf66ab10aeb72cf7318148d927d6953ff3e5d9",
+                      "bytes":  112
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/provenance-baseline.log",
+                      "sha256":  "e7046b341aeae94dcbeb7f6d9106118e06481e6f3387dbb280ff00c70ef233d4",
+                      "bytes":  733
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/remote-head.log",
+                      "sha256":  "9160e8825445c270e8fdfa2db7c46c1ef0a0f14919b536dfe1d558e1fcf62e50",
+                      "bytes":  57
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/repo-tools-after.log",
+                      "sha256":  "2c62d8486fe152c07147d74250293837633eb28d55ef817d0226a41003230554",
+                      "bytes":  101
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/repo-tools-selected-python.log",
+                      "sha256":  "9186dc75c7ee92b6b53de5efc9af84796d9c606a17b20c518bc37c326c96c0b8",
+                      "bytes":  844
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/reports-after.log",
+                      "sha256":  "b73716f6a92851a213a568896c442026f45ce785f23fa6b05a7fe99ec4e6493e",
+                      "bytes":  1519
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/reports-before.log",
+                      "sha256":  "d7f80cc407389d00e79e4edbcad1958b2fd8059c7b7709ba9794be61b2322bae",
+                      "bytes":  1541
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/restore-test-outputs.log",
+                      "sha256":  "574bfd9375fb8445d04ccb7edfabcd47d9126ebc3fb716bfae069e92117d6842",
+                      "bytes":  434
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/restore_test_outputs.py",
+                      "sha256":  "75eddf151ec180bdde6a258c1e3f313a0d4bbfb7fb8e4d1dc24efcf694a1cb59",
+                      "bytes":  1294
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/review-packet.log",
+                      "sha256":  "16d5a12e38af3cd749166db3d2acf96ab211f4aae192fa04960f5f48bd459d9d",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/scoped.patch",
+                      "sha256":  "258b2ddc9d4e11e4c5f39522b8785930fa7c7ec17ec48106e0dd7feed1d50ecd",
+                      "bytes":  26400
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/stages-baseline.log",
+                      "sha256":  "184dfdf4445c2a795807006f2ed9189f7e3cf2ba448e8049a743c8f4a6e3f7b8",
+                      "bytes":  937
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/stages-final.log",
+                      "sha256":  "d43537532992827809389066a887a79471f79f280882bc2c2ebfb506bed4e374",
+                      "bytes":  193
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/superseded-final_assessment.md",
+                      "sha256":  "002419ec15cb788bb40715c673e3d5ea94a51994805ec3397d260031174057e7",
+                      "bytes":  1086
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/test-generated-gate_evaluation.json",
+                      "sha256":  "3775a4dc9e1016a8de0ad6d33f1e77e1706e3342ac3314189ec585080fc4eac4",
+                      "bytes":  6881
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/test-generated-integrity_evaluation.json",
+                      "sha256":  "906fa94a31f6c1459eb92da761edae780f67b74cb08af25a33a01aae65d8785a",
+                      "bytes":  3327
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/agent_validation_report.md",
+                      "sha256":  "fe15f478f55c7acc0c912041126973ab207af6d8c1c750cf70671a67cc18ff78",
+                      "bytes":  1499
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/canonical_graph_report.md",
+                      "sha256":  "3f21e5ed3cb3134f410c41312a73801c47f6e968adf3701c2e448935f4ff7669",
+                      "bytes":  762
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/context_planner_report.md",
+                      "sha256":  "768330981aa1183c408714f2cb1e7957e8864b771f7533365a7ed057f5999e77",
+                      "bytes":  1009
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/failure_catalog.md",
+                      "sha256":  "cbd4829d449d9597a7332dd89e6fc80098cc33459962da394dd656120eacea6b",
+                      "bytes":  1225
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/final_assessment.md",
+                      "sha256":  "25a076fa0f9b2fa5a8c3b7e5921febe1c644d40b6d1c0ef2032e372448c50576",
+                      "bytes":  829
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/generalization_readiness.md",
+                      "sha256":  "3d8b5b952195096a42135fc94e0e01e35a3f6443e59d5ab76e42a2c3ddafd9a7",
+                      "bytes":  700
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/ground_truth_report.md",
+                      "sha256":  "38ef754a8010c7d3c41e169473c05af10f285bcbe5d3b7f378ec9f56c185d26a",
+                      "bytes":  1162
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/impact_plane_report.md",
+                      "sha256":  "e31ef78ecb0730c4f7e1a0c1d6a76e3c2fa37cf62fb03d165f5d8272926c8c9f",
+                      "bytes":  1156
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/integrity_report.md",
+                      "sha256":  "143354cea36b4427474d27333ea3143bf0c46852ab8239ccb9d1e209a0dcf2a0",
+                      "bytes":  1383
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/performance_report.md",
+                      "sha256":  "f874f513d803219824f8e65ffe56733b7d9eaa939101314871ece1f46ab7c604",
+                      "bytes":  578
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/ranking_report.md",
+                      "sha256":  "22077eecac68ae2200ec6b66e4f679471e02cdeba382ad1d35d80614d0572f12",
+                      "bytes":  1007
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/reproduction.md",
+                      "sha256":  "86d9d7e311c021c29e440833ac20fbfc477a41c34c0850d1b11a45e32444c9be",
+                      "bytes":  2223
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/typed_edge_report.md",
+                      "sha256":  "42bd52f54ac6708f8662f6f68de597968a8abef8e3e915c7a1839653b14c0c22",
+                      "bytes":  835
+                  },
+                  {
+                      "path":  "experiments/runs/pf_rp_01_20261126T014922/derived-reports/type_flow_report.md",
+                      "sha256":  "dd49e51c2a40f3751ae9222e6088fe544265d3b355824ce0b7fd9263fc3ffc9b",
+                      "bytes":  1277
+                  },
+                  {
+                      "path":  "plans/rcir_proof/BACKLOG.json",
+                      "sha256":  "363e152a0810c47eb2981e5b771852b9bea41a7f0532989d2ff32560f18b8a97",
+                      "bytes":  3403
+                  },
+                  {
+                      "path":  "plans/rcir_proof/BASELINE.md",
+                      "sha256":  "d34d78369721b161fb97361dfe2579f8dfc82fdff9333e31ae01866b9a211771",
+                      "bytes":  10055
+                  },
+                  {
+                      "path":  "plans/rcir_proof/PF-RP-01.json",
+                      "sha256":  "420aa86797964378ee5f7d0638143217b6b150170ae0082ef12d61ce7f41b9b1",
+                      "bytes":  3363
+                  },
+                  {
+                      "path":  "plans/rcir_proof/PHASE_LEDGER.jsonl",
+                      "sha256":  "8414c8c83791f668aef7f625d770dae32b72b193708a528dcf882a0f19382e92",
+                      "bytes":  576
+                  },
+                  {
+                      "path":  "plans/rcir_proof/PROGRESS.md",
+                      "sha256":  "2a355d1c2114b7cd025aaf64f9c55d33f8a109c7554a30c97e661b9876dccd38",
+                      "bytes":  7515
+                  },
+                  {
+                      "path":  ".github/workflows/ci.yml",
+                      "sha256":  "2df33b9f55b406218c5c4a50f022d4f62f226324c9265e95a1b3214ebe9ec5cb",
+                      "bytes":  1975
+                  },
+                  {
+                      "path":  ".github/workflows/rcir-artifact-integrity.yml",
+                      "sha256":  "aa3a68629b3860cccbb04971e1765e8c4dffce7fc6d854a57c7aef9af558fd69",
+                      "bytes":  1000
+                  },
+                  {
+                      "path":  "showcase_app/backend/services/evidence_registry.py",
+                      "sha256":  "36baecae132dea9b72c2c17c0f9d293ecc83b21260566fabc2dbe3046d9e2b0f",
+                      "bytes":  6439
+                  },
+                  {
+                      "path":  "showcase_app/backend/api/proofs.py",
+                      "sha256":  "55f34f7741b5a9777a6e7b46f82c6273048739612e2368ee56deb24eabaa013a",
+                      "bytes":  5133
+                  },
+                  {
+                      "path":  "showcase_app/backend/api/health.py",
+                      "sha256":  "62b1a370c8b1c24d9ebf4a1eae59c67d2acd38d8d8ac8611c0001e08c6d2d626",
+                      "bytes":  619
+                  },
+                  {
+                      "path":  "showcase_app/backend/schemas.py",
+                      "sha256":  "9218c57124031bd446eb36687822fdb8ce2ebeea59f002a3a7c24664f3bec27a",
+                      "bytes":  2854
+                  },
+                  {
+                      "path":  "orchestrator/tools.py",
+                      "sha256":  "2a9b91b9efda7702db628c58f212f187670eda322ec1e502754b2f877153476c",
+                      "bytes":  27188
+                  },
+                  {
+                      "path":  "tests/test_backend_proof_server.py",
+                      "sha256":  "eb595a60de2a0d5a2459db6fa1a7a61ae7a41d76dfa7090c5f590641ed76f19e",
+                      "bytes":  6373
+                  },
+                  {
+                      "path":  "tests/test_evidence_registry.py",
+                      "sha256":  "fb2f12f184ba95546d14855b5f684404e465c2f14955ad51f2ab5976bac2525f",
+                      "bytes":  7748
+                  },
+                  {
+                      "path":  "tests/test_repo_tools.py",
+                      "sha256":  "015fde4e53951a6d416223f172f1b0f2dedbcbd63182218ccf97273a7255cc0c",
+                      "bytes":  4519
+                  },
+                  {
+                      "path":  "tests/benchmark_integrity/test_historical_provenance_gate.py",
+                      "sha256":  "6ba774b41864f18d12a1e255e1ab48424f13f6c35ee0ac16c2d18e48f0bef7dd",
+                      "bytes":  6158
+                  },
+                  {
+                      "path":  "experiments/rcir_v8_5/reports/final_assessment.md",
+                      "sha256":  "25a076fa0f9b2fa5a8c3b7e5921febe1c644d40b6d1c0ef2032e372448c50576",
+                      "bytes":  829
+                  }
+              ]
+}

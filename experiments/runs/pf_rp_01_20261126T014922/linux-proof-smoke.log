@@ -1,0 +1,24 @@
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'D:\flutter_sdk\flutter\bin'
+PLATFORM linux 3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]
+Traceback (most recent call last):
+  File "/mnt/c/Users/Paril Rupani/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/project/PolyFlow/experiments/runs/pf_rp_01_20261126T014922/linux_proof_smoke.py", line 23, in <module>
+    registry.proof_index_file.write_text(json.dumps(index))
+  File "/usr/lib/python3.12/pathlib.py", line 1049, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/polyflow-proof-linux-8kcsg1ea/showcase/data/proof_index.json'

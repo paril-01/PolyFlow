@@ -2,7 +2,7 @@
 tests/test_backend_proof_server.py — Automated verification for FastAPI Backend & Proof Server.
 
 Validates:
-1. Health endpoint returns 200 with VALIDATED evidence status.
+1. Health endpoint reports liveness without claiming evidence validation.
 2. Feature service loads real Sales Invoice 12-to-1 mappings.
 3. Live interpreter executes real PolyCellRuntime in normal and controlled failure modes.
 4. Security: Proof resolver strictly denies path traversal (../, absolute paths, missing files).
@@ -32,7 +32,7 @@ def test_health_endpoint(client):
     assert res.status_code == 200
     data = res.json()
     assert data["status"] == "healthy"
-    assert data["evidence_status"] == "VALIDATED"
+    assert data["evidence_status"] == "NOT_EVALUATED_BY_HEALTH"
 
 
 def test_features_native_vs_poly(client):

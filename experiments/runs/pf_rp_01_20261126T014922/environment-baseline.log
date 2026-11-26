@@ -1,0 +1,14 @@
+BenchmarkEnvironment successfully initialized:
+{
+  "run_id": "rcir-v8.5.2-primary",
+  "polyflow_root": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow",
+  "target_repo_root": "C:\\Users\\Paril Rupani\\OneDrive - Shri Vile Parle Kelavani Mandal\\Desktop\\project\\PolyFlow\\experiments\\nextcloud_validation\\nextcloud-server",
+  "target_repo_name": "nextcloud/server",
+  "target_repo_commit": "da57df078d0808a7235a0177bd99d23c010b472e",
+  "target_repo_dirty": false,
+  "target_repository_state": "CLEAN",
+  "working_tree_diff_hash": "",
+  "polyflow_commit": "6a586e16007cb1bed123619b4494067f99eccf2f",
+  "polyflow_dirty": true,
+  "polyflow_worktree_diff_hash": "5801373308c505eaa30925077973d0bbdc16d6b8888142df93e11371f7cbc2b2"
+}

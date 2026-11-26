@@ -1,0 +1,17 @@
+........................................................................ [ 93%]
+...F.                                                                    [100%]
+================================== FAILURES ===================================
+_______________________ TestRepoTools.test_run_command ________________________
+
+self = <tests.test_repo_tools.TestRepoTools testMethod=test_run_command>
+
+    def test_run_command(self):
+        res = self.env.run_command("python -c \"print('Hello from Sandbox')\"")
+        self.assertEqual(res["exit_code"], 0)
+>       self.assertIn("Hello from Sandbox", res["stdout"])
+E       AssertionError: 'Hello from Sandbox' not found in ''
+
+tests\test_repo_tools.py:108: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_repo_tools.py::TestRepoTools::test_run_command - AssertionE...
+1 failed, 76 passed in 75.65s (0:01:15)

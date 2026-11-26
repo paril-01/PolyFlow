@@ -1,0 +1,25 @@
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'G:\Scripts\'
+wsl: Failed to translate 'G:\'
+wsl: Failed to translate 'D:\Scripts\'
+wsl: Failed to translate 'D:\'
+wsl: Failed to translate 'D:\flutter_sdk\flutter\bin'
+LINUX_SOURCE_OBJECT_CHECK 3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0] 6a586e16007cb1bed123619b4494067f99eccf2f da57df078d0808a7235a0177bd99d23c010b472e
+WORKTREE_CLEANLINESS_NOT_EVALUATED: explicit resolved revisions avoid the slow NTFS status census.
+================================================================================
+RCIR v8.5 — Commit-Bound Ground-Truth Provenance Audit (PF-RC-CI-001)
+================================================================================
+Auditing 16 ground truth tasks against Git object store...
+Auditing 25 edge ground truth tuples at commit da57df078d0808a7235a0177bd99d23c010b472e...
+Auditing 12 receiver ground truth call sites at commit da57df078d0808a7235a0177bd99d23c010b472e...
+Auditing 8 canonicalization corpus records at commit da57df078d0808a7235a0177bd99d23c010b472e...
+Side-effect free execution: results not written to tracked results/ directory.
+SUCCESS: All 16 tasks, commits, files, and hashes 100% verified!
+LINUX_SOURCE_OBJECT_PROVENANCE_COMPLETE None

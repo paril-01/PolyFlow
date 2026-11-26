@@ -16,7 +16,7 @@ def get_health():
         service="PolyFlow Evidence & Showcase Server",
         version="1.0.0",
         process_liveness="UP",
-        evidence_status="VALIDATED",
+        evidence_status="NOT_EVALUATED_BY_HEALTH",
         benchmarks_gate="NOT_EVALUATED_BY_HEALTH",
         timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     )

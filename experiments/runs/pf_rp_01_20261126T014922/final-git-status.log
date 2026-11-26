@@ -1,0 +1,19 @@
+ M .github/workflows/ci.yml
+ M .github/workflows/rcir-artifact-integrity.yml
+ M experiments/rcir_v8_5/reports/final_assessment.md
+ M orchestrator/tools.py
+A  "plans/PolyFlow_CI_Architecture_Recovery_Execution_Pack_v4 (1).md"
+ M repos/flask
+ m repos/opentelemetry-demo
+ M repos/requests
+ M showcase_app/backend/api/health.py
+ M showcase_app/backend/api/proofs.py
+ M showcase_app/backend/schemas.py
+ M showcase_app/backend/services/evidence_registry.py
+ M tests/benchmark_integrity/test_historical_provenance_gate.py
+ M tests/test_backend_proof_server.py
+ M tests/test_repo_tools.py
+?? PolyFlow_RCIR_Master_Implementation_and_Proof_Plan.md
+?? experiments/runs/pf_rp_01_20261126T014922/
+?? plans/rcir_proof/
+?? tests/test_evidence_registry.py

@@ -1,0 +1,2 @@
+{"timestamp": "2026-11-25T20:39:09.764576+00:00", "phase": "PF-RP-00", "status": "BASELINE_CAPTURED", "source_sha": "6a586e16007cb1bed123619b4494067f99eccf2f", "evidence": "BASELINE.md"}
+{"timestamp": "2026-11-25T20:39:09.764576+00:00", "phase": "PF-RP-01", "status": "LOCAL_REPAIR_IMPLEMENTED_CI_AND_INDEPENDENT_REVIEW_PENDING", "source_sha": "6a586e16007cb1bed123619b4494067f99eccf2f", "patch_sha256": "258b2ddc9d4e11e4c5f39522b8785930fa7c7ec17ec48106e0dd7feed1d50ecd", "evidence": "PROGRESS.md", "later_lifecycle_failure": "core-after.log", "live_benchmarks": "NOT_RUN"}
