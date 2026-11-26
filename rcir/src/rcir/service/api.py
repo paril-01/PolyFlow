@@ -13,11 +13,12 @@ from .snapshot import Snapshot, ServiceError, canonical, digest, safe_path
 
 
 class RepositoryService:
-    def __init__(self, repo, ref="HEAD", *, allow_overlay=False, allow_unversioned=False, counter=None, cache_entries=256):
+    def __init__(self, repo, ref="HEAD", *, allow_overlay=False, allow_unversioned=False, source_only=False, counter=None, cache_entries=256):
         self.root = Path(repo).resolve()
         self.ref = ref
         self.allow_overlay = allow_overlay
         self.allow_unversioned = allow_unversioned
+        self.source_only = source_only
         self.counter = counter or TiktokenTokenCounter()
         if self.counter.get_provenance().get("token_count_type") != "exact":
             raise ServiceError("UNSUPPORTED", "An available exact tokenizer is required")
@@ -33,7 +34,7 @@ class RepositoryService:
 
     def refresh(self):
         with self.lock:
-            snapshot = Snapshot(self.root, self.ref, self.allow_overlay, self.allow_unversioned)
+            snapshot = Snapshot(self.root, self.ref, self.allow_overlay, self.allow_unversioned, self.source_only)
             index = SourceIndex(snapshot)
             snapshot.verify()
             self.snapshot, self.index = snapshot, index

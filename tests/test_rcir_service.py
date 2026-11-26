@@ -137,6 +137,17 @@ def test_exact_tokenizer_required(repo):
         RepositoryService(repo, counter=ApproximateCharTokenCounter())
 
 
+def test_source_only_never_runs_host_git(repo, monkeypatch):
+    from rcir.service.snapshot import Snapshot
+    def prohibited(*args, **kwargs):
+        raise AssertionError("Host Git must not inspect agent-controlled metadata")
+    monkeypatch.setattr(Snapshot, "_git", prohibited)
+    service = RepositoryService(repo, allow_unversioned=True, source_only=True)
+    assert service.snapshot.commit is None
+    assert service.retrieve("calculate")["evidence_items"]
+    assert ".git/config" not in service.snapshot.files
+
+
 def test_concurrent_consistency(repo):
     service = RepositoryService(repo)
     with ThreadPoolExecutor(max_workers=4) as pool:

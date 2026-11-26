@@ -94,7 +94,9 @@ class TrialTools:
         if name in {"search", "rcir_context_retrieve"}:
             if name == "rcir_context_retrieve" and not self.rcir_enabled:
                 raise ServiceError("UNSUPPORTED", "RCIR is not enabled in this arm")
-            service = RepositoryService(self.root, allow_overlay=True, allow_unversioned=True)
+            # Agent-controlled .git config may define executable filters or
+            # fsmonitor commands. Do not run ANY host Git from this point.
+            service = RepositoryService(self.root, allow_overlay=True, allow_unversioned=True, source_only=True)
             if name == "rcir_context_retrieve":
                 return service.retrieve(args["query"], 3000)
             text = args["text"]
@@ -201,9 +203,12 @@ def evaluate_trial(repo, base_sha, changes_file, oracle, command, output, *, qua
 
 
 def initialize_trial_git(root):
-    for args in [("init",), ("config", "user.name", "Trial Base"), ("config", "user.email", "trial@example.invalid"),
+    import os
+    environment = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    environment.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull)
+    for args in [("init", "--template="), ("config", "user.name", "Trial Base"), ("config", "user.email", "trial@example.invalid"),
                  ("config", "core.autocrlf", "false"), ("add", "."), ("commit", "--allow-empty", "-m", "Exported base only")]:
-        subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+        subprocess.run(["git", "-C", str(root), *args], env=environment, check=True, capture_output=True)
 
 
 def run_dev_trial(repo, base_sha, public_prompt, arm, output, provider, limits, *, task_id, replicate=0):

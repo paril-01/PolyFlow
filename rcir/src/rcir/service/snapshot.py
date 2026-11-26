@@ -73,13 +73,15 @@ class SourceFile:
 class Snapshot:
     policy_version = "tracked-source-uniform-v1"
 
-    def __init__(self, root: Path, ref="HEAD", allow_overlay=False, allow_unversioned=False):
+    def __init__(self, root: Path, ref="HEAD", allow_overlay=False, allow_unversioned=False, source_only=False):
         self.root = Path(root).resolve()
         if not self.root.is_dir():
             raise ServiceError("INVALID_SCOPE", "Repository does not exist")
         self.allow_overlay = allow_overlay
         self.allow_unversioned = allow_unversioned
-        self.git = self._git("rev-parse", "--show-toplevel", required=False)
+        if source_only and not allow_unversioned:
+            raise ServiceError("INVALID_SCOPE", "Source-only capture requires explicit unversioned authorization")
+        self.git = b"" if source_only else self._git("rev-parse", "--show-toplevel", required=False)
         if self.git:
             if Path(self.git.decode().strip()).resolve() != self.root:
                 raise ServiceError("INVALID_SCOPE", "Use the repository root, not a nested directory")

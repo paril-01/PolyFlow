@@ -93,7 +93,11 @@ fallback runs agent commands on the host. The independent controller is in
 [agent_trial.py](../experiments/benchmark_core/agent_trial.py); it records raw
 requests, responses, native usage and tool actions. Complete file changes include
 untracked/binary content, hashes and executable modes; capture never runs host
-Git against an agent-modified config. Missing usage remains null. Arbitrary test
+Git against an agent-modified config. Missing usage remains null.
+Trial retrieval ignores Git metadata entirely; the separate controller receipt
+binds the exported upstream base SHA, while the source-only context reports a
+null commit and actual byte-derived snapshot identity.
+Arbitrary test
 commands must have qualified exit-code semantics: 0 pass, 1 assertion failure,
 other exits setup/execution errors. Control execution alone does not establish
 task validity. A curator-reviewed dataset, frozen candidate and real model runs

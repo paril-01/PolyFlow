@@ -94,6 +94,12 @@ CPython 3.12.2; WSL Python 3.12.3. Local SDK test used MCP 2.3.0 and tiktoken
 [observed Windows constraints](./requirements-win312-observed.txt). These are
 actual observations, not a claim of a universal hash-locked environment.
 
+SECURITY FOLLOW-UP: Trial search/retrieval explicitly uses source-only snapshots
+and never consults agent-modified Git configuration. Initial base-only Git setup
+ignores host/system Git configuration and templates. Regression command
+`python -m pytest tests/test_rcir_service.py::test_source_only_never_runs_host_git tests/test_product_study.py::test_patch_capture_is_independent_of_agent_git -q`
+is recorded in [agent-git-isolation.log](../../experiments/runs/pf_rp_impl_20261126/agent-git-isolation.log).
+
 GATE STATUS: PASS_FOR_TESTED_SOFTWARE_SCOPE; INCOMPLETE_FOR_MASTER_PLAN;
 BLOCKED_FOR_BENCHMARK/RELEASE_ACCEPTANCE. No phase is self-promoted.
 
