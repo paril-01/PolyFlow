@@ -182,3 +182,12 @@ def test_proof_extra_file(tmp_path):
     (tmp_path / "extra").write_text("unexpected")
     with pytest.raises(ServiceError):
         verify_run(tmp_path)
+
+
+@pytest.mark.parametrize("manifest", [[], {"schema": "rcir.run_integrity.v1", "files": ["bad"]},
+    {"schema": "rcir.run_integrity.v1", "files": {"path": "bad-digest"}}])
+def test_malformed_run_inventory_fails_explicitly(tmp_path, manifest):
+    (tmp_path / "integrity.json").write_text(json.dumps(manifest))
+    with pytest.raises(ServiceError) as error:
+        verify_run(tmp_path)
+    assert error.value.status == "INVALID_SCOPE"
