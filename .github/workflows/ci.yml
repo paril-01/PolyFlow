@@ -2,7 +2,7 @@ name: PolyFlow Continuous Integration
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, work/pf-rp-01-proof-integrity ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:

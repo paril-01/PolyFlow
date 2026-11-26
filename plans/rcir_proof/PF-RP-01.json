@@ -27,6 +27,7 @@
     ".github/workflows/ci.yml",
     ".github/workflows/rcir-artifact-integrity.yml",
     ".github/workflows/rcir-unit.yml"
+    ,".github/workflows/rcir-smoke-benchmark.yml"
   ],
   "forbidden_paths": ["polyflow/**", "polyflow-sdk/**", "repos/**", "agents/**", "experiments/**/ground_truth/**", "experiments/**/results/**", "experiments/runs/run_20261009_blind_verified/**", "templates/PHASE_STATE.json"],
   "acceptance_tests": [

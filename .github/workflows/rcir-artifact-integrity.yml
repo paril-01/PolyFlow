@@ -2,7 +2,7 @@ name: RCIR Artifact Integrity & Report Consistency
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, work/pf-rp-01-proof-integrity ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:

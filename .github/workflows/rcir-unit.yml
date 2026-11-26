@@ -2,7 +2,7 @@ name: RCIR Unit Tests & Static Verification
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, work/pf-rp-01-proof-integrity ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:

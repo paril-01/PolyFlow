@@ -4,6 +4,8 @@
 
 The owner has explicitly requested implementation of the complete master plan followed by pushing the changes. Publishing the scoped branch is now authorized; the earlier approval request below is historical. Required CI checkpoints will be published to this work branch, with no merge. No failed gate or unmeasured benchmark result is promoted to a pass. The first checkpoint publishes the existing PF-RP-01 repair and its prior provenance-fix parent for hosted verification. New CI receipts are saved under `experiments/runs/pf_rp_ci_20261126/`.
 
+Checkpoint `5159abf32624c4b008c7caa8f3d3c00b95165f8a` was pushed and verified with `git ls-remote`. GitHub connector PR creation returned HTTP 403; GitKraken integration was not authenticated and did not execute. The four existing workflows now also accept pushes to this exact work branch, preserving all existing jobs/checks and avoiding a dependency on PR-creation access. No main-branch write, merge, disabled test or relaxed gate is involved.
+
 PHASE: PF-RP-00 baseline captured; PF-RP-01 local repair implemented; hosted CI/independent acceptance pending.
 
 REPO/SHA/BRANCH/DIRTY: paril-01/PolyFlow @ 6a586e16007cb1bed123619b4494067f99eccf2f; work/pf-rp-01-proof-integrity; uncommitted scoped patch plus preserved user changes.
